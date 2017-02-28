@@ -1,7 +1,7 @@
 "use strict";
 /*
-  2017/02/26- yoya@awm.jp
-*/
+ * 2017/02/26- (c) yoya@awm.jp
+ */
 
 document.addEventListener("DOMContentLoaded", function(event) {
     main();
@@ -12,10 +12,8 @@ var dstCanvas = document.getElementById("dstCanvas");
 var srcImage = new Image();
 
 function main() {
+    // console.debug("main");
     dropFunction(document, function(dataURL) {
-        if (dataURL === null) {
-            return ;
-        }
 	srcImage.onload = function() {
 	    drawSrcImage();
 	    drawDotize();
@@ -36,16 +34,15 @@ function main() {
 
 
 function drawSrcImage() {
+    // console.debug("drawSrcImage");
     var srcCtx = srcCanvas.getContext("2d");
     var width = srcImage.width, height = srcImage.height;
     var maxWidth = parseFloat(document.getElementById("maxWidthRange").value);
     var maxHeight = parseFloat(document.getElementById("maxHeightRange").value);
-    console.log(maxHeight);
     if ((maxWidth < width) || (maxHeight < height)) {
-	var resizeScale;
 	var resizeScaleWidth = maxWidth / width;
 	var resizeScaleHeight = maxHeight / height;
-	resizeScale = (resizeScaleWidth < resizeScaleHeight)?resizeScaleWidth:resizeScaleHeight;
+	var resizeScale = (resizeScaleWidth < resizeScaleHeight)?resizeScaleWidth:resizeScaleHeight;
 	width *= resizeScale;
 	height *= resizeScale;
     }
@@ -55,7 +52,7 @@ function drawSrcImage() {
 		     0, 0, width, height);
 }
 function drawDotize() {
-    console.debug("drawDotize");
+    // console.debug("drawDotize");
     var scale = parseFloat(document.getElementById("scaleRange").value);
     var border = parseFloat(document.getElementById("borderRange").value);
     //
