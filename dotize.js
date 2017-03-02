@@ -21,13 +21,10 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction("range2text", "scaleRange", "scaleText", drawDotize);
-    bindFunction("range2text", "borderRange", "borderText", drawDotize);
-    bindFunction("range2text", "maxWidthRange", "maxWidthText", function() {
-	drawSrcImage();
-	drawDotize();
-    });
-    bindFunction("range2text", "maxHeightRange", "maxHeightText", function() {
+    bindFunction("range2text", {"scaleRange":"scaleText",
+			       "borderRange":"borderText"}, drawDotize);
+    bindFunction("range2text", {"maxWidthRange":"maxWidthText",
+				"maxHeightRange":"maxHeightText"}, function() {
 	drawSrcImage();
 	drawDotize();
     });
@@ -52,6 +49,7 @@ function drawSrcImage() {
     srcCtx.drawImage(srcImage, 0, 0, srcImage.width, srcImage.height,
 		     0, 0, width, height);
 }
+
 function drawDotize() {
     // console.debug("drawDotize");
     var scale = parseFloat(document.getElementById("scaleRange").value);
