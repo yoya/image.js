@@ -9,11 +9,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 var srcCanvas = document.getElementById("srcCanvas");
 var dstCanvas = document.getElementById("dstCanvas");
-var srcImage = new Image();
+var srcImage = new Image(srcCanvas.width, srcCanvas.height);
 
 function main() {
     // console.debug("main");
     dropFunction(document, function(dataURL) {
+	srcImage = new Image();
 	srcImage.onload = function() {
 	    drawSrcImage();
 	    drawDotize();
