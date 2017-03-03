@@ -17,17 +17,17 @@ function main() {
 	srcImage = new Image();
 	srcImage.onload = function() {
 	    drawSrcImage();
-	    drawEdge();
+	    drawFCBI();
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction("range2text", {"TMRange":"TMText",
 				"edgeRange":"edgeText",
-				"phaseRange":"phaseText"}, drawEdge);
+				"phaseRange":"phaseText"}, drawFCBI);
     bindFunction("range2text", {"maxWidthRange":"maxWidthText",
 				"maxHeightRange":"maxHeightText"}, function() {
 	drawSrcImage();
-	drawEdge();
+	drawFCBI();
     });
 }
 
@@ -97,8 +97,8 @@ function meanRGBA(rgba1, rgba2) {
     return [(r1+r2)/2, (g1+g2)/2, (b1+b2)/2, (a1+a2)/2];
 }
 
-function drawEdge() {
-    // console.debug("drawEdge");
+function drawFCBI() {
+    // console.debug("drawFCBI");
     var TM = parseFloat(document.getElementById("TMRange").value);
     TM *= 256;
     var edge = parseFloat(document.getElementById("edgeRange").value);
