@@ -76,10 +76,19 @@ function setRGBA(imageData, x, y, rgba) {
     data[offset++] = rgba[2];
     data[offset++] = rgba[3];
 }
-function getLuma(imageData, x, y) {
-    var [r,g,b,a] = getRGBA(imageData, x, y);
+function meanRGBA(rgba1, rgba2) {
+    var [r1,g1,b1,a1] = rgba1;
+    var [r2,g2,b2,a2] = rgba2;
+    return [(r1+r2)/2, (g1+g2)/2, (b1+b2)/2, (a1+a2)/2];
+}
+function lumaFromRGBA(rgba) {
+    var [r,g,b,a] = rgba;
     var y = 0.299 * r + 0.587 * g + 0.114 * b;
     return y * a; // XXX y or y * a
+}
+function getLuma(imageData, x, y) {
+    var rgba = getRGBA(imageData, x, y);
+    return lumaFromRGBA(rgba);
 }
 function FilterMultiply(imageData, x, y, posi, filter) {
     var h = 0;
