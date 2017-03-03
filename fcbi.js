@@ -63,10 +63,10 @@ function clamp(x, min, max) {
 
 function getRGBA(imageData, x, y) {
     var width = imageData.width, height = imageData.height;
-    x = clamp(x, 0, width -1);
+    x = clamp(x, 0, width - 1);
     y = clamp(y, 0, height - 1);
     var offset = 4 * (x + y * width);
-    return imageData.data.slice(offset, offset+4);
+    return imageData.data.slice(offset, offset + 4);
 }
 function setRGBA(imageData, x, y, rgba) {
     var offset = 4 * (x + y * imageData.width);
@@ -169,14 +169,14 @@ function drawFCBI_Phase2(dstImageData, TM, edge) {
 		    var rgba = [0, 128, 0, 255]; // green
 		} else {
 		    var H1 = FilterMultiply(dstImageData, dstX, dstY,
-					    [[-3, 1],[-1, -1], [1, -3], // 1,2,3
-					     [-1, 1], [1, -1],          // 4, 5
-					     [-1, 3], [1,1], [3, -1]],  // 6, 7, 8
+					    [[-3, 1],[-1, -1], [1, -3],  // 1, 2, 3
+					     [-1, 1], [1, -1],           // 4, 5
+					     [-1, 3], [1, 1], [3, -1]],  // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
 		    var H2 = FilterMultiply(dstImageData, dstX, dstY,
-					    [[-1, -3],[1, 1], [3, 1],   // 1,2,3
-					     [-1, -1], [1, 1],          // 4, 5
-					     [-3, -1], [-1,1], [1, 3]], // 6, 7, 8
+					    [[-1, -3],[1, -1], [3, 1],   // 1, 2, 3
+					     [-1, -1], [1, 1],           // 4, 5
+					     [-3, -1], [-1, 1], [1, 3]], // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
 		    if (H1 < H2) {
 			var rgba1 = getRGBA(dstImageData, dstX-1, dstY-1);
