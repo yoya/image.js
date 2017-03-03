@@ -100,7 +100,6 @@ function FilterMultiply(imageData, x, y, posi, filter) {
 function drawFCBI() {
     // console.debug("drawFCBI");
     var TM = parseFloat(document.getElementById("TMRange").value);
-    TM *= 255;
     var edge = parseFloat(document.getElementById("edgeRange").value);
     var phase = parseFloat(document.getElementById("phaseRange").value);
     //
