@@ -1,0 +1,27 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2017/03/03- yoya@awm.jp . All Rights Reserved.">
+  <title> FCBI(Fast Curvature Based Interpolation) </title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body bgcolor="lightgray">
+  <div class="container">
+    <div>
+
+      TM:<input id="TMRange" type="range" min="25" max="150" step="1" value="50">:<input type="text" id="TMText">
+      edge:<input id="edgeRange" type="range" min="0" max="1" step="1" value="1">:<input type="text" id="edgeText">
+      phase:<input id="phaseRange" type="range" min="1" max="3" step="1" value="1">:<input type="text" id="phaseText">
+    </div>
+    <div>
+      maxWidth:<input id="maxWidthRange" type="range" min="16" max="800" step="1" value="640">:<input type="text" id="maxWidthText">x
+      maxHeight:<input id="maxHeightRange" type="range" min="16" max="600" step="1" value="480">:<input type="text" id="maxHeightText">
+    </div>
+    <canvas id="srcCanvas" width=200 height=200> srcCanvas </canvas>
+    <br />
+    <canvas id="dstCanvas" width=200 height=200> dstCanvas </canvas>
+  </div>
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="fcbi.js"> </script>
+</body>
+</html>
