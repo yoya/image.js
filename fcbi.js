@@ -91,7 +91,7 @@ function getLuma(imageData, x, y) {
 function FilterMultiply(imageData, x, y, posi, filter) {
     var h = 0;
     for (var i=0, n = posi.length ; i < n ; i++) {
-	var [dx, dy] = posi;
+	var [dx, dy] = posi[i];
 	h += getLuma(imageData, x + dx, y + dy) * filter[i];
     }
     return h;
