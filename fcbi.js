@@ -156,10 +156,14 @@ function drawFCBI_Phase2(dstImageData, TM, edge) {
 	     *      x  
 	     *  l3     l4
 	     */
-	    var l1 = getLuma(dstImageData, dstX-1, dstY-1);
-	    var l2 = getLuma(dstImageData, dstX+1, dstY-1);
-	    var l3 = getLuma(dstImageData, dstX-1, dstY+1);
-	    var l4 = getLuma(dstImageData, dstX+1, dstY+1);
+	    var rgba1 = getRGBA(dstImageData, dstX-1, dstY-1);
+	    var rgba2 = getRGBA(dstImageData, dstX+1, dstY-1);
+	    var rgba3 = getRGBA(dstImageData, dstX-1, dstY+1);
+	    var rgba4 = getRGBA(dstImageData, dstX+1, dstY+1);
+	    var l1 = lumaFromRGBA(rgba1)
+	    var l2 = lumaFromRGBA(rgba2)
+	    var l3 = lumaFromRGBA(rgba3)
+	    var l4 = lumaFromRGBA(rgba4)
 	    var V1 = Math.abs(l1 - l4);
 	    var V2 = Math.abs(l2 - l3);
 	    var p1 = (l1 + l4) / 2;
@@ -179,12 +183,8 @@ function drawFCBI_Phase2(dstImageData, TM, edge) {
 					     [-3, -1], [-1, 1], [1, 3]], // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
 		    if (H1 < H2) {
-			var rgba1 = getRGBA(dstImageData, dstX-1, dstY-1);
-			var rgba4 = getRGBA(dstImageData, dstX+1, dstY+1);
 			var rgba = meanRGBA(rgba1, rgba4);
 		    } else {
-			var rgba2 = getRGBA(dstImageData, dstX-1, dstY+1);
-			var rgba3 = getRGBA(dstImageData, dstX+1, dstY-1);
 			var rgba = meanRGBA(rgba2, rgba3);
 		    }
 		}
@@ -193,12 +193,8 @@ function drawFCBI_Phase2(dstImageData, TM, edge) {
 		    var rgba = [255, 0, 0, 255]; // red
 		} else {
 		    if (V1 < V2) {
-			var rgba1 = getRGBA(dstImageData, dstX-1, dstY-1);
-			var rgba4 = getRGBA(dstImageData, dstX+1, dstY+1);
 			var rgba = meanRGBA(rgba1, rgba4);
 		    } else{
-			var rgba2 = getRGBA(dstImageData, dstX-1, dstY+1);
-			var rgba3 = getRGBA(dstImageData, dstX+1, dstY-1);
 			var rgba = meanRGBA(rgba2, rgba3);
 		    }
 		}
@@ -219,10 +215,14 @@ function drawFCBI_Phase3(dstImageData, TM, edge) {
 	     *  l1  x  l4
 	     *     l3
 	     */
-	    var l1 = getLuma(dstImageData, dstX-1, dstY);
-	    var l2 = getLuma(dstImageData, dstX, dstY-1);
-	    var l3 = getLuma(dstImageData, dstX, dstY+1);
-	    var l4 = getLuma(dstImageData, dstX+1, dstY);
+	    var rgba1 = getRGBA(dstImageData, dstX-1, dstY);
+	    var rgba2 = getRGBA(dstImageData, dstX  , dstY-1);
+	    var rgba3 = getRGBA(dstImageData, dstX  , dstY+1);
+	    var rgba4 = getRGBA(dstImageData, dstX+1, dstY);
+	    var l1 = lumaFromRGBA(rgba1)
+	    var l2 = lumaFromRGBA(rgba2)
+	    var l3 = lumaFromRGBA(rgba3)
+	    var l4 = lumaFromRGBA(rgba4)
 	    var V1 = Math.abs(l1 - l4);
 	    var V2 = Math.abs(l2 - l3);
 	    var p1 = (l1 + l4) / 2;
@@ -242,12 +242,8 @@ function drawFCBI_Phase3(dstImageData, TM, edge) {
 					     [-2, 1], [0,1], [2, 1]],    // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
 		    if (H1 < H2) {
-			var rgba2 = getRGBA(dstImageData, dstX, dstY-1);
-			var rgba3 = getRGBA(dstImageData, dstX, dstY+1);
 			var rgba = meanRGBA(rgba2, rgba3);
 		    } else {
-			var rgba1 = getRGBA(dstImageData, dstX-1, dstY);
-			var rgba4 = getRGBA(dstImageData, dstX+1, dstY);
 			var rgba = meanRGBA(rgba1, rgba4);
 		    }
 		}
