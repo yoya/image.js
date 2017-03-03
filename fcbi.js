@@ -169,9 +169,9 @@ function drawFCBI_Phase2(dstImageData, TM, edge) {
 		    var rgba = [0, 128, 0, 255]; // green
 		} else {
 		    var H1 = FilterMultiply(dstImageData, dstX, dstY,
-					    [[-3, 1],[-1, -1], [1, -3],  // 1, 2, 3
+					    [[-3, 1], [-1,-1], [1, -3],  // 1, 2, 3
 					     [-1, 1],          [1, -1],  // 4,    5
-					     [-1, 3], [1, 1], [3, -1]],  // 6, 7, 8
+					     [-1, 3], [ 1, 1], [3, -1]], // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
 		    var H2 = FilterMultiply(dstImageData, dstX, dstY,
 					    [[-1, -3], [1, -1], [3, 1],  // 1, 2, 3
@@ -230,14 +230,14 @@ function drawFCBI_Phase3(dstImageData, TM, edge) {
 		    var H1 = FilterMultiply(dstImageData, dstX, dstY,
 					    [[1, -2], [1, 0], [1, 2],    // 1, 2, 3
 					     [0, -1],         [0, 1],    // 4,    5
-					     [-1, -2], [-1,0], [-1, 2]], // 6, 7, 8
+					     [-1,-2], [-1,0], [-1, 2]],  // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
 		    var H2 = FilterMultiply(dstImageData, dstX, dstY,
-					    [[-2, -1],[0, -1], [2, -1],  // 1, 2, 3
-					     [-1, 0],          [1, 0],   // 4,    5
-					     [-2, 1], [0,1], [2, 1]],    // 6, 7, 8
+					    [[-2,-1], [0,-1], [2, -1],   // 1, 2, 3
+					     [-1, 0],         [1,  0],   // 4,    5
+					     [-2, 1], [0, 1], [2,  1]],  // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
-		    if (H1 < H2) {
+		    if (H1 <= H2) {
 			var rgba = meanRGBA(rgba2, rgba3);
 		    } else {
 			var rgba = meanRGBA(rgba1, rgba4);
@@ -248,12 +248,8 @@ function drawFCBI_Phase3(dstImageData, TM, edge) {
 		    var rgba = [255, 255, 0, 255]; // yellow
 		} else {
 		    if (V1 < V2) {
-			var rgba1 = getRGBA(dstImageData, dstX-1, dstY);
-			var rgba4 = getRGBA(dstImageData, dstX+1, dstY);
 			var rgba = meanRGBA(rgba1, rgba4);
 		    } else{
-			var rgba2 = getRGBA(dstImageData, dstX, dstY-1);
-			var rgba3 = getRGBA(dstImageData, dstX, dstY+1);
 			var rgba = meanRGBA(rgba2, rgba3);
 		    }
 		}
