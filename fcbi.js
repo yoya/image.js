@@ -115,11 +115,11 @@ function drawFCBI() {
     var dstData = dstImageData.data;
     // リサンプル
     drawFCBI_Phase1(srcImageData, dstImageData);
-
     if (phase > 1) {
 	// 対角成分補間
 	drawFCBI_Phase2(dstImageData, TM, edge)
-    } if (phase > 2) {
+    }
+    if (phase > 2) {
 	// 水平垂直成分補完
 	drawFCBI_Phase3(dstImageData, TM, edge)
     }
