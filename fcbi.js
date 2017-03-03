@@ -52,11 +52,8 @@ function drawSrcImage() {
 }
 
 function clamp(x, min, max) {
-    if (min <= x) {
-	if (x <= max) {
-	    return x;
-	}
-	return max;
+    if (min < x) {
+	return (x < max)? x : max;
     }
     return min;
 }
