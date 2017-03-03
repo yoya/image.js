@@ -100,16 +100,10 @@ function FilterMultiply(imageData, x, y, posi, filter) {
     return h;
 }
 
-function meanRGBA(rgba1, rgba2) {
-    var [r1,g1,b1,a1] = rgba1;
-    var [r2,g2,b2,a2] = rgba2;
-    return [(r1+r2)/2, (g1+g2)/2, (b1+b2)/2, (a1+a2)/2];
-}
-
 function drawFCBI() {
     // console.debug("drawFCBI");
     var TM = parseFloat(document.getElementById("TMRange").value);
-    TM *= 256;
+    TM *= 255;
     var edge = parseFloat(document.getElementById("edgeRange").value);
     var phase = parseFloat(document.getElementById("phaseRange").value);
     //
