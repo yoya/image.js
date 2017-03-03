@@ -163,7 +163,7 @@ function drawFCBI_Phase2(dstImageData, TM, edge) {
 	    var p2 = (l2 + l3) / 2;
 	    if ((V1 < TM) && (V2 < TM) && (Math.abs(p1 - p2) < TM)) {
 		if (edge) {
-		    var rgba = [255, 0, 0, 255];
+		    var rgba = [0, 128, 0, 255]; // green
 		} else {
 		    var H1 = FilterMultiply(dstImageData, dstX, dstY,
 					    [[-3, 1],[-1, -1], [1, -3], // 1,2,3
@@ -187,7 +187,7 @@ function drawFCBI_Phase2(dstImageData, TM, edge) {
 		}
 	    } else {
 		if (edge) {
-		    var rgba = [0, 255, 0, 255];
+		    var rgba = [255, 0, 0, 255]; // red
 		} else {
 		    if (V1 < V2) {
 			var rgba1 = getRGBA(dstImageData, dstX-1, dstY-1);
@@ -226,7 +226,7 @@ function drawFCBI_Phase3(dstImageData, TM, edge) {
 	    var p2 = (l2 + l3) / 2;
 	    if ((V1 < TM) && (V2 < TM) && (Math.abs(p1 - p2) < TM)) {
 		if (edge) {
-		    var rgba = [0, 0, 255, 255];
+		    var rgba = [0, 0, 255, 255]; // blue
 		} else {
 		    var H1 = FilterMultiply(dstImageData, dstX, dstY,
 					    [[1, -2],[1, 0], [1, 2],     // 1,2,3
@@ -250,7 +250,7 @@ function drawFCBI_Phase3(dstImageData, TM, edge) {
 		}
 	    } else {
 		if (edge) {
-	    	    var rgba = [255, 255, 0, 255];
+		    var rgba = [255, 255, 0, 255]; // yellow
 		} else {
 		    if (V1 < V2) {
 			var rgba1 = getRGBA(dstImageData, dstX-1, dstY);
