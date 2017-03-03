@@ -170,12 +170,12 @@ function drawFCBI_Phase2(dstImageData, TM, edge) {
 		} else {
 		    var H1 = FilterMultiply(dstImageData, dstX, dstY,
 					    [[-3, 1],[-1, -1], [1, -3],  // 1, 2, 3
-					     [-1, 1], [1, -1],           // 4, 5
+					     [-1, 1],          [1, -1],  // 4,    5
 					     [-1, 3], [1, 1], [3, -1]],  // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
 		    var H2 = FilterMultiply(dstImageData, dstX, dstY,
 					    [[-1, -3], [1, -1], [3, 1],  // 1, 2, 3
-					     [-1, -1], [1, 1],           // 4, 5
+					     [-1, -1],          [1, 1],  // 4,    5
 					     [-3, -1], [-1, 1], [1, 3]], // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
 		    if (H1 < H2) {
@@ -228,13 +228,13 @@ function drawFCBI_Phase3(dstImageData, TM, edge) {
 		    var rgba = [0, 0, 255, 255]; // blue
 		} else {
 		    var H1 = FilterMultiply(dstImageData, dstX, dstY,
-					    [[1, -2],[1, 0], [1, 2],     // 1,2,3
-					     [0, -1], [0, 1],            // 4, 5
+					    [[1, -2], [1, 0], [1, 2],    // 1, 2, 3
+					     [0, -1],         [0, 1],    // 4,    5
 					     [-1, -2], [-1,0], [-1, 2]], // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
 		    var H2 = FilterMultiply(dstImageData, dstX, dstY,
-					    [[-2, -1],[0, -1], [2, -1],  // 1,2,3
-					     [-1, 0], [1, 0],            // 4, 5
+					    [[-2, -1],[0, -1], [2, -1],  // 1, 2, 3
+					     [-1, 0],          [1, 0],   // 4,    5
 					     [-2, 1], [0,1], [2, 1]],    // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
 		    if (H1 < H2) {
