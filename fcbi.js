@@ -22,8 +22,8 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction("range2text", {"TMRange":"TMText",
-				"edgeRange":"edgeText",
 				"phaseRange":"phaseText"}, drawFCBI);
+    bindFunction("checkbox", {"edgeCheckbox":null}, drawFCBI);
     bindFunction("range2text", {"maxWidthRange":"maxWidthText",
 				"maxHeightRange":"maxHeightText"}, function() {
 	drawSrcImage();
@@ -39,10 +39,10 @@ function drawSrcImage() {
     var maxWidth = parseFloat(document.getElementById("maxWidthRange").value);
     var maxHeight = parseFloat(document.getElementById("maxHeightRange").value);
     if ((maxWidth < width) || (maxHeight < height)) {
-	var resizeScaleWidth = maxWidth / width;
+	var resizeScaleWidth  = maxWidth / width;
 	var resizeScaleHeight = maxHeight / height;
 	var resizeScale = (resizeScaleWidth < resizeScaleHeight)?resizeScaleWidth:resizeScaleHeight;
-	width *= resizeScale;
+	width  *= resizeScale;
 	height *= resizeScale;
     }
     srcCanvas.width  = width;
@@ -90,7 +90,7 @@ function getLuma(imageData, x, y) {
 }
 function FilterMultiply(imageData, x, y, posi, filter) {
     var h = 0;
-    for (var i=0, n = posi.length ; i < n ; i++) {
+    for (var i = 0, n = posi.length ; i < n ; i++) {
 	var [dx, dy] = posi[i];
 	h += getLuma(imageData, x + dx, y + dy) * filter[i];
     }
@@ -100,7 +100,7 @@ function FilterMultiply(imageData, x, y, posi, filter) {
 function drawFCBI() {
     // console.debug("drawFCBI");
     var TM = parseFloat(document.getElementById("TMRange").value);
-    var edge = parseFloat(document.getElementById("edgeRange").value);
+    var edge = document.getElementById("edgeCheckbox").checked;
     var phase = parseFloat(document.getElementById("phaseRange").value);
     //
     var srcCtx = srcCanvas.getContext("2d");
