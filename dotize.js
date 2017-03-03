@@ -15,19 +15,14 @@ function main() {
     // console.debug("main");
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
-	srcImage.onload = function() {
-	    drawSrcImage();
-	    drawDotize();
-	}
+	srcImage.onload = function() { drawSrcImage(); drawDotize(); }
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction("range2text", {"scaleRange":"scaleText",
 			       "borderRange":"borderText"}, drawDotize);
     bindFunction("range2text", {"maxWidthRange":"maxWidthText",
-				"maxHeightRange":"maxHeightText"}, function() {
-	drawSrcImage();
-	drawDotize();
-    });
+				"maxHeightRange":"maxHeightText"},
+		 function() { drawSrcImage(); drawDotize(); } );
 }
 
 
