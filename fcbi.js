@@ -92,7 +92,18 @@ function FilterMultiply(imageData, x, y, posi, filter) {
 }
 
 function drawFCBI() {
-    // console.debug("drawFCBI");
+    var Context = function() {
+	this.phase = 0;
+	this.srcImageData = null;
+	this.dstImageData = null;
+    }
+    var ctx = new Context();
+    for (var i=0 ; i < 5 ; i++) {
+	setTimeout(drawFCBI_.bind(ctx), 1);
+    }
+}
+function drawFCBI_() {
+    console.debug("drawFCBI:" + this.phase);
     var TM = parseFloat(document.getElementById("TMRange").value);
     var edge = document.getElementById("edgeCheckbox").checked;
     var phase = parseFloat(document.getElementById("phaseRange").value);
@@ -104,20 +115,46 @@ function drawFCBI() {
     var dstWidth = dstCanvas.width = 2*srcWidth - 1;
     var dstHeight = dstCanvas.height = 2*srcHeight - 1;
     //
-    var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-    var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
+    if (this.srcImageData !== null) {
+	var srcImageData = this.srcImageData;
+	var dstImageData = this.dstImageData;
+    } else {
+	var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
+	var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
+	this.srcImageData = srcImageData;
+	this.dstImageData = dstImageData;
+    }
     var srcData = srcImageData.data;
     var dstData = dstImageData.data;
     // リサンプル
-    drawFCBI_Phase1(srcImageData, dstImageData);
+    if (this.phase < 1) {
+	drawFCBI_Phase1(srcImageData, dstImageData);
+	dstCtx.putImageData(dstImageData, 0, 0);
+	this.phase = 1;
+	return ;
+    }
     if (phase > 1) {
 	// 対角成分補間
-	drawFCBI_Phase2(dstImageData, TM, false);
+	if (this.phase < 2) {
+	    drawFCBI_Phase2(dstImageData, TM, false);
+	    dstCtx.putImageData(dstImageData, 0, 0);
+	    this.phase = 2;
+	    return ;
+	}
 	if (phase > 2) {
 	    // 水平垂直成分補完
-	    drawFCBI_Phase3(dstImageData, TM, edge)
+	    if (this.phase < 3) {
+		drawFCBI_Phase3(dstImageData, TM, edge)
+		dstCtx.putImageData(dstImageData, 0, 0);
+		this.phase = 3;
+		return ;
+	    }
 	    if (edge) {
-		drawFCBI_Phase2(dstImageData, TM, edge)
+		if (this.phase < 4) {
+		    drawFCBI_Phase2(dstImageData, TM, edge)
+		    dstCtx.putImageData(dstImageData, 0, 0);
+		    this.phase = 4;
+		}
 	    }
 	}
 	if (edge) { // Phase1 clean
