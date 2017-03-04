@@ -91,6 +91,8 @@ function FilterMultiply(imageData, x, y, posi, filter) {
     return h;
 }
 
+var g_timeoutList = [];
+var g_timeoutNum = 5;
 function drawFCBI() {
     var Context = function() {
 	this.phase = 0;
@@ -98,12 +100,19 @@ function drawFCBI() {
 	this.dstImageData = null;
     }
     var ctx = new Context();
-    for (var i=0 ; i < 5 ; i++) {
-	setTimeout(drawFCBI_.bind(ctx), 1);
+    for (var i=0 ; i < g_timeoutNum ; i++) {
+	var id = setTimeout(drawFCBI_.bind(ctx), 1);
+	g_timeoutList.push(id); // for remove old process
     }
 }
 function drawFCBI_() {
     console.debug("drawFCBI:" + this.phase);
+    if (g_timeoutNum < g_timeoutList.length) { // remove old process
+	for (var id of g_timeoutList.slice(0, -g_timeoutNum)) {
+	    clearTimeout(id);
+	}
+	g_timeoutList = g_timeoutList.slice(-g_timeoutNum);
+    }
     var TM = parseFloat(document.getElementById("TMRange").value);
     var edge = document.getElementById("edgeCheckbox").checked;
     var phase = parseFloat(document.getElementById("phaseRange").value);
