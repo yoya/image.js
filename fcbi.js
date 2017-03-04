@@ -102,6 +102,7 @@ function drawFCBI() {
     var TM = parseFloat(document.getElementById("TMRange").value);
     var edge = document.getElementById("edgeCheckbox").checked;
     var phase = parseFloat(document.getElementById("phaseRange").value);
+    // console.debug("TM,edge,phase:", TM,edge,phase);
     //
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -117,11 +118,24 @@ function drawFCBI() {
     drawFCBI_Phase1(srcImageData, dstImageData);
     if (phase > 1) {
 	// 対角成分補間
-	drawFCBI_Phase2(dstImageData, TM, edge)
-    }
-    if (phase > 2) {
-	// 水平垂直成分補完
-	drawFCBI_Phase3(dstImageData, TM, edge)
+	drawFCBI_Phase2(dstImageData, TM, false);
+	if (phase > 2) {
+	    // 水平垂直成分補完
+	    drawFCBI_Phase3(dstImageData, TM, edge)
+	    if (edge) {
+		drawFCBI_Phase2(dstImageData, TM, edge)
+	    }
+	}
+	if (edge) { // Phase1 clean
+	    for (var dstY = 0 ; dstY < dstHeight; dstY+=2) {
+		for (var dstX = 0 ; dstX < dstWidth; dstX+=2) {
+		    var srcX = dstX/2;
+		    var srcY = dstY/2;
+		    var rgba = [0, 0, 0, 255];
+		    setRGBA(dstImageData, dstX, dstY, rgba);
+		}
+	    }
+	}
     }
     dstCtx.putImageData(dstImageData, 0, 0);
 }
