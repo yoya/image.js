@@ -24,11 +24,8 @@ function main() {
     bindFunction("range2text", {"TMRange":"TMText",
 				"phaseRange":"phaseText"}, drawFCBI);
     bindFunction("checkbox", {"edgeCheckbox":null}, drawFCBI);
-    bindFunction("range2text", {"maxWidthRange":"maxWidthText",
-				"maxHeightRange":"maxHeightText"}, function() {
-	drawSrcImage();
-	drawFCBI();
-    });
+    bindFunction("range2text", {"maxWidthHeightRange":"maxWidthHeightText"},
+		 function() { drawSrcImage(); drawFCBI(); } );
 }
 
 
@@ -36,12 +33,9 @@ function drawSrcImage() {
     // console.debug("drawSrcImage");
     var srcCtx = srcCanvas.getContext("2d");
     var width = srcImage.width, height = srcImage.height;
-    var maxWidth = parseFloat(document.getElementById("maxWidthRange").value);
-    var maxHeight = parseFloat(document.getElementById("maxHeightRange").value);
-    if ((maxWidth < width) || (maxHeight < height)) {
-	var resizeScaleWidth  = maxWidth / width;
-	var resizeScaleHeight = maxHeight / height;
-	var resizeScale = (resizeScaleWidth < resizeScaleHeight)?resizeScaleWidth:resizeScaleHeight;
+    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    if ((maxWidthHeight < width) || (maxWidthHeight < height)) {
+	var resizeScale = maxWidthHeight / ((width > height)?width:height);
 	width  *= resizeScale;
 	height *= resizeScale;
     }
