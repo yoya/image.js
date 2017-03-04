@@ -128,7 +128,7 @@ function drawFCBI_() {
     var dstData = dstImageData.data;
     // リサンプル
     if (this.phase < 1) {
-	drawFCBI_Phase1(srcImageData, dstImageData);
+	drawFCBI_Phase1(srcImageData, dstImageData, false);
 	dstCtx.putImageData(dstImageData, 0, 0);
 	this.phase = 1;
 	return ;
@@ -157,15 +157,9 @@ function drawFCBI_() {
 		}
 	    }
 	}
-	if (edge) { // Phase1 clean
-	    for (var dstY = 0 ; dstY < dstHeight; dstY+=2) {
-		for (var dstX = 0 ; dstX < dstWidth; dstX+=2) {
-		    var srcX = dstX/2;
-		    var srcY = dstY/2;
-		    var rgba = [0, 0, 0, 255];
-		    setRGBA(dstImageData, dstX, dstY, rgba);
-		}
-	    }
+	if (edge) {
+	    drawFCBI_Phase1(srcImageData, dstImageData, edge);
+	    dstCtx.putImageData(dstImageData, 0, 0);
 	}
     }
     dstCtx.putImageData(dstImageData, 0, 0);
@@ -174,13 +168,17 @@ function drawFCBI_() {
 /*
  *  リサンプル(補間なし)
  */
-function drawFCBI_Phase1(srcImageData, dstImageData) {
+function drawFCBI_Phase1(srcImageData, dstImageData, edge) {
     var dstWidth = dstImageData.width, dstHeight = dstImageData.height;
     for (var dstY = 0 ; dstY < dstHeight; dstY+=2) {
         for (var dstX = 0 ; dstX < dstWidth; dstX+=2) {
-	    var srcX = dstX/2;
-	    var srcY = dstY/2;
-	    var rgba = getRGBA(srcImageData, srcX, srcY);
+	    if (edge) {
+		var rgba = [0, 0, 0, 255];
+	    } else {
+		var srcX = dstX/2;
+		var srcY = dstY/2;
+		var rgba = getRGBA(srcImageData, srcX, srcY);
+	    }
 	    setRGBA(dstImageData, dstX, dstY, rgba);
 	}
     }
