@@ -154,6 +154,7 @@ function drawFCBI_() {
 		    drawFCBI_Phase2(dstImageData, TM, edge)
 		    dstCtx.putImageData(dstImageData, 0, 0);
 		    this.phase = 4;
+		    return ;
 		}
 	    }
 	}
