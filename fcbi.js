@@ -82,7 +82,7 @@ function getLuma(imageData, x, y) {
     var rgba = getRGBA(imageData, x, y);
     return lumaFromRGBA(rgba);
 }
-function FilterMultiply(imageData, x, y, posi, filter) {
+function convolveFilter(imageData, x, y, posi, filter) {
     var h = 0;
     for (var i = 0, n = posi.length ; i < n ; i++) {
 	var [dx, dy] = posi[i];
@@ -221,12 +221,12 @@ function drawFCBI_Phase2(dstImageData, TM, edge) {
 		if (edge) {
 		    var rgba = [0, 128, 0, 255]; // green
 		} else {
-		    var H1 = FilterMultiply(dstImageData, dstX, dstY,
+		    var H1 = convolveFilter(dstImageData, dstX, dstY,
 					    [[-3, 1], [-1,-1], [1, -3],  // 1, 2, 3
 					     [-1, 1],          [1, -1],  // 4,    5
 					     [-1, 3], [ 1, 1], [3, -1]], // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
-		    var H2 = FilterMultiply(dstImageData, dstX, dstY,
+		    var H2 = convolveFilter(dstImageData, dstX, dstY,
 					    [[-1, -3], [1, -1], [3, 1],  // 1, 2, 3
 					     [-1, -1],          [1, 1],  // 4,    5
 					     [-3, -1], [-1, 1], [1, 3]], // 6, 7, 8
@@ -280,12 +280,12 @@ function drawFCBI_Phase3(dstImageData, TM, edge) {
 		if (edge) {
 		    var rgba = [0, 0, 255, 255]; // blue
 		} else {
-		    var H1 = FilterMultiply(dstImageData, dstX, dstY,
+		    var H1 = convolveFilter(dstImageData, dstX, dstY,
 					    [[1, -2], [1, 0], [1, 2],    // 1, 2, 3
 					     [0, -1],         [0, 1],    // 4,    5
 					     [-1,-2], [-1,0], [-1, 2]],  // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
-		    var H2 = FilterMultiply(dstImageData, dstX, dstY,
+		    var H2 = convolveFilter(dstImageData, dstX, dstY,
 					    [[-2,-1], [0,-1], [2, -1],   // 1, 2, 3
 					     [-1, 0],         [1,  0],   // 4,    5
 					     [-2, 1], [0, 1], [2,  1]],  // 6, 7, 8
