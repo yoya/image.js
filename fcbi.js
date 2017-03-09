@@ -231,7 +231,7 @@ function drawFCBI_Phase2(dstImageData, TM, edgeMode) {
 					     [-1, -1],          [1, 1],  // 4,    5
 					     [-3, -1], [-1, 1], [1, 3]], // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
-		    if (H1 < H2) {
+		    if (Math.abs(H1) < Math.abs(H2)) {
 			var rgba = meanRGBA(rgba1, rgba4);
 		    } else {
 			var rgba = meanRGBA(rgba2, rgba3);
@@ -290,7 +290,7 @@ function drawFCBI_Phase3(dstImageData, TM, edgeMode) {
 					     [-1, 0],         [1,  0],   // 4,    5
 					     [-2, 1], [0, 1], [2,  1]],  // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
-		    if (H1 <= H2) {
+		    if (Math.abs(H1) < Math.abs(H2)) {
 			var rgba = meanRGBA(rgba1, rgba4);
 		    } else {
 			var rgba = meanRGBA(rgba2, rgba3);
