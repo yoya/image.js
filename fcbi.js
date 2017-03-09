@@ -101,7 +101,7 @@ function drawFCBI() {
     }
     var ctx = new Context();
     for (var i=0 ; i < g_timeoutNum ; i++) {
-	var id = setTimeout(drawFCBI_.bind(ctx), 1);
+	var id = setTimeout(drawFCBI_.bind(ctx), 10);
 	g_timeoutList.push(id); // for remove old process
     }
 }
