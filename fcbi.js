@@ -23,7 +23,7 @@ function main() {
     }, "DataURL");
     bindFunction("range2text", {"TMRange":"TMText",
 				"phaseRange":"phaseText"}, drawFCBI);
-    bindFunction("checkbox", {"edgeCheckbox":null}, drawFCBI);
+    bindFunction("checkbox", {"edgeModeCheckbox":null}, drawFCBI);
     bindFunction("range2text", {"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() { drawSrcImage(); drawFCBI(); } );
 }
@@ -114,9 +114,9 @@ function drawFCBI_() {
 	g_timeoutList = g_timeoutList.slice(-g_timeoutNum);
     }
     var TM = parseFloat(document.getElementById("TMRange").value);
-    var edge = document.getElementById("edgeCheckbox").checked;
+    var edgeMode = document.getElementById("edgeModeCheckbox").checked;
     var phase = parseFloat(document.getElementById("phaseRange").value);
-    // console.debug("TM,edge,phase:", TM,edge,phase);
+    // console.debug("TM,edgeMode,phase:", TM,edgeMode,phase);
     //
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -153,22 +153,22 @@ function drawFCBI_() {
 	if (phase > 2) {
 	    // 水平垂直成分補完
 	    if (this.phase < 3) {
-		drawFCBI_Phase3(dstImageData, TM, edge)
+		drawFCBI_Phase3(dstImageData, TM, edgeMode)
 		dstCtx.putImageData(dstImageData, 0, 0);
 		this.phase = 3;
 		return ;
 	    }
-	    if (edge) {
+	    if (edgeMode) {
 		if (this.phase < 4) {
-		    drawFCBI_Phase2(dstImageData, TM, edge)
+		    drawFCBI_Phase2(dstImageData, TM, edgeMode)
 		    dstCtx.putImageData(dstImageData, 0, 0);
 		    this.phase = 4;
 		    return ;
 		}
 	    }
 	}
-	if (edge) {
-	    drawFCBI_Phase1(srcImageData, dstImageData, edge);
+	if (edgeMode) {
+	    drawFCBI_Phase1(srcImageData, dstImageData, edgeMode);
 	    dstCtx.putImageData(dstImageData, 0, 0);
 	}
     }
@@ -178,15 +178,15 @@ function drawFCBI_() {
 /*
  *  リサンプル(補間なし)
  */
-function drawFCBI_Phase1(srcImageData, dstImageData, edge) {
+function drawFCBI_Phase1(srcImageData, dstImageData, edgeMode) {
     var dstWidth = dstImageData.width, dstHeight = dstImageData.height;
-    for (var dstY = 0 ; dstY < dstHeight; dstY+=2) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX+=2) {
-	    if (edge) {
+    for (var dstY = 0 ; dstY < dstHeight ; dstY+=2) {
+        for (var dstX = 0 ; dstX < dstWidth ; dstX+=2) {
+	    if (edgeMode) {
 		var rgba = [0, 0, 0, 255];
 	    } else {
-		var srcX = dstX/2;
-		var srcY = dstY/2;
+		var srcX = dstX / 2;
+		var srcY = dstY / 2;
 		var rgba = getRGBA(srcImageData, srcX, srcY);
 	    }
 	    setRGBA(dstImageData, dstX, dstY, rgba);
@@ -197,7 +197,7 @@ function drawFCBI_Phase1(srcImageData, dstImageData, edge) {
 /*
  * 対角成分補間
  */
-function drawFCBI_Phase2(dstImageData, TM, edge) {
+function drawFCBI_Phase2(dstImageData, TM, edgeMode) {
     var dstWidth = dstImageData.width, dstHeight = dstImageData.height;
     for (var dstY = 1 ; dstY < dstHeight; dstY+=2) {
         for (var dstX = 1 ; dstX < dstWidth; dstX+=2) {
@@ -218,7 +218,7 @@ function drawFCBI_Phase2(dstImageData, TM, edge) {
 	    var p1 = (l1 + l4) / 2;
 	    var p2 = (l2 + l3) / 2;
 	    if ((V1 < TM) && (V2 < TM) && (Math.abs(p1 - p2) < TM)) {
-		if (edge) {
+		if (edgeMode) {
 		    var rgba = [0, 128, 0, 255]; // green
 		} else {
 		    var H1 = convolveFilter(dstImageData, dstX, dstY,
@@ -238,7 +238,7 @@ function drawFCBI_Phase2(dstImageData, TM, edge) {
 		    }
 		}
 	    } else {
-		if (edge) {
+		if (edgeMode) {
 		    var rgba = [255, 0, 0, 255]; // red
 		} else {
 		    if (V1 < V2) {
@@ -256,7 +256,7 @@ function drawFCBI_Phase2(dstImageData, TM, edge) {
 /*
  * 水平垂直成分補完
  */
-function drawFCBI_Phase3(dstImageData, TM, edge) {
+function drawFCBI_Phase3(dstImageData, TM, edgeMode) {
     var dstWidth = dstImageData.width, dstHeight = dstImageData.height;
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 1 - (dstY%2) ; dstX < dstWidth; dstX+=2) {
@@ -277,7 +277,7 @@ function drawFCBI_Phase3(dstImageData, TM, edge) {
 	    var p1 = (l1 + l4) / 2;
 	    var p2 = (l2 + l3) / 2;
 	    if ((V1 < TM) && (V2 < TM) && (Math.abs(p1 - p2) < TM)) {
-		if (edge) {
+		if (edgeMode) {
 		    var rgba = [0, 0, 255, 255]; // blue
 		} else {
 		    var H1 = convolveFilter(dstImageData, dstX, dstY,
@@ -297,7 +297,7 @@ function drawFCBI_Phase3(dstImageData, TM, edge) {
 		    }
 		}
 	    } else {
-		if (edge) {
+		if (edgeMode) {
 		    var rgba = [255, 255, 0, 255]; // yellow
 		} else {
 		    if (V1 < V2) {
