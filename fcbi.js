@@ -213,25 +213,25 @@ function drawFCBI_Phase2(dstImageData, TM, edgeMode) {
 	    var l2 = lumaFromRGBA(rgba2);
 	    var l3 = lumaFromRGBA(rgba3);
 	    var l4 = lumaFromRGBA(rgba4);
-	    var V1 = Math.abs(l1 - l4);
-	    var V2 = Math.abs(l2 - l3);
+	    var v1 = Math.abs(l1 - l4);
+	    var v2 = Math.abs(l2 - l3);
 	    var p1 = (l1 + l4) / 2;
 	    var p2 = (l2 + l3) / 2;
-	    if ((V1 < TM) && (V2 < TM) && (Math.abs(p1 - p2) < TM)) {
+	    if ((v1 < TM) && (v2 < TM) && (Math.abs(p1 - p2) < TM)) {
 		if (edgeMode) {
 		    var rgba = [0, 128, 0, 255]; // green
 		} else {
-		    var H1 = convolveFilter(dstImageData, dstX, dstY,
+		    var h1 = convolveFilter(dstImageData, dstX, dstY,
 					    [[-3, 1], [-1,-1], [1, -3],  // 1, 2, 3
 					     [-1, 1],          [1, -1],  // 4,    5
 					     [-1, 3], [ 1, 1], [3, -1]], // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
-		    var H2 = convolveFilter(dstImageData, dstX, dstY,
+		    var h2 = convolveFilter(dstImageData, dstX, dstY,
 					    [[-1, -3], [1, -1], [3, 1],  // 1, 2, 3
 					     [-1, -1],          [1, 1],  // 4,    5
 					     [-3, -1], [-1, 1], [1, 3]], // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
-		    if (Math.abs(H1) < Math.abs(H2)) {
+		    if (Math.abs(h1) < Math.abs(h2)) {
 			var rgba = meanRGBA(rgba1, rgba4);
 		    } else {
 			var rgba = meanRGBA(rgba2, rgba3);
@@ -241,7 +241,7 @@ function drawFCBI_Phase2(dstImageData, TM, edgeMode) {
 		if (edgeMode) {
 		    var rgba = [255, 0, 0, 255]; // red
 		} else {
-		    if (V1 < V2) {
+		    if (v1 < v2) {
 			var rgba = meanRGBA(rgba1, rgba4);
 		    } else{
 			var rgba = meanRGBA(rgba2, rgba3);
@@ -272,25 +272,25 @@ function drawFCBI_Phase3(dstImageData, TM, edgeMode) {
 	    var l2 = lumaFromRGBA(rgba2);
 	    var l3 = lumaFromRGBA(rgba3);
 	    var l4 = lumaFromRGBA(rgba4);
-	    var V1 = Math.abs(l1 - l4);
-	    var V2 = Math.abs(l2 - l3);
+	    var v1 = Math.abs(l1 - l4);
+	    var v2 = Math.abs(l2 - l3);
 	    var p1 = (l1 + l4) / 2;
 	    var p2 = (l2 + l3) / 2;
-	    if ((V1 < TM) && (V2 < TM) && (Math.abs(p1 - p2) < TM)) {
+	    if ((v1 < TM) && (v2 < TM) && (Math.abs(p1 - p2) < TM)) {
 		if (edgeMode) {
 		    var rgba = [0, 0, 255, 255]; // blue
 		} else {
-		    var H1 = convolveFilter(dstImageData, dstX, dstY,
+		    var h1 = convolveFilter(dstImageData, dstX, dstY,
 					    [[1, -2], [1, 0], [1, 2],    // 1, 2, 3
 					     [0, -1],         [0, 1],    // 4,    5
 					     [-1,-2], [-1,0], [-1, 2]],  // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
-		    var H2 = convolveFilter(dstImageData, dstX, dstY,
+		    var h2 = convolveFilter(dstImageData, dstX, dstY,
 					    [[-2,-1], [0,-1], [2, -1],   // 1, 2, 3
 					     [-1, 0],         [1,  0],   // 4,    5
 					     [-2, 1], [0, 1], [2,  1]],  // 6, 7, 8
 					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
-		    if (Math.abs(H1) < Math.abs(H2)) {
+		    if (Math.abs(h1) < Math.abs(h2)) {
 			var rgba = meanRGBA(rgba1, rgba4);
 		    } else {
 			var rgba = meanRGBA(rgba2, rgba3);
@@ -300,7 +300,7 @@ function drawFCBI_Phase3(dstImageData, TM, edgeMode) {
 		if (edgeMode) {
 		    var rgba = [255, 255, 0, 255]; // yellow
 		} else {
-		    if (V1 < V2) {
+		    if (v1 < v2) {
 			var rgba = meanRGBA(rgba1, rgba4);
 		    } else{
 			var rgba = meanRGBA(rgba2, rgba3);
