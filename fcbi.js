@@ -241,10 +241,14 @@ function drawFCBI_Phase2(dstImageData, TM, edgeMode) {
 		if (edgeMode) {
 		    var rgba = [255, 0, 0, 255]; // red
 		} else {
-		    if (v1 < v2) {
-			var rgba = meanRGBA(rgba1, rgba4);
-		    } else{
-			var rgba = meanRGBA(rgba2, rgba3);
+		    if (Math.abs(v1 - v2) < TM)  { // yoya custom
+			var rgba = meanRGBA(meanRGBA(rgba1, rgba4), meanRGBA(rgba2, rgba3));
+		    } else {
+			if (v1 < v2) {
+			    var rgba = meanRGBA(rgba1, rgba4);
+			} else {
+			    var rgba = meanRGBA(rgba2, rgba3);
+			}
 		    }
 		}
 	    }
@@ -300,10 +304,14 @@ function drawFCBI_Phase3(dstImageData, TM, edgeMode) {
 		if (edgeMode) {
 		    var rgba = [255, 255, 0, 255]; // yellow
 		} else {
-		    if (v1 < v2) {
-			var rgba = meanRGBA(rgba1, rgba4);
-		    } else{
-			var rgba = meanRGBA(rgba2, rgba3);
+		    if (Math.abs(v1 - v2) < TM)  { // yoya custom
+			var rgba = meanRGBA(meanRGBA(rgba1, rgba4), meanRGBA(rgba2, rgba3));
+		    } else {
+			if (v1 < v2) {
+			    var rgba = meanRGBA(rgba1, rgba4);
+			} else{
+			    var rgba = meanRGBA(rgba2, rgba3);
+			}
 		    }
 		}
 	    }
