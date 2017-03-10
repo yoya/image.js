@@ -82,14 +82,6 @@ function getLuma(imageData, x, y) {
     var rgba = getRGBA(imageData, x, y);
     return lumaFromRGBA(rgba);
 }
-function convolveFilter(imageData, x, y, posi, filter) {
-    var h = 0;
-    for (var i = 0, n = posi.length ; i < n ; i++) {
-	var [dx, dy] = posi[i];
-	h += getLuma(imageData, x + dx, y + dy) * filter[i];
-    }
-    return h;
-}
 
 var g_timeoutList = [];
 var g_timeoutNum = 5;
@@ -221,16 +213,21 @@ function drawFCBI_Phase2(dstImageData, TM, edgeMode) {
 		if (edgeMode) {
 		    var rgba = [0, 128, 0, 255]; // green
 		} else {
-		    var h1 = convolveFilter(dstImageData, dstX, dstY,
-					    [[-3, 1], [-1,-1], [1, -3],  // 1, 2, 3
-					     [-1, 1],          [1, -1],  // 4,    5
-					     [-1, 3], [ 1, 1], [3, -1]], // 6, 7, 8
-					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
-		    var h2 = convolveFilter(dstImageData, dstX, dstY,
-					    [[-1, -3], [1, -1], [3, 1],  // 1, 2, 3
-					     [-1, -1],          [1, 1],  // 4,    5
-					     [-3, -1], [-1, 1], [1, 3]], // 6, 7, 8
-					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
+		    var l_m1m3 = getLuma(dstImageData, dstX-1, dstY-3);
+		    var l_p1m3 = getLuma(dstImageData, dstX+1, dstY-3);
+		    var l_m3m1 = getLuma(dstImageData, dstX-3, dstY-1);
+		    // l_m1m1 = l1;
+		    // l_p1m1 = l2;
+		    var l_p3m1 = getLuma(dstImageData, dstX+3, dstY-1);
+		    var l_m3p1 = getLuma(dstImageData, dstX-3, dstY+1);
+		    // l_m1p1 = l3;
+		    // l_p1p1 = l4;
+		    var l_p3p1 = getLuma(dstImageData, dstX+3, dstY+1);
+		    var l_m1p3 = getLuma(dstImageData, dstX-1, dstY+3);
+		    var l_p1p3 = getLuma(dstImageData, dstX+1, dstY+3);
+
+		    var h1 = (l_m3p1 + l1 + l_p1m3) - 3 * (l3 + l2) + (l_m1p3 + l4 + l_p3m1);
+		    var h2 = (l_m1m3 + l2 + l_p3p1) - 3 * (l1 + l4) + (l_m3m1 + l3 + l_p1p3);
 		    if (Math.abs(h1) < Math.abs(h2)) {
 			var rgba = meanRGBA(rgba1, rgba4);
 		    } else {
@@ -284,16 +281,21 @@ function drawFCBI_Phase3(dstImageData, TM, edgeMode) {
 		if (edgeMode) {
 		    var rgba = [0, 0, 255, 255]; // blue
 		} else {
-		    var h1 = convolveFilter(dstImageData, dstX, dstY,
-					    [[1, -2], [1, 0], [1, 2],    // 1, 2, 3
-					     [0, -1],         [0, 1],    // 4,    5
-					     [-1,-2], [-1,0], [-1, 2]],  // 6, 7, 8
-					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
-		    var h2 = convolveFilter(dstImageData, dstX, dstY,
-					    [[-2,-1], [0,-1], [2, -1],   // 1, 2, 3
-					     [-1, 0],         [1,  0],   // 4,    5
-					     [-2, 1], [0, 1], [2,  1]],  // 6, 7, 8
-					    [1, 1, 1, -3, -3, 1, 1, 1]); // filter
+		    var l_m1m2 = getLuma(dstImageData, dstX-1, dstY-2);
+		    var l_p1m2 = getLuma(dstImageData, dstX+1, dstY-2);
+		    var l_m2m1 = getLuma(dstImageData, dstX-2, dstY-1);
+		    // l_z0m1 = l2
+		    var l_p2m1 = getLuma(dstImageData, dstX+2, dstY-1);
+		    // l_m1z0 = l1
+		    // l_p1z0 = l4
+		    var l_m2p1 = getLuma(dstImageData, dstX-2, dstY+1);
+		    // l_z0p1 = l3
+		    var l_p2p1 = getLuma(dstImageData, dstX+2, dstY+1);
+		    var l_m1p2 = getLuma(dstImageData, dstX-1, dstY+2);
+		    var l_p1p2 = getLuma(dstImageData, dstX+1, dstY+2);
+
+		    var h1 = (l_p1m2 + l4 + l_p1p2) + 3 * (l2 + l3) + (l_m1m2 + l1 + l_m1p2)
+		    var h2 = (l_m2m1 + l2 + l_p2m1) + 3 * (l1 + l4) + (l_m2p1 + l3 + l_p2p1);
 		    if (Math.abs(h1) < Math.abs(h2)) {
 			var rgba = meanRGBA(rgba1, rgba4);
 		    } else {
