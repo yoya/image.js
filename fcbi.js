@@ -209,7 +209,8 @@ function drawFCBI_Phase2(dstImageData, TM, edgeMode) {
 	    var v2 = Math.abs(l2 - l3);
 	    var p1 = (l1 + l4) / 2;
 	    var p2 = (l2 + l3) / 2;
-	    if ((v1 < TM) && (v2 < TM) && (Math.abs(p1 - p2) < TM)) {
+	    if (((v1 < TM) && (v2 < TM) && (Math.abs(p1 - p2) < TM)) ||
+		(Math.abs(v1 - v2) < TM)) { // yoya custom
 		if (edgeMode) {
 		    var rgba = [0, 128, 0, 255]; // green
 		} else {
@@ -238,14 +239,10 @@ function drawFCBI_Phase2(dstImageData, TM, edgeMode) {
 		if (edgeMode) {
 		    var rgba = [255, 0, 0, 255]; // red
 		} else {
-		    if (Math.abs(v1 - v2) < TM)  { // yoya custom
-			var rgba = meanRGBA(meanRGBA(rgba1, rgba4), meanRGBA(rgba2, rgba3));
+		    if (v1 < v2) {
+			var rgba = meanRGBA(rgba1, rgba4);
 		    } else {
-			if (v1 < v2) {
-			    var rgba = meanRGBA(rgba1, rgba4);
-			} else {
-			    var rgba = meanRGBA(rgba2, rgba3);
-			}
+			var rgba = meanRGBA(rgba2, rgba3);
 		    }
 		}
 	    }
@@ -277,7 +274,8 @@ function drawFCBI_Phase3(dstImageData, TM, edgeMode) {
 	    var v2 = Math.abs(l2 - l3);
 	    var p1 = (l1 + l4) / 2;
 	    var p2 = (l2 + l3) / 2;
-	    if ((v1 < TM) && (v2 < TM) && (Math.abs(p1 - p2) < TM)) {
+	    if (((v1 < TM) && (v2 < TM) && (Math.abs(p1 - p2) < TM)) ||
+		(Math.abs(v1 - v2) < TM)) { // yoya custom
 		if (edgeMode) {
 		    var rgba = [0, 0, 255, 255]; // blue
 		} else {
@@ -306,14 +304,10 @@ function drawFCBI_Phase3(dstImageData, TM, edgeMode) {
 		if (edgeMode) {
 		    var rgba = [255, 255, 0, 255]; // yellow
 		} else {
-		    if (Math.abs(v1 - v2) < TM)  { // yoya custom
-			var rgba = meanRGBA(meanRGBA(rgba1, rgba4), meanRGBA(rgba2, rgba3));
-		    } else {
-			if (v1 < v2) {
-			    var rgba = meanRGBA(rgba1, rgba4);
-			} else{
-			    var rgba = meanRGBA(rgba2, rgba3);
-			}
+		    if (v1 < v2) {
+			var rgba = meanRGBA(rgba1, rgba4);
+		    } else{
+			var rgba = meanRGBA(rgba2, rgba3);
 		    }
 		}
 	    }
