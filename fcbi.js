@@ -7,29 +7,36 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
-var srcCanvas = document.getElementById("srcCanvas");
-var dstCanvas = document.getElementById("dstCanvas");
-var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-
 function main() {
     // console.debug("main");
+    var srcCanvas = document.getElementById("srcCanvas");
+    var dstCanvas = document.getElementById("dstCanvas");
+    var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImage();
-	    drawFCBI();
+	    drawSrcImage(srcImage, srcCanvas);
+	    drawFCBI(srcCanvas, dstCanvas);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction("range2text", {"TMRange":"TMText",
-				"phaseRange":"phaseText"}, drawFCBI);
-    bindFunction("checkbox", {"edgeModeCheckbox":null}, drawFCBI);
+				"phaseRange":"phaseText"},
+		 function () { drawFCBI(srcCanvas, dstCanvas); }
+		);
+    bindFunction("checkbox", {"edgeModeCheckbox":null},
+		 function () {
+		     drawFCBI(srcCanvas, dstCanvas); }
+		);
     bindFunction("range2text", {"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() { drawSrcImage(); drawFCBI(); } );
+		 function() {
+		     drawSrcImage(srcImage, srcCanvas);
+		     drawFCBI(srcCanvas, dstCanvas); }
+		);
 }
 
 
-function drawSrcImage() {
+function drawSrcImage(srcImage, srcCanvas) {
     // console.debug("drawSrcImage");
     var srcCtx = srcCanvas.getContext("2d");
     var width = srcImage.width, height = srcImage.height;
@@ -85,11 +92,24 @@ function getLuma(imageData, x, y) {
 
 var g_timeoutList = [];
 var g_timeoutNum = 5;
-function drawFCBI() {
+function drawFCBI(srcCanvas, dstCanvas) {
+    var srcCtx = srcCanvas.getContext("2d");
+    var dstCtx = dstCanvas.getContext("2d");
+    var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
+    var dstWidth = dstCanvas.width = 2*srcWidth - 1;
+    var dstHeight = dstCanvas.height = 2*srcHeight - 1;
+    //
+    var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
+    var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
+    //
     var Context = function() {
 	this.phase = 0;
-	this.srcImageData = null;
-	this.dstImageData = null;
+	this.srcCanvas = srcCanvas;
+	this.dstCanvas = dstCanvas;
+	this.srcCtx = srcCtx;
+	this.dstCtx = dstCtx;
+	this.srcImageData = srcImageData;
+	this.dstImageData = dstImageData;;
     }
     var ctx = new Context();
     for (var i=0 ; i < g_timeoutNum ; i++) {
@@ -99,6 +119,12 @@ function drawFCBI() {
 }
 function drawFCBI_() {
     console.debug("drawFCBI:" + this.phase);
+    var srcCanvas = this.srcCanvas;
+    var dstCanvas = this.dstCanvas;
+    var srcCtx = this.srcCtx;
+    var dstCtx = this.dstCtx;
+    var srcImageData = this.srcImageData;
+    var dstImageData = this.dstImageData;
     if (g_timeoutNum < g_timeoutList.length) { // remove old process
 	for (var id of g_timeoutList.slice(0, -g_timeoutNum)) {
 	    clearTimeout(id);
@@ -110,21 +136,6 @@ function drawFCBI_() {
     var phase = parseFloat(document.getElementById("phaseRange").value);
     // console.debug("TM,edgeMode,phase:", TM,edgeMode,phase);
     //
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtx = dstCanvas.getContext("2d");
-    var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var dstWidth = dstCanvas.width = 2*srcWidth - 1;
-    var dstHeight = dstCanvas.height = 2*srcHeight - 1;
-    //
-    if (this.srcImageData !== null) {
-	var srcImageData = this.srcImageData;
-	var dstImageData = this.dstImageData;
-    } else {
-	var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-	var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-	this.srcImageData = srcImageData;
-	this.dstImageData = dstImageData;
-    }
     var srcData = srcImageData.data;
     var dstData = dstImageData.data;
     // リサンプル
