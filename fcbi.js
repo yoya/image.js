@@ -292,8 +292,8 @@ function drawFCBI_Phase3(dstImageData, TM, edgeMode) {
 		    var l_m1p2 = getLuma(dstImageData, dstX-1, dstY+2);
 		    var l_p1p2 = getLuma(dstImageData, dstX+1, dstY+2);
 
-		    var h1 = (l_p1m2 + l4 + l_p1p2) + 3 * (l2 + l3) + (l_m1m2 + l1 + l_m1p2)
-		    var h2 = (l_m2m1 + l2 + l_p2m1) + 3 * (l1 + l4) + (l_m2p1 + l3 + l_p2p1);
+		    var h1 = (l_p1m2 + l4 + l_p1p2) - 3 * (l2 + l3) + (l_m1m2 + l1 + l_m1p2)
+		    var h2 = (l_m2m1 + l2 + l_p2m1) - 3 * (l1 + l4) + (l_m2p1 + l3 + l_p2p1);
 		    if (Math.abs(h1) < Math.abs(h2)) {
 			var rgba = meanRGBA(rgba1, rgba4);
 		    } else {
