@@ -91,8 +91,9 @@ function getLuma(imageData, x, y) {
 }
 
 var g_timeoutList = [];
-var g_timeoutNum = 5;
+var g_timeoutNum = 6;
 function drawFCBI(srcCanvas, dstCanvas) {
+    console.debug("drawFCBI");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
@@ -118,7 +119,7 @@ function drawFCBI(srcCanvas, dstCanvas) {
     }
 }
 function drawFCBI_() {
-    console.debug("drawFCBI:" + this.phase);
+    console.debug("drawFCBI_ phase:" + this.phase);
     var srcCanvas = this.srcCanvas;
     var dstCanvas = this.dstCanvas;
     var srcCtx = this.srcCtx;
@@ -145,37 +146,40 @@ function drawFCBI_() {
 	this.phase = 1;
 	return ;
     }
-    if (phase > 1) {
-	// 対角成分補間
-	if (this.phase < 2) {
-	    drawFCBI_Phase2(dstImageData, TM, false);
+    // 対角成分補間
+    if (this.phase < 2) {
+	drawFCBI_Phase2(dstImageData, TM, false);
+	dstCtx.putImageData(dstImageData, 0, 0);
+	this.phase = 2;
+	return ;
+    }
+    // 水平垂直成分補完
+    if (this.phase < 3) {
+	drawFCBI_Phase3(dstImageData, TM, edgeMode)
+	dstCtx.putImageData(dstImageData, 0, 0);
+	this.phase = 3;
+	return ;
+    }
+    if (this.phase < 4) {
+	if (edgeMode) {
+	    drawFCBI_Phase2(dstImageData, TM, edgeMode)
 	    dstCtx.putImageData(dstImageData, 0, 0);
-	    this.phase = 2;
+	    this.phase = 4;
 	    return ;
 	}
-	if (phase > 2) {
-	    // 水平垂直成分補完
-	    if (this.phase < 3) {
-		drawFCBI_Phase3(dstImageData, TM, edgeMode)
-		dstCtx.putImageData(dstImageData, 0, 0);
-		this.phase = 3;
-		return ;
-	    }
-	    if (edgeMode) {
-		if (this.phase < 4) {
-		    drawFCBI_Phase2(dstImageData, TM, edgeMode)
-		    dstCtx.putImageData(dstImageData, 0, 0);
-		    this.phase = 4;
-		    return ;
-		}
-	    }
-	}
+    }
+    if (this.phase < 5) {
 	if (edgeMode) {
 	    drawFCBI_Phase1(srcImageData, dstImageData, edgeMode);
 	    dstCtx.putImageData(dstImageData, 0, 0);
+	    this.phase = 5;
+	    return ;
 	}
     }
-    dstCtx.putImageData(dstImageData, 0, 0);
+    if (this.phase < 6) {
+	dstCtx.putImageData(dstImageData, 0, 0);
+	this.phase = 6;
+    }
 }
 
 /*
