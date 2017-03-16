@@ -103,25 +103,28 @@ function drawFCBI_() {
 	break;
     case 1:  // 対角成分補間
 	if (1 < phaseLimit) {
-	    drawFCBI_Phase2(dstImageData, TM, false);
+	    if (2 === phaseLimit) {
+		drawFCBI_Phase2(dstImageData, TM, edgeMode);
+	    } else {
+		drawFCBI_Phase2(dstImageData, TM, false);
+	    }
 	}
 	break;
     case 2: // 水平垂直成分補完
 	if (2 < phaseLimit) {
-	    drawFCBI_Phase3(dstImageData, TM, edgeMode)
+	    drawFCBI_Phase3(dstImageData, TM, edgeMode);
 	}
 	break;
     case 3: // 対角成分エッジ
-	if (1 < phaseLimit) {
+	if (2 < phaseLimit) {
 	    if (edgeMode) {
-		drawFCBI_Phase2(dstImageData, TM, edgeMode)
+		drawFCBI_Phase2(dstImageData, TM, edgeMode);
 	    }
 	}
 	break;
     case 4: // エッジの隙間クリア
 	if (edgeMode) {
 	    drawFCBI_Phase1(srcImageData, dstImageData, edgeMode);
-
 	}
 	break;
     default:
