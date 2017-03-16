@@ -22,7 +22,7 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction("range2text", {"TMRange":"TMText",
-				"phaseRange":"phaseText"},
+				"phaseLimitRange":"phaseLimitText"},
 		 function () { drawFCBI(srcCanvas, dstCanvas); }
 		);
     bindFunction("checkbox", {"edgeModeCheckbox":null},
@@ -94,30 +94,34 @@ function drawFCBI_() {
     }
     var TM = parseFloat(document.getElementById("TMRange").value);
     var edgeMode = document.getElementById("edgeModeCheckbox").checked;
-    var phase = parseFloat(document.getElementById("phaseRange").value);
+    var phaseLimit = parseFloat(document.getElementById("phaseLimitRange").value);
     // console.debug("TM,edgeMode,phase:", TM,edgeMode,phase);
     //
-    if (phase <= this.phase) {
-	return ;
-    }
     switch (this.phase) {
     case 0: // リサンプル
 	drawFCBI_Phase1(srcImageData, dstImageData, false);
 	break;
     case 1:  // 対角成分補間
-	drawFCBI_Phase2(dstImageData, TM, false);
+	if (1 < phaseLimit) {
+	    drawFCBI_Phase2(dstImageData, TM, false);
+	}
 	break;
     case 2: // 水平垂直成分補完
-	drawFCBI_Phase3(dstImageData, TM, edgeMode)
+	if (2 < phaseLimit) {
+	    drawFCBI_Phase3(dstImageData, TM, edgeMode)
+	}
 	break;
     case 3: // 対角成分エッジ
-	if (edgeMode) {
-	    drawFCBI_Phase2(dstImageData, TM, edgeMode)
+	if (1 < phaseLimit) {
+	    if (edgeMode) {
+		drawFCBI_Phase2(dstImageData, TM, edgeMode)
+	    }
 	}
 	break;
     case 4: // エッジの隙間クリア
 	if (edgeMode) {
 	    drawFCBI_Phase1(srcImageData, dstImageData, edgeMode);
+
 	}
 	break;
     default:
