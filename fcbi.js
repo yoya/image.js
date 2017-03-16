@@ -113,30 +113,25 @@ function drawFCBI(srcCanvas, dstCanvas) {
 	this.dstImageData = dstImageData;;
     }
     var ctx = new Context();
-    var id = setTimeout(drawFCBI_.bind(ctx), 0);
+    var id = setTimeout(drawFCBI_.bind(ctx), 10); //フェイズ毎に描画させたい
     g_timeoutList.push(id); // for remove old process
 }
+
 function drawFCBI_() {
     console.debug("drawFCBI_ phase:" + this.phase);
     var srcCanvas = this.srcCanvas;
     var dstCanvas = this.dstCanvas;
-    var srcCtx = this.srcCtx;
     var dstCtx = this.dstCtx;
     var srcImageData = this.srcImageData;
     var dstImageData = this.dstImageData;
-    if (this.phase === 0) {
-	while (0 < g_timeoutList.length) {
-	    var id = g_timeoutList.pop();
-	    clearTimeout(id);
-	}
+    while (1 < g_timeoutList.length) { // 最後の１つを残す
+	var id = g_timeoutList.shift(); // リストの頭からキャンセル
+	clearTimeout(id);
     }
     var TM = parseFloat(document.getElementById("TMRange").value);
     var edgeMode = document.getElementById("edgeModeCheckbox").checked;
     var phase = parseFloat(document.getElementById("phaseRange").value);
     // console.debug("TM,edgeMode,phase:", TM,edgeMode,phase);
-    //
-    var srcData = srcImageData.data;
-    var dstData = dstImageData.data;
     //
     switch (this.phase) {
     case 0: // リサンプル
