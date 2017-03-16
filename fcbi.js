@@ -171,7 +171,7 @@ function drawFCBI_Phase1(srcImageData, dstImageData, edgeMode) {
     for (var dstY = 0 ; dstY < dstHeight ; dstY+=2) {
         for (var dstX = 0 ; dstX < dstWidth ; dstX+=2) {
 	    if (edgeMode) {
-		var rgba = [0, 0, 0, 255];
+		var rgba = [128, 128, 128, 255]; // gray
 	    } else {
 		var srcX = dstX / 2;
 		var srcY = dstY / 2;
