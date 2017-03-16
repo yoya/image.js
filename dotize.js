@@ -40,10 +40,9 @@ function drawDotize(srcCanvas, dstCanvas) {
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var dstWidth = dstCanvas.width, dstHeight = dstCanvas.height;
-    var dstWidth = srcWidth * scale + (srcWidth + 1) * border;
+    var dstWidth  = srcWidth  * scale + (srcWidth  + 1) * border;
     var dstHeight = srcHeight * scale + (srcHeight + 1) * border;
-    dstCanvas.width = dstWidth;
+    dstCanvas.width  = dstWidth;
     dstCanvas.height = dstHeight;
     //
     var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
