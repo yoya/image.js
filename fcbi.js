@@ -133,6 +133,9 @@ function drawFCBI_() {
     var phase = parseFloat(document.getElementById("phaseRange").value);
     // console.debug("TM,edgeMode,phase:", TM,edgeMode,phase);
     //
+    if (phase <= this.phase) {
+	return ;
+    }
     switch (this.phase) {
     case 0: // リサンプル
 	drawFCBI_Phase1(srcImageData, dstImageData, false);
