@@ -91,7 +91,7 @@ function getLuma(imageData, x, y) {
 }
 
 var g_timeoutList = [];
-var g_timeoutNum = 6;
+
 function drawFCBI(srcCanvas, dstCanvas) {
     console.debug("drawFCBI");
     var srcCtx = srcCanvas.getContext("2d");
@@ -113,10 +113,8 @@ function drawFCBI(srcCanvas, dstCanvas) {
 	this.dstImageData = dstImageData;;
     }
     var ctx = new Context();
-    for (var i=0 ; i < g_timeoutNum ; i++) {
-	var id = setTimeout(drawFCBI_.bind(ctx), 10 + 20 * i);
-	g_timeoutList.push(id); // for remove old process
-    }
+    var id = setTimeout(drawFCBI_.bind(ctx), 0);
+    g_timeoutList.push(id); // for remove old process
 }
 function drawFCBI_() {
     console.debug("drawFCBI_ phase:" + this.phase);
@@ -126,11 +124,11 @@ function drawFCBI_() {
     var dstCtx = this.dstCtx;
     var srcImageData = this.srcImageData;
     var dstImageData = this.dstImageData;
-    if (g_timeoutNum < g_timeoutList.length) { // remove old process
-	for (var id of g_timeoutList.slice(0, -g_timeoutNum)) {
+    if (this.phase === 0) {
+	while (0 < g_timeoutList.length) {
+	    var id = g_timeoutList.pop();
 	    clearTimeout(id);
 	}
-	g_timeoutList = g_timeoutList.slice(-g_timeoutNum);
     }
     var TM = parseFloat(document.getElementById("TMRange").value);
     var edgeMode = document.getElementById("edgeModeCheckbox").checked;
@@ -139,47 +137,35 @@ function drawFCBI_() {
     //
     var srcData = srcImageData.data;
     var dstData = dstImageData.data;
-    // リサンプル
-    if (this.phase < 1) {
+    //
+    switch (this.phase) {
+    case 0: // リサンプル
 	drawFCBI_Phase1(srcImageData, dstImageData, false);
-	dstCtx.putImageData(dstImageData, 0, 0);
-	this.phase = 1;
-	return ;
-    }
-    // 対角成分補間
-    if (this.phase < 2) {
+	break;
+    case 1:  // 対角成分補間
 	drawFCBI_Phase2(dstImageData, TM, false);
-	dstCtx.putImageData(dstImageData, 0, 0);
-	this.phase = 2;
-	return ;
-    }
-    // 水平垂直成分補完
-    if (this.phase < 3) {
+	break;
+    case 2: // 水平垂直成分補完
 	drawFCBI_Phase3(dstImageData, TM, edgeMode)
-	dstCtx.putImageData(dstImageData, 0, 0);
-	this.phase = 3;
-	return ;
-    }
-    if (this.phase < 4) {
+	break;
+    case 3: // 対角成分エッジ
 	if (edgeMode) {
 	    drawFCBI_Phase2(dstImageData, TM, edgeMode)
-	    dstCtx.putImageData(dstImageData, 0, 0);
-	    this.phase = 4;
-	    return ;
 	}
-    }
-    if (this.phase < 5) {
+	break;
+    case 4: // エッジの隙間クリア
 	if (edgeMode) {
 	    drawFCBI_Phase1(srcImageData, dstImageData, edgeMode);
-	    dstCtx.putImageData(dstImageData, 0, 0);
-	    this.phase = 5;
-	    return ;
 	}
+	break;
+    default:
+	return ; // complete
     }
-    if (this.phase < 6) {
-	dstCtx.putImageData(dstImageData, 0, 0);
-	this.phase = 6;
-    }
+    this.phase ++;
+    dstCtx.putImageData(dstImageData, 0, 0);
+    //
+    var id = setTimeout(drawFCBI_.bind(this), 10);
+    g_timeoutList.push(id); // for remove old process
 }
 
 /*
