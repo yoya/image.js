@@ -1,0 +1,31 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2017/03/17- yoya@awm.jp . All Rights Reserved.">
+  <title> quantize </title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body bgcolor="lightgray">
+  <div class="container">
+    <div>
+      Quantize Method: <select id="quantieMethod" size="6">
+        <option value="equalQuantize" selected> 均等量子化 </option>
+        <option value="frequency"> 頻度法 </option>
+        <option value="linearCut"> 線形分割 </option>
+        <option value="medianCut">  中央値分割 </option>
+        <option value="populationEqualization"> 頻度均等化 </option>
+	<option value="kMeans"> K-平均法 </option>
+      </select> </br>
+    </div>
+    <div>
+      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="800" step="1" value="640">:<input type="text" id="maxWidthHeightText">
+    </div>
+    <canvas id="srcCanvas" width=200 height=200> srcCanvas </canvas>
+    <br />
+    <canvas id="dstCanvas" width=200 height=200> dstCanvas </canvas>
+  </div>
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/canvas.js"> </script>
+  <script type="text/javascript" src="quantize.js"> </script>
+</body>
+</html>
