@@ -7,45 +7,32 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
-var srcCanvas = document.getElementById("srcCanvas");
-var dstCanvas = document.getElementById("dstCanvas");
-var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-
 function main() {
     // console.debug("main");
+    var srcCanvas = document.getElementById("srcCanvas");
+    var dstCanvas = document.getElementById("dstCanvas");
+    var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
-	srcImage.onload = function() { drawSrcImage(); drawDotize(); }
+	srcImage.onload = function() {
+	    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+	    drawDotize(srcCanvas, dstCanvas);
+	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction("range2text", {"scaleRange":"scaleText",
-			       "borderRange":"borderText"}, drawDotize);
-    bindFunction("range2text", {"maxWidthRange":"maxWidthText",
-				"maxHeightRange":"maxHeightText"},
-		 function() { drawSrcImage(); drawDotize(); } );
+				"borderRange":"borderText"},
+		 function() { drawDotize(srcCanvas, dstCanvas) } );
+    bindFunction("range2text", {"maxWidthHeightRange":"maxWidthHeightText"},
+		 function() {
+		     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+		     drawDotize(srcCanvas, dstCanvas);
+		 } );
 }
 
-
-function drawSrcImage() {
-    // console.debug("drawSrcImage");
-    var srcCtx = srcCanvas.getContext("2d");
-    var width = srcImage.width, height = srcImage.height;
-    var maxWidth = parseFloat(document.getElementById("maxWidthRange").value);
-    var maxHeight = parseFloat(document.getElementById("maxHeightRange").value);
-    if ((maxWidth < width) || (maxHeight < height)) {
-	var resizeScaleWidth = maxWidth / width;
-	var resizeScaleHeight = maxHeight / height;
-	var resizeScale = (resizeScaleWidth < resizeScaleHeight)?resizeScaleWidth:resizeScaleHeight;
-	width *= resizeScale;
-	height *= resizeScale;
-    }
-    srcCanvas.width  = width;
-    srcCanvas.height = height;
-    srcCtx.drawImage(srcImage, 0, 0, srcImage.width, srcImage.height,
-		     0, 0, width, height);
-}
-
-function drawDotize() {
+function drawDotize(srcCanvas, dstCanvas) {
     // console.debug("drawDotize");
     var scale = parseFloat(document.getElementById("scaleRange").value);
     var border = parseFloat(document.getElementById("borderRange").value);
