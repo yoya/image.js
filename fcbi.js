@@ -15,7 +15,8 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImage(srcImage, srcCanvas);
+	    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    drawFCBI(srcCanvas, dstCanvas);
 	}
 	srcImage.src = dataURL;
@@ -30,55 +31,18 @@ function main() {
 		);
     bindFunction("range2text", {"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
-		     drawSrcImage(srcImage, srcCanvas);
+		     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     drawFCBI(srcCanvas, dstCanvas); }
 		);
 }
 
-
-function drawSrcImage(srcImage, srcCanvas) {
-    // console.debug("drawSrcImage");
-    var srcCtx = srcCanvas.getContext("2d");
-    var width = srcImage.width, height = srcImage.height;
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    if ((maxWidthHeight < width) || (maxWidthHeight < height)) {
-	var resizeScale = maxWidthHeight / ((width > height)?width:height);
-	width  *= resizeScale;
-	height *= resizeScale;
-    }
-    srcCanvas.width  = width;
-    srcCanvas.height = height;
-    srcCtx.drawImage(srcImage, 0, 0, srcImage.width, srcImage.height,
-		     0, 0, width, height);
-}
-
-function clamp(x, min, max) {
-    if (min < x) {
-	return (x < max)? x : max;
-    }
-    return min;
-}
-
-function getRGBA(imageData, x, y) {
-    var width = imageData.width, height = imageData.height;
-    x = clamp(x, 0, width - 1);
-    y = clamp(y, 0, height - 1);
-    var offset = 4 * (x + y * width);
-    return imageData.data.slice(offset, offset + 4);
-}
-function setRGBA(imageData, x, y, rgba) {
-    var offset = 4 * (x + y * imageData.width);
-    var data = imageData.data;
-    data[offset++] = rgba[0];
-    data[offset++] = rgba[1];
-    data[offset++] = rgba[2];
-    data[offset++] = rgba[3];
-}
 function meanRGBA(rgba1, rgba2) {
     var [r1,g1,b1,a1] = rgba1;
     var [r2,g2,b2,a2] = rgba2;
     return [(r1+r2)/2, (g1+g2)/2, (b1+b2)/2, (a1+a2)/2];
 }
+
 function lumaFromRGBA(rgba) {
     var [r,g,b,a] = rgba;
     var y = 0.299 * r + 0.587 * g + 0.114 * b;
