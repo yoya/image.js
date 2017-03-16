@@ -66,6 +66,9 @@ function drawFCBI(srcCanvas, dstCanvas) {
     //
     var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
     var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
+    for (var i = 3 , n = 4 * dstWidth * dstHeight ; i < n ; i += 4) {
+	dstImageData[i] = 255;
+   }
     //
     var Context = function() {
 	this.phase = 0;
@@ -145,7 +148,7 @@ function drawFCBI_Phase1(srcImageData, dstImageData, edgeMode) {
     for (var dstY = 0 ; dstY < dstHeight ; dstY+=2) {
         for (var dstX = 0 ; dstX < dstWidth ; dstX+=2) {
 	    if (edgeMode) {
-		var rgba = [128, 128, 128, 255]; // gray
+		var rgba = [0, 0, 0, 255]; // black
 	    } else {
 		var srcX = dstX / 2;
 		var srcY = dstY / 2;
