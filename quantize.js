@@ -45,11 +45,11 @@ function drawQuantize(srcCanvas, dstCanvas) {
     var dstData = dstImageData.data;
     for (var srcY = 0 ; srcY < srcHeight; srcY++) {
         for (var srcX = 0 ; srcX < srcWidth; srcX++) {
-	    var rgba = getRGBA(srcImageData, srcX, srcY);
-	    rgba[0] &= 0xe0;
-	    rgba[1] &= 0xe0;
-	    rgba[2] &= 0xc0;
 	    var dstX = srcX, dstY = srcY;
+	    var rgba = getRGBA(srcImageData, srcX, srcY);
+	    rgba[0] &= 0xe0; // 1110 0000
+	    rgba[1] &= 0xe0; // 1110 0000
+	    rgba[2] &= 0xc0; // 1100 0000
 	    setRGBA(dstImageData, dstX, dstY, rgba);
 	}
     }
