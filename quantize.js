@@ -107,7 +107,7 @@ function drawQuantize_frequency(srcCanvas, dstCanvas) {
     var paletteNum = (colorNum < 256)?colorNum:256;
     var palette = new Uint32Array(paletteNum);
     var colorId = null;
-    var colorMap = new Uint32Array(ColorNum);
+    var colorMap = {}
     for (var i = 0 ; i < paletteNum ; i++) {
 	colorId = histArray[i].colorId;
 	palette[i] = colorId;
