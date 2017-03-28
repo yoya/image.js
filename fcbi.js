@@ -68,16 +68,25 @@ function drawFCBI(srcCanvas, dstCanvas) {
     var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
     for (var i = 3 , n = 4 * dstWidth * dstHeight ; i < n ; i += 4) {
 	dstImageData[i] = 255;
-   }
+    }
+    var TM = parseFloat(document.getElementById("TMRange").value);
+    var edgeMode = document.getElementById("edgeModeCheckbox").checked;
+    var phaseLimit = parseFloat(document.getElementById("phaseLimitRange").value);
     //
     var Context = function() {
+	// progress number
 	this.phase = 0;
+	// canvas object
 	this.srcCanvas = srcCanvas;
 	this.dstCanvas = dstCanvas;
 	this.srcCtx = srcCtx;
 	this.dstCtx = dstCtx;
 	this.srcImageData = srcImageData;
 	this.dstImageData = dstImageData;;
+	// input params
+	this.TM = TM;
+	this.edgeMode = edgeMode;
+	this.phaseLimit = phaseLimit;
     }
     var ctx = new Context();
     var id = setTimeout(drawFCBI_.bind(ctx), 10); //フェイズ毎に描画させたい
@@ -91,13 +100,13 @@ function drawFCBI_() {
     var dstCtx = this.dstCtx;
     var srcImageData = this.srcImageData;
     var dstImageData = this.dstImageData;
+    var TM = this.TM;
+    var edgeMode = this.edgeMode;
+    var phaseLimit = this.phaseLimit;
     while (1 < g_timeoutList.length) { // 最後の１つを残す
 	var id = g_timeoutList.shift(); // リストの頭からキャンセル
 	clearTimeout(id);
     }
-    var TM = parseFloat(document.getElementById("TMRange").value);
-    var edgeMode = document.getElementById("edgeModeCheckbox").checked;
-    var phaseLimit = parseFloat(document.getElementById("phaseLimitRange").value);
     // console.debug("TM,edgeMode,phase:", TM,edgeMode,phase);
     //
     switch (this.phase) {
