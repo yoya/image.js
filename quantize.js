@@ -32,8 +32,24 @@ function main() {
 function drawSrcImageAndQuantize(srcImage, srcCanvas) {
     var quantizeMethod = document.getElementById("quantizeMethod").value;
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    document.getElementById("nColorSrc").value = "";
+    document.getElementById("nColorDst").value = "";
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+    document.getElementById("nColorSrc").value = getColorNum(srcCanvas);
     drawQuantize(srcCanvas, dstCanvas,quantizeMethod);
+    document.getElementById("nColorDst").value = getColorNum(dstCanvas);
+
+    var paletteCanvas = document.getElementById("paletteCanvas");
+    var paletteHist = getColorHistogram(dstCanvas);
+    var paletteNum = Object.keys(paletteHist).length;
+    var palette = new Uint32Array(paletteNum);
+    var i = 0;
+    for (var colorId in paletteHist) {
+	colorId = parseFloat(colorId);
+	palette[i] = colorId;
+	i++;
+    }
+    drawPalette(paletteCanvas, palette);
 }
 
 function drawQuantize(srcCanvas, dstCanvas, quantizeMethod) {
@@ -48,8 +64,6 @@ function drawQuantize(srcCanvas, dstCanvas, quantizeMethod) {
 	console.error("Unknown quantizeMethod:"+quantizeMethod);
 	break;
     }
-    document.getElementById("nColorSrc").value = getColorNum(srcCanvas);
-    document.getElementById("nColorDst").value = getColorNum(dstCanvas);
 }
 
 /*
@@ -74,9 +88,12 @@ function drawQuantize_uniform(srcCanvas, dstCanvas) {
 	    var dstX = srcX, dstY = srcY;
 	    var rgba = getRGBA(srcImageData, srcX, srcY);
 	    var [r,g,b] = rgba;
-	    rgba[0] = Math.round(r * 7 / 0xff) * 0xff / 7;
-	    rgba[1] = Math.round(g * 5 / 0xff) * 0xff / 5;
-	    rgba[2] = Math.round(b * 4 / 0xff) * 0xff / 4;
+//	    rgba[0] = Math.round(r * 7 / 0xff) * 0xff / 7;
+//	    rgba[1] = Math.round(g * 5 / 0xff) * 0xff / 5;
+//	    rgba[2] = Math.round(b * 4 / 0xff) * 0xff / 4;
+	    rgba[0] = (r & 0xe0) + (0xff-0xe0)/2 // 1110 0000
+	    rgba[1] = (g & 0xe0) + (0xff-0xe0)/2 // 1110 0000
+	    rgba[2] = (b & 0xc0) + (0xff-0xc0)/2 // 1100 0000
 	    setRGBA(dstImageData, dstX, dstY, rgba);
 	}
     }
@@ -107,13 +124,18 @@ function drawQuantize_popularity(srcCanvas, dstCanvas) {
 	colorId = parseFloat(colorId);
 	histArray.push({colorId:colorId, count:hist[colorId]});
     }
+    console.debug("HistogramSort");
+    console.time("HistogramSort");
     histArray.sort(function(a, b) {
 	return (a.count < b.count)?1:-1; // descend order
     });
+    console.timeEnd("HistogramSort");
     var paletteNum = (colorNum < 256)?colorNum:256;
     var palette = new Uint32Array(paletteNum);
     var colorId = null;
     var colorMap = {}
+    console.debug("ColorMapMaking");
+    console.time("ColorMapMaking");
     for (var i = 0 ; i < paletteNum ; i++) {
 	colorId = histArray[i].colorId;
 	palette[i] = colorId;
@@ -131,8 +153,9 @@ function drawQuantize_popularity(srcCanvas, dstCanvas) {
 	    }
 	}
 	colorMap[colorId] = closestId;
-	console.debug(colorId2RGBA(colorId), colorId2RGBA(closestId), closestDistance);
+	// console.debug(colorId2RGBA(colorId), colorId2RGBA(closestId), closestDistance);
     }
+    console.timeEnd("ColorMapMaking");
     for (var srcY = 0 ; srcY < srcHeight; srcY++) {
         for (var srcX = 0 ; srcX < srcWidth; srcX++) {
 	    var dstX = srcX, dstY = srcY;

@@ -7,21 +7,22 @@
 </head>
 <body bgcolor="lightgray">
   <div class="container">
-    <div>
+    <div class="noCR">
       Quantize Method: <select id="quantizeMethod" size="6">
-        <option value="uniform"> 均等量子化 </option>
-        <option value="popularity" selected> 頻度法 </option>
+        <option value="uniform" selected> 均等量子化 </option>
+        <option value="popularity"> 頻度法 </option>
         <option value="linearCut"> 線形分割 </option>
         <option value="medianCut">  中央値分割 </option>
         <option value="populationEqualization"> 頻度均等化 </option>
 	<option value="kMeans"> K-平均法 </option>
       </select> </br>
-    </div>
-    nColor Src:<input id="nColorSrc" type="text" size="6" readonly>
-    nColor Dst:<input id="nColorDst" type="text" size="6" readonly>
-    <div>
+      nColor Src:<input id="nColorSrc" type="text" size="6" readonly>
+      nColor Dst:<input id="nColorDst" type="text" size="6" readonly>
+      <br />
       maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="640">:<input type="text" id="maxWidthHeightText">
     </div>
+    <canvas id="paletteCanvas" width=200 height=200> paletteCanvas </canvas>
+    </br>
     <canvas id="srcCanvas" width=200 height=200> srcCanvas </canvas>
     <canvas id="dstCanvas" width=200 height=200> dstCanvas </canvas>
   </div>
