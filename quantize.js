@@ -38,11 +38,11 @@ function drawSrcImageAndQuantize(srcImage, srcCanvas) {
 
 function drawQuantize(srcCanvas, dstCanvas, quantizeMethod) {
     switch (quantizeMethod) {
-    case "equalQuantize":
-	drawQuantize_equalQuantize(srcCanvas, dstCanvas);
+    case "uniform": // 均等量子化法
+	drawQuantize_uniform(srcCanvas, dstCanvas);
 	break;
-    case "frequency":
-	drawQuantize_frequency(srcCanvas, dstCanvas);
+    case "popularity": // 頻度法
+	drawQuantize_popularity(srcCanvas, dstCanvas);
 	break;
     default:
 	console.error("Unknown quantizeMethod:"+quantizeMethod);
@@ -52,7 +52,10 @@ function drawQuantize(srcCanvas, dstCanvas, quantizeMethod) {
     document.getElementById("nColorDst").value = getColorNum(dstCanvas);
 }
 
-function drawQuantize_equalQuantize(srcCanvas, dstCanvas) {
+/*
+ * 均等量子化法 (uniform quqntization)
+ */
+function drawQuantize_uniform(srcCanvas, dstCanvas) {
     // console.debug("drawQuantize");
     //
     var srcCtx = srcCanvas.getContext("2d");
@@ -80,7 +83,10 @@ function drawQuantize_equalQuantize(srcCanvas, dstCanvas) {
     dstCtx.putImageData(dstImageData, 0, 0);
 }
 
-function drawQuantize_frequency(srcCanvas, dstCanvas) {
+/*
+ * 頻度法 popularity algorithm
+ */
+function drawQuantize_popularity(srcCanvas, dstCanvas) {
     // console.debug("drawQuantize");
     //
     var srcCtx = srcCanvas.getContext("2d");
@@ -125,12 +131,13 @@ function drawQuantize_frequency(srcCanvas, dstCanvas) {
 	    }
 	}
 	colorMap[colorId] = closestId;
+	console.debug(colorId2RGBA(colorId), colorId2RGBA(closestId), closestDistance);
     }
     for (var srcY = 0 ; srcY < srcHeight; srcY++) {
         for (var srcX = 0 ; srcX < srcWidth; srcX++) {
 	    var dstX = srcX, dstY = srcY;
 	    var rgba = getRGBA(srcImageData, srcX, srcY);
-	    var colorId = RGBA2colorId(rgba);
+	    colorId = RGBA2colorId(rgba);
 	    colorId = colorMap[colorId];
 	    rgba = colorId2RGBA(colorId);
 	    setRGBA(dstImageData, dstX, dstY, rgba);
