@@ -2,3 +2,11 @@
   2017/02/26- yoya@awm.jp
 */
 
+.noCR {
+  display: inline-block; // IE
+  display: inline;      // Mozilla
+}
+.CR {
+  display: block; // IE
+  display: block;      // Mozilla
+}
