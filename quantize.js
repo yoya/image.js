@@ -74,9 +74,9 @@ function drawQuantize_uniform(srcCanvas, dstCanvas) {
 	    var dstX = srcX, dstY = srcY;
 	    var rgba = getRGBA(srcImageData, srcX, srcY);
 	    var [r,g,b] = rgba;
-	    rgba[0] = (r & 0xe0) * 0xff / 0xe0; // 1110 0000
-	    rgba[1] = (g & 0xe0) * 0xff / 0xe0; // 1110 0000
-	    rgba[2] = (b & 0xc0) * 0xff / 0xc0; // 1100 0000
+	    rgba[0] = Math.round(r * 7 / 0xff) * 0xff / 7;
+	    rgba[1] = Math.round(g * 5 / 0xff) * 0xff / 5;
+	    rgba[2] = Math.round(b * 4 / 0xff) * 0xff / 4;
 	    setRGBA(dstImageData, dstX, dstY, rgba);
 	}
     }
