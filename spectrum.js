@@ -54,35 +54,33 @@ function drawDCT(srcCanvas, dstCanvas) {
     // console.debug("drawCopy");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
-    var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var dstWidth  = srcWidth;
-    var dstHeight = srcHeight;
-    dstCanvas.width  = dstWidth;
-    dstCanvas.height = dstHeight;
+    var width = srcCanvas.width, height = srcCanvas.height;
+    dstCanvas.width  = width;
+    dstCanvas.height = height;
     dstCtx.fillStyle = '#ffffff';
-    dstCtx.fillRect(0, 0, dstCanvas.width, dstCanvas.height);
+    dstCtx.fillRect(0, 0, width, height);
     
     //
-    var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-    var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
+    var srcImageData = srcCtx.getImageData(0, 0, width, height);
+    var dstImageData = dstCtx.createImageData(width, height);
     var srcData = srcImageData.data;
     var dstData = dstImageData.data;
 
     //
-    FFT.init(srcWidth);
-    FrequencyFilter.init(srcWidth);
+    FFT.init(width);
+    FrequencyFilter.init(width);
     SpectrumViewer.init(dstCtx);
     //var re = [];
     //var im = []
-    var re = new Float32Array(srcWidth * srcHeight);
-    var im = new Float32Array(srcWidth * srcHeight);
+    var re = new Float32Array(width * height);
+    var im = new Float32Array(width * height);
     var i = 0;
-    for(var y=0; y<srcHeight; y++) {
-	for(var x=0; x<srcWidth; x++) {
-	    var o = i  << 2;
-	    var val = (srcData[o++]  + srcData[o++]  + srcData[o++]) / 3;
+    for(var y = 0; y < height; y++) {
+	for(var x = 0; x < width; x++) {
+	    var o = i << 2;
+	    var val = (3 * srcData[o++]  + 6 * srcData[o++]  + srcData[o++]) / 10;
 	    re[i++] = val;
-	    // im[i] = 0.0;
+	    // im[i] = 0;
 	}
     }
     FFT.fft2d(re, im);
