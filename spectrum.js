@@ -69,11 +69,11 @@ function drawDCT(srcCanvas, dstCanvas) {
     //
     FFT.init(width);
     FrequencyFilter.init(width);
-    SpectrumViewer.init(dstCtx);
     //var re = [];
     //var im = []
-    var re = new Float32Array(width * height);
-    var im = new Float32Array(width * height);
+    var nSample = width * height;
+    var re = new Float32Array(nSample);
+    var im = new Float32Array(nSample);
     var i = 0;
     for(var y = 0; y < height; y++) {
 	for(var x = 0; x < width; x++) {
@@ -85,5 +85,30 @@ function drawDCT(srcCanvas, dstCanvas) {
     }
     FFT.fft2d(re, im);
     FrequencyFilter.swap(re, im);
-    SpectrumViewer.render(re, im, true);
+    //     SpectrumViewer.render(re, im, true);
+    //
+
+    var spectrum = new Float32Array(nSample);
+    var maxSpectrum = 0;
+    for (var i = 0 ; i < nSample ; i++) {
+	var s = Math.log(Math.sqrt(re[i]*re[i] + im[i]*im[i]));
+	spectrum[i] = s;
+	if (s > maxSpectrum) {
+	    maxSpectrum = s;
+	}
+    }
+    var i = 0;
+    var normFactor = 255 / maxSpectrum;
+    for (var y = 0; y < height; y++) {
+	for (var x = 0; x < width; x++) {
+	    var o = i << 2;
+	    var val = spectrum[i] * normFactor;
+	    dstData[o++] = 64 + (val >> 2);
+	    dstData[o++] = val;
+	    dstData[o++] = val >> 1;
+	    dstData[o++] = 255;
+	    i++;
+	}
+    }
+    dstCtx.putImageData(dstImageData, 0, 0);
 }
