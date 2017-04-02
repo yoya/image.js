@@ -21,10 +21,10 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction("range2text", {"scaleRange":"scaleText",
-				"borderRange":"borderText"},
+    bindFunction({"scaleRange":"scaleText",
+		  "borderRange":"borderText"},
 		 function() { drawDotize(srcCanvas, dstCanvas) } );
-    bindFunction("range2text", {"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
 		     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);

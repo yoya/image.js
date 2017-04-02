@@ -21,15 +21,12 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction("range2text", {"TMRange":"TMText",
-				"phaseLimitRange":"phaseLimitText"},
+    bindFunction({"TMRange":"TMText",
+		  "phaseLimitRange":"phaseLimitText",
+		  "edgeModeCheckbox":null},
 		 function () { drawFCBI(srcCanvas, dstCanvas); }
 		);
-    bindFunction("checkbox", {"edgeModeCheckbox":null},
-		 function () {
-		     drawFCBI(srcCanvas, dstCanvas); }
-		);
-    bindFunction("range2text", {"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
 		     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);

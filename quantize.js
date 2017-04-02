@@ -19,11 +19,7 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction("range2text", {"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
-		     drawSrcImageAndQuantize(srcImage, srcCanvas);
-		 } );
-    bindFunction("range2text", {"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
 		     drawSrcImageAndQuantize(srcImage, srcCanvas);
 		 } );

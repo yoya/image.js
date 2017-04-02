@@ -19,7 +19,7 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction("range2text", {"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
 		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas);
 		 } );
