@@ -1,0 +1,3 @@
+[submodule "dist/imageprocessing-labs"]
+	path = dist/imageprocessing-labs
+	url = git@github.com:wellflat/imageprocessing-labs.git
