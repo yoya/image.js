@@ -85,9 +85,6 @@ function drawDCT(srcCanvas, dstCanvas) {
     }
     FFT.fft2d(re, im);
     FrequencyFilter.swap(re, im);
-    //     SpectrumViewer.render(re, im, true);
-    //
-
     var spectrum = new Float32Array(nSample);
     var maxSpectrum = 0;
     for (var i = 0 ; i < nSample ; i++) {
