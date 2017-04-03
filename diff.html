@@ -1,0 +1,25 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2017/04/02- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> diff </title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body bgcolor="lightgray">
+  <div class="container">
+    <div>
+    <div>
+      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="640">:<input type="text" id="maxWidthHeightText">
+    </div>
+    <canvas id="srcCanvas1" width=200 height=200 > src1Canvas </canvas>
+    <span id="srcCanvas2Container" >
+      <canvas id="srcCanvas2" width=200 height=200> src2Canvas </canvas>
+    </span>
+    <canvas id="dstCanvas" width=200 height=200> dstCanvas </canvas>
+  </div>
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/canvas.js"> </script>
+  <script type="text/javascript" src="diff.js"> </script>
+</body>
+</html>
