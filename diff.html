@@ -7,16 +7,30 @@
 </head>
 <body bgcolor="lightgray">
   <div class="container">
-    <div>
-    <div>
-      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="640">:<input type="text" id="maxWidthHeightText">
-    </div>
-    <canvas id="srcCanvas1" width=200 height=200 > src1Canvas </canvas>
-    <span id="srcCanvas2Container" >
-      <canvas id="srcCanvas2" width=200 height=200> src2Canvas </canvas>
-    </span>
-    <canvas id="dstCanvas" width=200 height=200> dstCanvas </canvas>
-  </div>
+    <div id="controlPanel"  style="float:left">
+      <div style="float:left">
+        Quantize Method:  <br />
+        <select id="methodSelect" size="6" style="float:right">
+          <option value="ae" selected> AE   </option>
+          <option value="mse"        > MSE  </option>
+          <option value="psnr"       > PSNR </option>
+        </select>
+      </div >
+      <div style="float:left">
+        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="640">:<input type="text" id="maxWidthHeightText">
+        <br />
+	normalize:<input id="normalizeCheckbox" type="checkbox" value="1" />
+      </div>
+    </div> <!-- controlPanel -->
+    <br />
+    <div style="float:left">
+      <canvas id="srcCanvas1" width=200 height=200 > src1Canvas </canvas>
+      <span id="srcCanvas2Container" >
+        <canvas id="srcCanvas2" width=200 height=200> src2Canvas </canvas>
+      </span>
+      <canvas id="dstCanvas" width=200 height=200> dstCanvas </canvas>
+     </div>
+  </div>  <!-- container -->
   <script type="text/javascript" src="lib/drop.js"> </script>
   <script type="text/javascript" src="lib/bind.js"> </script>
   <script type="text/javascript" src="lib/canvas.js"> </script>

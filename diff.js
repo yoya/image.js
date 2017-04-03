@@ -36,17 +36,25 @@ function main() {
 	srcImage2.src = dataURL;
     }, "DataURL");
     
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+		 "normalizeCheckbox":null},
 		 function() {
 		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
 		     drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
 		     drawDiff(srcCanvas1, srcCanvas2, dstCanvas);
 		 } );
+    bindFunction({"methodSelect":null},
+		 function() {
+		     drawDiff(srcCanvas1, srcCanvas2, dstCanvas);
+		 } );
+    
 }
 
 function drawDiff(srcCanvas1, srcCanvas2, dstCanvas) {
     // console.debug("drawCopy")
+    var normalize = document.getElementById("normalizeCheckbox").checked;
+    var method = document.getElementById("methodSelect").value;
     var srcCtx1 = srcCanvas1.getContext("2d");
     var srcCtx2 = srcCanvas2.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -62,15 +70,59 @@ function drawDiff(srcCanvas1, srcCanvas2, dstCanvas) {
     
     var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
 
+    var nSample4 = dstWidth * dstHeight * 4;
+    var tmpImageData = {width:dstWidth, data:new Float32Array(nSample4)};
+    
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
 	    var srcX1 = dstX, srcY1 = dstY;
 	    var srcX2 = dstX, srcY2 = dstY;
 	    var [r1,g1,b1,a1] = getRGBA(srcImageData1, srcX1, srcY1);
 	    var [r2,g2,b2,a2] = getRGBA(srcImageData2, srcX2, srcY2);
-	    var rgba = [Math.abs(r1 - r2),Math.abs(g1 - g2),Math.abs(b1 - b2), 255];
-	    setRGBA(dstImageData, dstX, dstY, rgba);
+	    var [rdiff, gdiff, bdiff] = [Math.abs(r2 - r1), Math.abs(g2 - g1), Math.abs(b2 - b1)];
+	    var [rmse, gmse, bmse] = [rdiff*rdiff, gdiff*gdiff, bdiff*bdiff];
+	    var rgba;
+	    switch (method) {
+	    case "ae":
+		rgba = [rdiff, gdiff, bdiff, 255];
+		break;
+	    case "mse":
+		rgba = [rmse/255, gmse/255, bmse/255, 255];
+		break;
+	    case "psnr":
+		rgba = [20 * Math.log10(255) - 10 * Math.log10(rmse),
+			20 * Math.log10(255) - 10 * Math.log10(gmse),
+			20 * Math.log10(255) - 10 * Math.log10(bmse),
+			255];
+		break;
+	    default:
+		console.error("unknown method:"+method);
+		break;
+	    }
+	    setRGBA(tmpImageData, dstX, dstY, rgba);
 	}
+    }
+    if (normalize) {
+	var maxLuminance = 0;
+	for (var i = 0 ; i < nSample4 ; i+=4) {
+	    var luminance = (3 * tmpImageData.data[i] + 6 * tmpImageData.data[i+1] + tmpImageData.data[i+2]) / 10;
+	    if ((luminance  > maxLuminance) && (luminance !== Infinity)) {
+		maxLuminance = luminance;
+	    }
+	}
+	console.debug("maxLuminance:" + maxLuminance);
+	for (var i = 0 ; i < nSample4 ; i+=4) {
+	    for (var j = 0 ; j < 3 ; j++) {
+		tmpImageData.data[i+j]   *= 255 / maxLuminance;
+		if ((255 < tmpImageData.data[i+j]) ||
+		    (tmpImageData.data[i+j] === Infinity)) {
+		    tmpImageData.data[i+j] = 255;
+		}
+	    }
+	}
+    }
+    for (var i = 0 ; i < nSample4 ; i++) {
+	dstImageData.data[i] = tmpImageData.data[i] >>> 0;
     }
     dstCtx.putImageData(dstImageData, 0, 0);
 }
