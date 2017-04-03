@@ -9,12 +9,14 @@
   <div class="container">
     <div id="controlPanel"  style="float:left">
       <div style="float:left">
-        Quantize Method:  <br />
-        <select id="methodSelect" size="6" style="float:right">
-          <option value="ae" selected> AE   </option>
-          <option value="mse"        > MSE  </option>
-          <option value="psnr"       > PSNR </option>
-        </select>
+        Compare Diff Method:  <br />
+	<div  style="position:relative; left: 30%; float:left; ">
+          <select id="methodSelect" size="6">
+            <option value="ae" selected> AE   </option>
+            <option value="mse"        > MSE  </option>
+            <option value="psnr"       > PSNR </option>
+          </select>
+	</div>
       </div >
       <div style="float:left">
         maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="640">:<input type="text" id="maxWidthHeightText">
