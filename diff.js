@@ -113,7 +113,10 @@ function drawDiff(srcCanvas1, srcCanvas2, dstCanvas) {
 	console.debug("maxLuminance:" + maxLuminance);
 	for (var i = 0 ; i < nSample4 ; i+=4) {
 	    for (var j = 0 ; j < 3 ; j++) {
-		tmpImageData.data[i+j]   *= 255 / maxLuminance;
+		if ((maxLuminance !== 0) ||
+		    (maxLuminance !== Infinity)) {
+		    tmpImageData.data[i+j]   *= 255 / maxLuminance;
+		}
 		if ((255 < tmpImageData.data[i+j]) ||
 		    (tmpImageData.data[i+j] === Infinity)) {
 		    tmpImageData.data[i+j] = 255;
