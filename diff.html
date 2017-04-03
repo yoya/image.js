@@ -23,13 +23,16 @@
       </div>
     </div> <!-- controlPanel -->
     <br />
-    <div style="float:left">
-      <canvas id="srcCanvas1" width=200 height=200 > src1Canvas </canvas>
-      <span id="srcCanvas2Container" >
-        <canvas id="srcCanvas2" width=200 height=200> src2Canvas </canvas>
+    <div style="clear:both">
+      <span id="srcCanvas1Container" >
+	<canvas id="srcCanvas1" width="200" height="200"> src1Canvas </canvas>
       </span>
-      <canvas id="dstCanvas" width=200 height=200> dstCanvas </canvas>
-     </div>
+      <span id="srcCanvas2Container" >
+        <canvas id="srcCanvas2" width="200" height="200"> src2Canvas </canvas>
+      </span>
+      <canvas id="dstCanvas" width="200" height="200"> dstCanvas </canvas>
+    </div>
+    <p> Drop image files(png,jpg,gif) into red & green box </p>
   </div>  <!-- container -->
   <script type="text/javascript" src="lib/drop.js"> </script>
   <script type="text/javascript" src="lib/bind.js"> </script>

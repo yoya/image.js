@@ -11,6 +11,8 @@ function main() {
     // console.debug("main");
     var srcCanvas1 = document.getElementById("srcCanvas1");
     var srcCanvas2 = document.getElementById("srcCanvas2");
+    var srcCanvas1Container = document.getElementById("srcCanvas1Container");
+    var srcCanvas2Container = document.getElementById("srcCanvas2Container");
     var dstCanvas = document.getElementById("dstCanvas");
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var srcImage1 = new Image(srcCanvas1.width, srcCanvas1.height);
@@ -19,7 +21,7 @@ function main() {
     srcCanvas2.style.border = "thick solid green";
     dstCanvas.style.border = "thick solid blue";
     
-    dropFunction(srcCanvas1, function(dataURL) {
+    dropFunction(srcCanvas1Container, function(dataURL) {
 	srcImage1 = new Image();
 	srcImage1.onload = function() {
 	    drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
@@ -27,7 +29,7 @@ function main() {
 	}
 	srcImage1.src = dataURL;
     }, "DataURL");
-    dropFunction(srcCanvas2, function(dataURL) {
+    dropFunction(srcCanvas2Container, function(dataURL) {
 	srcImage2 = new Image();
 	srcImage2.onload = function() {
 	    drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
