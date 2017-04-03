@@ -49,12 +49,8 @@ function drawCopy(srcCanvas, dstCanvas) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
 	    var srcX = dstX;
 	    var srcY = dstY;
-	    var srcOffset = 4 * (srcX + srcY * srcWidth);
-	    var dstOffset = 4 * (dstX + dstY * dstWidth);
-	    dstData[dstOffset++] = srcData[srcOffset++];
-	    dstData[dstOffset++] = srcData[srcOffset++];
-	    dstData[dstOffset++] = srcData[srcOffset++];
-	    dstData[dstOffset++] = srcData[srcOffset++];
+	    var rgba = getRGBA(srcImageData, srcX, srcY);
+	    setRGBA(dstImageData, dstX, dstY, rgba);
 	}
     }
     dstCtx.putImageData(dstImageData, 0, 0);
