@@ -68,9 +68,6 @@ function drawDCT(srcCanvas, dstCanvas) {
 
     //
     FFT.init(width);
-    FrequencyFilter.init(width);
-    //var re = [];
-    //var im = []
     var nSample = width * height;
     var re = new Float32Array(nSample);
     var im = new Float32Array(nSample);
@@ -84,7 +81,8 @@ function drawDCT(srcCanvas, dstCanvas) {
 	}
     }
     FFT.fft2d(re, im);
-    FrequencyFilter.swap(re, im);
+    swapQuadrant(re, width, height);
+    swapQuadrant(im, width, height);
     var spectrum = new Float32Array(nSample);
     var maxSpectrum = 0;
     for (var i = 0 ; i < nSample ; i++) {
@@ -108,4 +106,29 @@ function drawDCT(srcCanvas, dstCanvas) {
 	}
     }
     dstCtx.putImageData(dstImageData, 0, 0);
+}
+
+// 象限シフト
+function swapQuadrant(data, width, height) {
+    var nSample = width * height
+    var nSample_1 = nSample / 4;
+    var nSample_2 = nSample / 2;
+    var nSample_3 = nSample * 3 / 4;
+    var width_2 = width / 2 , height_2 = height / 2;
+    var i = 0;
+    var offset = nSample_2;
+    for (var y = 0 ; y < height_2 ; y++) {
+	for (var x = 0 ; x < width_2 ; x++) {
+	    [data[i], data[i + offset]] = [data[i + offset], data[i]];
+	    i++;
+	}
+    }
+    i = nSample_1;
+    offset = nSample_2 - width;
+    for (var y = 0 ; y < height_2 ; y++) {
+	for (var x = width_2 ; x < width; x++) {
+	    [data[i], data[i + offset]] = [data[i + offset], data[i]];
+	    i++;
+	}
+    }
 }
