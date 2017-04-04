@@ -111,24 +111,24 @@ function drawDCT(srcCanvas, dstCanvas) {
 // 象限シフト
 function swapQuadrant(data, width, height) {
     var nSample = width * height
-    var nSample_1 = nSample / 4;
     var nSample_2 = nSample / 2;
     var nSample_3 = nSample * 3 / 4;
     var width_2 = width / 2 , height_2 = height / 2;
-    var i = 0;
-    var offset = nSample_2;
+    var i, j;
     for (var y = 0 ; y < height_2 ; y++) {
+	i = y * width;
+	j = i + nSample_2 + width_2;
 	for (var x = 0 ; x < width_2 ; x++) {
-	    [data[i], data[i + offset]] = [data[i + offset], data[i]];
-	    i++;
+	    [data[i], data[j]] = [data[j], data[i]];
+	    i++; j++;
 	}
     }
-    i = nSample_1;
-    offset = nSample_2 - width;
     for (var y = 0 ; y < height_2 ; y++) {
+	i = y * width + width_2;
+	j = i + nSample_2 - width_2;
 	for (var x = width_2 ; x < width; x++) {
-	    [data[i], data[i + offset]] = [data[i + offset], data[i]];
-	    i++;
+	    [data[i], data[j]] = [data[j], data[i]];
+	    i++; j++;
 	}
     }
 }
