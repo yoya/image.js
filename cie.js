@@ -9,18 +9,47 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function main() {
     console.debug("cie main()");
+    var srcCanvas = document.getElementById("srcCanvas");
+    var dstCanvas = document.getElementById("dstCanvas");
+    var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     var file = "data/ciexyz64.json";
+    var cieArr = null;
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
 	if (xhr.readyState === 4) {
-	    cieMain((JSON.parse(xhr.responseText)));
+	    cieArr = JSON.parse(xhr.responseText);
+	    drawSrcImageAndDiagram(srcImage, srcCanvas, dstCanvas, cieArr);
 	}
     };
     xhr.open("GET", file, true); // async:true
     xhr.send(null);
+    //
+    dropFunction(document, function(dataURL) {
+	srcImage = new Image();
+	srcImage.onload = function() {
+	    drawSrcImageAndDiagram(srcImage, srcCanvas, dstCanvas, cieArr);
+	}
+	srcImage.src = dataURL;
+    }, "DataURL");
 }
 
-function cieMain(cieArr) {
+function drawSrcImageAndDiagram(srcImage, srcCanvas, dstCanvas, cieArr) {
+    drawSrcImage(srcImage, srcCanvas);
+    drawDiagramBase(dstCanvas, cieArr);
+    var hist = getColorHistogram(srcCanvas);
+    drawDiagramPoint(dstCanvas, hist);
+}
+
+function graphTrans(xy, width, height) {
+	var [x, y] = xy;
+	return [x * width, (1 - y) * height];
+    }
+function graphTransRev(xy, width, height) {
+	var [x, y] = xy;
+	return [x / width, 1 - (y / height)];
+    }
+
+function drawDiagramBase(dstCanvas, cieArr) {
     var xyArr = [], rgbArr = [];
     for (var data of cieArr) {
 	var [wl, lx, ly, lz] = data;
@@ -31,21 +60,12 @@ function cieMain(cieArr) {
 	rgbArr.push(rgb);
     }
     // drawing
-    var graphCanvas = document.getElementById("graphCanvas");
-    var width = graphCanvas.width, height = graphCanvas.height;
-    var ctx = graphCanvas.getContext("2d");
+    var width = dstCanvas.width, height = dstCanvas.height;
+    var ctx = dstCanvas.getContext("2d");
     // axis mapping
-    var graphTrans = function(xy) {
-	var [x, y] = xy;
-	return [x * width, (1 - y) * height];
-    }
-    var graphTransRev = function(xy) {
-	var [x, y] = xy;
-	return [x / width, 1 - (y / height)];
-    }
     var gxyArr = [];
     for (var i in xyArr) {
-	gxyArr.push(graphTrans(xyArr[i]));
+	gxyArr.push(graphTrans(xyArr[i], width, height));
     }
     var cxyArr = xyArr2CntlArr(gxyArr);
     // clip definition
@@ -73,7 +93,7 @@ function cieMain(cieArr) {
     var offset = 0;
     for (var y = 0 ; y < height ; y++) {
 	for (var x = 0 ; x < width ; x++) {
-	    var xy = graphTransRev([x, y]);
+	    var xy = graphTransRev([x, y], width, height);
 	    var lxyz = xy2XYZ(xy)
 	    var [r, g, b] = XYZ2sRGB(lxyz);
 	    data[offset++] = r;
@@ -85,3 +105,19 @@ function cieMain(cieArr) {
     offCtx.putImageData(imageData, 0, 0);
     ctx.drawImage(offCanvas, 0, 0, width, height);
 }
+
+function drawDiagramPoint(dstCanvas, hist) {
+    var width = dstCanvas.width, height = dstCanvas.height;
+    var ctx = dstCanvas.getContext("2d");
+    for (var colorId in hist) {
+	var [r,g,b,a] = colorId2RGBA(colorId);
+	var lxyz = sRGB2XYZ([r,g,b]);
+	var xy = XYZ2xy(lxyz);
+	var [gx, gy] = graphTrans(xy, width, height);
+	ctx.beginPath();
+	ctx.fillStyle = "black";
+	ctx.arc(gx, gy, 1, 0, 2*Math.PI, true);
+	ctx.stroke();
+    }
+}
+
