@@ -119,7 +119,7 @@ function drawDiagramPoint(dstCanvas, hist) {
 	var [gx, gy] = graphTrans(xy, width, height);
 	ctx.beginPath();
 	ctx.fillStyle = "black";
-	ctx.arc(gx, gy, 1, 0, 2*Math.PI, true);
+	ctx.arc(gx, gy, 0.5, 0, 2*Math.PI, true);
 	ctx.stroke();
     }
 }
