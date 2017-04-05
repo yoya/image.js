@@ -21,13 +21,14 @@ function main() {
 }
 
 function cieMain(cieArr) {
-    var xyRgbArr = [];
+    var xyArr = [], rgbArr = [];
     for (var data of cieArr) {
 	var [wl, lx, ly, lz] = data;
 	lxyz = [lx, ly, lz];
 	var xy =  XYZ2xy(lxyz);
 	var rgb = XYZ2sRGB(lxyz);
-	xyRgbArr.push({xy:xy, rgb:rgb});
+	xyArr.push(xy);
+	rgbArr.push(rgb);
     }
     // drawing
     var graphCanvas = document.getElementById("graphCanvas");
@@ -42,15 +43,15 @@ function cieMain(cieArr) {
 	var [x, y] = xy;
 	return [x / width, 1 - (y / height)];
     }
-    var [px, py] = graphTrans(xyRgbArr[1].xy);
     for (var i = 0 ; i < 20 ; i++) {
-	xyRgbArr.pop(); // XXX
+	xyArr.pop(); // XXX
+	rgbArr.pop(); // XXX
     }
     // clip definition
     ctx.beginPath();
-    for (var xyRgb of xyRgbArr) {
-	var [gx, gy] = graphTrans(xyRgb.xy);
-	var [r, g, b] = xyRgb.rgb;
+    for (var i in xyArr) {
+	var [gx, gy] = graphTrans(xyArr[i]);
+	var [r, g, b] = rgbArr[i];
 	ctx.strokeStyle= "rgb("+r+","+g+","+b+")";
 	ctx.lineTo(gx, gy);
     }
