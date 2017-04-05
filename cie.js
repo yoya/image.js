@@ -50,14 +50,16 @@ function cieMain(cieArr) {
     var cxyArr = xyArr2CntlArr(gxyArr);
     // clip definition
     ctx.beginPath();
-    for (var i in gxyArr.slice(0, -1)) {
+    for (var i in gxyArr) {
 	var [gx, gy] = gxyArr[i];
 	var [cx, cy] = cxyArr[i];
 	var [r, g, b] = rgbArr[i];
 	ctx.strokeStyle= "rgb("+r+","+g+","+b+")";
-	// ctx.lineTo(gx, gy);
-	ctx.quadraticCurveTo(cx, cy, gx, gy);
-	// ctx.bezierCurveTo(cx1, cy1, cx2, cy2, gx, gy);
+	if (i >= gxyArr.length - 1) {
+	    ctx.lineTo(gx, gy);
+	}else {
+	    ctx.quadraticCurveTo(cx, cy, gx, gy);
+	}
 	// console.debug(cx, cy, gx, gy);
     }
     ctx.closePath();
