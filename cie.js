@@ -43,10 +43,6 @@ function cieMain(cieArr) {
 	var [x, y] = xy;
 	return [x / width, 1 - (y / height)];
     }
-    for (var i = 0 ; i < 20 ; i++) {
-	xyArr.pop(); // XXX
-	rgbArr.pop(); // XXX
-    }
     var gxyArr = [];
     for (var i in xyArr) {
 	gxyArr.push(graphTrans(xyArr[i]));
@@ -54,7 +50,7 @@ function cieMain(cieArr) {
     var cxyArr = xyArr2CntlArr(gxyArr);
     // clip definition
     ctx.beginPath();
-    for (var i in gxyArr) {
+    for (var i in gxyArr.slice(0, -1)) {
 	var [gx, gy] = gxyArr[i];
 	var [cx, cy] = cxyArr[i];
 	var [r, g, b] = rgbArr[i];
