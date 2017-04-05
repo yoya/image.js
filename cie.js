@@ -11,8 +11,8 @@ function xy2XYZ(xy) {
     var [x, y] = xy;
     var ly = y;
     var lx = (x / y) * ly
-    var z = (1 - x - y) / y * ly;
-    return [x, y, z];
+    var lz = (1 - x - y) / y * ly;
+    return [lx, ly, lz];
 }
 //  http://www.enjoy.ne.jp/~k-ichikawa/CIEXYZ_RGB.html
 
