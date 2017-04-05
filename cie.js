@@ -111,6 +111,9 @@ function drawDiagramPoint(dstCanvas, hist) {
     var ctx = dstCanvas.getContext("2d");
     for (var colorId in hist) {
 	var [r,g,b,a] = colorId2RGBA(colorId);
+	if (a === 0) {
+	    continue;
+	}
 	var lxyz = sRGB2XYZ([r,g,b]);
 	var xy = XYZ2xy(lxyz);
 	var [gx, gy] = graphTrans(xy, width, height);
