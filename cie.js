@@ -35,7 +35,6 @@ function main() {
 		drawSrcImageAndDiagram(srcImage, srcCanvas, dstCanvas, cieArr);
 	    }
 	};
-	console.debug("file:"+file);
 	xhr.open("GET", file, true); // async:true
 	xhr.send(null);
     }
@@ -46,6 +45,7 @@ function main() {
 		 } );
     //
     dropFunction(document, function(dataURL) {
+	console.debug("drop file");
 	srcImage = new Image();
 	srcImage.onload = function() {
 	    drawSrcImageAndDiagram(srcImage, srcCanvas, dstCanvas, cieArr);
