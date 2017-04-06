@@ -6,6 +6,18 @@
 </head>
 <body>
   <div id="container">
+    <div id="controlPanel"  style="float:left">
+      <div style="float:left">
+        Compare Diff Method:  <br />
+	<div style="position:relative; left: 10%; float:left; ">
+          <select id="cieSelect" size="6">
+            <option value="ciexyz31" selected> CIEXYZ 31 (2-degree) </option>
+            <option value="ciexyz64"         > CIEXYZ 64 (10-degree)  </option>
+          </select>
+	</div>
+      </div>
+    </div>
+    <div style="clear:both">
     <canvas id="srcCanvas" width="320" height="240"> srcImage </canvas>
     <canvas id="dstCanvas" width="512" height="512"> diagram </canvas>
   </div>

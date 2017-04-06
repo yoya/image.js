@@ -12,17 +12,38 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    var file = "data/ciexyz64.json";
+    srcCanvas.style.border = "thick solid red";
     var cieArr = null;
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-	if (xhr.readyState === 4) {
-	    cieArr = JSON.parse(xhr.responseText);
-	    drawSrcImageAndDiagram(srcImage, srcCanvas, dstCanvas, cieArr);
+    var readCIEXYZdata = function() {
+	var file;
+	var cieSelect = document.getElementById("cieSelect").value;
+	switch (cieSelect) {
+	case "ciexyz31":
+	    file = "data/ciexyz31.json";
+	    break;
+	case "ciexyz64":
+	    file = "data/ciexyz64.json";
+	    break;
+	default:
+	    console.error("Unknown cie Data:"+cieSelect);
+	    return ;
 	}
-    };
-    xhr.open("GET", file, true); // async:true
-    xhr.send(null);
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function() {
+	    if (xhr.readyState === 4) {
+		cieArr = JSON.parse(xhr.responseText);
+		drawSrcImageAndDiagram(srcImage, srcCanvas, dstCanvas, cieArr);
+	    }
+	};
+	console.debug("file:"+file);
+	xhr.open("GET", file, true); // async:true
+	xhr.send(null);
+    }
+    bindFunction({"cieSelect":null},
+		 function() {
+		     console.debug("cieSelect event");
+		     readCIEXYZdata();
+		 } );
     //
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
@@ -31,9 +52,12 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
+    readCIEXYZdata();
 }
 
 function drawSrcImageAndDiagram(srcImage, srcCanvas, dstCanvas, cieArr) {
+    srcCanvas.width  = srcCanvas.width ; // clear
+    dstCanvas.width  = dstCanvas.width ; // clear
     drawSrcImage(srcImage, srcCanvas);
     drawDiagramBase(dstCanvas, cieArr);
     var hist = getColorHistogram(srcCanvas);
@@ -68,6 +92,7 @@ function drawDiagramBase(dstCanvas, cieArr) {
 	gxyArr.push(graphTrans(xyArr[i], width, height));
     }
     var cxyArr = xyArr2CntlArr(gxyArr);
+
     // clip definition
     ctx.beginPath();
     for (var i in gxyArr) {
