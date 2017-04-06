@@ -15,6 +15,7 @@ function main() {
     srcCanvas.style.border = "thick solid red";
     dstCanvas.style.border = "thick solid blue";
     var cieArr = null;
+    var hist = null
     var readCIEXYZdata = function() {
 	var file;
 	var cieSelect = document.getElementById("cieSelect").value;
@@ -33,7 +34,7 @@ function main() {
 	xhr.onreadystatechange = function() {
 	    if (xhr.readyState === 4) {
 		cieArr = JSON.parse(xhr.responseText);
-		drawSrcImageAndDiagram(srcImage, srcCanvas, dstCanvas, cieArr);
+		drawDiagram(dstCanvas, cieArr, hist);
 	    }
 	};
 	xhr.open("GET", file, true); // async:true
@@ -46,28 +47,29 @@ function main() {
 		 } );
     bindFunction({"colorspaceSelect":null},
 		 function() {
-		     drawSrcImageAndDiagram(srcImage, srcCanvas, dstCanvas, cieArr);
+		     drawDiagram(dstCanvas, cieArr, hist);
 		 } );
     //
     dropFunction(document, function(dataURL) {
 	console.debug("drop file");
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndDiagram(srcImage, srcCanvas, dstCanvas, cieArr);
+	    drawSrcImage(srcImage, srcCanvas);
+	    hist = getColorHistogram(srcCanvas);
+	    drawDiagram(dstCanvas, cieArr, hist);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     readCIEXYZdata();
 }
 
-function drawSrcImageAndDiagram(srcImage, srcCanvas, dstCanvas, cieArr) {
+function drawDiagram(dstCanvas, cieArr, hist) {
     var colorspace = document.getElementById("colorspaceSelect").value;
-    srcCanvas.width  = srcCanvas.width ; // clear
     dstCanvas.width  = dstCanvas.width ; // clear
-    drawSrcImage(srcImage, srcCanvas);
     drawDiagramBase(dstCanvas, cieArr, colorspace);
-    var hist = getColorHistogram(srcCanvas);
-    drawDiagramPoint(dstCanvas, hist, colorspace);
+    if (hist !== null) {
+	drawDiagramPoint(dstCanvas, hist, colorspace);
+    }
 }
 
 function graphTrans(xy, width, height) {
