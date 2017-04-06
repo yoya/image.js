@@ -71,13 +71,14 @@ function drawSrcImageAndDiagram(srcImage, srcCanvas, dstCanvas, cieArr) {
 }
 
 function graphTrans(xy, width, height) {
-	var [x, y] = xy;
-	return [x * width, (1 - y) * height];
-    }
+    var [x, y] = xy;
+    return [x * width, (1 - y) * height];
+}
+
 function graphTransRev(xy, width, height) {
-	var [x, y] = xy;
-	return [x / width, 1 - (y / height)];
-    }
+    var [x, y] = xy;
+    return [x / width, 1 - (y / height)];
+}
 
 function drawDiagramBase(dstCanvas, cieArr, colorspace) {
     var xyArr = [], rgbArr = [];
@@ -164,4 +165,3 @@ function drawDiagramPoint(dstCanvas, hist, colorspace) {
 	ctx.stroke();
     }
 }
-
