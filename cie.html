@@ -8,11 +8,20 @@
   <div id="container">
     <div id="controlPanel"  style="float:left">
       <div style="float:left">
-        CIEXYZ Color Matching Function:  <br />
+        Color Matching Function:  <br />
 	<div style="position:relative; left: 30%; float:left; ">
           <select id="cieSelect" size="6">
             <option value="ciexyz31" selected> CIEXYZ 31 (2-degree) </option>
             <option value="ciexyz64"         > CIEXYZ 64 (10-degree)  </option>
+          </select>
+	</div>
+      </div>
+      <div style="float:left">
+        Color Space:  <br />
+	<div style="position:relative; left: 30%; float:left; ">
+          <select id="colorspaceSelect" size="6">
+            <option value="ciexy" selected> CIE xy   </option>
+	    <option value="cieuv"         > CIE u'v' </option>
           </select>
 	</div>
       </div>

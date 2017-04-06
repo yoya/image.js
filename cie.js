@@ -13,6 +13,7 @@ function main() {
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     srcCanvas.style.border = "thick solid red";
+    dstCanvas.style.border = "thick solid blue";
     var cieArr = null;
     var readCIEXYZdata = function() {
 	var file;
@@ -43,6 +44,10 @@ function main() {
 		     console.debug("cieSelect event");
 		     readCIEXYZdata();
 		 } );
+    bindFunction({"colorspaceSelect":null},
+		 function() {
+		     drawSrcImageAndDiagram(srcImage, srcCanvas, dstCanvas, cieArr);
+		 } );
     //
     dropFunction(document, function(dataURL) {
 	console.debug("drop file");
@@ -56,12 +61,13 @@ function main() {
 }
 
 function drawSrcImageAndDiagram(srcImage, srcCanvas, dstCanvas, cieArr) {
+    var colorspace = document.getElementById("colorspaceSelect").value;
     srcCanvas.width  = srcCanvas.width ; // clear
     dstCanvas.width  = dstCanvas.width ; // clear
     drawSrcImage(srcImage, srcCanvas);
-    drawDiagramBase(dstCanvas, cieArr);
+    drawDiagramBase(dstCanvas, cieArr, colorspace);
     var hist = getColorHistogram(srcCanvas);
-    drawDiagramPoint(dstCanvas, hist);
+    drawDiagramPoint(dstCanvas, hist, colorspace);
 }
 
 function graphTrans(xy, width, height) {
@@ -73,14 +79,19 @@ function graphTransRev(xy, width, height) {
 	return [x / width, 1 - (y / height)];
     }
 
-function drawDiagramBase(dstCanvas, cieArr) {
+function drawDiagramBase(dstCanvas, cieArr, colorspace) {
     var xyArr = [], rgbArr = [];
     for (var data of cieArr) {
 	var [wl, lx, ly, lz] = data;
 	lxyz = [lx, ly, lz];
 	var xy =  XYZ2xy(lxyz);
 	var rgb = XYZ2sRGB(lxyz);
-	xyArr.push(xy);
+	if (colorspace === "ciexy") {
+	    xyArr.push(xy);
+	} else {
+	    var uava = xy2uava(xy);
+	    xyArr.push(uava);
+	}
 	rgbArr.push(rgb);
     }
     // drawing
@@ -131,7 +142,7 @@ function drawDiagramBase(dstCanvas, cieArr) {
     ctx.drawImage(offCanvas, 0, 0, width, height);
 }
 
-function drawDiagramPoint(dstCanvas, hist) {
+function drawDiagramPoint(dstCanvas, hist, colorspace) {
     var width = dstCanvas.width, height = dstCanvas.height;
     var ctx = dstCanvas.getContext("2d");
     for (var colorId in hist) {
@@ -141,7 +152,12 @@ function drawDiagramPoint(dstCanvas, hist) {
 	}
 	var lxyz = sRGB2XYZ([r,g,b]);
 	var xy = XYZ2xy(lxyz);
-	var [gx, gy] = graphTrans(xy, width, height);
+	if (colorspace === "ciexy") {
+	    var [gx, gy] = graphTrans(xy, width, height);
+	} else {
+	    var uava = xy2uava(xy);
+	    var [gx, gy] = graphTrans(uava, width, height);
+	}
 	ctx.beginPath();
 	ctx.fillStyle = "black";
 	ctx.arc(gx, gy, 0.5, 0, 2*Math.PI, true);
