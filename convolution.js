@@ -11,26 +11,95 @@ function main() {
     // console.debug("main");
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
-    srcCanvas.style.border = "thick solid red";
+    var filterTable = document.getElementById("filterTable");
+    var filter = document.getElementById("filterSelect").value;    srcCanvas.style.border = "thick solid red";
+    var filterMatrix = null;
+    var filterWindow = null;
     dstCanvas.style.border = "thick solid blue";
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas);
+	    drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "filterSelect":null},
 		 function() {
-		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas);
+		     filter = document.getElementById("filterSelect").value;    srcCanvas.style.border = "thick solid red";
+		     [filterMatrix, filterWindow] = selectFilterMatrix(filter);
+		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
 		 } );
+    [filterMatrix, filterWindow] = selectFilterMatrix(filter);
 }
-function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas) {
+
+function selectFilterMatrix(filter) {
+    console.debug("selectFilterMatrix("+filter+")");
+    var filterMatrix = null;;
+    var filterWindow = 3;
+    switch (filter) {
+    case "smoothing":
+	var v = 1/9;
+	filterMatrix = [v, v, v,
+			v, v, v,
+			v, v, v];
+	break;
+    case "differentialHoli":
+	filterMatrix = [0, 0, 0,
+			0, -1, 1,
+			0, 0, 0];
+	break;
+    case "differentialVert":
+	filterMatrix = [0, 1, 0,
+			0, -1, 0,
+			0, 0, 0];
+	break;
+    case "differential":
+	filterMatrix = [0, 1, 0,
+			0, -2, 1,
+			0, 0, 0];
+	break;
+    case "laplacian":
+	filterMatrix = [0, 1, 0,
+			1, -4, 1,
+			0, 1, 0];
+	break;
+    case "sharpening1":
+	filterMatrix = [ 0, -1,  0,
+			 -1,  5, -1,
+			 0, -1,  0];
+	break;
+    case "sharpening2":
+	filterMatrix = [-1, -1, -1,
+			-1,  9, -1,
+			-1, -1, -1];
+	break;
+    case "emboss":
+	filterMatrix = [1, 0,  0,
+			0, 0,  0,
+			0, 0, -1];
+	break;
+    case "prewitt":
+	filterMatrix = [-2, -1, 0,
+			-1, 0,  1,
+			0, 1, 2];
+	break;
+    case "sobel":
+	filterMatrix = [-2, -2, 0,
+			-2,  0, 2,
+			0,  2, 2];
+	break;
+    default:
+	console.error("Unknown filter:"+filter);
+    }
+    return [filterMatrix, filterWindow];
+}
+
+function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, filterMatrix, filterWindow) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawConvolution(srcCanvas, dstCanvas);
+    drawConvolution(srcCanvas, dstCanvas, filterMatrix, filterWindow);
 }
 
 function convolution(srcImageData, srcX, srcY, filterMatrix, convWindow) {
@@ -50,7 +119,7 @@ function convolution(srcImageData, srcX, srcY, filterMatrix, convWindow) {
     return [r2, g2, b2, a];
 }
 
-function drawConvolution(srcCanvas, dstCanvas) {
+function drawConvolution(srcCanvas, dstCanvas, filterMatrix, filterWindow) {
     // console.debug("drawConvolution");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -66,67 +135,6 @@ function drawConvolution(srcCanvas, dstCanvas) {
     var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
     var srcData = srcImageData.data;
     var dstData = dstImageData.data;
-
-    var filterMatrix = [0, 1, 0,
-		  1, -3, 1,
-		  0, 1 , 0];
-    var filterWindow = 3;
-    switch (filter) {
-    case "smoothing":
-	var v = 1/9;
-	filterMatrix = [v, v, v,
-		  v, v, v,
-		  v, v, v];
-	break;
-    case "differentialHoli":
-	filterMatrix = [0, 0, 0,
-		  0, -1, 1,
-		  0, 0, 0];
-	break;
-    case "differentialVert":
-	filterMatrix = [0, 1, 0,
-		  0, -1, 0,
-		  0, 0, 0];
-	break;
-    case "differential":
-	filterMatrix = [0, 1, 0,
-		  0, -2, 1,
-		  0, 0, 0];
-	break;
-    case "laplacian":
-	filterMatrix = [0, 1, 0,
-		  1, -4, 1,
-		  0, 1, 0];
-	break;
-    case "sharpening1":
-	filterMatrix = [ 0, -1,  0,
-		  -1,  5, -1,
-		   0, -1,  0];
-	break;
-    case "sharpening2":
-	filterMatrix = [-1, -1, -1,
-		  -1,  9, -1,
-		  -1, -1, -1];
-	break;
-    case "emboss":
-	filterMatrix = [1, 0,  0,
-		  0, 0,  0,
-		  0, 0, -1];
-	break;
-    case "prewitt":
-	filterMatrix = [-2, -1, 0,
-		  -1, 0,  1,
-		  0, 1, 2];
-	break;
-    case "sobel":
-	filterMatrix = [-2, -2, 0,
-		  -2,  0, 2,
-		   0,  2, 2];
-	break;
-
-    default:
-	console.error("Unknown filter:"+filter);
-    }
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
 	    var srcX = dstX, srcY = dstY;
