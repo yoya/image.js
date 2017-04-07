@@ -11,12 +11,13 @@ function main() {
     // console.debug("main");
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
-    var filterTable = document.getElementById("filterTable");
-    var filter = document.getElementById("filterSelect").value;    srcCanvas.style.border = "thick solid red";
-    var filterMatrix = null;
-    var filterWindow = null;
+    srcCanvas.style.border = "thick solid red";
     dstCanvas.style.border = "thick solid blue";
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    //
+    var filterTable = document.getElementById("filterTable");
+    var filter = document.getElementById("filterSelect").value;
+    var [filterMatrix, filterWindow] = selectFilterMatrix(filter);
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
@@ -24,14 +25,47 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "filterSelect":null},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+		 function() {
+		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
+		 } );
+    bindFunction({"filterSelect":null},
 		 function() {
 		     filter = document.getElementById("filterSelect").value;    srcCanvas.style.border = "thick solid red";
 		     [filterMatrix, filterWindow] = selectFilterMatrix(filter);
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
+		     for (var i = 0 ; i < filterWindow * filterWindow ; i++) {
+			 document.getElementById("filterValue"+i).value = filterMatrix[i];
+		     }
 		 } );
-    [filterMatrix, filterWindow] = selectFilterMatrix(filter);
+    // generate filter table dom
+    var i = 0;
+    for (var y = 0 ; y < filterWindow ; y++) {
+	var tr = document.createElement("tr")
+	filterTable.appendChild(tr);
+	for (var x = 0 ; x < filterWindow ; x++) {
+	    var td = document.createElement("td")
+	    tr.appendChild(td);
+	    var input = document.createElement("input")
+	    td.appendChild(input);
+	    input.type = "text";
+	    input.id = "filterValue"+i;
+	    input.size = 10;
+	    input.value = filterMatrix[i];
+	    i++;
+	}
+    }
+    for (var i = 0 ; i < filterWindow * filterWindow ; i++) {
+	var map = {}
+	map["filterValue"+i] = null;
+	bindFunction(map,
+		     function(target) {
+			 var i = target.id.substr("filterValue".length);
+			 filterMatrix[i] = target.value;
+			 drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
+		     });
+    }
+    console.log(filterTable);
 }
 
 function selectFilterMatrix(filter) {
