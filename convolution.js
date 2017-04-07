@@ -22,7 +22,7 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "convolutionMatrixSelect":null},
+		  "filterSelect":null},
 		 function() {
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas);
 		 } );
@@ -33,7 +33,7 @@ function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas) {
     drawConvolution(srcCanvas, dstCanvas);
 }
 
-function convolution(srcImageData, srcX, srcY, matrix, convWindow) {
+function convolution(srcImageData, srcX, srcY, filterMatrix, convWindow) {
     var startX = srcX - (convWindow-1)/2, endX = startX + convWindow;
     var startY = srcY - (convWindow-1)/2, endY = startY + convWindow;
     var i = 0;
@@ -41,9 +41,9 @@ function convolution(srcImageData, srcX, srcY, matrix, convWindow) {
     for (var y = startY ; y < endY ; y++) {
 	for (var x = startX ; x < endX ; x++) {
 	    var [r, g, b, a] = getRGBA(srcImageData, x, y);
-	    r2 += r * matrix[i];
-	    g2 += g * matrix[i];
-	    b2 += b * matrix[i];
+	    r2 += r * filterMatrix[i];
+	    g2 += g * filterMatrix[i];
+	    b2 += b * filterMatrix[i];
 	    i++;
 	}
     }
@@ -60,77 +60,77 @@ function drawConvolution(srcCanvas, dstCanvas) {
     dstCanvas.width  = dstWidth;
     dstCanvas.height = dstHeight;
     //
-    var convolutionMatrix = document.getElementById("convolutionMatrixSelect").value;
+    var filter = document.getElementById("filterSelect").value;
     //
     var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
     var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
     var srcData = srcImageData.data;
     var dstData = dstImageData.data;
 
-    var matrix = [0, 1, 0,
+    var filterMatrix = [0, 1, 0,
 		  1, -3, 1,
 		  0, 1 , 0];
-    switch (convolutionMatrix) {
+    var filterWindow = 3;
+    switch (filter) {
     case "smoothing":
 	var v = 1/9;
-	matrix = [v, v, v,
+	filterMatrix = [v, v, v,
 		  v, v, v,
 		  v, v, v];
 	break;
     case "differentialHoli":
-	matrix = [0, 0, 0,
+	filterMatrix = [0, 0, 0,
 		  0, -1, 1,
 		  0, 0, 0];
 	break;
     case "differentialVert":
-	matrix = [0, 1, 0,
+	filterMatrix = [0, 1, 0,
 		  0, -1, 0,
 		  0, 0, 0];
 	break;
     case "differential":
-	matrix = [0, 1, 0,
+	filterMatrix = [0, 1, 0,
 		  0, -2, 1,
 		  0, 0, 0];
 	break;
     case "laplacian":
-	matrix = [0, 1, 0,
+	filterMatrix = [0, 1, 0,
 		  1, -4, 1,
 		  0, 1, 0];
 	break;
     case "sharpening1":
-	matrix = [ 0, -1,  0,
+	filterMatrix = [ 0, -1,  0,
 		  -1,  5, -1,
 		   0, -1,  0];
 	break;
     case "sharpening2":
-	matrix = [-1, -1, -1,
+	filterMatrix = [-1, -1, -1,
 		  -1,  9, -1,
 		  -1, -1, -1];
 	break;
     case "emboss":
-	matrix = [1, 0,  0,
+	filterMatrix = [1, 0,  0,
 		  0, 0,  0,
 		  0, 0, -1];
 	break;
     case "prewitt":
-	matrix = [-2, -1, 0,
+	filterMatrix = [-2, -1, 0,
 		  -1, 0,  1,
 		  0, 1, 2];
 	break;
     case "sobel":
-	matrix = [-2, -2, 0,
+	filterMatrix = [-2, -2, 0,
 		  -2,  0, 2,
 		   0,  2, 2];
 	break;
 
     default:
-	console.error("Unknown matrix:"+convolutionMatrix);
+	console.error("Unknown filter:"+filter);
     }
-    var convWindow = 3;
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
 	    var srcX = dstX, srcY = dstY;
-	    var rgba = convolution(srcImageData, srcX, srcY, matrix, convWindow);
+	    var rgba = convolution(srcImageData, srcX, srcY, filterMatrix, filterWindow);
 	    setRGBA(dstImageData, dstX, dstY, rgba);
 	}
     }
