@@ -58,7 +58,7 @@ function main() {
 		 } );
     //
     dropFunction(document, function(dataURL) {
-	console.debug("drop file");
+	console.debug("file drop");
 	srcImage = new Image();
 	srcImage.onload = function() {
 	    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
