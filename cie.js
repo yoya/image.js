@@ -45,6 +45,13 @@ function main() {
 		     console.debug("cieSelect event");
 		     readCIEXYZdata();
 		 } );
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+		 function() {
+		     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+		     hist = getColorHistogram(srcCanvas);
+		     drawDiagram(dstCanvas, cieArr, hist);
+		 } );
     bindFunction({"colorspaceSelect":null},
 		 function() {
 		     drawDiagram(dstCanvas, cieArr, hist);
@@ -54,7 +61,8 @@ function main() {
 	console.debug("drop file");
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImage(srcImage, srcCanvas);
+	    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    hist = getColorHistogram(srcCanvas);
 	    drawDiagram(dstCanvas, cieArr, hist);
 	}
