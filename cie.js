@@ -141,7 +141,12 @@ function drawDiagramBase(dstCanvas, cieArr, colorspace) {
     for (var y = 0 ; y < height ; y++) {
 	for (var x = 0 ; x < width ; x++) {
 	    var xy = graphTransRev([x, y], width, height);
-	    var lxyz = xy2XYZ(xy)
+	    if (colorspace === "ciexy") {
+		var lxyz = xy2XYZ(xy)
+	    } else {
+		xy = uava2xy(xy);
+		var lxyz = xy2XYZ(xy);
+	    }
 	    var [r, g, b] = XYZ2sRGB(lxyz);
 	    data[offset++] = r;
 	    data[offset++] = g;
