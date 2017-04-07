@@ -8,9 +8,26 @@
 <body bgcolor="lightgray">
   <div class="container">
     <div>
-    <div>
-      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText">
+      <div id="controlPanel"  style="float:left">
+        Convolution Matrix:  <br />
+	<div style="position:relative; left: 30%; float:left; ">
+          <select id="convolutionMatrixSelect" size="8">
+            <option value="smoothing" selected> 平滑化 </option>
+	    <option value="differential"      > 微分</option>
+            <option value="differentialHoli"  > 微分(横) </option>
+	    <option value="differentialVert"  > 微分(縦) </option>
+	    <option value="laplacian"         > ラプラシアン </option>
+	    <option value="sharpening1"       > 先鋭化1 </option>
+	    <option value="sharpening2"       > 先鋭化2 </option>
+	    <option value="emboss"            > エンボス </option>
+          </select>
+	</div>
+      </div>
+      <div>
+        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText">
+      </div>
     </div>
+    <div style="clear:both">
     <canvas id="srcCanvas" width=200 height=200> srcCanvas </canvas>
     <canvas id="dstCanvas" width=200 height=200> dstCanvas </canvas>
   </div>

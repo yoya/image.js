@@ -21,7 +21,8 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+		  "convolutionMatrixSelect":null},
 		 function() {
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas);
 		 } );
@@ -43,11 +44,10 @@ function convolution(srcImageData, srcX, srcY, matrix, convWindow) {
 	    r2 += r * matrix[i];
 	    g2 += g * matrix[i];
 	    b2 += b * matrix[i];
-	    a2 += a * matrix[i];
 	    i++;
 	}
     }
-    return [r2, g2, b2, a2];
+    return [r2, g2, b2, a];
 }
 
 function drawConvolution(srcCanvas, dstCanvas) {
@@ -60,13 +60,61 @@ function drawConvolution(srcCanvas, dstCanvas) {
     dstCanvas.width  = dstWidth;
     dstCanvas.height = dstHeight;
     //
+    var convolutionMatrix = document.getElementById("convolutionMatrixSelect").value;
+    //
     var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
     var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
     var srcData = srcImageData.data;
     var dstData = dstImageData.data;
+
     var matrix = [0, 1, 0,
 		  1, -3, 1,
 		  0, 1 , 0];
+    switch (convolutionMatrix) {
+    case "smoothing":
+	var v = 1/9;
+	matrix = [v, v, v,
+		  v, v, v,
+		  v, v, v];
+	break;
+    case "differentialHoli":
+	matrix = [0, 0, 0,
+		  0, -1, 1,
+		  0, 0, 0];
+	break;
+    case "differentialVert":
+	matrix = [0, 1, 0,
+		  0, -1, 0,
+		  0, 0, 0];
+	break;
+    case "differential":
+	matrix = [0, 1, 0,
+		  0, -2, 1,
+		  0, 0, 0];
+	break;
+    case "laplacian":
+	matrix = [0, 1, 0,
+		  1, -4, 1,
+		  0, 1, 0];
+	break;
+    case "sharpening1":
+	matrix = [ 0, -1,  0,
+		  -1,  5, -1,
+		   0, -1,  0];
+	break;
+    case "sharpening2":
+	matrix = [-1, -1, -1,
+		  -1,  9, -1,
+		  -1, -1, -1];
+	break;
+    case "emboss":
+	matrix = [1, 0,  0,
+		  0, 0,  0,
+		  0, 0, -1];
+	break;
+    default:
+	console.error("Unknown matrix:"+convolutionMatrix);
+    }
     var convWindow = 3;
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
