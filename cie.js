@@ -161,6 +161,7 @@ function drawDiagramBase(dstCanvas, cieArr, colorspace) {
 function drawDiagramPoint(dstCanvas, hist, colorspace) {
     var width = dstCanvas.width, height = dstCanvas.height;
     var ctx = dstCanvas.getContext("2d");
+    ctx.fillStyle = "black";
     for (var colorId in hist) {
 	var [r,g,b,a] = colorId2RGBA(colorId);
 	if (a === 0) {
@@ -174,9 +175,6 @@ function drawDiagramPoint(dstCanvas, hist, colorspace) {
 	    var uava = xy2uava(xy);
 	    var [gx, gy] = graphTrans(uava, width, height);
 	}
-	ctx.beginPath();
-	ctx.fillStyle = "black";
-	ctx.arc(gx, gy, 0.5, 0, 2*Math.PI, true);
-	ctx.stroke();
+	ctx.fillRect(gx, gy, 0.5, 0.5);
     }
 }
