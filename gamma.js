@@ -39,17 +39,22 @@ function drawSrcImageAndGamma(srcImage, srcCanvas, dstCancas, gammaCanvas) {
 
 
 function drawGammaGraph(gammaCanvas, gamma) {
-    gammaCanvas.width = gammaCanvas.width;
     var ctx = gammaCanvas.getContext("2d");
-    ctx.strokeStyle="black";
+    ctx.fillStyle="black";
+    ctx.fillRect(0, 0, 256, 256);
+    ctx.fillStyle="white";
     ctx.beginPath();
+    ctx.moveTo(256, 0)
+    ctx.lineTo(256, 256);
+    ctx.lineTo(0, 256);
     for (var x = 0 ; x < 256 ; x++) {
 	var v1 = x / 255;
     	var v2 = Math.pow(v1, gamma);
 	var y = (1 - v2) * 255;
 	ctx.lineTo(x, y);
     }
-    ctx.stroke();
+    ctx.closePath();
+    ctx.fill();
 }
 
 function drawGammaImage(srcCanvas, dstCanvas, gamma) {
