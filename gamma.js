@@ -12,9 +12,6 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var gammaCanvas = document.getElementById("gammaCanvas");
-    srcCanvas.style.border = "thick solid red";
-    dstCanvas.style.border = "thick solid green";
-    gammaCanvas.style.border = "thick solid blue";
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();

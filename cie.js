@@ -12,8 +12,6 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    srcCanvas.style.border = "thick solid red";
-    dstCanvas.style.border = "thick solid blue";
     var cieArr = null;
     var hist = null
     var readCIEXYZdata = function() {

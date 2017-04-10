@@ -17,9 +17,6 @@ function main() {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var srcImage1 = new Image(srcCanvas1.width, srcCanvas1.height);
     var srcImage2 = new Image(srcCanvas2.width, srcCanvas2.height);
-    srcCanvas1.style.border = "thick solid red";
-    srcCanvas2.style.border = "thick solid green";
-    dstCanvas.style.border = "thick solid blue";
     
     dropFunction(srcCanvas1Container, function(dataURL) {
 	srcImage1 = new Image();

@@ -10,3 +10,15 @@
   display: block; // IE
   display: block;      // Mozilla
 }
+
+#srcCanvas, #srcCanvas1 {
+    border: thick solid red;
+}
+
+#srcCanvas2, #gammaCanvas, #graphCanvas {
+    border: thick solid green;
+}
+
+#dstCanvas {
+    border: thick solid blue;
+}
