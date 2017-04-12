@@ -15,34 +15,34 @@ function main() {
     dstCanvas.style.border = "thick solid blue";
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     //
-    var filterMatrix = document.getElementById("filterMatrix");
+    var filterTable = document.getElementById("filterTable");
     var filter = document.getElementById("filterSelect").value;
-    var [matrix, filterWindow] = selectFilterMatrix(filter);
+    var [filterMatrix, filterWindow] = selectFilterMatrix(filter);
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, matrix, filterWindow);
+	    drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
-		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, matrix, filterWindow);
+		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
 		 } );
     bindFunction({"filterSelect":null},
 		 function() {
 		     filter = document.getElementById("filterSelect").value;    srcCanvas.style.border = "thick solid red";
-		     [matrix, filterWindow] = selectFilterMatrix(filter);
-		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, matrix, filterWindow);
+		     [filterMatrix, filterWindow] = selectFilterMatrix(filter);
+		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
 		     for (var i = 0 ; i < filterWindow * filterWindow ; i++) {
-			 document.getElementById("filterValue"+i).value = matrix[i];
+			 document.getElementById("filterValue"+i).value = filterMatrix[i];
 		     }
 		 } );
     // generate filter table dom
     var i = 0;
     for (var y = 0 ; y < filterWindow ; y++) {
 	var tr = document.createElement("tr")
-	filterMatrix.appendChild(tr);
+	filterTable.appendChild(tr);
 	for (var x = 0 ; x < filterWindow ; x++) {
 	    var td = document.createElement("td")
 	    tr.appendChild(td);
@@ -51,7 +51,7 @@ function main() {
 	    input.type = "text";
 	    input.id = "filterValue"+i;
 	    input.size = 10;
-	    input.value = matrix[i];
+	    input.value = filterMatrix[i];
 	    i++;
 	}
     }
@@ -61,82 +61,82 @@ function main() {
 	bindFunction(map,
 		     function(target) {
 			 var i = target.id.substr("filterValue".length);
-			 matrix[i] = target.value;
-			 drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, matrix, filterWindow);
+			 filterMatrix[i] = target.value;
+			 drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
 		     });
     }
-    console.log(filterMatrix);
+    console.log(filterTable);
 }
 
 function selectFilterMatrix(filter) {
     console.debug("selectFilterMatrix("+filter+")");
-    var matrix = null;;
+    var filterMatrix = null;;
     var filterWindow = 3;
     switch (filter) {
     case "smoothing":
 	var v = 1/9;
-	matrix = [v, v, v,
-		  v, v, v,
-		  v, v, v];
+	filterMatrix = [v, v, v,
+			v, v, v,
+			v, v, v];
 	break;
     case "differentialHoli":
-	matrix = [0, 0, 0,
-		  0, -1, 1,
-		  0, 0, 0];
+	filterMatrix = [0, 0, 0,
+			0, -1, 1,
+			0, 0, 0];
 	break;
     case "differentialVert":
-	matrix = [0, 1, 0,
-		  0, -1, 0,
-		  0, 0, 0];
+	filterMatrix = [0, 1, 0,
+			0, -1, 0,
+			0, 0, 0];
 	break;
     case "differential":
-	matrix = [0, 1, 0,
-		  0, -2, 1,
-		  0, 0, 0];
+	filterMatrix = [0, 1, 0,
+			0, -2, 1,
+			0, 0, 0];
 	break;
     case "laplacian":
-	matrix = [0, 1, 0,
-		  1, -4, 1,
-		  0, 1, 0];
+	filterMatrix = [0, 1, 0,
+			1, -4, 1,
+			0, 1, 0];
 	break;
     case "sharpening1":
-	matrix = [ 0, -1,  0,
-		   -1,  5, -1,
-		   0, -1,  0];
+	filterMatrix = [ 0, -1,  0,
+			 -1,  5, -1,
+			 0, -1,  0];
 	break;
     case "sharpening2":
-	matrix = [-1, -1, -1,
-		  -1,  9, -1,
-		  -1, -1, -1];
+	filterMatrix = [-1, -1, -1,
+			-1,  9, -1,
+			-1, -1, -1];
 	break;
     case "emboss":
-	matrix = [1, 0,  0,
-		  0, 0,  0,
-		  0, 0, -1];
+	filterMatrix = [1, 0,  0,
+			0, 0,  0,
+			0, 0, -1];
 	break;
     case "prewitt":
-	matrix = [-2, -1, 0,
-		  -1, 0,  1,
-		  0, 1, 2];
+	filterMatrix = [-2, -1, 0,
+			-1, 0,  1,
+			0, 1, 2];
 	break;
     case "sobel":
-	matrix = [-2, -2, 0,
-		  -2,  0, 2,
-		  0,  2, 2];
+	filterMatrix = [-2, -2, 0,
+			-2,  0, 2,
+			0,  2, 2];
 	break;
     default:
 	console.error("Unknown filter:"+filter);
     }
-    return [matrix, filterWindow];
+    return [filterMatrix, filterWindow];
 }
 
-function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, matrix, filterWindow) {
+function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, filterMatrix, filterWindow) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawConvolution(srcCanvas, dstCanvas, matrix, filterWindow);
+    drawConvolution(srcCanvas, dstCanvas, filterMatrix, filterWindow);
 }
 
-function convolution(srcImageData, srcX, srcY, matrix, convWindow) {
+function convolution(srcImageData, srcX, srcY, filterMatrix, convWindow) {
     var startX = srcX - (convWindow-1)/2, endX = startX + convWindow;
     var startY = srcY - (convWindow-1)/2, endY = startY + convWindow;
     var i = 0;
@@ -144,16 +144,16 @@ function convolution(srcImageData, srcX, srcY, matrix, convWindow) {
     for (var y = startY ; y < endY ; y++) {
 	for (var x = startX ; x < endX ; x++) {
 	    var [r, g, b, a] = getRGBA(srcImageData, x, y);
-	    r2 += r * matrix[i];
-	    g2 += g * matrix[i];
-	    b2 += b * matrix[i];
+	    r2 += r * filterMatrix[i];
+	    g2 += g * filterMatrix[i];
+	    b2 += b * filterMatrix[i];
 	    i++;
 	}
     }
     return [r2, g2, b2, a];
 }
 
-function drawConvolution(srcCanvas, dstCanvas, matrix, filterWindow) {
+function drawConvolution(srcCanvas, dstCanvas, filterMatrix, filterWindow) {
     // console.debug("drawConvolution");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -172,7 +172,7 @@ function drawConvolution(srcCanvas, dstCanvas, matrix, filterWindow) {
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
 	    var srcX = dstX, srcY = dstY;
-	    var rgba = convolution(srcImageData, srcX, srcY, matrix, filterWindow);
+	    var rgba = convolution(srcImageData, srcX, srcY, filterMatrix, filterWindow);
 	    setRGBA(dstImageData, dstX, dstY, rgba);
 	}
     }
