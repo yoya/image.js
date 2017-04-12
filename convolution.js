@@ -11,8 +11,6 @@ function main() {
     // console.debug("main");
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
-    srcCanvas.style.border = "thick solid red";
-    dstCanvas.style.border = "thick solid blue";
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     //
     var filterMatrixTable = document.getElementById("filterMatrixTable");
