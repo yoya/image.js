@@ -18,6 +18,7 @@ function main() {
     var filterMatrixTable = document.getElementById("filterMatrixTable");
     var filter = document.getElementById("filterSelect").value;
     var [filterMatrix, filterWindow] = selectFilterMatrix(filter);
+    
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
@@ -34,37 +35,13 @@ function main() {
 		     filter = document.getElementById("filterSelect").value;    srcCanvas.style.border = "thick solid red";
 		     [filterMatrix, filterWindow] = selectFilterMatrix(filter);
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
-		     for (var i = 0 ; i < filterWindow * filterWindow ; i++) {
-			 document.getElementById("filterValue"+i).value = filterMatrix[i];
-		     }
+		     setTableFunction("filterMatrixTable", filterMatrix, filterWindow);
 		 } );
-    // generate filter table dom
-    var i = 0;
-    for (var y = 0 ; y < filterWindow ; y++) {
-	var tr = document.createElement("tr")
-	filterMatrixTable.appendChild(tr);
-	for (var x = 0 ; x < filterWindow ; x++) {
-	    var td = document.createElement("td")
-	    tr.appendChild(td);
-	    var input = document.createElement("input")
-	    td.appendChild(input);
-	    input.type = "text";
-	    input.id = "filterValue"+i;
-	    input.size = 10;
-	    input.value = filterMatrix[i];
-	    i++;
-	}
-    }
-    for (var i = 0 ; i < filterWindow * filterWindow ; i++) {
-	var map = {}
-	map["filterValue"+i] = null;
-	bindFunction(map,
-		     function(target) {
-			 var i = target.id.substr("filterValue".length);
-			 filterMatrix[i] = target.value;
-			 drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
-		     });
-    }
+    bindTableFunction("filterMatrixTable", function(table, values, width) {
+	filterMatrix = values;
+	filterWindow = width;
+	drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
+    }, filterMatrix, filterWindow);
     console.log(filterMatrixTable);
 }
 
