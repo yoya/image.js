@@ -35,12 +35,12 @@ function main() {
 		     filter = document.getElementById("filterSelect").value;    srcCanvas.style.border = "thick solid red";
 		     [filterMatrix, filterWindow] = selectFilterMatrix(filter);
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
-		     setTableFunction("filterMatrixTable", filterMatrix, filterWindow);
+		     setTableValues("filterMatrixTable", filterMatrix);
 		 } );
     bindTableFunction("filterMatrixTable", function(table, values, width) {
 	filterMatrix = values;
 	filterWindow = width;
-	drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
+	 drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
     }, filterMatrix, filterWindow);
     console.log(filterMatrixTable);
 }
