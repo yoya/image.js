@@ -15,7 +15,7 @@ function main() {
     dstCanvas.style.border = "thick solid blue";
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     //
-    var filterTable = document.getElementById("filterTable");
+    var filterMatrixTable = document.getElementById("filterMatrixTable");
     var filter = document.getElementById("filterSelect").value;
     var [filterMatrix, filterWindow] = selectFilterMatrix(filter);
     dropFunction(document, function(dataURL) {
@@ -42,7 +42,7 @@ function main() {
     var i = 0;
     for (var y = 0 ; y < filterWindow ; y++) {
 	var tr = document.createElement("tr")
-	filterTable.appendChild(tr);
+	filterMatrixTable.appendChild(tr);
 	for (var x = 0 ; x < filterWindow ; x++) {
 	    var td = document.createElement("td")
 	    tr.appendChild(td);
@@ -65,7 +65,7 @@ function main() {
 			 drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
 		     });
     }
-    console.log(filterTable);
+    console.log(filterMatrixTable);
 }
 
 function selectFilterMatrix(filter) {
