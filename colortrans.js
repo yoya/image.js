@@ -55,8 +55,6 @@ function drawColorTransform(srcCanvas, dstCanvas,
     //
     var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
     var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-    var srcData = srcImageData.data;
-    var dstData = dstImageData.data;
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
 	    var srcX = dstX;

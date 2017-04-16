@@ -77,8 +77,6 @@ function drawQuantize_uniform(srcCanvas, dstCanvas) {
     //
     var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
     var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-    var srcData = srcImageData.data;
-    var dstData = dstImageData.data;
     for (var srcY = 0 ; srcY < srcHeight; srcY++) {
         for (var srcX = 0 ; srcX < srcWidth; srcX++) {
 	    var dstX = srcX, dstY = srcY;
@@ -111,8 +109,6 @@ function drawQuantize_popularity(srcCanvas, dstCanvas) {
     //
     var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
     var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-    var srcData = srcImageData.data;
-    var dstData = dstImageData.data;
     var hist = getColorHistogram(srcCanvas);
     var colorNum = Object.keys(hist).length;
     var histArray = [];
