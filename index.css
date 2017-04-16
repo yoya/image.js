@@ -11,14 +11,11 @@
   display: block;      // Mozilla
 }
 
-#srcCanvas, #srcCanvas1 {
-    border: thick solid red;
-}
+.borderRed { border: thick solid red; }
+.borderGreen { border: thick solid green; }
+.borderBlue { border: thick solid blue; }
 
-#srcCanvas2, #gammaCanvas, #graphCanvas {
-    border: thick solid green;
-}
+.borderYellow { border: thick solid yellow; }
+.borderBlack { border: thick solid black; }
 
-#dstCanvas {
-    border: thick solid blue;
-}
+
