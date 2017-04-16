@@ -65,6 +65,15 @@ function colorComponent(imageData, x, y, component) {
 	    arr.push(a) ; return arr;
 	});
 	break;
+    case "ycbcr": // naive convert
+	var [yy, cb, cr] = RGB2YCbCr([r, g, b]);
+	var rgb1 = YCbCr2RGB([yy, 128, 128]);
+	var rgb2 = YCbCr2RGB([128, cb, 128]);
+	var rgb3 = YCbCr2RGB([128, 128, cr]);
+	rgbaArr = [rgb1, rgb2, rgb3].map(function(arr) {
+	    arr.push(a) ; return arr;
+	});
+	break;
     default:
 	console.error("Illegal component:"+component);
     }
