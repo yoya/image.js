@@ -1,0 +1,37 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2017/04/02- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> Color Component </title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body bgcolor="lightgray">
+  <div class="container">
+    <div>
+      <div id="controlPanel"  style="float:left">
+        Color Filter:  <br />
+	<div style="position:relative; left: 10%; float:left; ">
+          <select id="componentSelect" size="8">
+            <option value="rgb" selected> RBG </option>
+	    <option value="cmyk"        > CMYK (naive) </option>
+          </select>
+	</div>
+      </div>
+      <div>
+        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText">
+      </div>
+    </div>
+    <div style="clear:both">
+    <canvas id="srcCanvas" class="borderYellow" width=200 height=200> srcCanvas </canvas>
+    <canvas id="dstCanvas1" class="borderRed" width=200 height=200> dstCanvas1 </canvas>
+    <canvas id="dstCanvas2" class="borderGreen" width=200 height=200> dstCanvas2 </canvas>
+    <canvas id="dstCanvas3" class="borderBlue" width=200 height=200> dstCanvas3 </canvas>
+    <canvas id="dstCanvas4" class="borderBlack" width=200 height=200> dstCanvas4 </canvas>
+  </div>
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/canvas.js"> </script>
+  <script type="text/javascript" src="lib/color.js"> </script>
+  <script type="text/javascript" src="colorcomponent.js"> </script>
+</body>
+</html>
