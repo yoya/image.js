@@ -68,8 +68,11 @@ function colorComponent(imageData, x, y, component) {
     case "ycbcr": // naive convert
 	var [yy, cb, cr] = RGB2YCbCr([r, g, b]);
 	var rgb1 = YCbCr2RGB([yy, 128, 128]);
-	var rgb2 = YCbCr2RGB([128, cb, 128]);
-	var rgb3 = YCbCr2RGB([128, 128, cr]);
+	var cby = Math.pow(Math.abs(cb-128)/255, 1/2.2) * 255;
+	var cry = Math.pow(Math.abs(cr-128)/255, 1/2.2) * 255;
+	var rgb2 = YCbCr2RGB([cby, cb, 128]);
+	var rgb3 = YCbCr2RGB([cry, 128, cr]);
+	rgba2
 	rgbaArr = [rgb1, rgb2, rgb3].map(function(arr) {
 	    arr.push(a) ; return arr;
 	});
