@@ -46,7 +46,8 @@ function drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, compon
 }
 
 function colorComponent(imageData, x, y, component) {
-    var [r, g, b, a] = getRGBA(imageData, x, y);
+    var rgba = getRGBA(imageData, x, y);
+    var [r, g, b, a] = rgba;
     var rgbaArr;
     switch (component) {
     case "rgb":
@@ -56,7 +57,7 @@ function colorComponent(imageData, x, y, component) {
 	rgbaArr = [rgba1, rgba2, rgba3];
 	break;
     case "cmyk": // naive convert
-	var [c, m, y, k] = RGB2CMYK([r, g, b]);
+	var [c, m, y, k] = RGB2CMYK(rgba);
 	var rgb1 = CMYK2RGB([c, 0, 0, 0]);
 	var rgb2 = CMYK2RGB([0, m, 0, 0]);
 	var rgb3 = CMYK2RGB([0, 0, y, 0]);
@@ -66,7 +67,7 @@ function colorComponent(imageData, x, y, component) {
 	});
 	break;
     case "ycbcr": // YCbCr (JPEG)
-	var [yy, cb, cr] = RGB2YCbCr([r, g, b]);
+	var [yy, cb, cr] = RGB2YCbCr(rgba);
 	var rgb1 = YCbCr2RGB([yy, 128, 128]);
 	var rgb2 = YCbCr2RGB([128, cb, 128]);
 	var rgb3 = YCbCr2RGB([128, 128, cr]);
@@ -75,7 +76,7 @@ function colorComponent(imageData, x, y, component) {
 	});
 	break;
     case "yiq": // YIQ (NTSC)
-	var [yy, ii, qq] = RGB2YIQ([r, g, b]);
+	var [yy, ii, qq] = RGB2YIQ(rgba);
 	var rgb1 = YIQ2RGB([yy, 128, 128]);
 	var rgb2 = YIQ2RGB([128, ii, 128]);
 	var rgb3 = YIQ2RGB([128, 128, qq]);
@@ -84,7 +85,7 @@ function colorComponent(imageData, x, y, component) {
 	});
 	break;
     case "yuv_bt601": // YUV (BT.601))
-	var [yy, uu, vv] = RGB2YUV_BT601([r, g, b]);
+	var [yy, uu, vv] = RGB2YUV_BT601(rgba);
 	var rgb1 = YUV2RGB_BT601([yy, 128, 128]);
 	var rgb2 = YUV2RGB_BT601([128, uu, 128]);
 	var rgb3 = YUV2RGB_BT601([128, 128, vv]);
@@ -93,7 +94,7 @@ function colorComponent(imageData, x, y, component) {
 	});
 	break;
     case "yuv_bt709": // YUV (BT.709)
-	var [yy, uu, vv] = RGB2YUV_BT709([r, g, b]);
+	var [yy, uu, vv] = RGB2YUV_BT709(rgba);
 	var rgb1 = YUV2RGB_BT709([yy, 128, 128]);
 	var rgb2 = YUV2RGB_BT709([128, uu, 128]);
 	var rgb3 = YUV2RGB_BT709([128, 128, vv]);
