@@ -65,14 +65,38 @@ function colorComponent(imageData, x, y, component) {
 	    arr.push(a) ; return arr;
 	});
 	break;
-    case "ycbcr": // naive convert
+    case "ycbcr": // YCbCr (JPEG)
 	var [yy, cb, cr] = RGB2YCbCr([r, g, b]);
 	var rgb1 = YCbCr2RGB([yy, 128, 128]);
-	var cby = Math.pow(Math.abs(cb-128)/255, 1/2.2) * 255;
-	var cry = Math.pow(Math.abs(cr-128)/255, 1/2.2) * 255;
-	var rgb2 = YCbCr2RGB([cby, cb, 128]);
-	var rgb3 = YCbCr2RGB([cry, 128, cr]);
-	rgba2
+	var rgb2 = YCbCr2RGB([128, cb, 128]);
+	var rgb3 = YCbCr2RGB([128, 128, cr]);
+	rgbaArr = [rgb1, rgb2, rgb3].map(function(arr) {
+	    arr.push(a) ; return arr;
+	});
+	break;
+    case "yiq": // YIQ (NTSC)
+	var [yy, ii, qq] = RGB2YIQ([r, g, b]);
+	var rgb1 = YIQ2RGB([yy, 128, 128]);
+	var rgb2 = YIQ2RGB([128, ii, 128]);
+	var rgb3 = YIQ2RGB([128, 128, qq]);
+	rgbaArr = [rgb1, rgb2, rgb3].map(function(arr) {
+	    arr.push(a) ; return arr;
+	});
+	break;
+    case "yuv_bt601": // YUV (BT.601))
+	var [yy, uu, vv] = RGB2YUV_BT601([r, g, b]);
+	var rgb1 = YUV2RGB_BT601([yy, 128, 128]);
+	var rgb2 = YUV2RGB_BT601([128, uu, 128]);
+	var rgb3 = YUV2RGB_BT601([128, 128, vv]);
+	rgbaArr = [rgb1, rgb2, rgb3].map(function(arr) {
+	    arr.push(a) ; return arr;
+	});
+	break;
+    case "yuv_bt709": // YUV (BT.709)
+	var [yy, uu, vv] = RGB2YUV_BT709([r, g, b]);
+	var rgb1 = YUV2RGB_BT709([yy, 128, 128]);
+	var rgb2 = YUV2RGB_BT709([128, uu, 128]);
+	var rgb3 = YUV2RGB_BT709([128, 128, vv]);
 	rgbaArr = [rgb1, rgb2, rgb3].map(function(arr) {
 	    arr.push(a) ; return arr;
 	});
