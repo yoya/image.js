@@ -102,6 +102,15 @@ function colorComponent(imageData, x, y, component) {
 	    arr.push(a) ; return arr;
 	});
 	break;
+    case "hsv":
+	var [h, s, v] = RGB2HSV(rgba);
+	var rgb1 = HSV2RGB([h, 1, 1, 0]);
+	var rgb2 = HSV2RGB([0, s, s/2+0.5, 0]);
+	var rgb3 = HSV2RGB([0, 0, v, 0]);
+	rgbaArr = [rgb1, rgb2, rgb3].map(function(arr) {
+	    arr.push(a) ; return arr;
+	});
+	break;
     default:
 	console.error("Illegal component:"+component);
     }
