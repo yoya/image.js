@@ -175,7 +175,14 @@ function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix) {
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
 	    var [srcX, srcY] = affinTransform(dstX, dstY, invMat);
-	    var rgba = getRGBA(srcImageData, Math.round(srcX), Math.round(srcY));
+	    srcX = Math.round(srcX);
+	    srcY = Math.round(srcY);
+	    if ((0 <= srcX) && (srcX < srcWidth) &&
+		(0 <= srcY) && (srcY < srcHeight)) {
+		var rgba = getRGBA(srcImageData, srcX, srcY);
+	    } else {
+		var rgba = [0, 0, 0, 0];
+	    }
 	    setRGBA(dstImageData, dstX, dstY, rgba);
 	}
     }
