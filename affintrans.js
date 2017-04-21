@@ -82,11 +82,6 @@ function affin2Matrix(affin, canvas) {
 	       0, -1, canvas.height,
 	       0,  0, 1];
 	break;
-    case "flipflop":
-	mat = [-1, 0, canvas.width,
-	       0, -1, canvas.height,
-	       0,  0, 1];
-	break;
     case "rotate45":
 	var theta = Math.PI / 4;
 	mat = [Math.cos(theta), -Math.sin(theta), 0,
