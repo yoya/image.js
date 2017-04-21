@@ -15,6 +15,7 @@ function main() {
     //
     var affinMatrixTable = document.getElementById("affinMatrixTable");
     var affin = document.getElementById("affinSelect").value;
+    var outfill = document.getElementById("outfillSelect").value;
     var affinMatrix = affin2Matrix(affin, srcCanvas);
     var affinWindow = 3;
     //
@@ -24,7 +25,7 @@ function main() {
 	    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    affinMatrix = affin2Matrix(affin, srcCanvas);
-	    drawAffinTransform(srcCanvas, dstCanvas, affinMatrix);
+	    drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -34,19 +35,20 @@ function main() {
 		     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     affinMatrix = affin2Matrix(affin, srcCanvas);
-		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix);
+		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill);
 		 } );
-    bindFunction({"affinSelect":null},
+    bindFunction({"affinSelect":null, "outfillSelect":null},
 		 function() {
 		     affin = document.getElementById("affinSelect").value;
+		     outfill = document.getElementById("outfillSelect").value;
 		     affinMatrix = affin2Matrix(affin, srcCanvas);
-		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix);
+		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill);
 		     setTableValues("affinMatrixTable", affinMatrix);
 		 } );
     //
     bindTableFunction("affinMatrixTable", function(table, values, width) {
 	affinMatrix = values;
-	drawAffinTransform(srcCanvas, dstCanvas, affinMatrix);
+	drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill);
     }, affinMatrix, affinWindow);
 }
 
@@ -159,7 +161,7 @@ function scaleAffinTransform(x, y, width, height, mat) {
 }
 
 
-function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix) {
+function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill) {
     // console.debug("drawAffinTransform");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -177,12 +179,7 @@ function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix) {
 	    var [srcX, srcY] = affinTransform(dstX, dstY, invMat);
 	    srcX = Math.round(srcX);
 	    srcY = Math.round(srcY);
-	    if ((0 <= srcX) && (srcX < srcWidth) &&
-		(0 <= srcY) && (srcY < srcHeight)) {
-		var rgba = getRGBA(srcImageData, srcX, srcY);
-	    } else {
-		var rgba = [0, 0, 0, 0];
-	    }
+	    var rgba = getRGBA(srcImageData, srcX, srcY, outfill);
 	    setRGBA(dstImageData, dstX, dstY, rgba);
 	}
     }
