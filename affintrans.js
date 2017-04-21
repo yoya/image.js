@@ -62,6 +62,16 @@ function affin2Matrix(affin, canvas) {
 	       0, 0.5, 0,
 	       0,   0, 1];
 	break;
+    case "skew0.2x":
+	mat = [1, 0.2, 0,
+	       0, 1,   0,
+	       0, 0,   1];
+	break;
+    case "skew0.2y":
+	mat = [1,   0, 0,
+	       0.2, 1, 0,
+	       0,   0, 1];
+	break;
     case "flop":
 	mat = [-1, 0, canvas.width,
 	       0,  1, 0,
