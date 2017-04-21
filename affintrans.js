@@ -21,26 +21,32 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndAffinTransform(srcImage, srcCanvas, dstCanvas, affinMatrix);
+	    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+	    affinMatrix = affin2Matrix(affin, srcCanvas);
+	    drawAffinTransform(srcCanvas, dstCanvas, affinMatrix);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     //
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
-		     drawSrcImageAndAffinTransform(srcImage, srcCanvas, dstCanvas, affinMatrix);
+		     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+		     affinMatrix = affin2Matrix(affin, srcCanvas);
+		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix);
 		 } );
     bindFunction({"affinSelect":null},
 		 function() {
 		     affin = document.getElementById("affinSelect").value;
 		     affinMatrix = affin2Matrix(affin, srcCanvas);
-		     drawSrcImageAndAffinTransform(srcImage, srcCanvas, dstCanvas, affinMatrix);
+		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix);
 		     setTableValues("affinMatrixTable", affinMatrix);
 		 } );
     //
     bindTableFunction("affinMatrixTable", function(table, values, width) {
 	affinMatrix = values;
-	drawSrcImageAndAffinTransform(srcImage, srcCanvas, dstCanvas, affinMatrix);
+	drawAffinTransform(srcCanvas, dstCanvas, affinMatrix);
     }, affinMatrix, affinWindow);
 }
 
@@ -114,12 +120,6 @@ function affin2Matrix(affin, canvas) {
     return mat;
 	
 };
-
-function drawSrcImageAndAffinTransform(srcImage, srcCanvas, dstCancas, affinMatrix) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawAffinTransform(srcCanvas, dstCanvas, affinMatrix);
-}
 
 function affinTransform(srcX, srcY, mat) {
     var dstX = srcX*mat[0] + srcY*mat[1] + mat[2];
