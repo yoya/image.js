@@ -13,6 +13,10 @@ function main() {
     var dstCanvas = document.getElementById("dstCanvas");
     var gammaCanvas = document.getElementById("gammaCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var gammaRange = document.getElementById("gammaRange");
+    var gammaText = document.getElementById("gammaText");
+    var gammaReciprocalRange = document.getElementById("gammaReciprocalRange");
+    var gammaReciprocalText = document.getElementById("gammaReciprocalText");
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
@@ -21,10 +25,21 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "gammaRange":"gammaText"},
-		 function() {
+		  "gammaRange":"gammaText",
+		  "gammaReciprocalRange":"gammaReciprocalText"},
+		 function(target) {
+		     console.log(target.id);
+		     if ((target.id === "gammaRange") || (target.id === "gammaText")) {
+			 gammaReciprocalRange.value = 1.0 / parseFloat(gammaRange.value);
+			 gammaReciprocalText.value = gammaReciprocalRange.value;
+		     } else if ((target.id === "gammaReciprocalRange") || (target.id === "gammaReciprocalText")) {
+			 gammaRange.value = 1.0 / parseFloat(gammaReciprocalRange.value);
+			 gammaText.value = gammaRange.value;
+		     }
 		     drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas);
 		 } );
+    gammaReciprocalRange.value = 1.0 / parseFloat(gammaRange.value);
+    gammaReciprocalText.value = gammaReciprocalRange.value;
 }
 function drawSrcImageAndGamma(srcImage, srcCanvas, dstCancas, gammaCanvas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
