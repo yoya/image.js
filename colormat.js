@@ -49,8 +49,7 @@ function main() {
 
 var color2Matrix = {
     // colorName:[
-    // colorMatrix,
-    // colorWindow],
+    // colorMatrix],
     "ident":[
 	1, 0, 0, 0,
 	0, 1, 0, 0,
