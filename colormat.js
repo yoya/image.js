@@ -15,8 +15,6 @@ function main() {
     //
     var colorMatrixTable = document.getElementById("colorMatrixTable");
     var color = document.getElementById("colorSelect").value;
-    console.log("color:"+color);
-    console.log(color2Matrix);
     var colorMatrix = color2Matrix[color];
     var colorWindow = 4;
     //
@@ -36,6 +34,7 @@ function main() {
 		 function() {
 		     color = document.getElementById("colorSelect").value;
 		     colorMatrix = color2Matrix[color];
+		     console.log(colorMatrix);
 		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, colorWindow);
 		     setTableValues("colorMatrixTable", colorMatrix);
 		 } );
