@@ -107,7 +107,11 @@ function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equal
     var greenHist = getColorHistogramList(srcCanvas, "green");
     var blueHist  = getColorHistogramList(srcCanvas, "blue");
     drawHistgramGraph(srcHistCanvas, redHist, greenHist, blueHist);
-    var colorMap = equalizeMap(redHist, greenHist, blueHist);
+    if (equalize) {
+	var colorMap = equalizeMap(redHist, greenHist, blueHist);
+    } else {
+	var colorMap = new Uint8Array(256).map(function(n, i) { return i; });
+    }
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
 	    var srcX = dstX;
