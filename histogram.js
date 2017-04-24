@@ -114,9 +114,9 @@ function equalizeMap(redHist, greenHist, blueHist, minValue, maxValue) {
     var count = 0;
     for (var i = 0; i < 256 ; i++) {
 	if (i < minValue) {
-	    map[i] = minValue;
+	    map[i] = 0;
 	} else if (maxValue < i) {
-	    map[i] = maxValue;
+	    map[i] = 255;
 	} else {
 	    var c = hist[i];
 	    if (c > 0) {
