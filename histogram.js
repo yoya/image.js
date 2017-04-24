@@ -123,8 +123,9 @@ function equalizeMap(redHist, greenHist, blueHist, minValue, maxValue) {
 		count += c;
 		map[i] = 255; // fail safe
 		for (var j = 0; j < 256 ; j++) {
-		    if (count <= (nColors / 256 * (j+1))) {
-			map[i] = j;
+		    if (count <= (nColors / (maxValue-minValue) * (j-minValue+1))) {
+			// level adjustment
+			map[i] = 255 * (j - minValue) / (maxValue - minValue);
 			break;
 		    }
 		}
@@ -159,6 +160,7 @@ function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equal
 	    } else if (maxValue < i) {
 		return 255;
 	    }
+	    // level adjustment
 	    return 255 * (i - minValue) / (maxValue - minValue);
 	});
     } else {
