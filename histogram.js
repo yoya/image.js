@@ -104,25 +104,29 @@ function drawHistgramGraph(histCanvas, redHist, greenHist, blueHist,
 
 function equalizeMap(redHist, greenHist, blueHist, minValue, maxValue) {
     var map = new Uint8Array(256);
-    var reduceFnSum = function(prev, cur) {
-	if ((cur < minValue) || (maxValue < cur)) {
-	    return prev;
+    var hist = new Uint32Array(256).map(function(n, i) {
+	if ((i < minValue) || (maxValue < i)) {
+	    return 0;
 	}
-	return prev + cur;
-    };
-    var nColors = redHist.reduce(reduceFnSum);
-    nColors += greenHist.reduce(reduceFnSum);
-    nColors += blueHist.reduce(reduceFnSum);
+	return redHist[i] + greenHist[i] + blueHist[i];
+    });
+    var nColors = hist.reduce( function(prev, cur) { return prev + cur; });
     var count = 0;
     for (var i = 0; i < 256 ; i++) {
-	var c = redHist[i] + greenHist[i] + blueHist[i];
-	if (c > 0) {
-	    count += c;
+	if (i < minValue) {
+	    map[i] = minValue;
+	} else if (maxValue < i) {
 	    map[i] = maxValue;
-	    for (var j = 0; j < 256 ; j++) {
-		if (count <= (nColors / maxValue * (j+1))) {
-		    map[i] = j;
-		    break;
+	} else {
+	    var c = hist[i];
+	    if (c > 0) {
+		count += c;
+		map[i] = 255; // fail safe
+		for (var j = 0; j < 256 ; j++) {
+		    if (count <= (nColors / 256 * (j+1))) {
+			map[i] = j;
+			break;
+		    }
 		}
 	    }
 	}
@@ -147,7 +151,7 @@ function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equal
     var blueHist  = getColorHistogramList(srcCanvas, "blue");
     drawHistgramGraph(srcHistCanvas, redHist, greenHist, blueHist, minValue, maxValue);
     if (equalize) {
-	var colorMap = equalizeMap(redHist, greenHist, blueHist);
+	var colorMap = equalizeMap(redHist, greenHist, blueHist, minValue, maxValue);
     } else if (( 0 < minValue) || (maxValue< 255)) {
 	var colorMap = new Uint8Array(256).map(function(n, i) {
 	    if (i < minValue) {
