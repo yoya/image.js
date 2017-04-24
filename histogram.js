@@ -80,7 +80,7 @@ function equalizeMap(redHist, greenHist, blueHist) {
 	    count += c;
 	    map[i] = 255;
 	    for (var j = 0; j < 256 ; j++) {
-		if (count < (nColors / 256 * (j+1))) {
+		if (count <= (nColors / 256 * (j+1))) {
 		    map[i] = j;
 		    break;
 		}
