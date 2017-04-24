@@ -14,6 +14,12 @@
     <div>
       equalize:<input id="equalizeCheckbox" type="checkbox" value="0" />
     </div>
+    <div>
+      maxValue:<input id="maxValueRange" type="range" min="0" max="255" step="1" value="255">:<input type="text" id="maxValueText" size="4">
+    </div>
+    <div>
+      minValue:<input id="minValueRange" type="range" min="0" max="255" step="1" value="0">:<input type="text" id="minValueText" size="4">
+    </div>
     <canvas id="srcHistCanvas" class="borderGray" width=256 height=256> srcHistCanvas </canvas>
     <canvas id="dstHistCanvas" class="borderGray" width=256 height=256> dstHistCanvas </canvas>
     <br />
