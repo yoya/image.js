@@ -28,7 +28,7 @@ function main() {
 		  "gammaRange":"gammaText",
 		  "gammaReciprocalRange":"gammaReciprocalText"},
 		 function(target) {
-		     console.log(target.id);
+		     console.debug(target.id);
 		     if ((target.id === "gammaRange") || (target.id === "gammaText")) {
 			 gammaReciprocalRange.value = 1.0 / parseFloat(gammaRange.value);
 			 gammaReciprocalText.value = gammaReciprocalRange.value;
