@@ -154,8 +154,8 @@ function equalizeMap(redHist, greenHist, blueHist, minValue, maxValue) {
 		map[i] = 255; // fail safe
 		for (var j = 0; j < 256 ; j++) {
 		    if (count <= (nColors / (maxValue-minValue) * (j-minValue+1))) {
-			// level adjustment
-			map[i] = levelAdjustment(j, minValue, maxValue, 0, 255);
+			var v = levelAdjustment(j, minValue, maxValue, 0, 255);
+			map[i] = Math.round(v);
 			break;
 		    }
 		}
@@ -185,7 +185,8 @@ function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equal
 	var colorMap = equalizeMap(redHist, greenHist, blueHist, minValue, maxValue);
     } else if (( 0 < minValue) || (maxValue< 255)) {
 	var colorMap = new Uint8Array(256).map(function(n, i) {
-	    return levelAdjustment(i, minValue, maxValue, 0, 255);
+	    var v = levelAdjustment(i, minValue, maxValue, 0, 255);
+	    return Math.round(v);
 	});
     } else {
 	var colorMap = new Uint8Array(256).map(function(n, i) { return i; });
@@ -205,7 +206,7 @@ function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equal
 		r = (ra * (255 - equalizeRatio) + colorMap[r] * equalizeRatio) / 255;
 		g = (ga * (255 - equalizeRatio) + colorMap[g] * equalizeRatio) / 255;
 		b = (ba * (255 - equalizeRatio) + colorMap[b] * equalizeRatio) / 255;
-		setRGBA(dstImageData, dstX, dstY, [r, g, b, a]);
+		setRGBA(dstImageData, dstX, dstY, [Math.round(r), Math.round(g), Math.round(b), a]);
 	    }
 	}
     }
