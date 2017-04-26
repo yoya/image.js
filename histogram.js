@@ -14,6 +14,9 @@ function main() {
     var srcHistCanvas = document.getElementById("srcHistCanvas");
     var dstHistCanvas = document.getElementById("dstHistCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var equalize = document.getElementById("equalizeCheckbox");
+    var equalizeRatioRange = document.getElementById("equalizeRatioRange");
+    var equalizeRatioText  = document.getElementById ("equalizeRatioText");
     var maxValueRange = document.getElementById("maxValueRange");
     var minValueRange = document.getElementById("minValueRange");
     var maxValueText = document.getElementById("maxValueText");
@@ -27,19 +30,37 @@ function main() {
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "equalizeCheckbox":null,
+		  "equalizeRatioRange":"equalizeRatioText",
 		  "maxValueRange":"maxValueText",
 		  "minValueRange":"minValueText"},
 		 function(target) {
 		     console.debug(target.id);
 		     var maxValue = parseFloat(document.getElementById("maxValueRange").value);
 		     var minValue = parseFloat(document.getElementById("minValueRange").value);
-		     if (minValue > maxValue) {
-			 if ((target.id === "maxValueRange") || (target.id === "maxValueText")) {
-			     minValueRange.value = maxValue;
-			     minValueText.value  = maxValue;
+		     if (target.id === "equalizeCheckbox")  {
+			 if (equalize.checked) {
+			     equalizeRatioRange.value = 255;
+			     equalizeRatioText.value = 255;
 			 } else {
-			     maxValueRange.value = minValue;
-			     maxValueText.value  = minValue;
+			     equalizeRatioRange.value = 0
+			     equalizeRatioText.value = 0;
+			 }
+		     } else if ((target.id === "equalizeRatioRange") ||
+				(target.id === "equalizeRatioText")) {
+			 if (equalizeRatioRange.value == 0) {
+			     equalize.checked = false;
+			 } else {
+			     equalize.checked = true;
+			 }
+		     } else {
+			 if (minValue > maxValue) {
+			     if ((target.id === "maxValueRange") || (target.id === "maxValueText")) {
+				 minValueRange.value = maxValue;
+				 minValueText.value  = maxValue;
+			     } else if ((target.id === "minValueRange") || (target.id === "minValueText")) {
+				 maxValueRange.value = minValue;
+				 maxValueText.value  = minValue;
+			     }
 			 }
 		     }
 		     drawSrcImageAndHistogram(srcImage, srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas);
@@ -48,11 +69,11 @@ function main() {
 
 function drawSrcImageAndHistogram(srcImage, srcCanvas, dstCancas, srcHistCanvas, dstHistCanvas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var equalize = document.getElementById("equalizeCheckbox").checked;
+    var equalizeRatio = parseFloat(document.getElementById("equalizeRatioRange").value);
     var maxValue = parseFloat(document.getElementById("maxValueRange").value);
     var minValue = parseFloat(document.getElementById("minValueRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equalize, minValue, maxValue);
+    drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equalizeRatio, minValue, maxValue);
 }
 
 function drawHistgramGraph(histCanvas, redHist, greenHist, blueHist,
@@ -102,6 +123,15 @@ function drawHistgramGraph(histCanvas, redHist, greenHist, blueHist,
     }
 }
 
+function levelAdjustment(v, srcMinValue, srcMaxValue, dstMinValue, dstMaxValue) {
+    if (v < srcMinValue) {
+	return dstMinValue;
+    } else if (srcMaxValue < v) {
+	return dstMaxValue;
+    }
+    return dstMaxValue * (v - srcMinValue) / (srcMaxValue - srcMinValue) + dstMinValue;
+}
+
 function equalizeMap(redHist, greenHist, blueHist, minValue, maxValue) {
     var map = new Uint8Array(256);
     var hist = new Uint32Array(256).map(function(n, i) {
@@ -125,7 +155,7 @@ function equalizeMap(redHist, greenHist, blueHist, minValue, maxValue) {
 		for (var j = 0; j < 256 ; j++) {
 		    if (count <= (nColors / (maxValue-minValue) * (j-minValue+1))) {
 			// level adjustment
-			map[i] = 255 * (j - minValue) / (maxValue - minValue);
+			map[i] = levelAdjustment(j, minValue, maxValue, 0, 255);
 			break;
 		    }
 		}
@@ -135,7 +165,7 @@ function equalizeMap(redHist, greenHist, blueHist, minValue, maxValue) {
     return map;
 }
 
-function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equalize, minValue, maxValue) {
+function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equalizeRatio, minValue, maxValue) {
     // console.debug("drawHistogram");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -151,17 +181,11 @@ function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equal
     var greenHist = getColorHistogramList(srcCanvas, "green");
     var blueHist  = getColorHistogramList(srcCanvas, "blue");
     drawHistgramGraph(srcHistCanvas, redHist, greenHist, blueHist, minValue, maxValue);
-    if (equalize) {
+    if (equalizeRatio) {
 	var colorMap = equalizeMap(redHist, greenHist, blueHist, minValue, maxValue);
     } else if (( 0 < minValue) || (maxValue< 255)) {
 	var colorMap = new Uint8Array(256).map(function(n, i) {
-	    if (i < minValue) {
-		return 0;
-	    } else if (maxValue < i) {
-		return 255;
-	    }
-	    // level adjustment
-	    return 255 * (i - minValue) / (maxValue - minValue);
+	    return levelAdjustment(i, minValue, maxValue, 0, 255);
 	});
     } else {
 	var colorMap = new Uint8Array(256).map(function(n, i) { return i; });
@@ -171,8 +195,18 @@ function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equal
 	    var srcX = dstX;
 	    var srcY = dstY;
 	    var [r, g, b, a] = getRGBA(srcImageData, srcX, srcY);
-	    setRGBA(dstImageData, dstX, dstY, [colorMap[r], colorMap[g],
-					       colorMap[b], a]);
+	    if ((equalizeRatio === 0) || (equalizeRatio === 255)) {
+		setRGBA(dstImageData, dstX, dstY, [colorMap[r], colorMap[g],
+						   colorMap[b], a]);
+	    } else {
+		var ra = levelAdjustment(r, minValue, maxValue, 0, 255);
+		var ga = levelAdjustment(g, minValue, maxValue, 0, 255);
+		var ba = levelAdjustment(b, minValue, maxValue, 0, 255);
+		r = (ra * (255 - equalizeRatio) + colorMap[r] * equalizeRatio) / 255;
+		g = (ga * (255 - equalizeRatio) + colorMap[g] * equalizeRatio) / 255;
+		b = (ba * (255 - equalizeRatio) + colorMap[b] * equalizeRatio) / 255;
+		setRGBA(dstImageData, dstX, dstY, [r, g, b, a]);
+	    }
 	}
     }
     dstCtx.putImageData(dstImageData, 0, 0);
