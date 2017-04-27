@@ -83,12 +83,15 @@ function drawHistgramGraph(histCanvas, redHist, greenHist, blueHist,
     histCanvas.height = height; // canvas clear
     var ctx = histCanvas.getContext("2d");
     ctx.globalCompositeOperation = "lighter";
-    var processList = [["#F00", redHist],
-		       ["#0F0", greenHist],
-		       ["#00F", blueHist]];
+    var redCount = redHist.reduce( function(prev, cur) { return prev + cur; });
+    var greenCount = redHist.reduce( function(prev, cur) { return prev + cur; });
+    var blueCount = redHist.reduce( function(prev, cur) { return prev + cur; });
+    var processList = [["#F00", "#855", redHist,   redCount],
+		       ["#0F0", "#585", greenHist, greenCount],
+		       ["#00F", "#558", blueHist,  blueCount]];
     var max = 0;
     for (var i = 0; i < processList.length ; i++) {
-	var [color, hist]  =  processList[i];
+	var [color, color2, hist]  =  processList[i];
 	for (var j = 0 ; j < 256 ; j++) {
 	    var v = hist[j];
 	    if (max < v) {
@@ -97,8 +100,22 @@ function drawHistgramGraph(histCanvas, redHist, greenHist, blueHist,
 	}
     }
     for (var i = 0; i < processList.length ; i++) {
-	var [color, hist]  =  processList[i];
+	var [color, color2, hist, nColor]  =  processList[i];
+	ctx.strokeStyle=color2;
+	// total line
+	ctx.beginPath();
+	ctx.moveTo(0+0.5, height);
+	var total = 0;
+	for (var x = 0 ; x < 256 ; x++) {
+	    total += hist[x];
+	    var y = height  - height * total / nColor;
+	    //. console.log(hist[x], total, y);
+	    ctx.lineTo(x+0.5, y+0.5);
+	}
+	ctx.stroke();
+	
 	ctx.strokeStyle=color;
+	// histogram bar
 	for (var x = 0 ; x < 256 ; x++) {
 	    var nColor = hist[x];
 	    var y = height - (nColor * height/max) - 1;
