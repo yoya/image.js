@@ -15,6 +15,7 @@ function main() {
     var srcCanvas2Container = document.getElementById("srcCanvas2Container");
     var dstCanvas = document.getElementById("dstCanvas");
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value)
+    var linearGamma = document.getElementById("linearGammaCheckbox").checked;
     var ratioRange  = document.getElementById("ratioRange");
     var ratio1Range = document.getElementById("ratio1Range");
     var ratio2Range = document.getElementById("ratio2Range");
@@ -37,17 +38,19 @@ function main() {
 	srcImage2 = new Image();
 	srcImage2.onload = function() {
 	    drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
-	    drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas);
+	    drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, linearGamma);
 	}
 	srcImage2.src = dataURL;
     }, "DataURL");
     
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+		  "linearGammaCheckbox":null,
 		  "ratioRange":"ratioText",
 		  "ratio1Range":"ratio1Text",
 		  "ratio2Range":"ratio2Text"},
 		 function(target) {
 		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+		     linearGamma = document.getElementById("linearGammaCheckbox").checked;
 		     if ((target.id === "ratioRange") || (target.id === "ratioText")) {
 			 var ratio = parseFloat(ratioRange.value);
 			 ratio1Range.value = ratio1Text.value = 1 - ratio;
@@ -55,7 +58,7 @@ function main() {
 		     }
 		     drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
 		     drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
-		     drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas);
+		     drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, linearGamma);
 		 } );
     bindFunction({"methodSelect":null},
 		 function() {
@@ -64,7 +67,7 @@ function main() {
     
 }
 
-function drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas) {
+function drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, linearGamma) {
     // console.debug("drawAlphaBrend")
     var method = document.getElementById("methodSelect").value;
     var ratio1 = parseFloat(document.getElementById("ratio1Range").value);
@@ -88,8 +91,19 @@ function drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
 	    var srcX1 = dstX, srcY1 = dstY;
 	    var srcX2 = dstX, srcY2 = dstY;
-	    var [r1,g1,b1,a1] = getRGBA(srcImageData1, srcX1, srcY1);
-	    var [r2,g2,b2,a2] = getRGBA(srcImageData2, srcX2, srcY2);
+	    var rgba1 = getRGBA(srcImageData1, srcX1, srcY1);
+	    var rgba2 = getRGBA(srcImageData2, srcX2, srcY2);
+	    if (linearGamma) {
+		rgba1 = sRGB2linearRGB(rgba1);
+		rgba2 = sRGB2linearRGB(rgba2);
+		var [r1,g1,b1,a1] = rgba1;
+		var [r2,g2,b2,a2] = rgba2;
+	    } else {
+		var [r1,g1,b1,a1] = rgba1; // uint to double
+		var [r2,g2,b2,a2] = rgba2; // uint to double
+		[r1, g1, b1, a1] = [r1, g1, b1, a1].map(function(v) { return v/255; });
+		[r2, g2, b2, a2] = [r2, g2, b2, a2].map(function(v) { return v/255; });
+	    }
 	    var rgba;
 	    switch (method) {
 	    case "plus":
@@ -105,20 +119,25 @@ function drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas) {
 			(a1+a2)/2];
 		break;
 	    case "multi":
-		rgba = [r1*ratio1 * r2*ratio2 / 255,
-			g1*ratio1 * g2*ratio2 / 255,
-			b1*ratio1 * b2*ratio2 / 255,
+		rgba = [r1*ratio1 * r2*ratio2,
+			g1*ratio1 * g2*ratio2,
+			b1*ratio1 * b2*ratio2,
 			(a1 + a2)/2];
 		break;
 	    case "div":
-		rgba = [r1*ratio1 / r2*ratio2 * 255,
-			g1*ratio1 / g2*ratio2 * 255,
-			b1*ratio1 / b2*ratio2 * 255,
+		rgba = [r1*ratio1 / r2*ratio2,
+			g1*ratio1 / g2*ratio2,
+			b1*ratio1 / b2*ratio2,
 			(a1 + a2)/2];
 		break;
 	    default:
 		console.error("unknown method:"+method);
 		break;
+	    }
+	    if (linearGamma) {
+		rgba = linearRGB2sRGB(rgba);
+	    } else {
+		rgba = rgba.map(function(v) { return v*255; });
 	    }
 	    setRGBA(dstImageData, dstX, dstY, rgba);
 	}
