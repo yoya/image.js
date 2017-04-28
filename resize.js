@@ -120,7 +120,7 @@ function getPixel(imageData, x, y) {
 }
 
 function getPixel_NN(imageData, x, y) {
-    return getPixel(imageData, Math.round(x), Math.round(y));
+    return getPixel(imageData, x >>> 0, y >>> 0);
 }
 
 function linearRatio([a, b], p) {
