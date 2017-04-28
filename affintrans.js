@@ -167,7 +167,7 @@ function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill) {
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
     var [dstWidth, dstHeight] = scaleAffinTransform(0, 0, srcWidth, srcHeight, affinMatrix);
-    dstWidth >>>= 0; dstHeight >>>= 0;
+    dstWidth = Math.floor(dstWidth); dstHeight = Math.floor(dstHeight);
     dstCanvas.width  = dstWidth;
     dstCanvas.height = dstHeight;
     var invMat = invertMatrix(affinMatrix, 3);

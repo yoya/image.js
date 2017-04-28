@@ -38,8 +38,8 @@ function main() {
 }
 
 function medianFilter(srcImageData, srcX, srcY, filter, filterWindow) {
-    var startX = srcX - (((filterWindow-1)/2) >>> 0);
-    var startY = srcY - (((filterWindow-1)/2) >>> 0);
+    var startX = srcX - Math.floor((filterWindow-1)/2);
+    var startY = srcY - Math.floor((filterWindow-1)/2);
     var endX = startX + filterWindow;
     var endY = startY + filterWindow;
     var windowArea = filterWindow * filterWindow;
@@ -72,7 +72,7 @@ function medianFilter(srcImageData, srcX, srcY, filter, filterWindow) {
 		bArr[windowArea-1], aArr[windowArea-1]];
 	break;
 	case "median":
-	var windowArea_2 = ((windowArea-1) / 2) >>> 0;
+	var windowArea_2 = Math.floor((windowArea-1) / 2);
 	rgba = [rArr[windowArea_2], gArr[windowArea_2],
 		bArr[windowArea_2], aArr[windowArea_2]];
 		break;

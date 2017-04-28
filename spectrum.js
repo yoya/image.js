@@ -37,8 +37,8 @@ function draw2NCanvas(srcCanvas, dstCanvas) {
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width;
     var srcHeight = srcCanvas.height;
-    var w = Math.log2(srcCanvas.width) >>> 0;
-    var h = Math.log2(srcCanvas.height) >>> 0;
+    var w = Math.floor(Math.log2(srcCanvas.width));
+    var h = Math.floor(Math.log2(srcCanvas.height));
     var n = (w < h)? w : h;
     var dstWidth = Math.pow(2, n);
     var dstHeight = dstWidth;

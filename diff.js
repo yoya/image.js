@@ -124,7 +124,7 @@ function drawDiff(srcCanvas1, srcCanvas2, dstCanvas) {
 	}
     }
     for (var i = 0 ; i < nSample4 ; i++) {
-	dstImageData.data[i] = tmpImageData.data[i] >>> 0;
+	dstImageData.data[i] = Math.floor(tmpImageData.data[i]);
     }
     dstCtx.putImageData(dstImageData, 0, 0);
 }
