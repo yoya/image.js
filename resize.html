@@ -1,0 +1,47 @@
+<html>
+<head>
+<meta name="copyright" content="Copyright &copy; 2016/11/13- yoya@awm.jp . All Rights Reserved.">
+<title> image resize demo </title>
+<link rel="stylesheet" href="resize.css">
+</head>
+<body bgcolor="gray">
+
+<div class="container">
+  <div class="noCR">
+    <canvas id="graphCanvas" width=400 height=150> graph </canvas>
+  </div>
+  <div class="noCR"  style="vertical-align:top;">
+     <div>
+      <p align="center"> Filter </p>
+      Type: <select id="filterType" size="4">
+               <option value="NN" selected> Nearest neighbor </option>
+               <option value="BiLinear"> BiLinear </option>
+               <option value="BiCubic"> BiCubic </option>
+               <option value="Lanczos"> Lanczos </option>
+             </select> </br>
+      B: <input id="cubicB" type="range" min="0" max="1" step="0.01" />
+         <input id="cubicBValue" type="text" size="4" value="0.33"/> <br>
+      C: <input id="cubicC" type="range" min="0" max="1" step="0.01" />
+         <input id="cubicCValue" type="text" size="4" value="0.33"/> <br>
+      L: <input id="lobe" type="range" min="2" max="4" step="1" />
+         <input id="lobeValue" type="text" size="4" value="2"/> <br>
+     </div>
+     <div>
+       <p align="center"> Resize </p>
+       Scale:<input id="logScale" type="range" min=-1 max=1 step="0.1" />
+       <input id="logScaleValue" type="text" size="4" value="1.0" /> <br>
+     </div>
+  </div>
+  <div class="yesCR">
+  <canvas id="srcCanvas" width=320 height=240> src </canvas>
+  <canvas id="dstCanvas" width=320 height=240> dst </canvas>
+  </div>
+</div>
+<script type="text/javascript" src="lib/drop.js"> </script>
+<script type="text/javascript" src="func.js"> </script>
+<script type="text/javascript" src="bind.js"> </script>
+<script type="text/javascript" src="graph.js"> </script>
+<script type="text/javascript" src="image.js"> </script>
+<script type="text/javascript" src="main.js"> </script>
+</body>
+</html>
