@@ -35,12 +35,15 @@ function main() {
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "rotateRange":"rotateText",
 		  "transXRange":"transXText",
-		  "transYRange":"transYText"},
+		  "transYRange":"transYText",
+		  "outfillSelect":null},
 		 function(target) {
 		     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+		     
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+		     var outfill = document.getElementById("outfillSelect").value;
 		     affinMatrix = makeAffinMatrix(srcCanvas);
-		     setTableValues("affinMatrixTable", affinMatrix);		     
+		     setTableValues("affinMatrixTable", affinMatrix);
 		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill);
 		 } );
     //
@@ -60,21 +63,23 @@ function makeAffinMatrix(canvas) {
 	       Math.sin(theta),  Math.cos(theta), 0,
 
 	       0, 0, 1];
+    var leftX, topY;
     if (rotate < 90) {
-	mat[2] = Math.sin(theta) * height;
+	leftX = 0 - Math.sin(theta) * height;
+	topY  = 0 + 0;
     } else if (rotate < 180) {
-	mat[2] = Math.sin(theta) * height - Math.cos(theta) * width;
-	mat[5] = - Math.cos(theta) * height;
+	leftX = Math.cos(theta) * width  - Math.sin(theta) * height;
+	topY  = 0                        + Math.cos(theta) * height;
     } else if (rotate < 270) {
-	mat[2] = width;
-	mat[5] = height;
+	leftX = Math.cos(theta) * width - 0;
+	topY  = Math.sin(theta) * width + Math.cos(theta) * height;
     } else {
-	mat[5] = width;
+	leftX = 0                        - 0;
+	topY  = Math.sin(theta) * width  + 0;
     }
-
-    console.log("mat:", mat);
+    mat[2] = - leftX + transX * width;
+    mat[5] = - topY  + transY * height;
     return mat;
-	
 };
 
 function affinTransform(srcX, srcY, mat) {
