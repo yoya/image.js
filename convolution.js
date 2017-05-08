@@ -33,6 +33,11 @@ function main() {
 		 function() {
 		     filter = document.getElementById("filterSelect").value;
 		     [filterMatrix, filterWindow] = filter2Matrix[filter];
+		     bindTableFunction("filterMatrixTable", function(table, values, width) {
+			 filterMatrix = values;
+			 filterWindow = width;
+			 drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
+		     }, filterMatrix, filterWindow);
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
 		     setTableValues("filterMatrixTable", filterMatrix);
 		 } );
@@ -54,6 +59,24 @@ var filter2Matrix = {
 	 1/9, 1/9, 1/9,
 	 1/9, 1/9, 1/9],
 	3],
+    "smoothing2":[
+	[0, 0, 0, 0, 0, 0, 0,
+	 0, 0, 0, 0, 0, 0, 0,
+	 0, 0, 0, 0, 0, 0, 0,
+	 1/7, 1/7, 1/7, 1/7, 1/7, 1/7, 1/7,
+	 0, 0, 0, 0, 0, 0, 0,
+	 0, 0, 0, 0, 0, 0, 0,
+	 0, 0, 0, 0, 0, 0, 0,],
+	7],
+    "smoothing3":[
+	[1/7, 0, 0, 0, 0, 0, 0,
+	 0, 1/7, 0, 0, 0, 0, 0,
+	 0, 0, 1/7, 0, 0, 0, 0,
+	 0, 0, 0, 1/7, 0, 0, 0,
+	 0, 0, 0, 0, 1/7, 0, 0,
+	 0, 0, 0, 0, 0, 1/7, 0,
+	 0, 0, 0, 0, 0, 0, 1/7],
+	7],
     "differentialHoli":[
 	[0, 0, 0,
 	 0, -1, 1,
