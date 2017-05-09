@@ -11,12 +11,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     var containerNode = document.getElementById("ibv_container");
     var ibviewer = new ImageBinaryViewer(containerNode, [IO_JPEG, IO_PNG, IO_GIF, IO_TIFF, IO_BMP]);
-    dropFunction(null, function(buf) {
-	if (buf === null) {
-	    ibviewer.reset();
-	} else {
-	    ibviewer.add(buf);
-	}
+    dropFunction(document, function(buf) {
+	ibviewer.reset();
+	ibviewer.add(buf);
     }, "ArrayBuffer");
 }
 
