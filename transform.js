@@ -67,26 +67,13 @@ function makeAffinMatrix(canvas, rotateAroundZero) {
 	       Math.sin(theta),  Math.cos(theta), 0,
 	       0, 0, 1];
     var leftX, topY;
-    if (rotateAroundZero) {
-	leftX = 0
-	topY = 0;
-    } else {
-	if (rotate < 90) {
-	    leftX = 0 - Math.sin(theta) * height;
-	    topY  = 0 + 0;
-	} else if (rotate < 180) {
-	    leftX = Math.cos(theta) * width  - Math.sin(theta) * height;
-	    topY  = 0                        + Math.cos(theta) * height;
-	} else if (rotate < 270) {
-	    leftX = Math.cos(theta) * width - 0;
-	    topY  = Math.sin(theta) * width + Math.cos(theta) * height;
-	} else {
-	    leftX = 0                        - 0;
-	    topY  = Math.sin(theta) * width  + 0;
-	}
+    mat[2] = transX * width;
+    mat[5] = transY * height;
+    if (rotateAroundZero === false) {
+	var hypotenuse = Math.sqrt(width*width + height*height);
+	mat[2] += (- mat[0] * width - mat[1] * height + hypotenuse) / 2;
+	mat[5] += (- mat[3] * width - mat[4] * height + hypotenuse) / 2;
     }
-    mat[2] = - leftX + transX * width;
-    mat[5] = - topY  + transY * height;
     return mat;
 };
 
@@ -135,8 +122,9 @@ function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, rotateAroundZero,
     if (rotateAroundZero) {
 	var [dstWidth, dstHeight] = [srcWidth * 2 , srcHeight * 2];
     } else {
-	var [dstWidth, dstHeight] = scaleAffinTransform(0, 0, srcWidth, srcHeight, affinMatrix);
-	dstWidth = Math.floor(dstWidth); dstHeight = Math.floor(dstHeight);
+	var hypotenuse = Math.sqrt(srcWidth*srcWidth + srcHeight*srcHeight);
+	var [dstWidth, dstHeight] = [hypotenuse, hypotenuse];
+	dstWidth = Math.ceil(dstWidth); dstHeight = Math.ceil(dstHeight);
     }
     dstCanvas.width  = dstWidth;
     dstCanvas.height = dstHeight;
