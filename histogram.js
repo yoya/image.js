@@ -135,7 +135,7 @@ function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equal
     var redHist   = getColorHistogramList(srcCanvas, "red");
     var greenHist = getColorHistogramList(srcCanvas, "green");
     var blueHist  = getColorHistogramList(srcCanvas, "blue");
-    drawHistgramGraph(srcHistCanvas, redHist, greenHist, blueHist, minValue, maxValue);
+    drawHistgramGraph(srcHistCanvas, redHist, greenHist, blueHist, minValue, maxValue, totalLine);
     if (equalizeRatio) {
 	var colorMap = equalizeMap(redHist, greenHist, blueHist, minValue, maxValue);
     } else if (( 0 < minValue) || (maxValue< 255)) {
