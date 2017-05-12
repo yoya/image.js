@@ -14,7 +14,7 @@ function main() {
     var srcHistCanvas = document.getElementById("srcHistCanvas");
     var dstHistCanvas = document.getElementById("dstHistCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    var equalize = document.getElementById("equalizeCheckbox");
+    var equalizeCheckbox = document.getElementById("equalizeCheckbox");
     var equalizeRatioRange = document.getElementById("equalizeRatioRange");
     var equalizeRatioText  = document.getElementById ("equalizeRatioText");
     var maxValueRange = document.getElementById("maxValueRange");
@@ -30,6 +30,7 @@ function main() {
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "equalizeCheckbox":null,
+		  "totalLineCheckbox":null,
 		  "equalizeRatioRange":"equalizeRatioText",
 		  "maxValueRange":"maxValueText",
 		  "minValueRange":"minValueText"},
@@ -38,7 +39,7 @@ function main() {
 		     var maxValue = parseFloat(document.getElementById("maxValueRange").value);
 		     var minValue = parseFloat(document.getElementById("minValueRange").value);
 		     if (target.id === "equalizeCheckbox")  {
-			 if (equalize.checked) {
+			 if (equalizeCheckbox.checked) {
 			     equalizeRatioRange.value = 255;
 			     equalizeRatioText.value = 255;
 			 } else {
@@ -48,9 +49,9 @@ function main() {
 		     } else if ((target.id === "equalizeRatioRange") ||
 				(target.id === "equalizeRatioText")) {
 			 if (equalizeRatioRange.value == 0) {
-			     equalize.checked = false;
+			     equalizeCheckbox.checked = false;
 			 } else {
-			     equalize.checked = true;
+			     equalizeCheckbox.checked = true;
 			 }
 		     } else {
 			 if (minValue > maxValue) {
@@ -72,12 +73,13 @@ function drawSrcImageAndHistogram(srcImage, srcCanvas, dstCancas, srcHistCanvas,
     var equalizeRatio = parseFloat(document.getElementById("equalizeRatioRange").value);
     var maxValue = parseFloat(document.getElementById("maxValueRange").value);
     var minValue = parseFloat(document.getElementById("minValueRange").value);
+    var totalLine = document.getElementById("totalLineCheckbox").checked;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equalizeRatio, minValue, maxValue);
+    drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equalizeRatio, minValue, maxValue, totalLine);
 }
 
 function drawHistgramGraph(histCanvas, redHist, greenHist, blueHist,
-			   minValue, maxValue) {
+			   minValue, maxValue, totalLine) {
     var height = histCanvas.height;
     histCanvas.style.backgroundColor = "black";
     histCanvas.height = height; // canvas clear
@@ -103,16 +105,18 @@ function drawHistgramGraph(histCanvas, redHist, greenHist, blueHist,
 	var [color, color2, hist, nColor]  =  processList[i];
 	ctx.strokeStyle=color2;
 	// total line
-	ctx.beginPath();
-	ctx.moveTo(0+0.5, height);
-	var total = 0;
-	for (var x = 0 ; x < 256 ; x++) {
-	    total += hist[x];
-	    var y = height  - height * total / nColor;
-	    //. console.log(hist[x], total, y);
-	    ctx.lineTo(x+0.5, y+0.5);
+	if (totalLine) {
+	    ctx.beginPath();
+	    ctx.moveTo(0+0.5, height);
+	    var total = 0;
+	    for (var x = 0 ; x < 256 ; x++) {
+		total += hist[x];
+		var y = height  - height * total / nColor;
+		//. console.log(hist[x], total, y);
+		ctx.lineTo(x+0.5, y+0.5);
+	    }
+	    ctx.stroke();
 	}
-	ctx.stroke();
 	
 	ctx.strokeStyle=color;
 	// histogram bar
@@ -125,6 +129,8 @@ function drawHistgramGraph(histCanvas, redHist, greenHist, blueHist,
 	    ctx.stroke();
 	}
     }
+
+    // out of range
     ctx.fillStyle="gray";
     if (0 < minValue) {
 	ctx.beginPath();
@@ -182,7 +188,7 @@ function equalizeMap(redHist, greenHist, blueHist, minValue, maxValue) {
     return map;
 }
 
-function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equalizeRatio, minValue, maxValue) {
+function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equalizeRatio, minValue, maxValue, totalLine) {
     // console.debug("drawHistogram");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -232,5 +238,5 @@ function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equal
     var redHist   = getColorHistogramList(dstCanvas, "red");
     var greenHist = getColorHistogramList(dstCanvas, "green");
     var blueHist  = getColorHistogramList(dstCanvas, "blue");
-    drawHistgramGraph(dstHistCanvas, redHist, greenHist, blueHist, 0, 255);
+    drawHistgramGraph(dstHistCanvas, redHist, greenHist, blueHist, 0, 255, totalLine);
 }
