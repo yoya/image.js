@@ -12,14 +12,40 @@ function main() {
     var canvas = document.getElementById("canvas");
     var histCanvas = document.getElementById("histCanvas");
     bindFunction({"refreshButton":null,
+		  "animationButton":null,
 		  "widthRange":"widthText",
 		  "heightRange":"heightText",
 		  "redRatioRange":"redRatioText",
 		  "greenRatioRange":"greenRatioText",
 		  "blueRatioRange":"blueRatioText"},
-		 function() {
+		 function(target) {
+		     if (target.id === "animationButton") {
+			 animetionRandomAndHistogram(canvas, histCanvas);
+		     }
 		     drawRandomAndHistogram(canvas, histCanvas);
+		     
 		 } );
+    drawRandomAndHistogram(canvas, histCanvas);
+}
+
+var anim_id = null;
+function animetionRandomAndHistogram(canvas, histCanvas) {
+    var Context = function() {
+	this.canvas = canvas;
+	this.histCanvas =  histCanvas;
+    }
+    var ctx = new Context();
+    if (anim_id === null) {
+	anim_id = setInterval(animetionRandomAndHistogram_.bind(ctx), 10);
+    } else {
+	clearInterval(anim_id);
+	anim_id = null;
+    }
+}
+
+function animetionRandomAndHistogram_() {
+    var canvas = this.canvas;
+    var histCanvas = this.histCanvas
     drawRandomAndHistogram(canvas, histCanvas);
 }
 
