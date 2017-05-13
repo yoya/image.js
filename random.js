@@ -36,22 +36,25 @@ function drawRandomAndHistogram(canvas, histCanvas) {
     drawHistgramGraph(histCanvas, redHist, greenHist, blueHist, 0, 255, false);
 }
 
+function randomValue(ratio) {
+    var v = Math.random();       // 0   <= v < 1
+    var r = Math.random() - 0.5; // 0.5 <= r < 0.5
+    v = Math.sqrt(v);
+    if (ratio < r) {
+	v = 1 - v;
+    }
+    if (ratio < -0.5) {
+	v = v * (ratio + 1.5) ;
+    } else if (ratio > 0.5) {
+	v = v * (1.5 - ratio) + (ratio - 0.5);
+    }
+    return v;
+}
+
 function randomRGBA(redRatio, greenRatio, blueRatio) {
-    var r = Math.random();
-    var g = Math.random();
-    var b = Math.random();
-    r = Math.sqrt(r);
-    g = Math.sqrt(g);
-    b = Math.sqrt(b);
-    if (redRatio < Math.random()) {
-	r = 1 - r;
-    }
-    if (greenRatio < Math.random()) {
-	g = 1 - g;
-    }
-    if (blueRatio < Math.random()) {
-	b = 1 - b;
-    }
+    var r = randomValue(redRatio);
+    var g = randomValue(greenRatio);
+    var b = randomValue(blueRatio);
     return [Math.floor(r * 256),
 	    Math.floor(g * 256),
 	    Math.floor(b * 256), 255 ];
