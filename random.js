@@ -26,7 +26,12 @@ function main() {
 		var height = parseFloat(offCanvas.height);
 		widthRange.value = widthText.value = width;
 		heightRange.value = heightText.value = height;
-		drawRandomAndHistogram(canvas, offCanvas, histCanvas);
+		if (anim_id === null) {
+		    drawRandomAndHistogram(canvas, offCanvas, histCanvas);
+		} else {
+		    animetionRandomAndHistogram(canvas, offCanvas, histCanvas);
+		    animetionRandomAndHistogram(canvas, offCanvas, histCanvas);
+		}
 	    }
 	    image.src = dataURL;
 	}, "DataURL");
