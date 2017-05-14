@@ -26,12 +26,7 @@ function main() {
 		var height = parseFloat(offCanvas.height);
 		widthRange.value = widthText.value = width;
 		heightRange.value = heightText.value = height;
-		if (anim_id === null) {
-		    drawRandomAndHistogram(canvas, offCanvas, histCanvas);
-		} else {
-		    animetionRandomAndHistogram(canvas, offCanvas, histCanvas);
-		    animetionRandomAndHistogram(canvas, offCanvas, histCanvas);
-		}
+		drawRandomAndHistogram(canvas, offCanvas, histCanvas);
 	    }
 	    image.src = dataURL;
 	}, "DataURL");
@@ -91,6 +86,10 @@ function animetionRandomAndHistogram_() {
 }
 
 function drawRandomAndHistogram(canvas, offCanvas, histCanvas) {
+    if (anim_id !== null) {
+	animetionRandomAndHistogram(canvas, offCanvas, histCanvas);
+	animetionRandomAndHistogram(canvas, offCanvas, histCanvas);
+    }
     var width = parseInt(document.getElementById("widthRange").value, 10);
     var height = parseInt(document.getElementById("heightRange").value, 10);
     var redRatio = parseFloat(document.getElementById("redRatioRange").value);
