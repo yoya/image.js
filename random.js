@@ -10,28 +10,63 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     var canvas = document.getElementById("canvas");
+    var image = new Image(canvas.width, canvas.height);
+    var offCanvas = null;
     var histCanvas = document.getElementById("histCanvas");
+    var widthRange = document.getElementById("widthRange");
+    var heightRange = document.getElementById("heightRange");
+    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+        dropFunction(document, function(dataURL) {
+	    image = new Image();
+	    image.onload = function() {
+		offCanvas = document.createElement("canvas");
+		offCanvas.id = "offCanvas";
+		drawSrcImage(image, offCanvas, maxWidthHeight);
+		var width = parseFloat(offCanvas.width);
+		var height = parseFloat(offCanvas.height);
+		widthRange.value = widthText.value = width;
+		heightRange.value = heightText.value = height;
+		drawRandomAndHistogram(canvas, offCanvas, histCanvas);
+	    }
+	    image.src = dataURL;
+	}, "DataURL");
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+		 function() {
+		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+		     drawSrcImage(image, offCanvas, maxWidthHeight);
+		     var width = parseFloat(offCanvas.width);
+		     var height = parseFloat(offCanvas.height);
+		     widthRange.value = widthText.value = width;
+		     heightRange.value = heightText.value = height;
+		     drawRandomAndHistogram(canvas, offCanvas, histCanvas);
+		 } );
     bindFunction({"refreshButton":null,
 		  "animationButton":null,
+		  "ejectButton":null,
 		  "widthRange":"widthText",
 		  "heightRange":"heightText",
 		  "redRatioRange":"redRatioText",
 		  "greenRatioRange":"greenRatioText",
-		  "blueRatioRange":"blueRatioText"},
+		  "blueRatioRange":"blueRatioText",
+		  "ampRange":"ampText"},
 		 function(target) {
-		     if (target.id === "animationButton") {
-			 animetionRandomAndHistogram(canvas, histCanvas);
+		     if (target.id === "ejectButton") {
+			 offCanvas = null;
 		     }
-		     drawRandomAndHistogram(canvas, histCanvas);
+		     if (target.id === "animationButton") {
+			 animetionRandomAndHistogram(canvas, offCanvas, histCanvas);
+		     }
+		     drawRandomAndHistogram(canvas, offCanvas, histCanvas);
 		     
 		 } );
-    drawRandomAndHistogram(canvas, histCanvas);
+    drawRandomAndHistogram(canvas, offCanvas, histCanvas);
 }
 
 var anim_id = null;
-function animetionRandomAndHistogram(canvas, histCanvas) {
+function animetionRandomAndHistogram(canvas, offCanvas, histCanvas) {
     var Context = function() {
 	this.canvas = canvas;
+	this.offCanvas = offCanvas;
 	this.histCanvas =  histCanvas;
     }
     var ctx = new Context();
@@ -45,17 +80,19 @@ function animetionRandomAndHistogram(canvas, histCanvas) {
 
 function animetionRandomAndHistogram_() {
     var canvas = this.canvas;
+    var offCanvas = this.offCanvas;
     var histCanvas = this.histCanvas
-    drawRandomAndHistogram(canvas, histCanvas);
+    drawRandomAndHistogram(canvas, offCanvas, histCanvas);
 }
 
-function drawRandomAndHistogram(canvas, histCanvas) {
+function drawRandomAndHistogram(canvas, offCanvas, histCanvas) {
     var width = parseInt(document.getElementById("widthRange").value, 10);
     var height = parseInt(document.getElementById("heightRange").value, 10);
     var redRatio = parseFloat(document.getElementById("redRatioRange").value);
     var greenRatio = parseFloat(document.getElementById("greenRatioRange").value);
     var blueRatio = parseFloat(document.getElementById("blueRatioRange").value);
-    drawRandom(canvas, width, height, redRatio, greenRatio, blueRatio);
+    var amp = parseFloat(document.getElementById("ampRange").value);
+    drawRandom(canvas, offCanvas, width, height, redRatio, greenRatio, blueRatio, amp);
     var redHist   = getColorHistogramList(canvas, "red");
     var greenHist = getColorHistogramList(canvas, "green");
     var blueHist  = getColorHistogramList(canvas, "blue");
@@ -86,17 +123,30 @@ function randomRGBA(redRatio, greenRatio, blueRatio) {
 	    Math.floor(b * 256), 255 ];
 }
 
-function drawRandom(canvas, width, height, redRatio, greenRatio, blueRatio) {
+function drawRandom(canvas, offCanvas, width, height, redRatio, greenRatio, blueRatio, amp) {
     // console.debug("drawRandom");
     var ctx = canvas.getContext("2d");
     canvas.width  = width;
     canvas.height = height;
     //
     var imageData = ctx.createImageData(width, height);
-    for (var y = 0 ; y < height; y++) {
-        for (var x = 0 ; x < width; x++) {
-	    var rgba = randomRGBA(redRatio, greenRatio, blueRatio);
-	    setRGBA(imageData, x, y, rgba);
+    if (offCanvas === null) {
+	for (var y = 0 ; y < height; y++) {
+            for (var x = 0 ; x < width; x++) {
+		var rgba = randomRGBA(redRatio, greenRatio, blueRatio);
+		setRGBA(imageData, x, y, rgba);
+	    }
+	}
+    } else {
+	var offCtx = offCanvas.getContext("2d");
+	var offImageData = offCtx.getImageData(0, 0, offCanvas.width, offCanvas.height);
+	for (var y = 0 ; y < height; y++) {
+            for (var x = 0 ; x < width; x++) {
+		var [r1,g1,b1,a1] = getRGBA(offImageData, x, y);
+		var [r2,g2,b2] = randomRGBA(redRatio, greenRatio, blueRatio);
+		var rgba = [ r1 + amp*2*(r2 - 127),  g1 + amp*2*(g2 - 127), b1 + amp*2*(b2 - 127), a1];
+		setRGBA(imageData, x, y, rgba);
+	    }
 	}
     }
     ctx.putImageData(imageData, 0, 0);
