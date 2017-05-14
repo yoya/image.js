@@ -147,7 +147,7 @@ function drawRandom(canvas, offCanvas, width, height, redRatio, greenRatio, blue
 	var offImageData = offCtx.getImageData(0, 0, offCanvas.width, offCanvas.height);
 	for (var y = 0 ; y < height; y++) {
             for (var x = 0 ; x < width; x++) {
-		var [r1,g1,b1,a1] = getRGBA(offImageData, x, y);
+		var [r1,g1,b1,a1] = getRGBA(offImageData, x, y, "edge");
 		var [r2,g2,b2] = randomRGBA(redRatio, greenRatio, blueRatio);
 		var rgba = [ r1 + amp*2*(r2 - 127),  g1 + amp*2*(g2 - 127), b1 + amp*2*(b2 - 127), a1];
 		setRGBA(imageData, x, y, rgba);
