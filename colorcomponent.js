@@ -115,6 +115,19 @@ function colorComponent(imageData, x, y, component) {
 	    arr.push(a) ; return arr;
 	});
 	break;
+    case "hsl":
+	var [h, s, l] = RGB2HSL(rgba);
+	if (s < Number.MIN_VALUE) {
+	    var rgb1 = [127, 127, 127];
+	} else {
+	    var rgb1 = HSL2RGB([h, 1, 1, 0]);
+	}
+	var rgb2 = HSL2RGB([0, s, s/2+0.5, 0]);
+	var rgb3 = HSL2RGB([0, 0, l, 0]);
+	rgbaArr = [rgb1, rgb2, rgb3].map(function(arr) {
+	    arr.push(a) ; return arr;
+	});
+	break;
     default:
 	console.error("Illegal component:"+component);
     }
