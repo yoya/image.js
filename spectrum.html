@@ -7,13 +7,25 @@
 </head>
 <body bgcolor="lightgray">
   <div class="container">
-    <div>
-    <div>
-      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText">
-    </div>
-    <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+    <div class="controlPanel">
+      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+      <div>
+	highPass:<input id="highPassRange" type="range" min="0" max="1" step="0.001" value="0">:<input type="text" id="highPassText" size="5">
+	<br />
+	lowPass:<input id="lowPassRange" type="range" min="0" max="1" step="0.001" value="1">:<input type="text" id="lowPassText" size="5">
+      </div>
+    </div> <!-- controlPanel -->
+    <div> <!-- src -->
+      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      <canvas id="src2NCanvas" class="borderRed" width=200 height=200 style="display:none"> src2NCanvas </canvas>
+      <canvas id="srcSpectrumCanvas" class="borderyellow" width=200 height=200> srcSpectrumCanvas </canvas>
+    </div>  <!-- src -->
+    <div> <!-- dst -->
+      <canvas id="dstSpectrumCanvas" class="borderyellow" width=200 height=200> dstSpectrumCanvas </canvas>
+    <canvas id="dst2NCanvas" class="borderBlue" width=200 height=200 style="display:none"> dst2NCanvas </canvas>
     <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
-  </div>
+    </div> <!-- dst -->
+  </div> <!-- container -->
   <script type="text/javascript" src="lib/drop.js"> </script>
   <script type="text/javascript" src="lib/bind.js"> </script>
   <script type="text/javascript" src="lib/canvas.js"> </script>
