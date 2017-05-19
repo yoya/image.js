@@ -193,14 +193,15 @@ function SpectrumFilter(spectrum, highPass, lowPass) {
     var nSample = re.length;
     var width = Math.sqrt(nSample);
     var height = width;
-    var centerX = (width +1)/ 2, centerY = (height+1) / 2; 
+    var centerX = (width +1)/ 2, centerY = (height+1) / 2;
+    var hypotenuse = Math.sqrt(width*width + height*height);
     var i = 0;
     for (var y = 0; y < height; y++) {
 	for (var x = 0; x < width; x++) {
 	    var dx = x - centerX;
 	    var dy = y - centerY
 	    var distance = Math.sqrt(dx*dx + dy*dy);
-	    var ratio = distance / width;
+	    var ratio = distance / hypotenuse * 2;
 	    if ((ratio < highPass) || (lowPass < ratio)) {
 		re[i] = 0;
 		im[i] = 0;
