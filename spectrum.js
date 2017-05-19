@@ -240,23 +240,22 @@ function drawFromDCT(dstCanvas, redSpectrum, greenSpectrum, blueSpectrum, keepCo
 
     if (keepContrast) {
 	var [srcMinRed, srcMaxRed, srcMinGreen, srcMaxGreen, srcMinBlue, srcMaxBlue] = getCanvasContrast(srcCanvas);
-	var [dstMinRed, dstMaxRed,] = getContrast(reRed);
+	var [dstMinRed, dstMaxRed] = getContrast(reRed);
 	var [dstMinGreen, dstMaxGreen] = getContrast(reGreen);
 	var [dstMinBlue, dstMaxBlue] = getContrast(reBlue);
 	var i = 0;
 	var scaleRed   = (srcMaxRed - srcMinRed) / (dstMaxRed - dstMinRed);
 	var scaleGreen = (srcMaxGreen - srcMinGreen) / (dstMaxGreen - dstMinGreen);
-	var scaleBlue  = (srcMaxBlue- srcMinBlue) / (dstMaxBlue - dstMinBlue);
+	var scaleBlue  = (srcMaxBlue - srcMinBlue) / (dstMaxBlue - dstMinBlue);
 	var baseRed   = srcMinRed - dstMinRed;
 	var baseGreen = srcMinGreen - dstMinGreen;
 	var baseBlue  = srcMinBlue - dstMinBlue;
-	
 	for(var y = 0; y < height; y++) {
 	    for(var x = 0; x < width; x++) {
 		var o = i << 2;
-		dstData[o++] = (reRed[i]   + baseRed);//   * scaleRed;
-		dstData[o++] = (reGreen[i] + baseGreen);//: * scaleGreen;
-		dstData[o++] = (reBlue[i]  + baseBlue);//  * scaleBlue;
+		dstData[o++] = (reRed[i]   + baseRed)   * scaleRed;
+		dstData[o++] = (reGreen[i] + baseGreen) * scaleGreen;
+		dstData[o++] = (reBlue[i]  + baseBlue)  * scaleBlue;
 		dstData[o++] = 255;
 		i++;
 	    }
