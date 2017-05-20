@@ -147,21 +147,21 @@ function drawSpectrum(dstCanvas, spectrum, color) {
     var dstImageData = dstCtx.createImageData(width, height);
     var dstData = dstImageData.data;
     //
-    var spectrum = new Float32Array(nSample);
-    var maxSpectrum = 0;
+    var spectrumPower = new Float32Array(nSample);
+    var maxSpectrumPower = 0;
     for (var i = 0 ; i < nSample ; i++) {
 	var s = Math.log(Math.sqrt(re[i]*re[i] + im[i]*im[i]));
-	spectrum[i] = s;
-	if (s > maxSpectrum) {
-	    maxSpectrum = s;
+	spectrumPower[i] = s;
+	if (s > maxSpectrumPower) {
+	    maxSpectrumPower = s;
 	}
     }
     var i = 0;
-    var normFactor = 255 / maxSpectrum;
+    var normFactor = 255 / maxSpectrumPower;
     for (var y = 0; y < height; y++) {
 	for (var x = 0; x < width; x++) {
 	    var o = i << 2;
-	    var val = spectrum[i] * normFactor;
+	    var val = spectrumPower[i] * normFactor;
 	    dstData[o++] = (color===0)?val:(val-50);
 	    dstData[o++] = (color===1)?val:(val-50);
 	    dstData[o++] = (color===2)?val:(val-50);
