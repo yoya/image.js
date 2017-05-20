@@ -298,15 +298,15 @@ function getCanvasContrast(canvas) {
 	} else if (maxRed < r) {
 	    maxRed = r;
 	}
-	if (r < minGreen) {
-	    minGreen = r;
-	} else if (maxGreen < r) {
-	    maxGreen = r;
+	if (g < minGreen) {
+	    minGreen = g;
+	} else if (maxGreen < g) {
+	    maxGreen = g;
 	}
-	if (r < minBlue) {
-	    minBlue = r;
-	} else if (maxBlue< r) {
-	    maxBlue = r;
+	if (b < minBlue) {
+	    minBlue = b;
+	} else if (maxBlue< b) {
+	    maxBlue = b;
 	}
     }
     return [minRed, maxRed, minGreen, maxGreen, minBlue, maxBlue];
