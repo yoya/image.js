@@ -302,7 +302,7 @@ function getCanvasContrast(canvas) {
 	var r = data[i++]
 	var g = data[i++];
 	var b = data[i++];
-	// a ; i++;
+	i++; // a;
 	if (r < minRed) {
 	    minRed = r;
 	} else if (maxRed < r) {
