@@ -8,24 +8,25 @@
 <body bgcolor="lightgray">
   <div class="container">
     <div>
-    <div>
-      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+      <div>
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+      </div>
+      <div>
+	equalize:<input id="equalizeCheckbox" type="checkbox" />
+	equalizeRatio:<input id="equalizeRatioRange" type="range" min="0" max="255" step="1" value="0">:<input type="text" id="equalizeRatioText" size="4">
+      </div>
+      <div>
+	maxValue:<input id="maxValueRange" type="range" min="0" max="255" step="1" value="255">:<input type="text" id="maxValueText" size="4">
+      </div>
+      <div>
+	minValue:<input id="minValueRange" type="range" min="0" max="255" step="1" value="0">:<input type="text" id="minValueText" size="4">
+      </div>
+      <div>
+	totalLine:<input id="totalLineCheckbox" type="checkbox" />
+      </div>
+      <canvas id="srcHistCanvas" class="borderGray" width=256 height=256> srcHistCanvas </canvas>
+      <canvas id="dstHistCanvas" class="borderGray" width=256 height=256> dstHistCanvas </canvas>
     </div>
-    <div>
-      equalize:<input id="equalizeCheckbox" type="checkbox" />
-      equalizeRatio:<input id="equalizeRatioRange" type="range" min="0" max="255" step="1" value="0">:<input type="text" id="equalizeRatioText" size="4">
-    </div>
-    <div>
-      maxValue:<input id="maxValueRange" type="range" min="0" max="255" step="1" value="255">:<input type="text" id="maxValueText" size="4">
-    </div>
-    <div>
-      minValue:<input id="minValueRange" type="range" min="0" max="255" step="1" value="0">:<input type="text" id="minValueText" size="4">
-    </div>
-    <div>
-      totalLine:<input id="totalLineCheckbox" type="checkbox" />
-    </div>
-    <canvas id="srcHistCanvas" class="borderGray" width=256 height=256> srcHistCanvas </canvas>
-    <canvas id="dstHistCanvas" class="borderGray" width=256 height=256> dstHistCanvas </canvas>
     <br />
     <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
     <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
