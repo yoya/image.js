@@ -57,15 +57,16 @@ function drawSrcImageAndDCTAndFilter(srcImage, srcCanvas, src2NCanvas,
     draw2NCanvas(srcCanvas, src2NCanvas ,floor2N);
 
     var [redSpectrum, greenSpectrum, blueSpectrum] = calcDCT(src2NCanvas);
-    drawSpectrum(srcSpectrumRedCanvas,   redSpectrum, 0)
-    drawSpectrum(srcSpectrumGreenCanvas, greenSpectrum, 1);
-    drawSpectrum(srcSpectrumBlueCanvas,  blueSpectrum, 2);
+    var maxRedSpectrumPower   = drawSpectrum(srcSpectrumRedCanvas,   redSpectrum,   null, 0)
+    var maxGreenSpectrumPower = drawSpectrum(srcSpectrumGreenCanvas, greenSpectrum, null, 1);
+    var maxBlueSpectrumPower  = drawSpectrum(srcSpectrumBlueCanvas,  blueSpectrum,  null, 2);
     redSpectrum   = SpectrumFilter(redSpectrum,   highPass, lowPass);
     greenSpectrum = SpectrumFilter(greenSpectrum, highPass, lowPass);
     blueSpectrum  = SpectrumFilter(blueSpectrum,  highPass, lowPass);
-    drawSpectrum(dstSpectrumRedCanvas,   redSpectrum, 0);
-    drawSpectrum(dstSpectrumGreenCanvas, greenSpectrum, 1);
-    drawSpectrum(dstSpectrumBlueCanvas,  blueSpectrum, 2);
+    // console.log(maxRedSpectrumPower);
+    drawSpectrum(dstSpectrumRedCanvas,   redSpectrum,   maxRedSpectrumPower,   0);
+    drawSpectrum(dstSpectrumGreenCanvas, greenSpectrum, maxGreenSpectrumPower, 1);
+    drawSpectrum(dstSpectrumBlueCanvas,  blueSpectrum,  maxBlueSpectrumPower,  2);
     drawFromDCT(dst2NCanvas, redSpectrum, greenSpectrum, blueSpectrum, keepContrast, src2NCanvas);
     dstCanvas.width  = srcCanvas.width;
     dstCanvas.height = srcCanvas.height;
@@ -135,7 +136,7 @@ function calcDCT(srcCanvas) {
     return [[reRed, imRed], [reGreen, imGreen], [reBlue, imBlue]];
 }
 
-function drawSpectrum(dstCanvas, spectrum, color) {
+function drawSpectrum(dstCanvas, spectrum, maxSpectrumPower, color) {
     var [re, im] = spectrum;
     var dstCtx = dstCanvas.getContext("2d");
     var nSample = re.length;
@@ -148,13 +149,12 @@ function drawSpectrum(dstCanvas, spectrum, color) {
     var dstData = dstImageData.data;
     //
     var spectrumPower = new Float32Array(nSample);
-    var maxSpectrumPower = 0;
     for (var i = 0 ; i < nSample ; i++) {
 	var s = Math.log(Math.sqrt(re[i]*re[i] + im[i]*im[i]));
 	spectrumPower[i] = s;
-	if (s > maxSpectrumPower) {
-	    maxSpectrumPower = s;
-	}
+    }
+    if (maxSpectrumPower === null) {
+	maxSpectrumPower = Math.max.apply(null, spectrumPower);
     }
     var i = 0;
     var normFactor = 255 / maxSpectrumPower;
@@ -170,7 +170,7 @@ function drawSpectrum(dstCanvas, spectrum, color) {
 	}
     }
     dstCtx.putImageData(dstImageData, 0, 0);
-    return [re, im];
+    return maxSpectrumPower;
 }
 
 // 象限シフト
