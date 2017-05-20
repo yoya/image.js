@@ -33,7 +33,8 @@ function main() {
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "highPassRange":"highPassText",
 		  "lowPassRange":"lowPassText",
-		  "keepContrastCheckbox":null},
+		  "keepContrastCheckbox":null,
+		  "floor2NCheckbox":null},
 		 function() {
 	    drawSrcImageAndDCTAndFilter(srcImage, srcCanvas, src2NCanvas,
 					srcSpectrumRedCanvas, srcSpectrumGreenCanvas, srcSpectrumBlueCanvas,
@@ -51,8 +52,9 @@ function drawSrcImageAndDCTAndFilter(srcImage, srcCanvas, src2NCanvas,
     var highPass = parseFloat(document.getElementById("highPassRange").value);
     var lowPass = parseFloat(document.getElementById("lowPassRange").value);
     var keepContrast = document.getElementById("keepContrastCheckbox").checked;
+    var floor2N = document.getElementById("floor2NCheckbox").checked;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    draw2NCanvas(srcCanvas, src2NCanvas);
+    draw2NCanvas(srcCanvas, src2NCanvas ,floor2N);
 
     var [redSpectrum, greenSpectrum, blueSpectrum] = calcDCT(src2NCanvas);
     drawSpectrum(srcSpectrumRedCanvas,   redSpectrum, 0)
@@ -70,13 +72,21 @@ function drawSrcImageAndDCTAndFilter(srcImage, srcCanvas, src2NCanvas,
     drawFrom2NCanvas(dst2NCanvas, dstCanvas);
 }
 
-function draw2NCanvas(srcCanvas, dstCanvas) {
+function draw2NCanvas(srcCanvas, dstCanvas, floor2N) {
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width;
     var srcHeight = srcCanvas.height;
-    var w = Math.floor(Math.log2(srcCanvas.width));
-    var h = Math.floor(Math.log2(srcCanvas.height));
-    var n = (w < h)? w : h;
+    var w = Math.log2(srcCanvas.width);
+    var h = Math.log2(srcCanvas.height);
+    if (floor2N) {
+	w = Math.floor(w);
+	h = Math.floor(h);
+	var n = (w < h)? w : h;
+    } else {
+	w = Math.ceil(w);
+	h = Math.ceil(h);
+	var n = (w > h)? w : h;
+    }
     var dstWidth = Math.pow(2, n);
     var dstHeight = dstWidth;
     dstCanvas.width  = dstWidth;
