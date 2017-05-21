@@ -66,6 +66,15 @@ function colorComponent(imageData, x, y, component) {
 	    arr.push(a) ; return arr;
 	});
 	break;
+    case "cmy": // naive convert
+	var [c, m, y] = RGB2CMY(rgba);
+	var rgb1 = CMYK2RGB([c, 0, 0, 0]);
+	var rgb2 = CMYK2RGB([0, m, 0, 0]);
+	var rgb3 = CMYK2RGB([0, 0, y, 0]);
+	rgbaArr = [rgb1, rgb2, rgb3].map(function(arr) {
+	    arr.push(a) ; return arr;
+	});
+	break;
     case "ycbcr": // YCbCr (JPEG)
 	var [yy, cb, cr] = RGB2YCbCr(rgba);
 	var rgb1 = YCbCr2RGB([yy, 128, 128]);
