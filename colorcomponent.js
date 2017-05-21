@@ -105,7 +105,6 @@ function colorComponent(imageData, x, y, component) {
     case "ydbdr": // YDbDr (SECOM)
 	var [yy, db, dr] = RGB2YDbDr(rgba);
 	var rgb1 = YDbDr2RGB([yy, 128, 128]);
-	var rgb1 = YDbDr2RGB([yy, db, dr]);
 	var rgb2 = YDbDr2RGB([128, db, 128]);
 	var rgb3 = YDbDr2RGB([128, 128, dr]);
 	rgbaArr = [rgb1, rgb2, rgb3].map(function(arr) {
