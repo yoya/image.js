@@ -47,15 +47,18 @@ function addImageFile(dataURL) {
 function searchKey(arr, offset, keyArr) {
     var type = null;
     var keyArrLen = keyArr.length;
-    for (var n = arr.length ; offset < n; offset++) {
-	var bo = offset;
-	for (var i = 0 ; i < keyArrLen ; i++) {
+    for (var n = arr.length - keyArrLen - 1; offset < n; offset++) {
+	offset = arr.indexOf(keyArr[0], offset);
+	if (offset < 0) {
+	    break;
+	}
+	for (var i = 1 ; i < keyArrLen ; i++) {
 	    if (arr[offset+i] !== keyArr[i]) {
 		break;
 	    }
 	}
 	if (i === keyArrLen) {
-	    return bo;
+	    return offset;
 	}
     }
     return false;
