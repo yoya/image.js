@@ -10,23 +10,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     dropFunction(document, function(buf) {
-	var arr = new Uint8Array(buf);
-	var bOffset = 0;
-	while (true) {
-	    var [bOffset, nOffset] = getImageBinaryArray(arr, bOffset);
-	    // console.debug("getImageBinaryArray:", bOffset, nOffset);
-	    if (bOffset === false) {
-		break;
-	    }
-	    var blob = new Blob([arr.slice(bOffset, nOffset)]);
-	    var dataURL = URL.createObjectURL(blob);
-	    var Context = function() {
-		this.dataURL = dataURL;
-	    }
-	    var ctx = new Context();
-	    var id = setTimeout(addImageFile.bind(ctx), 10); // 1枚ずつ描画
-	    bOffset = nOffset;
-	}
+	// console.debug("dropFunction");
+	addImageFiles.call({buf:buf, bOffset:0});
     }, "ArrayBuffer");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
@@ -34,8 +19,24 @@ function main() {
 		 } );
 }
 
+function addImageFiles() {
+    // console.debug("addImageFiles");
+    var arr = new Uint8Array(this.buf);
+    var bOffset = this.bOffset;
+    var [bOffset, nOffset] = getImageBinaryArray(arr, bOffset);
+    // console.debug("getImageBinaryArray:", bOffset, nOffset);
+    if (bOffset === false) {
+	return ; // finish
+    }
+    var blob = new Blob([arr.slice(bOffset, nOffset)]);
+    var dataURL = URL.createObjectURL(blob);
+    addImageFile(dataURL);
+    this.bOffset = nOffset;
+    setTimeout(addImageFiles.bind(this), 10); // 1枚ずつ描画
+}
+
 function addImageFile(dataURL) {
-    var dataURL = this.dataURL;
+    // console.debug("addImageFile");
     var srcImage = new Image();
     srcImage.onload = function(e) {
 	constraintImageSize(srcImage);
