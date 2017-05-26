@@ -14,7 +14,7 @@ function main() {
 	var bOffset = 0;
 	while (true) {
 	    var [bOffset, nOffset] = getImageBinaryArray(arr, bOffset);
-	    console.log("getImageBinaryArray:", bOffset, nOffset);
+	    // console.debug("getImageBinaryArray:", bOffset, nOffset);
 	    if (bOffset === false) {
 		break;
 	    }
@@ -65,7 +65,7 @@ function searchSignature(arr, offset) {
     var jpegOffset = searchKey(arr, offset, [0xFF, 0xD8]);
     var pngOffset = searchKey(arr, offset, [0x89, 0x50, 0x4E, 0x47]);
     if (jpegOffset !== false || pngOffset !== false) {
-	// console.log("jpegOffset, pngOffset:", jpegOffset, pngOffset);
+	// console.debug("jpegOffset, pngOffset:", jpegOffset, pngOffset);
 	jpegOffset = (jpegOffset !== false)?jpegOffset:(-1 >>> 0);
 	pngOffset = (pngOffset !== false)?pngOffset:(-1 >>> 0);
 	if (jpegOffset < pngOffset) {
@@ -97,7 +97,7 @@ function searchTailPNG(arr, offset) {
 function getImageBinaryArray(arr, offset)  {
     var length = arr.length;
     var [type, bOffset] = searchSignature(arr, offset);
-    console.log("Sig:", type, bOffset);
+    // console.debug("Sig:", type, bOffset);
     if (type === false) {
 	return [false, false];
     }
@@ -109,7 +109,7 @@ function getImageBinaryArray(arr, offset)  {
 	var nOffset = searchTailPNG(arr, bOffset);
 	break;
     }
-    console.log("nOffset:"+nOffset);
+    // console.debug("nOffset:"+nOffset);
     if (nOffset === false) {
 	console.warn("type:"+type+", head only, no tail ");
 	return [false, false];
