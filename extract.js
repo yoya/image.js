@@ -144,6 +144,9 @@ function searchTailGIF(arr, offset) {
 	    while (size = arr[offset++]) {
 		offset += size;
 	    }
+	default:
+	    console.warn("GIF: wrong separator:"+ sep);
+	    return -1;
 	}
     }
     return -1;
