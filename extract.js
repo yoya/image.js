@@ -25,7 +25,7 @@ function addImageFiles() {
     var bOffset = this.bOffset;
     var [bOffset, nOffset] = getImageBinaryArray(arr, bOffset);
     // console.debug("getImageBinaryArray:", bOffset, nOffset);
-    if (bOffset === false) {
+    if (bOffset === null) {
 	return ; // finish
     }
     var blob = new Blob([arr.slice(bOffset, nOffset)]);
@@ -46,7 +46,6 @@ function addImageFile(dataURL) {
 }
 
 function searchKey(arr, offset, keyArr) {
-    var type = null;
     var keyArrLen = keyArr.length;
     for (var n = arr.length - keyArrLen - 1; offset < n; offset++) {
 	offset = arr.indexOf(keyArr[0], offset);
@@ -62,48 +61,45 @@ function searchKey(arr, offset, keyArr) {
 	    return offset;
 	}
     }
-    return false;
+    return -1;
 }
 
 function searchSignature(arr, offset) {
     var jpegOffset = searchKey(arr, offset, [0xFF, 0xD8]);
-    var pngOffset = searchKey(arr, offset, [0x89, 0x50, 0x4E, 0x47]);
-    if (jpegOffset !== false || pngOffset !== false) {
-	// console.debug("jpegOffset, pngOffset:", jpegOffset, pngOffset);
-	jpegOffset = (jpegOffset !== false)?jpegOffset:(-1 >>> 0);
-	pngOffset = (pngOffset !== false)?pngOffset:(-1 >>> 0);
-	if (jpegOffset < pngOffset) {
-	    return ["jpeg", jpegOffset];
-	} else {
-	    return ["png", pngOffset];
-	}
+    var pngOffset  = searchKey(arr, offset, [0x89, 0x50, 0x4E, 0x47]);
+    if ((jpegOffset < 0) && (pngOffset < 0)) {
+	return [null, null];
     }
-    return [false, null];
+    // console.debug("jpegOffset, pngOffset:", jpegOffset, pngOffset);
+    if (jpegOffset < pngOffset) {
+	return ["jpeg", jpegOffset];
+    } else {
+	return ["png", pngOffset];
+    }
 }
 
 function searchTailJPEG(arr, offset) {
     var endOffset = searchKey(arr, offset, [0xFF, 0xD9]);
-    if (endOffset !== false) {
-	return endOffset + 2; // nextOffset
+    if (endOffset < 0) {
+	return -1;
     }
-    return false;
-
+    return endOffset + 2; // nextOffset
 }
 
 function searchTailPNG(arr, offset) {
     var endOffset = searchKey(arr, offset, [0x49, 0x45, 0x4E, 0x44]);
-    if (endOffset !== false) {
-	return endOffset + 8; // nextOffset
+    if (endOffset < 0) {
+	return -1;
     }
-    return false;
+    return endOffset + 8; // nextOffset
 }
 
 function getImageBinaryArray(arr, offset)  {
     var length = arr.length;
     var [type, bOffset] = searchSignature(arr, offset);
     // console.debug("Sig:", type, bOffset);
-    if (type === false) {
-	return [false, false];
+    if (type === null) {
+	return [null, null];
     }
     switch (type) {
     case "jpeg":
@@ -116,7 +112,7 @@ function getImageBinaryArray(arr, offset)  {
     // console.debug("nOffset:"+nOffset);
     if (nOffset === false) {
 	console.warn("type:"+type+", head only, no tail ");
-	return [false, false];
+	return [null, null];
     }
     return [bOffset, nOffset];
 }
