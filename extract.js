@@ -9,9 +9,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function main() {
     // console.debug("main");
+    var target = document.getElementById("imageContainer");
     dropFunction(document, function(buf) {
 	// console.debug("dropFunction");
-	addImageFiles.call({buf:buf, bOffset:0});
+	target.innerHTML = "";
+	addImageFiles.call({buf:buf, bOffset:0, target:target});
     }, "ArrayBuffer");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
@@ -19,10 +21,16 @@ function main() {
 		 } );
 }
 
+var g_timeoutId = null;
+
 function addImageFiles() {
+    if (g_timeoutId !== null) {
+	clearTimeout(g_timeoutId);
+    }
     // console.debug("addImageFiles");
     var arr = new Uint8Array(this.buf);
     var bOffset = this.bOffset;
+    var target = this.target;
     var [bOffset, nOffset] = getImageBinaryArray(arr, bOffset);
     // console.debug("getImageBinaryArray:", bOffset, nOffset);
     if (bOffset === null) {
@@ -30,18 +38,18 @@ function addImageFiles() {
     }
     var blob = new Blob([arr.slice(bOffset, nOffset)]);
     var dataURL = URL.createObjectURL(blob);
-    addImageFile(dataURL);
+    addImageFile(target, dataURL);
     this.bOffset = nOffset;
-    setTimeout(addImageFiles.bind(this), 10); // 1枚ずつ描画
+    g_timeoutId = setTimeout(addImageFiles.bind(this), 0); // 1枚ずつ描画
 }
 
-function addImageFile(dataURL) {
+function addImageFile(target, dataURL) {
     // console.debug("addImageFile");
     var srcImage = new Image();
     srcImage.onload = function(e) {
 	constraintImageSize(srcImage);
     }
-    document.body.append(srcImage);
+    target.append(srcImage);
     srcImage.src =  dataURL;
 }
 
