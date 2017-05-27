@@ -75,15 +75,22 @@ function searchKey(arr, offset, keyArr) {
 function searchSignature(arr, offset) {
     var jpegOffset = searchKey(arr, offset, [0xFF, 0xD8]);
     var pngOffset  = searchKey(arr, offset, [0x89, 0x50, 0x4E, 0x47]);
-    if ((jpegOffset < 0) && (pngOffset < 0)) {
+    var gifOffset  = searchKey(arr, offset, [0x47, 0x49, 0x46, 0x38]);
+    if ((jpegOffset < 0) && (pngOffset < 0) && (gifOffset < 0)) {
 	return [null, null];
     }
-    // console.debug("jpegOffset, pngOffset:", jpegOffset, pngOffset);
-    if (jpegOffset < pngOffset) {
-	return ["jpeg", jpegOffset];
-    } else {
-	return ["png", pngOffset];
-    }
+    var offsetTable = [["jpeg", jpegOffset], ["png", pngOffset], ["gif", gifOffset]];
+    // console.debug(offsetTable);
+    var minOffset = offsetTable.reduce(function(prev, curr) {
+	if (curr[1] < 0) {
+	    return prev;
+	} 
+	if (prev[1] < 0) {
+	    return curr;
+	} 
+	return (prev[1] < curr[1])?prev:curr;
+    });
+    return minOffset;
 }
 
 function searchTailJPEG(arr, offset) {
@@ -101,6 +108,46 @@ function searchTailPNG(arr, offset) {
     }
     return endOffset + 8; // nextOffset
 }
+function searchTailGIF(arr, offset) {
+    offset += 10; // sig(3),ver(3),width(2),height(2)
+    var flag = arr[offset++];
+    offset += 2; // bgindex(1), aspect(1)
+    if (flag & 0x80) { // global color table
+	var nColor = Math.pow(2, (flag&0x7)+1);
+	offset += 3 * nColor;
+    }
+    var size;
+    for (var n = arr.length ; offset < n ;) {
+	var sep = arr[offset++];
+	switch (sep) {
+	case 0x3B: // Trailer
+	    return offset; // GIF Trailer Found
+	    break;
+	case 0x21: // Extension
+	    var extLabel = arr[offset++];
+	    var extSize = arr[offset++];
+	    offset += extSize;
+	    if (extLabel === 0xFF) {
+		while (size = arr[offset++]) {
+		    offset += size;
+		}
+	    }
+	    break;
+	case 0x2C: // Image
+	    offset += 8; // left(2),top(2),width(2),height(2)
+	    flag = arr[offset++];
+	    if (flag & 0x80) { // local color table
+		var nColor = Math.pow(2, (flag&0x7)+1);
+		offset += 3 * nColor;
+	    }
+	    offset++; // lzwMinimumCodeSize
+	    while (size = arr[offset++]) {
+		offset += size;
+	    }
+	}
+    }
+    return -1;
+}
 
 function getImageBinaryArray(arr, offset)  {
     var length = arr.length;
@@ -109,12 +156,16 @@ function getImageBinaryArray(arr, offset)  {
     if (type === null) {
 	return [null, null];
     }
+    // console.debug("type, bOffset: ", type, bOffset);
     switch (type) {
     case "jpeg":
 	var nOffset = searchTailJPEG(arr, bOffset);
 	break;
     case "png":
 	var nOffset = searchTailPNG(arr, bOffset);
+	break;
+    case "gif":
+	var nOffset = searchTailGIF(arr, bOffset);
 	break;
     }
     // console.debug("nOffset:"+nOffset);
