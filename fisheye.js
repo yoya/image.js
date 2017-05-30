@@ -36,10 +36,11 @@ function fisheyeTransform(dstX, dstY, dstImageData, srcImageData) {
     var [srcWidth, srcHeight] = [srcImageData.width, srcImageData.height];
     if (false) {
 	var theta2 = Math.atan2(dstY/dstHeight - 0.5, dstX/dstWidth - 0.5);
-	if (theta2 === 0) {
-	    console.log("XXXXXX");
+	if (Math.abs(Math.abs(theta2) - Math.PI/2) < Math.PI/4) {
+	    var phi2_over_pi = (dstY/dstHeight - 0.5) / Math.sin(theta2);
+	} else {
+	    var phi2_over_pi = (dstX/dstWidth - 0.5) / Math.cos(theta2);
 	}
-	var phi2_over_pi = (dstX/dstWidth - 0.5) / Math.cos(theta2);
 	var y =  Math.cos(phi2_over_pi * Math.PI);
 	var z = - Math.sin(theta2); // XXX
 	var x =   Math.cos(theta2); // XXX
