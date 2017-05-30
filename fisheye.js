@@ -31,18 +31,38 @@ function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
 }
 
 // ref) https://trac.ffmpeg.org/attachment/wiki/RemapFilter/projection.c
-function fisheyeTransform(dstX, dstY, dstImageData) {
-    var [width, height] = [dstImageData.width, dstImageData.height];
-    var theta = (1.0 - dstX / width) * Math.PI;
-    var phi = (dstY / height) * Math.PI;
-    var x = Math.cos(theta) * Math.sin(phi);
-    var y = Math.sin(theta) * Math.sin(phi);
-    var z = Math.cos(phi);
-
-    var theta2 = Math.atan2(-z, x);
-    var phi2_over_pi = Math.acos(y) / Math.PI;
-    var srcX = ((phi2_over_pi * Math.cos(theta2))+0.5)*width;
-    var srcY = ((phi2_over_pi * Math.sin(theta2))+0.5)*height;
+function fisheyeTransform(dstX, dstY, dstImageData, srcImageData) {
+    var [dstWidth, dstHeight] = [dstImageData.width, dstImageData.height];
+    var [srcWidth, srcHeight] = [srcImageData.width, srcImageData.height];
+    if (false) {
+	var theta2 = Math.atan2(dstY/dstHeight - 0.5, dstX/dstWidth - 0.5);
+	if (theta2 === 0) {
+	    console.log("XXXXXX");
+	}
+	var phi2_over_pi = (dstX/dstWidth - 0.5) / Math.cos(theta2);
+	var y =  Math.cos(phi2_over_pi * Math.PI);
+	var z = - Math.sin(theta2); // XXX
+	var x =   Math.cos(theta2); // XXX
+	var a = Math.sqrt((1 - y*y) / (x*x + z*z)); // x^2+y^2+z^2 = 1.0
+	z = a * z;
+	x = a * x;
+	// console.log(x, y, z);
+	var phi = Math.acos(z);
+	var theta = Math.acos(x / Math.sin(phi));
+	var srcY  = phi / Math.PI * srcHeight;
+	var srcX =  (1.0 - theta / Math.PI) * srcWidth;
+    } else {
+	var theta = (1.0 - dstX / dstWidth) * Math.PI;
+	var phi = (dstY / dstHeight) * Math.PI;
+	var x = Math.cos(theta) * Math.sin(phi);
+	var y = Math.sin(theta) * Math.sin(phi);
+	var z = Math.cos(phi);
+	// console.log(x,y,z);
+	var theta2 = Math.atan2(-z, x);
+	var phi2_over_pi = Math.acos(y) / Math.PI;
+	var srcX = ((phi2_over_pi * Math.cos(theta2))+0.5)*srcWidth;
+	var srcY = ((phi2_over_pi * Math.sin(theta2))+0.5)*srcHeight;
+    }
     return [srcX, srcY];
 }
 
@@ -61,7 +81,8 @@ function drawCopy(srcCanvas, dstCanvas) {
     var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var [srcX, srcY] = fisheyeTransform(dstX, dstY, dstImageData);
+	    var [srcX, srcY] = fisheyeTransform(dstX, dstY, dstImageData,
+						srcImageData);
 	    srcX = Math.round(srcX);
 	    srcY = Math.round(srcY);
 	    var rgba = getRGBA(srcImageData, srcX, srcY, outfill);
