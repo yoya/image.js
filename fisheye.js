@@ -78,6 +78,16 @@ function drawCopy(srcCanvas, dstCanvas, srcProj, dstProj) {
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
     var dstWidth  = srcWidth;
     var dstHeight = srcHeight;
+    switch (dstProj) {
+    case "fisheye":
+	if (dstWidth !== dstHeight)  {
+	    if (dstWidth > dstHeight)  {
+		dstWidth = dstHeight;
+	    } else {
+		dstHeight = dstWidth;
+	    }
+	}
+    }
     dstCanvas.width  = dstWidth;
     dstCanvas.height = dstHeight;
     //
