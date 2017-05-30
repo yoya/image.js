@@ -42,8 +42,11 @@ function fisheyeTransform(dstX, dstY, dstImageData, srcImageData) {
 	    var phi2_over_pi = (dstX/dstWidth - 0.5) / Math.cos(theta2);
 	}
 	var y =  Math.cos(phi2_over_pi * Math.PI);
-	var z = - Math.sin(theta2); // XXX
-	var x =   Math.cos(theta2); // XXX
+	var z = - Math.sin(theta2);
+	var x =   Math.cos(theta2);
+	if (0.5 < phi2_over_pi) {
+	    return [-1, -1]; // out of area
+	}
 	var a = Math.sqrt((1 - y*y) / (x*x + z*z)); // x^2+y^2+z^2 = 1.0
 	z = a * z;
 	x = a * x;
