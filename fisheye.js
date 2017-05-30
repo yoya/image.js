@@ -1,6 +1,6 @@
 "use strict";
 /*
- * 2017/04/02- (c) yoya@awm.jp
+ * 2017/05/30- (c) yoya@awm.jp
  */
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -19,58 +19,59 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+		  "srcProjSelect":null,
+		  "dstProjSelect":null},
+		 function(target) {
+		     console.debug("target id:" + target.id);
 		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas);
 		 } );
 }
+
 function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    var srcProj = document.getElementById("srcProjSelect").value;
+    var dstProj = document.getElementById("dstProjSelect").value;
+    console.debug("srcProj,dstProj:" + srcProj +", " + dstProj);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawCopy(srcCanvas, dstCanvas);
+    drawCopy(srcCanvas, dstCanvas, srcProj, dstProj);
 }
 
-// ref) https://trac.ffmpeg.org/attachment/wiki/RemapFilter/projection.c
-function fisheyeTransform(dstX, dstY, dstImageData, srcImageData) {
+function fisheyeTransform(dstX, dstY, dstImageData, srcImageData,
+			  srcProj, dstProj) {
     var [dstWidth, dstHeight] = [dstImageData.width, dstImageData.height];
     var [srcWidth, srcHeight] = [srcImageData.width, srcImageData.height];
-    if (false) {
-	var theta2 = Math.atan2(dstY/dstHeight - 0.5, dstX/dstWidth - 0.5);
-	if (Math.abs(Math.abs(theta2) - Math.PI/2) < Math.PI/4) {
-	    var phi2_over_pi = (dstY/dstHeight - 0.5) / Math.sin(theta2);
-	} else {
-	    var phi2_over_pi = (dstX/dstWidth - 0.5) / Math.cos(theta2);
-	}
-	var y =  Math.cos(phi2_over_pi * Math.PI);
-	var z = - Math.sin(theta2);
-	var x =   Math.cos(theta2);
-	if (0.5 < phi2_over_pi) {
-	    return [-1, -1]; // out of area
-	}
-	var a = Math.sqrt((1 - y*y) / (x*x + z*z)); // x^2+y^2+z^2 = 1.0
-	z = a * z;
-	x = a * x;
-	// console.log(x, y, z);
-	var phi = Math.acos(z);
-	var theta = Math.acos(x / Math.sin(phi));
-	var srcY  = phi / Math.PI * srcHeight;
-	var srcX =  (1.0 - theta / Math.PI) * srcWidth;
-    } else {
-	var theta = (1.0 - dstX / dstWidth) * Math.PI;
-	var phi = (dstY / dstHeight) * Math.PI;
-	var x = Math.cos(theta) * Math.sin(phi);
-	var y = Math.sin(theta) * Math.sin(phi);
-	var z = Math.cos(phi);
-	// console.log(x,y,z);
-	var theta2 = Math.atan2(-z, x);
-	var phi2_over_pi = Math.acos(y) / Math.PI;
-	var srcX = ((phi2_over_pi * Math.cos(theta2))+0.5)*srcWidth;
-	var srcY = ((phi2_over_pi * Math.sin(theta2))+0.5)*srcHeight;
+    var xyz;
+    switch (dstProj) {
+    case "equirectangular":
+	xyz = equirectangular2xyz(dstX, dstY, dstWidth, dstHeight);
+	break;
+    case "fisheye":
+	xyz = fisheye2xyz(dstX, dstY, dstWidth, dstHeight);
+	break;
+    default:
+	console.error("dstProj:" + dstProj);
+	return null;
     }
-    return [srcX, srcY];
+    if (xyz === null) {
+	return [-1, -1]; // out of area.
+    }
+    var srcXY;
+    switch (srcProj) {
+    case "equirectangular":
+	srcXY = xyz2equirectangular(xyz, srcWidth, srcHeight);
+	break;
+    case "fisheye":
+	srcXY = xyz2fisheye(xyz, srcWidth, srcHeight);
+	break;
+    default:
+	console.error("dstProj:" + dstProj);
+	return null;
+    }
+    return srcXY; // [x, y]
 }
 
-function drawCopy(srcCanvas, dstCanvas) {
+function drawCopy(srcCanvas, dstCanvas, srcProj, dstProj) {
     // console.debug("drawCopy");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -86,7 +87,8 @@ function drawCopy(srcCanvas, dstCanvas) {
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
 	    var [srcX, srcY] = fisheyeTransform(dstX, dstY, dstImageData,
-						srcImageData);
+						srcImageData,
+						srcProj, dstProj);
 	    srcX = Math.round(srcX);
 	    srcY = Math.round(srcY);
 	    var rgba = getRGBA(srcImageData, srcX, srcY, outfill);

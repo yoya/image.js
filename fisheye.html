@@ -1,15 +1,29 @@
 <html>
 <head>
-  <meta name="copyright" content="Copyright &copy; 2017/04/02- yoya@awm.jp . All Rights Reserved.">
+  <meta name="copyright" content="Copyright &copy; 2017/05/30- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> Fish Eye </title>
 <link rel="stylesheet" href="index.css">
 </head>
 <body bgcolor="lightgray">
   <div class="container">
-    <div>
-    <div>
-      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+    <div id="controlPanel"  style="float:left">
+      <div>
+	Src Proj:  <br />
+        <select id="srcProjSelect" size="2">
+          <option value="fisheye" selected> ??? (魚眼) </option>
+	  <option value="equirectangular"> 正距円筒図 (パノラマ) </option>
+        </select>
+      </div>
+      <div >
+	Dist Proj:  <br />
+        <select id="dstProjSelect" size="2">
+          <option value="equirectangular" selected> 正距円筒図 (パノラマ) </option>
+	  <option value="fisheye" > ??? (魚眼) </option>
+        </select>
+      </div>
+      maxWidthHeight: <br />
+      <input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
     </div>
     <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
     <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
@@ -17,6 +31,7 @@
   <script type="text/javascript" src="lib/drop.js"> </script>
   <script type="text/javascript" src="lib/bind.js"> </script>
   <script type="text/javascript" src="lib/canvas.js"> </script>
+  <script type="text/javascript" src="lib/projection.js"> </script>
   <script type="text/javascript" src="fisheye.js"> </script>
 </body>
 </html>
