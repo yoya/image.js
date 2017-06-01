@@ -7,23 +7,44 @@
 </head>
 <body bgcolor="lightgray">
   <div class="container">
-    <div id="controlPanel"  style="float:left">
+    <div id="controlPanel">
       <div>
+	maxWidthHeight: <br />
+	<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+	guide:<input id="guideCheckbox" type="checkbox" />
+      </div>
+      <div class="noCR">
 	Src Proj:  <br />
         <select id="srcProjSelect" size="2">
           <option value="fisheye" selected> ??? (魚眼) </option>
 	  <option value="equirectangular"> 正距円筒図 (パノラマ) </option>
         </select>
+	<br />
+	srcProjX:
+	<input id="srcProjXRange" type="range" min="0.0" max="1.0" step="0.01" value="0.5">:<input type="text" id="srcProjXText" size="4">
+	<br />
+	srcProjY:
+	<input id="srcProjYRange" type="range" min="0.0" max="1.0" step="0.01" value="0.5">:<input type="text" id="srcProjYText" size="4">
+	<br />
+	srcProjR:
+	<input id="srcProjRRange" type="range" min="0.0" max="2.0" step="0.01" value="1.0">:<input type="text" id="srcProjRText" size="4">
       </div>
-      <div >
+      <div class="noCR">
 	Dist Proj:  <br />
         <select id="dstProjSelect" size="2">
           <option value="equirectangular" selected> 正距円筒図 (パノラマ) </option>
 	  <option value="fisheye" > ??? (魚眼) </option>
         </select>
+	<br />
+	dstProjX:
+	<input id="dstProjXRange" type="range" min="0.0" max="1.0" step="0.01" value="0.5">:<input type="text" id="dstProjXText" size="4">
+	<br />
+	dstProjY:
+	<input id="dstProjYRange" type="range" min="0.0" max="1.0" step="0.01" value="0.5">:<input type="text" id="dstProjYText" size="4">
+	<br />
+	dstProjR:
+	<input id="dstProjRRange" type="range" min="0.0" max="2.0" step="0.01" value="1.0">:<input type="text" id="dstProjRText" size="4">
       </div>
-      maxWidthHeight: <br />
-      <input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
     </div>
     <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
     <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
