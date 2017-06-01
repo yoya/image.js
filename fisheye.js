@@ -101,14 +101,11 @@ function drawFisheye(srcCanvas, dstCanvas, guide,
     var dstWidth  = srcWidth;
     var dstHeight = srcHeight;
     //
-    switch (dstProj) {
-    case "fisheye":
-	if (dstWidth !== dstHeight)  {
-	    if (dstWidth > dstHeight)  {
-		dstWidth = dstHeight;
-	    } else {
-		dstHeight = dstWidth;
-	    }
+    if (dstWidth !== dstHeight)  {
+	if (dstWidth < dstHeight)  {
+	    dstWidth = dstHeight;
+	} else {
+	    dstHeight = dstWidth;
 	}
     }
     dstCanvas.width  = dstWidth;
