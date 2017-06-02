@@ -3,31 +3,30 @@
   <meta name="copyright" content="Copyright &copy; 2017/04/02- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> Color Matrix </title>
-<link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="index.css">
 </head>
 <body bgcolor="lightgray">
   <div class="container">
-    <div>
-      <div id="controlPanel"  style="float:left">
-        Color Filter:  <br />
-	<div style="position:relative; left: 10%; float:left; ">
-          <select id="colorSelect" size="7">
-            <option value="ident" selected> 元のまま </option>
-	    <option value="red-p"         > 赤+ </option>
-            <option value="green-p"       > 緑+ </option>
-	    <option value="blue-p"        > 青+ </option>
-	    <option value="rgb2gbr"       > RGB2GBR </option>
-	    <option value="rgb2brg"       > RGB2BRG </option>
-	    <option value="negate"        > ネガポジ反転 </option>
-          </select>
-	</div>
-        </div> colorMatrix:<table id="colorMatrixTable" style="border:1 "> </table>
-      </div>
-      <div>
-        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText">
+    <div id="controlPanel"  style="float:left">
+      Color Filter:  <br />
+      <div style="position:relative; left: 10%; float:left; ">
+        <select id="colorSelect" size="7">
+          <option value="ident" selected> 元のまま </option>
+	  <option value="red-p"         > 赤+ </option>
+          <option value="green-p"       > 緑+ </option>
+	  <option value="blue-p"        > 青+ </option>
+	  <option value="rgb2gbr"       > RGB2GBR </option>
+	  <option value="rgb2brg"       > RGB2BRG </option>
+	  <option value="negate"        > ネガポジ反転 </option>
+        </select>
       </div>
     </div>
-    <div style="clear:both">
+    colorMatrix:<table id="colorMatrixTable" style="border:1 "> </table>
+    <div>
+      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText">
+    </div>
+  </div>
+  <div style="clear:both">
     <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
     <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
   </div>
