@@ -26,7 +26,8 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+		  "linearCheckbox":null},
 		 function() {
 		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, colorWindow);
 		 } );
@@ -82,19 +83,28 @@ var color2Matrix = {
 
 function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCancas, colorMatrix, colorWindow) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    var linear = document.getElementById("linearCheckbox").checked;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawColorTransform(srcCanvas, dstCanvas, colorMatrix, colorWindow);
+    drawColorTransform(srcCanvas, dstCanvas, colorMatrix, colorWindow, linear);
 }
 
-function colorTransform(imageData, x, y, mat) {
+function colorTransform(imageData, x, y, mat, linear) {
     var [r, g, b, a] = getRGBA(imageData, x, y);
+    if (linear) {
+	[r, g, b] = sRGB2linearRGB([r, g, b]);
+	r *= 255; g *= 255; b *= 255;
+    }
     var r2 = r*mat[0] + g*mat[1] + b*mat[2]  + 255*mat[3];
     var g2 = r*mat[4] + g*mat[5] + b*mat[6]  + 255*mat[7];
     var b2 = r*mat[8] + g*mat[9] + b*mat[10] + 255*mat[11];
+    if (linear) {
+	r2 /= 255; g2 /= 255; b2 /= 255;
+	[r2, g2, b2] = linearRGB2sRGB([r2, g2, b2]);
+    }
     return [r2, g2, b2, a];
 }
 
-function drawColorTransform(srcCanvas, dstCanvas, colorMatrix, colorWindow) {
+function drawColorTransform(srcCanvas, dstCanvas, colorMatrix, colorWindow, linear) {
     // console.debug("drawColorTransform");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -109,7 +119,7 @@ function drawColorTransform(srcCanvas, dstCanvas, colorMatrix, colorWindow) {
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
 	    var srcX = dstX, srcY = dstY;
-	    var rgba = colorTransform(srcImageData, srcX, srcY, colorMatrix);
+	    var rgba = colorTransform(srcImageData, srcX, srcY, colorMatrix, linear);
 	    setRGBA(dstImageData, dstX, dstY, rgba);
 	}
     }
