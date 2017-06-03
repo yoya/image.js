@@ -1,6 +1,6 @@
 "use strict";
 /*
- * 2017/04/07- (c) yoya@awm.jp
+ * 2017/04/17- (c) yoya@awm.jp
  */
 
 document.addEventListener("DOMContentLoaded", function(event) {

@@ -1,35 +1,34 @@
 <html>
 <head>
-  <meta name="copyright" content="Copyright &copy; 2017/04/02- yoya@awm.jp . All Rights Reserved.">
+  <meta name="copyright" content="Copyright &copy; 2017/04/17- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> Color Component </title>
 <link rel="stylesheet" href="index.css">
 </head>
 <body bgcolor="lightgray">
   <div class="container">
-    <div>
-      <div id="controlPanel"  style="float:left">
-        Color Filter:  <br />
-	<div style="position:relative; left: 10%; float:left; ">
-          <select id="componentSelect" size="8">
-            <option value="rgb" selected> RBG </option>
-	    <option value="cmyk"        > CMYK (naive) </option>
-	    <option value="cmy"        > CMY (naive) </option>
-	    <option value="ycbcr"       > YCbCr (JPEG) </option>
-	    <option value="yiq"         > YIQ (NTSC) </option>
-	    <option value="yuv_bt601"   > YUV (PAL) SDTV BT.601 </option>
-	    <option value="yuv_bt709"   > YUV (PAL) HDTV BT.709 </option>
-	    <option value="ydbdr"       > YDbDr (SECOM) </option>
-	    <option value="hsv"         > HSV (HSB) </option>
-	    <option value="hsl"         > HSL (HLS) </option>
-          </select>
-	</div>
+    <div id="controlPanel">
+      <div  class="noCR">
+	Color Filter:  <br />
+        <select id="componentSelect" size="8">
+          <option value="rgb" selected> RBG </option>
+	  <option value="cmyk"        > CMYK (naive) </option>
+	  <option value="cmy"        > CMY (naive) </option>
+	  <option value="ycbcr"       > YCbCr (JPEG) </option>
+	  <option value="yiq"         > YIQ (NTSC) </option>
+	  <option value="yuv_bt601"   > YUV (PAL) SDTV BT.601 </option>
+	  <option value="yuv_bt709"   > YUV (PAL) HDTV BT.709 </option>
+	  <option value="ydbdr"       > YDbDr (SECOM) </option>
+	  <option value="hsv"         > HSV (HSB) </option>
+	  <option value="hsl"         > HSL (HLS) </option>
+        </select>
       </div>
-      <div>
-        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="320">:<input type="text" id="maxWidthHeightText">
+      <div class="noCR" style="vertical-align: top">
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="320">:<input type="text" id="maxWidthHeightText">
       </div>
     </div>
-    <div style="clear:both">
+  </div>
+  <div style="clear:both">
     <canvas id="srcCanvas" class="borderYellow" width=200 height=200> srcCanvas </canvas>
     <canvas id="dstCanvas1" class="borderRed" width=200 height=200> dstCanvas1 </canvas>
     <canvas id="dstCanvas2" class="borderGreen" width=200 height=200> dstCanvas2 </canvas>
