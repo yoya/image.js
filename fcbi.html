@@ -7,13 +7,15 @@
 </head>
 <body bgcolor="lightgray">
   <div class="container">
-    <div>
-      TM:<input id="TMRange" type="range" min="4" max="150" step="1" value="20" />:<input type="text" id="TMText" size="3" />
-      edgeMode:<input id="edgeModeCheckbox" type="checkbox" />
-      phaseLimit:<input id="phaseLimitRange" type="range" min="1" max="3" step="1" value="3" />:<input type="text" id="phaseLimitText"  size="1" />
-    </div>
-    <div>
-      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="320" />:<input type="text" id="maxWidthHeightText" size="3" />
+    <div id="controlPanel">
+      <div>
+	TM:<input id="TMRange" type="range" min="4" max="150" step="1" value="20" />:<input type="text" id="TMText" size="3" />
+	edgeMode:<input id="edgeModeCheckbox" type="checkbox" />
+	phaseLimit:<input id="phaseLimitRange" type="range" min="1" max="3" step="1" value="3" />:<input type="text" id="phaseLimitText"  size="1" />
+      </div>
+      <div>
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="320" />:<input type="text" id="maxWidthHeightText" size="3" />
+      </div>
     </div>
     <div>
       <canvas id="srcCanvas" class="borderRed" width=320 height=240> srcCanvas </canvas>
