@@ -40,12 +40,6 @@ function meanRGBA(rgba1, rgba2) {
     return [(r1+r2)/2, (g1+g2)/2, (b1+b2)/2, (a1+a2)/2];
 }
 
-function lumaFromRGBA(rgba) {
-    var [r,g,b,a] = rgba;
-    var y = 0.299 * r + 0.587 * g + 0.114 * b;
-    return y * a / 255;
-    // return y;
-}
 function getLuma(imageData, x, y) {
     var rgba = getRGBA(imageData, x, y);
     return lumaFromRGBA(rgba);
