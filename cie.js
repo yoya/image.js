@@ -189,6 +189,9 @@ function drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus) {
 				[0.1500, 0.0600]];
 	for (var i in tristimulus_sRGB) {
 	    var xy = tristimulus_sRGB[i];
+	    if (colorspace !== "ciexy") {
+		xy = xy2uava(xy);
+	    }
 	    var [gx, gy] = graphTrans(xy, width, height);
 	    if (i === 0) {
 		ctx.moveTo(gx, gy);
