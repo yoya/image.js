@@ -40,7 +40,6 @@ function main() {
 		    }
 		}
 	    };
-	    console.log("file"+file);
 	    xhr.cie = cie;
 	    xhr.open("GET", file, true); // async:true
 	    xhr.send(null);
@@ -66,7 +65,8 @@ function main() {
 		     hist = getColorHistogram(srcCanvas);
 		     drawDiagram(dstCanvas, cieArr, hist);
 		 } );
-    bindFunction({"colorspaceSelect":null},
+    bindFunction({"colorspaceSelect":null,
+		  "tristimulusCheckbox":null},
 		 function() {
 		     drawDiagram(dstCanvas, cieArr, hist);
 		 } );
@@ -87,8 +87,9 @@ function main() {
 
 function drawDiagram(dstCanvas, cieArr, hist) {
     var colorspace = document.getElementById("colorspaceSelect").value;
+    var tristimulus = document.getElementById("tristimulusCheckbox").checked;
     dstCanvas.width  = dstCanvas.width ; // clear
-    drawDiagramBase(dstCanvas, cieArr, colorspace);
+    drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus);
     if (hist !== null) {
 	drawDiagramPoint(dstCanvas, hist, colorspace);
     }
@@ -111,7 +112,7 @@ function graphTransRev(xy, width, height) {
     return [x / width, 1 - (y / height)];
 }
 
-function drawDiagramBase(dstCanvas, cieArr, colorspace) {
+function drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus) {
     var xyArr = [], rgbArr = [];
     for (var data of cieArr) {
 	var [wl, lx, ly, lz] = data;
@@ -129,6 +130,7 @@ function drawDiagramBase(dstCanvas, cieArr, colorspace) {
     // drawing
     var width = dstCanvas.width, height = dstCanvas.height;
     var ctx = dstCanvas.getContext("2d");
+    ctx.save();
     // axis mapping
     var gxyArr = [];
     for (var i in xyArr) {
@@ -177,11 +179,34 @@ function drawDiagramBase(dstCanvas, cieArr, colorspace) {
     }
     offCtx.putImageData(imageData, 0, 0);
     ctx.drawImage(offCanvas, 0, 0, width, height);
+    if (tristimulus) {
+	// ctx.globalCompositeOperation = "lighter";
+	ctx.beginPath();
+	ctx.strokeStyle = "rgba(100, 100, 100, 0.2)";
+	ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+	var tristimulus_sRGB = [[0.6400, 0.3300	],
+				[0.3000, 0.6000],
+				[0.1500, 0.0600]];
+	for (var i in tristimulus_sRGB) {
+	    var xy = tristimulus_sRGB[i];
+	    var [gx, gy] = graphTrans(xy, width, height);
+	    if (i === 0) {
+		ctx.moveTo(gx, gy);
+	    } else {
+		ctx.lineTo(gx, gy);
+	    }
+	}
+	ctx.closePath();
+	ctx.fill();
+	ctx.stroke();
+    }
+    ctx.restore();
 }
 
 function drawDiagramPoint(dstCanvas, hist, colorspace) {
     var width = dstCanvas.width, height = dstCanvas.height;
     var ctx = dstCanvas.getContext("2d");
+    ctx.save();
     ctx.fillStyle = "black";
     for (var colorId in hist) {
 	var [r,g,b,a] = colorId2RGBA(colorId);
@@ -198,6 +223,7 @@ function drawDiagramPoint(dstCanvas, hist, colorspace) {
 	}
 	ctx.fillRect(gx, gy, 0.5, 0.5);
     }
+    ctx.restore();
 }
 
 function drawGraphBase(canvas, cieArr, cie31Arr) {
