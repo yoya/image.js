@@ -12,41 +12,52 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var cieSelect = document.getElementById("cieSelect").value;
     var cieArr = null;
-    var hist = null
-    var readCIEXYZdata = function() {
-	var file;
-	var cieSelect = document.getElementById("cieSelect").value;
-	switch (cieSelect) {
-	case "ciexyz31":
-	    file = "data/ciexyz31.json";
-	    break;
-	case "ciexyz64":
-	    file = "data/ciexyz64.json";
-	    break;
-	default:
-	    console.error("Unknown cie Data:"+cieSelect);
-	    return ;
+    var cie31Arr = null, cie64Arr = null;
+    var hist = null;
+    var loadCIEXYZdata = function() {
+	var cieList = [31, 64];
+	for (var i in cieList) {
+	    var cie = cieList[i];
+	    var file = (cie === 31)?"data/ciexyz31.json":"data/ciexyz64.json";
+	    var xhr = new XMLHttpRequest();
+	    xhr.onreadystatechange = function() {
+		if (this.readyState === 4) {
+		    var cie = this.cie;
+		    var arr = JSON.parse(this.responseText);
+		    var arr = arr.filter(function(e) {
+			var lw =  e[0]; // length of wave
+			return (370 < lw) && (lw < 720);
+		    });
+		    if (cie === 31) { // cieSelect as default
+			cie31Arr = arr;
+			cieArr = cie31Arr;
+			drawGraph(graphCanvas, cieArr, cie31Arr);
+			drawDiagram(dstCanvas, cieArr, hist);
+		    } else {
+			cie64Arr = arr;
+		    }
+		}
+	    };
+	    console.log("file"+file);
+	    xhr.cie = cie;
+	    xhr.open("GET", file, true); // async:true
+	    xhr.send(null);
+	    xhr = null;
 	}
-	var xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function() {
-	    if (xhr.readyState === 4) {
-		cieArr = JSON.parse(xhr.responseText);
-		cieArr = cieArr.filter(function(e) {
-		    var lw =  e[0]; // length of wave
-		    return (370 < lw) && (lw < 720);
-		});
-		drawDiagram(dstCanvas, cieArr, hist);
-		drawGraph(graphCanvas, cieArr, hist);
-	    }
-	};
-	xhr.open("GET", file, true); // async:true
-	xhr.send(null);
     }
     bindFunction({"cieSelect":null},
 		 function() {
 		     console.debug("cieSelect event");
-		     readCIEXYZdata();
+		     cieSelect = document.getElementById("cieSelect").value;
+		     if (cieSelect === "ciexyz31") {
+			 cieArr = cie31Arr;
+		     } else {
+			 cieArr = cie64Arr;
+		     }
+		     drawGraph(graphCanvas, cieArr, cie31Arr);
+		     drawDiagram(dstCanvas, cieArr, hist);
 		 } );
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
@@ -71,7 +82,7 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    readCIEXYZdata();
+    loadCIEXYZdata();
 }
 
 function drawDiagram(dstCanvas, cieArr, hist) {
@@ -83,13 +94,10 @@ function drawDiagram(dstCanvas, cieArr, hist) {
     }
 }
 
-function drawGraph(canvas, cieArr, hist) {
+function drawGraph(canvas, cieArr, cie31Arr) {
     var colorspace = document.getElementById("colorspaceSelect").value;
     canvas.width  = canvas.width ; // clear
-    drawGraphBase(canvas, cieArr, colorspace);
-    if (hist !== null) {
-	drawGraphPoint(dstCanvas, hist);
-    }
+    drawGraphBase(canvas, cieArr, cie31Arr);
 }
 
 
@@ -192,7 +200,7 @@ function drawDiagramPoint(dstCanvas, hist, colorspace) {
     }
 }
 
-function drawGraphBase(canvas, cieArr) {
+function drawGraphBase(canvas, cieArr, cie31Arr) {
     // console.debug("drawGraphBase", canvas, cieArr);
     canvas.style.backgroundColor = "gray";
     var width = canvas.width;
@@ -201,14 +209,11 @@ function drawGraphBase(canvas, cieArr) {
     var lxArr = [], lyArr = [], lzArr = [];
     var xyRatioTable = [];
     var maxValue = 0;
-    var i = 0;
     var arrLen = cieArr.length;
     var grad = ctx.createLinearGradient(0, 0, width, 0);
-    for (var data of cieArr) {
-	var [wl, lx, ly, lz] = data;
-	lxArr.push(lx);
-	lyArr.push(ly);
-	lzArr.push(lz);
+    // spectrum gradient
+    for (var i in cie31Arr) {
+	var [wl, lx, ly, lz] = cie31Arr[i];
 	if (wl < 445) {
 	    // wl: 440
 	    var [x, y, z] = [0.348280000000,0.023000000000,1.747060000000];
@@ -225,11 +230,17 @@ function drawGraphBase(canvas, cieArr) {
 	var [r, g, b] = linearRGB2sRGB(lrgb);
 	var color = "rgba("+r+","+g+","+b+","+a+")";
 	grad.addColorStop(i / arrLen, color);
-	i++;
     }
     ctx.fillStyle = grad;
     ctx.rect(0, 0, width, height);
     ctx.fill();
+    // color matching function
+    for (var i in cieArr) {
+	var [wl, lx, ly, lz] = cieArr[i];
+	lxArr.push(lx);
+	lyArr.push(ly);
+	lzArr.push(lz);
+    }
     var lxMax = Math.max.apply(null, lxArr);
     var lyMax = Math.max.apply(null, lyArr);
     var lzMax = Math.max.apply(null, lzArr);
@@ -248,11 +259,4 @@ function drawGraphBase(canvas, cieArr) {
 	}
 	ctx.stroke();
     }
-}
-
-function drawGraphPoint(canvas, hist) {
-    var width = canvas.width;
-    var height = canvas.height;
-    var ctx = canvas.getContext("2d");
-    ctx.fillStyle = "black";
 }
