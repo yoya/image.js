@@ -231,7 +231,7 @@ function drawDiagramPoint(dstCanvas, hist, colorspace) {
 
 function drawGraphBase(canvas, cieArr, cie31Arr) {
     // console.debug("drawGraphBase", canvas, cieArr);
-    canvas.style.backgroundColor = "gray";
+    canvas.style.backgroundColor = "black";
     var width = canvas.width;
     var height = canvas.height;
     var ctx = canvas.getContext("2d");
