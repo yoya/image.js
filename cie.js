@@ -114,7 +114,8 @@ function graphTransRev(xy, width, height) {
 
 function drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus) {
     var xyArr = [], rgbArr = [];
-    for (var data of cieArr) {
+    for (var i = 0, n = cieArr.length ; i < n; i++) {
+	var data = cieArr[i];
 	var [wl, lx, ly, lz] = data;
 	lxyz = [lx, ly, lz];
 	var xy =  XYZ2xy(lxyz);
@@ -140,7 +141,7 @@ function drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus) {
 
     // clip definition
     ctx.beginPath();
-    for (var i in gxyArr) {
+    for (var i = 0, n = gxyArr.length ; i < n; i++) {
 	var [gx, gy] = gxyArr[i];
 	var [cx, cy] = cxyArr[i];
 	var [r, g, b] = rgbArr[i];
@@ -235,10 +236,12 @@ function drawGraphBase(canvas, cieArr, cie31Arr) {
     var width = canvas.width;
     var height = canvas.height;
     var ctx = canvas.getContext("2d");
-    var lxArr = [], lyArr = [], lzArr = [];
+    var arrLen = cieArr.length;
+    var lxArr = new Float32Array(arrLen);
+    var lyArr = new Float32Array(arrLen);
+    var lzArr = new Float32Array(arrLen);
     var xyRatioTable = [];
     var maxValue = 0;
-    var arrLen = cieArr.length;
     var grad = ctx.createLinearGradient(0, 0, width, 0);
     // spectrum gradient
     for (var i in cie31Arr) {
@@ -266,9 +269,9 @@ function drawGraphBase(canvas, cieArr, cie31Arr) {
     // color matching function
     for (var i in cieArr) {
 	var [wl, lx, ly, lz] = cieArr[i];
-	lxArr.push(lx);
-	lyArr.push(ly);
-	lzArr.push(lz);
+	lxArr[i] = lx;
+	lyArr[i] = ly;
+	lzArr[i] = lz;
     }
     var lxMax = Math.max.apply(null, lxArr);
     var lyMax = Math.max.apply(null, lyArr);
