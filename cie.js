@@ -284,7 +284,8 @@ function drawGraphBase(canvas, cieArr, cie31Arr) {
 	ctx.moveTo(0, height);
 	for (var j = 1, n = arr.length ; j < n ; j++) {
 	    var x = width * j / n;
-	    ctx.lineTo(x, height * (1 - arr[j] / lMax));
+	    var y = height * (1 - arr[j] / lMax);
+	    ctx.lineTo(x, y);
 	}
 	ctx.stroke();
     }
