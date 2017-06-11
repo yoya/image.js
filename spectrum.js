@@ -97,8 +97,7 @@ function draw2NCanvas(srcCanvas, dstCanvas, floor2N) {
 }
 
 function calcDCT(srcCanvas) {
-    // console.log(srcCanvas); // XXX
-    // console.debug("drawCopy");
+    // console.debug("calcDCT");
     var srcCtx = srcCanvas.getContext("2d");
     var width = srcCanvas.width, height = srcCanvas.height;
     //

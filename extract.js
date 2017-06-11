@@ -17,7 +17,7 @@ function main() {
     }, "ArrayBuffer");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
-		     // drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas);
+		     ;
 		 } );
 }
 

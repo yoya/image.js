@@ -51,7 +51,7 @@ function main() {
 }
 
 function drawDiff(srcCanvas1, srcCanvas2, dstCanvas) {
-    // console.debug("drawCopy")
+    // console.debug("drawDiff")
     var normalize = document.getElementById("normalizeCheckbox").checked;
     var method = document.getElementById("methodSelect").value;
     var srcCtx1 = srcCanvas1.getContext("2d");

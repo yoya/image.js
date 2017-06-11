@@ -70,7 +70,7 @@ function drawGammaGraph(gammaCanvas, gamma) {
 }
 
 function drawGammaImage(srcCanvas, dstCanvas, gamma) {
-    // console.debug("drawCopy");
+    // console.debug("drawGammaImage");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
