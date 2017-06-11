@@ -15,7 +15,7 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas);
+	    drawSrcImageAndFisheye(srcImage, srcCanvas, dstCanvas);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -32,11 +32,11 @@ function main() {
 		 },
 		 function(target) {
 		     console.debug("target id:" + target.id);
-		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas);
+		     drawSrcImageAndFisheye(srcImage, srcCanvas, dstCanvas);
 		 } );
 }
 
-function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
+function drawSrcImageAndFisheye(srcImage, srcCanvas, dstCancas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var guide = document.getElementById("guideCheckbox").checked;
     var srcProj = document.getElementById("srcProjSelect").value;
@@ -47,7 +47,7 @@ function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
     var dstProjX = parseFloat(document.getElementById("dstProjXRange").value);
     var dstProjY = parseFloat(document.getElementById("dstProjYRange").value);
     var dstProjR = parseFloat(document.getElementById("dstProjRRange").value);
-    // console.debug("drawSrcImageAndCopy  guide:" + guide);
+    // console.debug("drawSrcImageAndFisheye  guide:" + guide);
     // console.debug("srcProj:" + srcProj+","+srcProjX+","+srcProjY+","+ srcProjR);
     // console.debug("dstProj:" + dstProj+","+dstProjX+","+dstProjY+","+ dstProjR);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
@@ -94,7 +94,7 @@ function fisheyeTransform(dstX, dstY, dstImageData, srcImageData,
 function drawFisheye(srcCanvas, dstCanvas, guide,
 		     srcProj, srcProjX, srcProjY, srcProjR,
 		     dstProj, dstProjX, dstProjY, dstProjR) {
-    // console.debug("drawCopy");
+    // console.debug("drawFisheye");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
