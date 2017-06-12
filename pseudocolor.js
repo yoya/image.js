@@ -59,13 +59,16 @@ function makeCLUT() {
 	    if ( prevRatio < nextRatio) {
 		var nextRGB = points[nextIndex];
 		var r = (j - prevRatio) / (nextRatio - prevRatio);
-		var rgb = [
-		    Math.round((1-r)*prevRGB[1] + r*nextRGB[1]),
-		    Math.round((1-r)*prevRGB[2] + r*nextRGB[2]),
-		    Math.round((1-r)*prevRGB[3] + r*nextRGB[3])
+		var lPrevRGB = sRGB2linearRGB(prevRGB.slice(1));
+		var lNextRGB = sRGB2linearRGB(nextRGB.slice(1));
+		var lrgb = [
+		    (1-r)*lPrevRGB[0] + r*lNextRGB[0],
+		    (1-r)*lPrevRGB[1] + r*lNextRGB[1],
+		    (1-r)*lPrevRGB[2] + r*lNextRGB[2]
 		];
+		var rgb = linearRGB2sRGB(lrgb);
 	    } else {
-		var rgb = [ prevRGB[1], prevRGB[2], prevRGB[3] ];
+		var rgb = prevRGB.slice(1);
 	    }
 	    table.push(rgb);
 	}
