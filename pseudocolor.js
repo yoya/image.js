@@ -77,36 +77,38 @@ function makeCLUT() {
 var CLUTtemplate = {
     // 色彩工学入門(森北出版) p191
     "fire":[
-	[0,    0,  0,200], // deepblue
-	[40,   0,  0,255], // blue
-	[80, 255,  0,255], // violet
-	[120,255,  0,  0], // red
+	[0,    0,  0,150], // deepblue
+	[30,   0,  0,255], // blue
+	[80, 210,  0,210], // violet
+	[100,230,  0,  0], // red
 	[180,255,200,  0], // orange
 	[220,255,255,  0], // yellow
 	[255,255,255,255]  // white
     ],
     "ice":[  // ?????
-	[0,     0,255,   0], // green
-	[50,    0,  0, 255], // blue
-	[100, 255,  0, 255], // violet
-	[150, 255,100, 100], // pink
-	[200, 255, 200,  0], // orange
-	[255, 255,   0,  0]  // red
+	[0,     0,200,  0], // green
+	[60,    0,100,255], // blue
+	[140, 230, 50,200], // violet
+	[220, 230,100,100], // pink
+	// [220, 220,150,  0], // orange
+	[255, 255,  0,  0]  // red
     ],
     "rainbow": [
-	[0,   255,  0,  0], // red
-	[50,  255,255,  0], // yellow
-	[100,   0,255,  0], // green
-	[150,   0,255,255], // cyan
-	[200,   0,  0,255], // blue
-	[255, 255,  0,255]  // violet
+	[0,  255,  0,  0], // red
+	[40, 230,230,  0], // yellow
+	[90,   0,200,  0], // green
+	[110,  0,200,200], // green -cyan 
+	[140,  0,150,255], // cyan - blue
+	[180,  0,  0,255], // blue
+	[220, 255, 0,255], // violet
+	[255, 255, 0,  0]  // red
     ]
 };
 
 var CLUT = { }; // from CUTtemplate;
 
 function drawClutTable(canvas, clutType) {
-    console.debug("drawClutTable:", canvas, clutType);
+    // console.debug("drawClutTable:", canvas, clutType);
     var table = CLUT[clutType];
     var ctx = canvas.getContext("2d");
     var width = canvas.width, height = canvas.height;
