@@ -279,11 +279,11 @@ function drawGraphBase(canvas, cieArr, cie31Arr, guide) {
     // spectrum gradient
     for (var i in cie31Arr) {
 	var [wl, lx, ly, lz] = cie31Arr[i];
-	if (wl < 445) {
-	    // wl: 440
-	    var [x, y, z] = [0.348280000000,0.023000000000,1.747060000000];
-	    var a = lz / 1.747060000000;
-	} else if (wl <= 600) {
+	if (wl <= 445) {
+	    // wl: 445
+	    var [x, y, z] = [0.348060000000,0.029800000000,1.782600000000];
+	    var a = lz / 1.782600000000;
+	} else if (wl < 605) {
 	    var [x, y, z] = [lx, ly, lz];
 	    var a = 1.0;
 	} else {
