@@ -66,8 +66,10 @@ function main() {
 		     drawDiagram(dstCanvas, cieArr, hist);
 		 } );
     bindFunction({"colorspaceSelect":null,
-		  "tristimulusCheckbox":null},
+		  "tristimulusCheckbox":null,
+		  "guideCheckbox":null},
 		 function() {
+		     drawGraph(graphCanvas, cieArr, cie31Arr);
 		     drawDiagram(dstCanvas, cieArr, hist);
 		 } );
     //
@@ -88,8 +90,9 @@ function main() {
 function drawDiagram(dstCanvas, cieArr, hist) {
     var colorspace = document.getElementById("colorspaceSelect").value;
     var tristimulus = document.getElementById("tristimulusCheckbox").checked;
+    var guide = document.getElementById("guideCheckbox").checked;
     dstCanvas.width  = dstCanvas.width ; // clear
-    drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus);
+    drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus, guide);
     if (hist !== null) {
 	drawDiagramPoint(dstCanvas, hist, colorspace);
     }
@@ -97,8 +100,9 @@ function drawDiagram(dstCanvas, cieArr, hist) {
 
 function drawGraph(canvas, cieArr, cie31Arr) {
     var colorspace = document.getElementById("colorspaceSelect").value;
+    var guide = document.getElementById("guideCheckbox").checked;
     canvas.width  = canvas.width ; // clear
-    drawGraphBase(canvas, cieArr, cie31Arr);
+    drawGraphBase(canvas, cieArr, cie31Arr, guide);
 }
 
 
@@ -112,7 +116,7 @@ function graphTransRev(xy, width, height) {
     return [x / width, 1 - (y / height)];
 }
 
-function drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus) {
+function drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus, guide) {
     var xyArr = [], rgbArr = [];
     for (var i = 0, n = cieArr.length ; i < n; i++) {
 	var data = cieArr[i];
@@ -132,7 +136,36 @@ function drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus) {
     var width = dstCanvas.width, height = dstCanvas.height;
     var ctx = dstCanvas.getContext("2d");
     ctx.save();
-    // axis mapping
+
+    if (guide) { // draw axis
+	for (var x = 0 ; x <= 10 ; x++) {
+	    var [x1, y1] = graphTrans([x/10, 0], width, height);
+	    var [x2, y2] = graphTrans([x/10, 1], width, height);
+	    ctx.beginPath();
+	    if (x%5 === 0){
+		ctx.strokeStyle= "gray";
+	    } else {
+		ctx.strokeStyle= "lightgray";
+	    }
+	    ctx.moveTo(x1, y1);
+	    ctx.lineTo(x2, y2);
+	    ctx.stroke();
+	}
+	for (var y = 0 ; y <= 10 ; y++) {
+	    var [x1, y1] = graphTrans([0, y/10], width, height);
+	    var [x2, y2] = graphTrans([1, y/10], width, height);
+	    ctx.beginPath();
+	    if (y%5 === 0){
+		ctx.strokeStyle= "gray";
+	    } else {
+		ctx.strokeStyle= "lightgray";
+	    }
+	    ctx.moveTo(x1, y1);
+	    ctx.lineTo(x2, y2);
+	ctx.stroke();
+	}
+    }
+    // geometry mapping
     var gxyArr = [];
     for (var i in xyArr) {
 	gxyArr.push(graphTrans(xyArr[i], width, height));
@@ -230,7 +263,7 @@ function drawDiagramPoint(dstCanvas, hist, colorspace) {
     ctx.restore();
 }
 
-function drawGraphBase(canvas, cieArr, cie31Arr) {
+function drawGraphBase(canvas, cieArr, cie31Arr, guide) {
     // console.debug("drawGraphBase", canvas, cieArr);
     canvas.style.backgroundColor = "black";
     var width = canvas.width;
@@ -266,6 +299,19 @@ function drawGraphBase(canvas, cieArr, cie31Arr) {
     ctx.fillStyle = grad;
     ctx.rect(0, 0, width, height);
     ctx.fill();
+    if (guide) { // axis
+	for (var i in cieArr) {
+	    var [wl, lx, ly, lz] = cieArr[i];
+	    var x = width * i / arrLen;
+	    if ((wl % 50) === 0) {
+		ctx.beginPath();
+		ctx.strokeStyle= "gray";
+		ctx.moveTo(x, 0);
+		ctx.lineTo(x, height);
+		ctx.stroke();
+	    }
+	}
+    }
     // color matching function
     for (var i in cieArr) {
 	var [wl, lx, ly, lz] = cieArr[i];
