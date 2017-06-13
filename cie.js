@@ -305,7 +305,11 @@ function drawGraphBase(canvas, cieArr, cie31Arr, guide) {
 	    var x = width * i / arrLen;
 	    if ((wl % 50) === 0) {
 		ctx.beginPath();
-		ctx.strokeStyle= "gray";
+		if ((wl % 100) === 0) {
+		    ctx.strokeStyle= "rgb(127,127,127)";
+		} else {
+		    ctx.strokeStyle= "rgba(127,127,127, 0.3)";
+		}
 		ctx.moveTo(x, 0);
 		ctx.lineTo(x, height);
 		ctx.stroke();
