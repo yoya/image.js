@@ -77,7 +77,7 @@ function drawMoment(canvas, reverse) {
     var minorAxis = sqrt_2 * Math.sqrt(M20 + M02 - tmp);
     var theta = 1/2 * Math.atan2(2* M11 , (M20 - M02));
     // console.debug([ cgX, cgY ]);
-    console.debug([ majorAxis, minorAxis, theta ]);
+    // console.debug([ majorAxis, minorAxis, theta ]);
     // Gravity Center
     ctx.beginPath();
     ctx.fillStyle = "rgba(255, 0, 0, 0.3)";
