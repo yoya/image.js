@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2017/06/15- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Moment </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body bgcolor="lightgray">
+    <div class="container">
+      <div class="controlPanel">
+	<div>
+	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+	  reverse:<input id="reverseCheckbox" type="checkbox" />
+	</div>
+	M00:<input type="text" id="M00Text" size="10" readonly>
+	M10:<input type="text" id="M10Text" size="14" readonly>
+	M01:<input type="text" id="M01Text" size="14" readonly>
+      </div> <!-- controlPanel -->
+      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="moment.js"> </script>
+  </body>
+</html>
