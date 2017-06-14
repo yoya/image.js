@@ -41,10 +41,11 @@ function calcMoment(canvas, reverse) {
     var M11 = 0, M20 = 0, M02 = 0;
     for (var y = 0, y_y = -height/2; y < height ; y++, y_y++) {
 	for (var x = 0, x_x = -width/2 ; x < width ; x++, x_x++) {
-	    var [v] = getRGBA(imageData, x, y);
+	    var [v, g, b, a] = getRGBA(imageData, x, y);
 	    if (reverse) {
 		v = 255 - v;
 	    }
+	    v *= a/255;
 	    M00 += v;
 	    M10 += x * v;
 	    M01 += y * v;
@@ -88,17 +89,30 @@ function drawMoment(canvas, reverse) {
     ctx.fill();
     ctx.stroke();
     // Axis
-    var size = (width + height) / 3;
-    ctx.strokeStyle = "rgba(0,255,255, 0.5)";
     ctx.lineWidth = 3;
+    var size = (width + height) / 2;
+    ctx.strokeStyle = "rgba(255,0,0, 0.5)"; // red
     ctx.beginPath();
     ctx.moveTo(cgX - Math.cos(theta)*size, cgY - Math.sin(theta)*size);
+    ctx.lineTo(cgX, cgY);
+    ctx.stroke();
+    //
+    ctx.strokeStyle = "rgba(255,255,0, 0.5)"; // yellow
+    ctx.beginPath();
+    ctx.moveTo(cgX, cgY);
     ctx.lineTo(cgX + Math.cos(theta)*size, cgY + Math.sin(theta)*size);
     ctx.stroke();
-    ctx.strokeStyle = "rgba(255,255,0, 0.5)";
-    ctx.beginPath();
+    //
     var theta2 = theta + Math.PI /2;
+    ctx.strokeStyle = "rgba(50,255,0, 0.5)"; // green
+    ctx.beginPath();
     ctx.moveTo(cgX - Math.cos(theta2)*size, cgY - Math.sin(theta2)*size);
+    ctx.lineTo(cgX, cgY);
+    ctx.stroke();
+    //
+    ctx.strokeStyle = "rgba(100,100,255, 0.5)"; // blue
+    ctx.beginPath();
+    ctx.moveTo(cgX, cgY);
     ctx.lineTo(cgX + Math.cos(theta2)*size, cgY + Math.sin(theta2)*size);
     ctx.stroke();
 }
