@@ -129,29 +129,8 @@ function drawClutTable(canvas, clutType) {
 function drawSrcImageAndPseudoColor(srcImage, srcCanvas, grayCanvas, dstCancas, clutType) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawGray(srcCanvas, grayCanvas);
+    drawGrayImage(srcCanvas, grayCanvas);
     drawPseudoColor(grayCanvas, dstCanvas, clutType);
-}
-
-function drawGray(srcCanvas, dstCanvas) {
-    // console.debug("drawGray");
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtx = dstCanvas.getContext("2d");
-    var width = srcCanvas.width, height = srcCanvas.height;
-    dstCanvas.width  = width;
-    dstCanvas.height = height;
-    //
-    var srcImageData = srcCtx.getImageData(0, 0, width, height);
-    var dstImageData = dstCtx.createImageData(width, height);
-    for (var y = 0 ; y < height; y++) {
-        for (var x = 0 ; x < width; x++) {
-	    var [r, g, b, a] = getRGBA(srcImageData, x, y);
-	    var v = (r + g + g + b) / 4;
-	    var rgba = [v, v, v, a];
-	    setRGBA(dstImageData, x, y, rgba);
-	}
-    }
-    dstCtx.putImageData(dstImageData, 0, 0);
 }
 
 function pseudoColor(v, clutType) {
