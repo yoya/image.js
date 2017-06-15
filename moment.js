@@ -63,6 +63,9 @@ function drawMoment(canvas, reverse) {
     var M00Text = document.getElementById("M00Text");
     var M10Text = document.getElementById("M10Text");
     var M01Text = document.getElementById("M01Text");
+    var M11Text = document.getElementById("M11Text");
+    var M20Text = document.getElementById("M20Text");
+    var M02Text = document.getElementById("M02Text");
     var width = canvas.width, height = canvas.height;
     //
     var [ M00, M10, M01, M11, M20, M02 ] = calcMoment(canvas, reverse);
@@ -70,6 +73,9 @@ function drawMoment(canvas, reverse) {
     M00Text.value = M00;
     M10Text.value = M10;
     M01Text.value = M01;
+    M11Text.value = M11;
+    M20Text.value = M20;
+    M02Text.value = M02;
     var [cgX, cgY] = [M10 / M00, M01 / M00];
     var sqrt_2 = Math.sqrt(2);
     var M20_M01 = M20 - M01;
