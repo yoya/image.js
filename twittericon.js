@@ -20,6 +20,7 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+		  "outfillSelect":null,
 		  "fisheyeCheckbox":null,
 		  "srcProjXRange":"srcProjXText",
 		  "srcProjYRange":"srcProjYText",
@@ -30,22 +31,23 @@ function main() {
 }
 function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    var outfill = document.getElementById("outfillSelect").value;
     var fisheye = document.getElementById("fisheyeCheckbox").checked;
     var srcProjX = parseFloat(document.getElementById("srcProjXRange").value);
     var srcProjY = parseFloat(document.getElementById("srcProjYRange").value);
     var srcProjR = parseFloat(document.getElementById("srcProjRRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawCopy(srcCanvas, dstCanvas, fisheye, srcProjX, srcProjY, srcProjR);
+    drawCopy(srcCanvas, dstCanvas, outfill,
+	     fisheye, srcProjX, srcProjY, srcProjR);
 }
 
-function drawCopy(srcCanvas, dstCanvas, fisheye, srcProjX, srcProjY, srcProjR) {
+function drawCopy(srcCanvas, dstCanvas, outfill,
+		  fisheye, srcProjX, srcProjY, srcProjR) {
     // console.debug("drawCopy");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
     dstCanvas.style.backgroundColor = "white";
-
-    
     if (fisheye) {
 	var dstWidth  = Math.min(srcWidth, srcHeight);
 	var dstHeight = dstWidth;
@@ -69,10 +71,23 @@ function drawCopy(srcCanvas, dstCanvas, fisheye, srcProjX, srcProjY, srcProjR) {
 		    var py = (rr==0.0) ? 0.0 : (pr*dy*sr/rr);
 		    var srcX = Math.round(px + srcWidth*srcProjX);
 		    var srcY = Math.round(py + srcHeight*srcProjY);
-		    var rgba = getRGBA(srcImageData, srcX, srcY);
+		    var rgba = getRGBA(srcImageData, srcX, srcY, outfill);
 		    setRGBA(dstImageData, dstX, dstY, rgba);
 		} else {
-		    // nothing to do
+		    if (outfill === "white") {
+			var rgba = [255,255,255,255];
+		    } else if (outfill === "black") {
+			var rgba = [0, 0, 0, 255];
+		    } else {
+			var pr = 1 - 2*Math.acos(1)/Math.PI;
+			pr *= srcProjR;
+			var px = (rr==0.0) ? 0.0 : (pr*dx*sr/rr);
+			var py = (rr==0.0) ? 0.0 : (pr*dy*sr/rr);
+			var srcX = Math.round(px + srcWidth*srcProjX);
+			var srcY = Math.round(py + srcHeight*srcProjY);
+			var rgba = getRGBA(srcImageData, srcX, srcY, outfill);
+		    }
+		    setRGBA(dstImageData, dstX, dstY, rgba);
 		}
 	    }
 	}
@@ -83,12 +98,20 @@ function drawCopy(srcCanvas, dstCanvas, fisheye, srcProjX, srcProjY, srcProjR) {
 	var dstHeight = dstWidth;
 	dstCanvas.width  = dstWidth;
 	dstCanvas.height = dstHeight;
-	var x1 = radius - srcWidth/2;
-	var y1 = radius - srcHeight/2;
-	var x2 = dstWidth  - 2 * x1;
-	var y2 = dstHeight - 2 * y1;
-	console.log(Math.ceil(x1), Math.ceil(y1),Math.floor(x2),Math.floor(y2) );
-	dstCtx.drawImage(srcCanvas, 0, 0, srcCanvas.width, srcCanvas.height,
-			 x1, y1, x2, y2);
+	var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
+	var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
+	//
+	var x1 = Math.round(radius - srcWidth/2);
+	var y1 = Math.round(radius - srcHeight/2);
+	// console.log( Math.round(x1), Math.round(y1) );
+	for (var dstY = 0 ; dstY < dstHeight; dstY++) {
+            for (var dstX = 0 ; dstX < dstWidth; dstX++) {
+		var srcX = dstX - x1;
+		var srcY = dstY - y1;
+		var rgba = getRGBA(srcImageData, srcX, srcY, outfill);
+		setRGBA(dstImageData, dstX, dstY, rgba);
+	    }
+	}
+	dstCtx.putImageData(dstImageData, 0, 0);
     }
 }
