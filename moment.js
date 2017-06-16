@@ -76,21 +76,21 @@ function drawMoment(canvas, reverse) {
     M11Text.value = M11;
     M20Text.value = M20;
     M02Text.value = M02;
-    var [cgX, cgY] = [M10 / M00, M01 / M00];
+    var [gx, gy] = [M10 / M00, M01 / M00];
     var sqrt_2 = Math.sqrt(2);
     var M20_M01 = M20 - M01;
     var tmp = Math.sqrt(M20_M01 * M20_M01 + 4 * M11*M11)
     var majorAxis = sqrt_2 * Math.sqrt(M20 + M02 + tmp);
     var minorAxis = sqrt_2 * Math.sqrt(M20 + M02 - tmp);
     var theta = 1/2 * Math.atan2(2* M11 , (M20 - M02));
-    // console.debug([ cgX, cgY ]);
+    // console.debug([ gx, gy ]);
     // console.debug([ majorAxis, minorAxis, theta ]);
     // Gravity Center
     ctx.beginPath();
     ctx.fillStyle = "rgba(255, 0, 0, 0.3)";
     ctx.strokeStyle = "rgb(255,0,255)";
     ctx.lineWidth = 2;
-    ctx.arc(cgX, cgY, 10, 0, 2*Math.PI);
+    ctx.arc(gx, gy, 10, 0, 2*Math.PI);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
@@ -99,26 +99,26 @@ function drawMoment(canvas, reverse) {
     var size = (width + height) / 2;
     ctx.strokeStyle = "rgba(255,0,0, 0.5)"; // red
     ctx.beginPath();
-    ctx.moveTo(cgX - Math.cos(theta)*size, cgY - Math.sin(theta)*size);
-    ctx.lineTo(cgX, cgY);
+    ctx.moveTo(gx - Math.cos(theta)*size, gy - Math.sin(theta)*size);
+    ctx.lineTo(gx, gy);
     ctx.stroke();
     //
     ctx.strokeStyle = "rgba(255,255,0, 0.5)"; // yellow
     ctx.beginPath();
-    ctx.moveTo(cgX, cgY);
-    ctx.lineTo(cgX + Math.cos(theta)*size, cgY + Math.sin(theta)*size);
+    ctx.moveTo(gx, gy);
+    ctx.lineTo(gx + Math.cos(theta)*size, gy + Math.sin(theta)*size);
     ctx.stroke();
     //
     var theta2 = theta + Math.PI /2;
     ctx.strokeStyle = "rgba(50,255,0, 0.5)"; // green
     ctx.beginPath();
-    ctx.moveTo(cgX - Math.cos(theta2)*size, cgY - Math.sin(theta2)*size);
-    ctx.lineTo(cgX, cgY);
+    ctx.moveTo(gx - Math.cos(theta2)*size, gy - Math.sin(theta2)*size);
+    ctx.lineTo(gx, gy);
     ctx.stroke();
     //
     ctx.strokeStyle = "rgba(100,100,255, 0.5)"; // blue
     ctx.beginPath();
-    ctx.moveTo(cgX, cgY);
-    ctx.lineTo(cgX + Math.cos(theta2)*size, cgY + Math.sin(theta2)*size);
+    ctx.moveTo(gx, gy);
+    ctx.lineTo(gx + Math.cos(theta2)*size, gy + Math.sin(theta2)*size);
     ctx.stroke();
 }
