@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2017/06/16- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Twitter Icon </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body bgcolor="lightgray">
+    四角い画像を Twitter アイコンで丸められる範囲に縮小して納まるようにします。
+    <div class="container">
+      <div class="controlPanel">
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+      </div> <!-- controlPanel -->
+      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="twittericon.js"> </script>
+  </body>
+</html>
