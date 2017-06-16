@@ -85,7 +85,7 @@ function drawMoment(canvas, reverse) {
     var width = canvas.width, height = canvas.height;
     //
     var [ M00, M10, M01, M11, M20, M02 ] = calcMoment(canvas, reverse);
-    console.debug([ M00, M10, M01, M11, M20, M02 ]);
+    // console.debug(M00, M10, M01, M11, M20, M02);
     M00Text.value = M00;
     M10Text.value = M10;
     M01Text.value = M01;
@@ -98,9 +98,9 @@ function drawMoment(canvas, reverse) {
     var tmp = Math.sqrt(M20_M01 * M20_M01 + 4 * M11*M11)
     var majorAxis = sqrt_2 * Math.sqrt(M20 + M02 + tmp);
     var minorAxis = sqrt_2 * Math.sqrt(M20 + M02 - tmp);
-    var theta = 1/2 * Math.atan2(2* M11 , (M20 - M02));
+    var theta = 1/2 * Math.atan2(2 * M11 , M20 - M02);
     // console.debug([ gx, gy ]);
-    // console.debug([ majorAxis, minorAxis, theta ]);
+    console.debug(majorAxis, minorAxis, theta);
     // Gravity Center
     ctx.beginPath();
     ctx.fillStyle = "rgba(255, 0, 0, 0.3)";
