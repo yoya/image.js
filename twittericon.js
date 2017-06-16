@@ -20,7 +20,10 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "fisheyeCheckbox":null},
+		  "fisheyeCheckbox":null,
+		  "srcProjXRange":"srcProjXText",
+		  "srcProjYRange":"srcProjYText",
+		  "srcProjRRange":"srcProjRText"},
 		 function() {
 		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas);
 		 } );
@@ -28,11 +31,14 @@ function main() {
 function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var fisheye = document.getElementById("fisheyeCheckbox").checked;
+    var srcProjX = parseFloat(document.getElementById("srcProjXRange").value);
+    var srcProjY = parseFloat(document.getElementById("srcProjYRange").value);
+    var srcProjR = parseFloat(document.getElementById("srcProjRRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawCopy(srcCanvas, dstCanvas, fisheye);
+    drawCopy(srcCanvas, dstCanvas, fisheye, srcProjX, srcProjY, srcProjR);
 }
 
-function drawCopy(srcCanvas, dstCanvas, fisheye) {
+function drawCopy(srcCanvas, dstCanvas, fisheye, srcProjX, srcProjY, srcProjR) {
     // console.debug("drawCopy");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -56,10 +62,11 @@ function drawCopy(srcCanvas, dstCanvas, fisheye) {
 		var rr = Math.hypot(dx, dy);
 		if (rr < sr) {
 		    var pr = 1 - 2*Math.acos(rr/sr)/Math.PI;
+		    pr *= srcProjR;
 		    var px = (rr==0.0) ? 0.0 : (pr*dx*sr/rr);
 		    var py = (rr==0.0) ? 0.0 : (pr*dy*sr/rr);
-		    var srcX = Math.round(px + kk);
-		    var srcY = Math.round(py + ll);
+		    var srcX = Math.round(px + srcWidth*srcProjX);
+		    var srcY = Math.round(py + srcHeight*srcProjY);
 		    var rgba = getRGBA(srcImageData, srcX, srcY);
 		    setRGBA(dstImageData, dstX, dstY, rgba);
 		} else {

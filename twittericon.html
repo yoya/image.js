@@ -10,7 +10,17 @@
     <div class="container">
       <div class="controlPanel">
 	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
-	fisheye:<input id="fisheyeCheckbox" type="checkbox" />
+	<br />
+	fisheye:<input id="fisheyeCheckbox" type="checkbox" checked="checked" />
+	<br />
+	srcProjX:
+	<input id="srcProjXRange" type="range" min="0.0" max="1.0" step="0.01" value="0.5">:<input type="text" id="srcProjXText" size="4">
+	<br />
+	srcProjY:
+	<input id="srcProjYRange" type="range" min="0.0" max="1.0" step="0.01" value="0.5">:<input type="text" id="srcProjYText" size="4">
+	<br />
+	srcProjR:
+	<input id="srcProjRRange" type="range" min="0.0" max="2.0" step="0.01" value="1.0">:<input type="text" id="srcProjRText" size="4">
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
