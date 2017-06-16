@@ -44,9 +44,11 @@ function drawCopy(srcCanvas, dstCanvas, fisheye, srcProjX, srcProjY, srcProjR) {
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
     dstCanvas.style.backgroundColor = "white";
+
+    
     if (fisheye) {
-	var dstWidth  = srcWidth;
-	var dstHeight = srcHeight;
+	var dstWidth  = Math.min(srcWidth, srcHeight);
+	var dstHeight = dstWidth;
 	dstCanvas.width  = dstWidth;
 	dstCanvas.height = dstHeight;
 	var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
@@ -54,8 +56,8 @@ function drawCopy(srcCanvas, dstCanvas, fisheye, srcProjX, srcProjY, srcProjR) {
 	// http://q.hatena.ne.jp/1347662738
 	for (var dstY = 0 ; dstY < dstHeight; dstY++) {
             for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-		var kk= srcWidth * 0.5;
-		var ll= srcHeight * 0.5;
+		var kk= dstWidth * 0.5;
+		var ll= dstHeight * 0.5;
 		var sr = Math.min(kk, ll);
 		var dx = dstX - kk;
 		var dy = dstY - ll;
