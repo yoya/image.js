@@ -74,16 +74,6 @@ function drawCopy(srcCanvas, dstCanvas, fisheye) {
 	var dstHeight = dstWidth;
 	dstCanvas.width  = dstWidth;
 	dstCanvas.height = dstHeight;
-	/*
-	  var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-	  for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-          for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	  setRGBA(dstImageData, dstX, dstY, [255, 255, 255, 0]);
-	  }
-	  }
-	  setRGBA(dstImageData, dstWidth - 1, dstHeight - 1, [255, 255, 255, 1]);
-	  dstCtx.putImageData(dstImageData, 0, 0);
-	*/
 	var x1 = radius - srcWidth/2;
 	var y1 = radius - srcHeight/2;
 	var x2 = dstWidth  - 2 * x1;
