@@ -8,7 +8,7 @@
 <body bgcolor="lightgray">
   <div class="container">
     <div>
-      <div id="controlPanel"  style="float:left">
+      <div id="controlPanel" style="float:left">
         Affin Transform:  <br />
 	<div style="position:relative; left: 10%; float:left; ">
           <select id="affinSelect" size="10">
@@ -28,13 +28,15 @@
         </div> affinMatrix:<table id="affinMatrixTable" style="border:1 "> </table>
      </div>
       <div>
-          Out-side fill style:  <br />
-          <select id="outfillSelect" size="4">
-            <option value="none" selected> 透明  </option>
-            <option value="edge"         > エッジ拡張 </option>
-            <option value="tile"         > タイル補完 </option>
-	    <option value="mirror"       > ミラー補完 </option>
-          </select>
+        Out-side fill style:  <br />
+        <select id="outfillSelect" size="5">
+          <option value="black" selected> 黒埋め </option>
+          <option value="transparent"   > 透明  </option>
+          <option value="edge"          > エッジ拡張 </option>
+          <option value="tile"          > タイル補完 </option>
+          <option value="mirror"        > ミラー補完 </option>
+          <option value="white"         > 白埋め </option>
+        </select>
       </div>
       <div>
         maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText">
