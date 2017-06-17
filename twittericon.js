@@ -288,6 +288,6 @@ function drawCopy(srcCanvas, dstCanvas, bilinear, outfill, guide, guideColor,
     if (overlapImage) {
 	dstCtx.drawImage(overlapImage, 0, 0,
 			 overlapImage.width, overlapImage.height,
-		     0, 0, dstWidth, dstHeight);
+			 -0.5, -0.5, dstWidth+1.5, dstHeight+1.5);
     }
 }
