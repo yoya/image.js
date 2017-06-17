@@ -90,6 +90,7 @@ function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas,
     var guide = document.getElementById("guideCheckbox").checked;
     var guideColor = document.getElementById("guideColorText").value;
     var outfill = document.getElementById("outfillSelect").value;
+    outfill = outfillStyleNumber(outfill);
     var proj = document.getElementById("projSelect").value;
     var srcProjX = parseFloat(document.getElementById("srcProjXRange").value);
     var srcProjY = parseFloat(document.getElementById("srcProjYRange").value);

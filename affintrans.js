@@ -16,6 +16,7 @@ function main() {
     var affinMatrixTable = document.getElementById("affinMatrixTable");
     var affin = document.getElementById("affinSelect").value;
     var outfill = document.getElementById("outfillSelect").value;
+    outfill = outfillStyleNumber(outfill);
     var affinMatrix = affin2Matrix(affin, srcCanvas);
     var affinWindow = 3;
     //
@@ -41,6 +42,7 @@ function main() {
 		 function() {
 		     affin = document.getElementById("affinSelect").value;
 		     outfill = document.getElementById("outfillSelect").value;
+		     outfill = outfillStyleNumber(outfill);
 		     affinMatrix = affin2Matrix(affin, srcCanvas);
 		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill);
 		     setTableValues("affinMatrixTable", affinMatrix);

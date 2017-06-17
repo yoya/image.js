@@ -16,6 +16,7 @@ function main() {
     var affinMatrixTable = document.getElementById("affinMatrixTable");
     var rotateAroundZero = document.getElementById("rotateAroundZeroCheckbox").checked;
     var outfill = document.getElementById("outfillSelect").value;
+    outfill = outfillStyleNumber(outfill);
     var affinMatrix = [1, 0, 0,
 		       0, 1, 0,
 		       0, 0, 1];
@@ -46,6 +47,7 @@ function main() {
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     rotateAroundZero = document.getElementById("rotateAroundZeroCheckbox").checked;
 		     outfill = document.getElementById("outfillSelect").value;
+		     outfill = outfillStyleNumber(outfill);
 		     affinMatrix = makeAffinMatrix(srcCanvas, rotateAroundZero);
 		     setTableValues("affinMatrixTable", affinMatrix);
 		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, rotateAroundZero, outfill);
