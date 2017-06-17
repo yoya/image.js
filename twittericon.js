@@ -20,25 +20,27 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+		  "guideCheckbox":null,
 		  "outfillSelect":null,
 		  "projSelect":null,
 		  "srcProjXRange":"srcProjXText",
 		  "srcProjYRange":"srcProjYText",
 		  "srcProjRRange":"srcProjRText"},
 		 function(e) {
-		     console.debug(e);
+		     // console.debug(e);
 		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas);
 		 } );
 }
 function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    var guide = document.getElementById("guideCheckbox").checked;
     var outfill = document.getElementById("outfillSelect").value;
     var proj = document.getElementById("projSelect").value;
     var srcProjX = parseFloat(document.getElementById("srcProjXRange").value);
     var srcProjY = parseFloat(document.getElementById("srcProjYRange").value);
     var srcProjR = parseFloat(document.getElementById("srcProjRRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawCopy(srcCanvas, dstCanvas, outfill,
+    drawCopy(srcCanvas, dstCanvas, outfill, guide,
 	     proj, srcProjX, srcProjY, srcProjR);
 }
 
@@ -46,7 +48,7 @@ function getRGBA_NN(imageData, x, y, outfill) {
     return getRGBA(imageData, Math.round(x), Math.round(y), outfill);
 }
 
-function drawCopy(srcCanvas, dstCanvas, outfill,
+function drawCopy(srcCanvas, dstCanvas, outfill, guide,
 		  proj, srcProjX, srcProjY, srcProjR) {
     // console.debug("drawCopy");
     var srcCtx = srcCanvas.getContext("2d");
@@ -66,13 +68,18 @@ function drawCopy(srcCanvas, dstCanvas, outfill,
 	// console.log( Math.round(x1), Math.round(y1) );
 	for (var dstY = 0 ; dstY < dstHeight; dstY++) {
             for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-		var srcX = (dstX - dstWidth/2)  / scale + srcWidth*srcProjX;
-		var srcY = (dstY - dstHeight/2) / scale + srcHeight*(1-srcProjY);
-		var rgba = getRGBA_NN(srcImageData, srcX, srcY, outfill);
+		var dx = dstX - dstWidth/2;
+		var dy = dstY - dstHeight/2;
+		if (guide && (dstWidth*dstHeight < 4 * (dx*dx + dy*dy))) {
+		    var rgba = [127,127,127,255];
+		} else {
+		    var srcX = dx  / scale + srcWidth*srcProjX;
+		    var srcY = dy / scale + srcHeight*(1-srcProjY);
+		    var rgba = getRGBA_NN(srcImageData, srcX, srcY, outfill);
+		}
 		setRGBA(dstImageData, dstX, dstY, rgba);
 	    }
 	}
-	dstCtx.putImageData(dstImageData, 0, 0);
     } else {
 	var dstWidth  = Math.min(srcWidth, srcHeight);
 	var dstHeight = dstWidth;
@@ -101,10 +108,11 @@ function drawCopy(srcCanvas, dstCanvas, outfill,
 		    var srcX = px + srcWidth*srcProjX;
 		    var srcY = py + srcHeight*(1-srcProjY);
 		    var rgba = getRGBA_NN(srcImageData, srcX, srcY, outfill);
-		    setRGBA(dstImageData, dstX, dstY, rgba);
+		} else if (guide) {
+		    var rgba = [127,127,127,255];
 		} else {
 		    if (outfill === "white") {
-			var rgba = [255,255,255,255];
+		    var rgba = [255,255,255,255];
 		    } else if (outfill === "black") {
 			var rgba = [0, 0, 0, 255];
 		    } else {
@@ -120,10 +128,10 @@ function drawCopy(srcCanvas, dstCanvas, outfill,
 			var srcY = Math.round(py + srcHeight*srcProjY);
 			var rgba = getRGBA(srcImageData, srcX, srcY, outfill);
 		    }
-		    setRGBA(dstImageData, dstX, dstY, rgba);
 		}
+		setRGBA(dstImageData, dstX, dstY, rgba);
 	    }
 	}
-	dstCtx.putImageData(dstImageData, 0, 0);
     }
+    dstCtx.putImageData(dstImageData, 0, 0);
 }
