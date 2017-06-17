@@ -29,7 +29,7 @@ function main() {
 		  "srcProjYRange":"srcProjYText",
 		  "srcProjRRange":"srcProjRText"},
 		 function(e) {
-		     console.debug(e);
+		     // console.debug(e);
 		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
 					overlapImage);
 		 } );
