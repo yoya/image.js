@@ -201,14 +201,14 @@ function drawCopy(srcCanvas, dstCanvas, outfill, guide, guideColor,
 			if (proj === "fisheye") {
 			    var pr = 1 - 2*Math.acos(1)/Math.PI;
 			} else { // doom
-			    var pr = 2 - 4*(0.5-Math.atan2(1, 0)/Math.PI);
+			    var pr = 2 - 4*(0.5-Math.atan2(1, 1)/Math.PI);
 			}
 			pr *= srcProjR;
 			var px = (rr==0.0) ? 0.0 : (pr*dx*sr/rr);
 			var py = (rr==0.0) ? 0.0 : (pr*dy*sr/rr);
-			var srcX = Math.round(px + srcWidth*srcProjX);
-			var srcY = Math.round(py + srcHeight*srcProjY);
-			var rgba = getRGBA(srcImageData, srcX, srcY, outfill);
+			var srcX = px + srcWidth*srcProjX;
+			var srcY = py + srcHeight*(1-srcProjY);
+			var rgba = getRGBA_NN(srcImageData, srcX, srcY, outfill);
 		    }
 		}
 		setRGBA(dstImageData, dstX, dstY, rgba);
