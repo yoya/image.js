@@ -12,10 +12,11 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var overlapImage = null;
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas);
+	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, overlapImage);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -28,10 +29,46 @@ function main() {
 		  "srcProjRRange":"srcProjRText"},
 		 function(e) {
 		     // console.debug(e);
-		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas);
+		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
+					overlapImage);
+		 } );
+    var loadOverlapImage = function(file) {
+	var image = new Image();
+	image.onload = function() {
+	    overlapImage = image;
+	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, overlapImage);
+	}
+	image.src = file;
+    }
+    var selectOverlapImage = function(overlap) {
+	console.log(overlap);
+	if (overlap === "none") {
+	    overlapImage = null;
+	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, overlapImage);
+	} else {
+	    var file = null;
+	    switch (overlap) {
+	    case "badge":
+		file = "img/badge.png";
+		break;
+	    case "scope":
+		file = "img/scope.png";
+		break;
+	    default:
+		console.error("Unknown overlap:"+overlap);
+		return ;
+	    }
+	    loadOverlapImage(file);
+	}
+    }
+    bindFunction({"overlapSelect":null},
+		 function(e) {
+		     // console.debug(e);
+		     var overlap= document.getElementById("overlapSelect").value;
+		     selectOverlapImage(overlap);
 		 } );
 }
-function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
+function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas, overlapImage) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var guide = document.getElementById("guideCheckbox").checked;
     var outfill = document.getElementById("outfillSelect").value;
@@ -41,7 +78,8 @@ function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
     var srcProjR = parseFloat(document.getElementById("srcProjRRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawCopy(srcCanvas, dstCanvas, outfill, guide,
-	     proj, srcProjX, srcProjY, srcProjR);
+	     proj, srcProjX, srcProjY, srcProjR,
+	     overlapImage);
 }
 
 function getRGBA_NN(imageData, x, y, outfill) {
@@ -49,7 +87,8 @@ function getRGBA_NN(imageData, x, y, outfill) {
 }
 
 function drawCopy(srcCanvas, dstCanvas, outfill, guide,
-		  proj, srcProjX, srcProjY, srcProjR) {
+		  proj, srcProjX, srcProjY, srcProjR,
+		  overlapImage) {
     // console.debug("drawCopy");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -134,4 +173,9 @@ function drawCopy(srcCanvas, dstCanvas, outfill, guide,
 	}
     }
     dstCtx.putImageData(dstImageData, 0, 0);
+    if (overlapImage) {
+	dstCtx.drawImage(overlapImage, 0, 0,
+			 overlapImage.width, overlapImage.height,
+		     0, 0, dstWidth, dstHeight);
+    }
 }
