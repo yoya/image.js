@@ -16,7 +16,9 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, overlapImage);
+	    var bilinear = false;
+	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
+				bilinear, overlapImage);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -30,14 +32,25 @@ function main() {
 		  "srcProjRRange":"srcProjRText"},
 		 function(e) {
 		     // console.debug(e);
+		     var bilinear = false;
 		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
-					overlapImage);
+					 bilinear, overlapImage);
 		 } );
+    bindFunction({"bilinearButton":null},
+		 function(e) {
+		     // console.debug(e);
+		     var bilinear = true;
+		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
+					 bilinear, overlapImage);
+		 } );
+    
     var loadOverlapImage = function(file) {
 	var image = new Image();
 	image.onload = function() {
 	    overlapImage = image;
-	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, overlapImage);
+	    var bilinear = false;
+	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
+				bilinear, overlapImage);
 	}
 	image.src = file;
     }
@@ -45,7 +58,9 @@ function main() {
 	console.log(overlap);
 	if (overlap === "none") {
 	    overlapImage = null;
-	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, overlapImage);
+	    var bilinear = false;
+	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
+				bilinear, overlapImage);
 	} else {
 	    var file = null;
 	    switch (overlap) {
@@ -69,7 +84,8 @@ function main() {
 		     selectOverlapImage(overlap);
 		 } );
 }
-function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas, overlapImage) {
+function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas,
+			     bilinear, overlapImage) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var guide = document.getElementById("guideCheckbox").checked;
     var guideColor = document.getElementById("guideColorText").value;
@@ -79,7 +95,7 @@ function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas, overlapImage) {
     var srcProjY = parseFloat(document.getElementById("srcProjYRange").value);
     var srcProjR = parseFloat(document.getElementById("srcProjRRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawCopy(srcCanvas, dstCanvas, outfill, guide, guideColor,
+    drawCopy(srcCanvas, dstCanvas, bilinear, outfill, guide, guideColor,
 	     proj, srcProjX, srcProjY, srcProjR,
 	     overlapImage);
 }
@@ -88,6 +104,47 @@ function getRGBA_NN(imageData, x, y, outfill) {
     return getRGBA(imageData, Math.round(x), Math.round(y), outfill);
 }
 
+function linearRatio([a, b], p) {
+    if (a === b) {
+	return [0.5, 0.5];
+    }
+    var aRatio = (b - p) / (b - a);
+    return [aRatio, 1 - aRatio];
+}
+
+function getRGBA_BL(imageData, x, y, outfill) {
+    var data = imageData.data;
+    var width  = imageData.width;
+    var height = imageData.height;
+    var x1 = Math.floor(x), x2 = Math.ceil(x);
+    var y1 = Math.floor(y), y2 = Math.ceil(y);
+    if (x1 < 0) {
+	x1 = 0;
+    } else if (width <= x2) {
+	x2 = width - 1;
+    }
+    if (y1 < 0) {
+	y1 = 0;
+    } else if (height <= y2) {
+	y2 = height - 1;
+    }
+    var rgba = [0, 0, 0, 0];
+    var [rx1, rx2] = linearRatio([x1, x2], x);
+    var [ry1, ry2] = linearRatio([y1, y2], y);
+    var r11 = rx1 * ry1;
+    var r12 = rx1 * ry2;
+    var r21 = rx2 * ry1;
+    var r22 = rx2 * ry2;
+    var rgba11 = getRGBA(imageData, x1, y1);
+    var rgba12 = getRGBA(imageData, x1, y2);
+    var rgba21 = getRGBA(imageData, x2, y1);
+    var rgba22 = getRGBA(imageData, x2, y2);
+    for (var i = 0 ; i < 4 ; i++) {
+	rgba[i] = r11 * rgba11[i] +  r12 * rgba12[i] +
+	    r21 * rgba21[i] + r22 * rgba22[i];
+    }
+    return rgba;
+}
 function getRGBAfromHexColor(hexCode) {
     switch (hexCode.length) {
     case 3: // RGB
@@ -128,7 +185,7 @@ function getRGBAfromHexColor(hexCode) {
     return rgba;
 }
 
-function drawCopy(srcCanvas, dstCanvas, outfill, guide, guideColor,
+function drawCopy(srcCanvas, dstCanvas, bilinear, outfill, guide, guideColor,
 		  proj, srcProjX, srcProjY, srcProjR,
 		  overlapImage) {
     // console.debug("drawCopy");
@@ -157,7 +214,11 @@ function drawCopy(srcCanvas, dstCanvas, outfill, guide, guideColor,
 		} else {
 		    var srcX = dx  / scale + srcWidth*srcProjX;
 		    var srcY = dy / scale + srcHeight*(1-srcProjY);
-		    var rgba = getRGBA_NN(srcImageData, srcX, srcY, outfill);
+		    if (bilinear) {
+			var rgba = getRGBA_BL(srcImageData, srcX, srcY, outfill);
+		    } else {
+			var rgba = getRGBA_NN(srcImageData, srcX, srcY, outfill);
+		    }
 		}
 		setRGBA(dstImageData, dstX, dstY, rgba);
 	    }
@@ -189,7 +250,11 @@ function drawCopy(srcCanvas, dstCanvas, outfill, guide, guideColor,
 		    var py = (rr==0.0) ? 0.0 : (pr*dy*sr/rr);
 		    var srcX = px + srcWidth*srcProjX;
 		    var srcY = py + srcHeight*(1-srcProjY);
-		    var rgba = getRGBA_NN(srcImageData, srcX, srcY, outfill);
+		    if (bilinear) {
+			var rgba = getRGBA_BL(srcImageData, srcX, srcY, outfill);
+		    } else {
+			var rgba = getRGBA_NN(srcImageData, srcX, srcY, outfill);
+		    }
 		} else if (guide) {
 		    var rgba = guideRGBA;
 		} else {
@@ -208,7 +273,11 @@ function drawCopy(srcCanvas, dstCanvas, outfill, guide, guideColor,
 			var py = (rr==0.0) ? 0.0 : (pr*dy*sr/rr);
 			var srcX = px + srcWidth*srcProjX;
 			var srcY = py + srcHeight*(1-srcProjY);
-			var rgba = getRGBA_NN(srcImageData, srcX, srcY, outfill);
+			if (bilinear) {
+			    var rgba = getRGBA_BL(srcImageData, srcX, srcY, outfill);
+			} else {
+			    var rgba = getRGBA_NN(srcImageData, srcX, srcY, outfill);
+			}
 		    }
 		}
 		setRGBA(dstImageData, dstX, dstY, rgba);
