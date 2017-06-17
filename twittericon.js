@@ -259,9 +259,9 @@ function drawCopy(srcCanvas, dstCanvas, bilinear, outfill, guide, guideColor,
 		} else if (guide) {
 		    var rgba = guideRGBA;
 		} else {
-		    if (outfill === "white") {
+		    if (outfill === OUTFILL_WHITE) {
 		    var rgba = [255,255,255,255];
-		    } else if (outfill === "black") {
+		    } else if (outfill === OUTFILL_BLACK) {
 			var rgba = [0, 0, 0, 255];
 		    } else {
 			if (proj === "fisheye") {
