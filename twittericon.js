@@ -122,6 +122,8 @@ function getRGBAfromHexColor(hexCode) {
 	    parseInt(hexCode.slice(6, 8), 16)
 	];
 	break;
+    default:
+	var rgba = [255,255,255,0];
     }
     return rgba;
 }
