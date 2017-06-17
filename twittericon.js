@@ -42,6 +42,10 @@ function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
 	     proj, srcProjX, srcProjY, srcProjR);
 }
 
+function getRGBA_NN(imageData, x, y, outfill) {
+    return getRGBA(imageData, Math.round(x), Math.round(y), outfill);
+}
+
 function drawCopy(srcCanvas, dstCanvas, outfill,
 		  proj, srcProjX, srcProjY, srcProjR) {
     // console.debug("drawCopy");
@@ -58,14 +62,13 @@ function drawCopy(srcCanvas, dstCanvas, outfill,
 	var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
 	var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
 	//
-	var x1 = Math.round(radius - srcWidth/2);
-	var y1 = Math.round(radius - srcHeight/2);
+	var scale = dstWidth/2 / radius / srcProjR;
 	// console.log( Math.round(x1), Math.round(y1) );
 	for (var dstY = 0 ; dstY < dstHeight; dstY++) {
             for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-		var srcX = dstX - x1;
-		var srcY = dstY - y1;
-		var rgba = getRGBA(srcImageData, srcX, srcY, outfill);
+		var srcX = (dstX - dstWidth/2)  / scale + srcWidth*srcProjX;
+		var srcY = (dstY - dstHeight/2) / scale + srcHeight*(1-srcProjY);
+		var rgba = getRGBA_NN(srcImageData, srcX, srcY, outfill);
 		setRGBA(dstImageData, dstX, dstY, rgba);
 	    }
 	}
@@ -95,9 +98,9 @@ function drawCopy(srcCanvas, dstCanvas, outfill,
 		    pr *= srcProjR;
 		    var px = (rr==0.0) ? 0.0 : (pr*dx*sr/rr);
 		    var py = (rr==0.0) ? 0.0 : (pr*dy*sr/rr);
-		    var srcX = Math.round(px + srcWidth*srcProjX);
-		    var srcY = Math.round(py + srcHeight*srcProjY);
-		    var rgba = getRGBA(srcImageData, srcX, srcY, outfill);
+		    var srcX = px + srcWidth*srcProjX;
+		    var srcY = py + srcHeight*(1-srcProjY);
+		    var rgba = getRGBA_NN(srcImageData, srcX, srcY, outfill);
 		    setRGBA(dstImageData, dstX, dstY, rgba);
 		} else {
 		    if (outfill === "white") {
