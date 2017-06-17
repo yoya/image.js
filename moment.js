@@ -33,7 +33,7 @@ function drawSrcImageAndMoment(srcImage, srcCanvas, dstCancas) {
     drawMoment(dstCanvas, reverse);
 }
 
-function calcMoment(canvas, reverse) {
+function getMomentSet(canvas, reverse) {
     var width = canvas.width, height = canvas.height;
     var ctx = canvas.getContext("2d");
     var imageData = ctx.getImageData(0, 0, width, height);
@@ -84,7 +84,7 @@ function drawMoment(canvas, reverse) {
     var M02Text = document.getElementById("M02Text");
     var width = canvas.width, height = canvas.height;
     //
-    var [ M00, M10, M01, M11, M20, M02 ] = calcMoment(canvas, reverse);
+    var [ M00, M10, M01, M11, M20, M02 ] = getMomentSet(canvas, reverse);
     // console.debug(M00, M10, M01, M11, M20, M02);
     M00Text.value = M00;
     M10Text.value = M10;
