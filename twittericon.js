@@ -193,7 +193,7 @@ function drawCopy(srcCanvas, dstCanvas, bilinear, outfill, guide, guideColor,
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
     var guideRGBA = getRGBAfromHexColor(guideColor);
-    dstCanvas.style.backgroundColor = "#" + guideColor;
+    dstCanvas.style.backgroundColor = "white";
     if (proj === "normal") {
 	var radius = Math.sqrt(srcWidth*srcWidth + srcHeight*srcHeight) / 2;
 	var dstWidth  = Math.ceil(radius*2);
