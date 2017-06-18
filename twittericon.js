@@ -82,6 +82,9 @@ function main() {
 	    case "bubbleSoap":
 		file = "img/bubbleSoap.png";
 		break;
+	    case "bubbleRainbow":
+		file = "img/bubbleRainbow.png";
+		break;
 	    default:
 		console.error("Unknown overlap:"+overlap);
 		return ;
