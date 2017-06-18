@@ -63,45 +63,62 @@ function main() {
 				bilinear, overlapImage);
 	} else {
 	    var file = null;
+	    var url = null;
 	    switch (overlap) {
 	    case "badge":
 		file = "img/badge.png";
+		url = "https://twitter.com/_hp23/status/875773014750543873";
 		break;
 	    case "scope":
 		file = "img/scope.png";
+		url = "https//twitter.com/KulasanM/status/875611714959556609";
 		break;
 	    case "clockBlue":
 		file = "img/clockBlue.png";
+		url ="https://twitter.com/device1020/status/875663435253415936";
 		break;
 	    case "clockYellow":
 		file = "img/clockYellow.png";
+		url ="https://twitter.com/device1020/status/875663435253415936";
 		break;
 	    case "clockRed":
 		file = "img/clockRed.png";
+		url ="https://twitter.com/device1020/status/875663435253415936";
 		break;
 	    case "bubbleSoap":
 		file = "img/bubbleSoap.png";
+		url = "https://twitter.com/NnAone2cmg/status/875738100973969408";
 		break;
 	    case "bubbleCyan":
 		file = "img/bubbleCyan.png";
+		url = "https://twitter.com/NnAone2cmg/status/875989771562106881";
 		break;
 	    case "bubbleMagenta":
 		file = "img/bubbleMagenta.png";
+		url = "https://twitter.com/NnAone2cmg/status/875990875578302464";
 		break;
 	    case "bubbleGreen":
 		file = "img/bubbleGreen.png";
+		url = "https://twitter.com/NnAone2cmg/status/875990875578302464";
 		break;
 	    case "bubbleBlue":
 		file = "img/bubbleBlue.png";
+		url = "https://twitter.com/NnAone2cmg/status/875989771562106881";
 		break;
 	    case "bubbleRainbow":
 		file = "img/bubbleRainbow.png";
+		url = "https://twitter.com/NnAone2cmg/status/876103882752917505";
 		break;
 	    default:
 		console.error("Unknown overlap:"+overlap);
 		return ;
 	    }
 	    loadOverlapImage(file);
+	    if (url !== null) {
+		var html = "Theme Image (c) <a href=\"" + url + "\" target=\"_blank\"\> " + url + " </a>";
+		console.log(html);
+		document.getElementById("imageCopyright").innerHTML = html;
+	    }
 	}
     }
     bindFunction({"overlapSelect":null},
