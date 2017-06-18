@@ -79,6 +79,9 @@ function main() {
 	    case "clockRed":
 		file = "img/clockRed.png";
 		break;
+	    case "bubbleSoap":
+		file = "img/bubbleSoap.png";
+		break;
 	    default:
 		console.error("Unknown overlap:"+overlap);
 		return ;
