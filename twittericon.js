@@ -70,6 +70,15 @@ function main() {
 	    case "scope":
 		file = "img/scope.png";
 		break;
+	    case "clockBlue":
+		file = "img/clockBlue.png";
+		break;
+	    case "clockYellow":
+		file = "img/clockYellow.png";
+		break;
+	    case "clockRed":
+		file = "img/clockRed.png";
+		break;
 	    default:
 		console.error("Unknown overlap:"+overlap);
 		return ;
