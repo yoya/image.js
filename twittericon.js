@@ -82,6 +82,18 @@ function main() {
 	    case "bubbleSoap":
 		file = "img/bubbleSoap.png";
 		break;
+	    case "bubbleCyan":
+		file = "img/bubbleCyan.png";
+		break;
+	    case "bubbleMagenta":
+		file = "img/bubbleMagenta.png";
+		break;
+	    case "bubbleGreen":
+		file = "img/bubbleGreen.png";
+		break;
+	    case "bubbleBlue":
+		file = "img/bubbleBlue.png";
+		break;
 	    case "bubbleRainbow":
 		file = "img/bubbleRainbow.png";
 		break;
