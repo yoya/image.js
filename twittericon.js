@@ -71,7 +71,7 @@ function main() {
 		break;
 	    case "scope":
 		file = "img/scope.png";
-		url = "https//twitter.com/KulasanM/status/875611714959556609";
+		url = "https://twitter.com/KulasanM/status/875611714959556609";
 		break;
 	    case "clockBlue":
 		file = "img/clockBlue.png";
