@@ -49,9 +49,9 @@ function drawVinette(srcCanvas, dstCanvas) {
             var r = Math.sqrt(dx*dx + dy*dy);
 	    var factor = Math.pow(Math.cos(r/2.0), 4);
 	    var [r, g, b, a] = getRGBA(srcImageData, x, y);
-	    r = r * factor;
-	    g = g * factor;
-	    b = b * factor;
+	    r *= factor;
+	    g *= factor;
+	    b *= factor;
 	    setRGBA(dstImageData, x, y, [r, g, b, a]);
 	}
     }
