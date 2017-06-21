@@ -78,8 +78,9 @@ function drawMosaic(srcCanvas, dstCanvas, blockSize, blockType) {
 	console.debug("hexagon");
 	var blockSizeH = Math.round(blockSize * Math.sqrt(1 - 0.25));
 	var blockSize_2 = Math.round(blockSize / 2);
-	for (var dstY = 0 ; dstY < dstHeight; dstY+=blockSizeH) {
-            for (var dstX = (dstY%2)?0:blockSize_2 ; dstX < dstWidth; dstX+=blockSize) {
+	var odd = true;
+	for (var dstY = -blockSizeH ; dstY < dstHeight + blockSizeH; dstY+=blockSizeH) {
+            for (var dstX = (odd)?0:blockSize_2 ; dstX < dstWidth + blockSize; dstX+=blockSize) {
 		var w = (dstX+blockSize<dstWidth)?blockSize:(dstWidth-dstX);
 		var h = (dstY+blockSizeH<dstHeight)?blockSizeH:(dstHeight-dstY);
 		// console.log("dstX, dstY, w, h:", dstX, dstY, w, h);
@@ -110,6 +111,7 @@ function drawMosaic(srcCanvas, dstCanvas, blockSize, blockType) {
 		    }
 		}
 	    }
+	    odd = !odd;
 	}
     }
     dstCtx.putImageData(dstImageData, 0, 0);
