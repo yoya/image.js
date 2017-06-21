@@ -7,9 +7,16 @@
   </head>
   <body bgcolor="lightgray">
     <div class="container">
-      <div class="controlPanel">
+     <div class="controlPanel">
 	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
-	block:<input id="blockRange" type="range" min="1" max="100" step="1" value="10">:<input type="text" id="blockText" size="4">
+	block:<input id="blockSizeRange" type="range" min="1" max="100" step="1" value="10">:<input type="text" id="blockSizeText" size="4">
+	<div style="float:left">
+          block type:  <br />
+	  <select id="blockTypeSelect" size="2">
+            <option value="square" selected> 正方形 </option>
+            <option value="hexagon"        > 六角形 </option>
+          </select>
+	</div>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
