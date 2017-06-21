@@ -86,7 +86,7 @@ function drawMosaic(srcCanvas, dstCanvas, blockSize, blockType) {
 		    for (var x = 0 ; x < blockSize ; x++) {
 			var srcX = dstX + x
 			var srcY = dstY + y;
-			var [r, g, b, a] = getRGBA(srcImageData, srcX, srcY);
+			var [r, g, b, a] = getRGBA(srcImageData, srcX, srcY, OUTFILL_EDGE);
 			r2 += r;  g2 += g;  b2 += b; a2 += a;
 		    }
 		}
