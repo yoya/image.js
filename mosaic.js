@@ -80,10 +80,7 @@ function drawMosaic(srcCanvas, dstCanvas, blockSize, blockType) {
 	var blockSize_2 = Math.round(blockSize / 2);
 	var odd = true;
 	for (var dstY = -blockSizeH ; dstY < dstHeight + blockSizeH; dstY+=blockSizeH) {
-            for (var dstX = (odd)?0:blockSize_2 ; dstX < dstWidth + blockSize; dstX+=blockSize) {
-		var w = (dstX+blockSize<dstWidth)?blockSize:(dstWidth-dstX);
-		var h = (dstY+blockSizeH<dstHeight)?blockSizeH:(dstHeight-dstY);
-		// console.log("dstX, dstY, w, h:", dstX, dstY, w, h);
+            for (var dstX = (odd)?0:-blockSize_2 ; dstX < dstWidth + blockSize_2; dstX+=blockSize) {
 		var [r2, g2, b2, a2] = [0, 0, 0, 0];
 		for (var y = 0 ; y < blockSize ; y++) {
 		    for (var x = 0 ; x < blockSize ; x++) {
