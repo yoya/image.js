@@ -92,18 +92,18 @@ function drawMosaic(srcCanvas, dstCanvas, blockSize, blockType) {
 		}
 		var bs2 = blockSize*blockSize;
 		r2 /= bs2; g2 /= bs2; b2 /= bs2; a2 /= bs2;
-		for (var y = Math.floor(-blockSize/3) ; y < 0 ; y++) {
+		for (var y = Math.round(-blockSize/3) ; y < 0 ; y++) {
 		    for (var x = -2*y  ; x < blockSize + 2*y ; x++) {
 			setRGBA(dstImageData, dstX + x, dstY + y, [r2,g2,b2,a2]);
 		    }
 		}
-		for (var y = 0 ; y < Math.ceil(blockSize*2/3) ; y++) {
+		for (var y = 0 ; y < Math.round(blockSize*2/3) ; y++) {
 		    for (var x = 0 ; x < blockSize ; x++) {
 			setRGBA(dstImageData, dstX + x, dstY + y, [r2,g2,b2,a2]);
 		    }
 		}
-		for (var y = Math.floor(blockSize*2/3); y < blockSize ; y++) {
-		    for (var x = Math.floor((y-blockSize*2/3)*2) -1 ; x < 1 + blockSize - Math.floor((y-blockSize*2/3)*2) ; x++) {
+		for (var y = Math.round(blockSize*2/3); y < blockSize ; y++) {
+		    for (var x = Math.round((y-blockSize*2/3)*2) ; x < blockSize - Math.round((y-blockSize*2/3)*2) ; x++) {
 			setRGBA(dstImageData, dstX + x, dstY + y, [r2,g2,b2,a2]);
 		    }
 		}
