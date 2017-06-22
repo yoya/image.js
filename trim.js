@@ -12,34 +12,60 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    var fuzz = parseFloat(document.getElementById("fuzzRange").value);
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndTrim(srcImage, srcCanvas, dstCanvas);
+	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+	    drawTrim(srcCanvas, dstCanvas, fuzz);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
-		     drawSrcImageAndTrim(srcImage, srcCanvas, dstCanvas);
+		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+		     drawTrim(srcCanvas, dstCanvas, fuzz);
+		 } );
+    bindFunction({"fuzzRange":"fuzzText"},
+		 function() {
+		     fuzz = parseFloat(document.getElementById("fuzzRange").value);
+		     drawTrim(srcCanvas, dstCanvas, fuzz);
 		 } );
 }
-function drawSrcImageAndTrim(srcImage, srcCanvas, dstCancas) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawTrim(srcCanvas, dstCanvas);
+
+function matchColorV(v, v2, fuzz) {
+    if (v < v2) {
+	var min = v, max = v2;
+    } else {
+	var min = v2, max = v;
+    }
+    if (max === 0) {
+	return 0
+    }
+    return ((max-min)/max <= fuzz);
 }
 
-function matchColorLineNum(imageData, rgba, isVert, start, d) {
+function matchColor(rgba, rgba2, fuzz) {
     var [r, g, b, a] = rgba;
+    var [r2, g2, b2, a2] = rgba2;
+    if ( matchColorV(r, r2, fuzz) && matchColorV(g, g2, fuzz) &&
+	 matchColorV(b, b2, fuzz) && matchColorV(a, a2, fuzz) ) {
+	return true
+    }
+    return false;
+}
+
+function matchColorLineNum(imageData, rgba, fuzz, isVert, start, d) {
     var width = imageData.width, height = imageData.height;
     var num = 0;
     if (isVert) {
 	if (d > 0) {
 	    for (var y = start ; y < height ; y+= d) {
 		for (var x = 0 ; x < width ; x++) {
-		    var [r2,g2,b2,a2] = getRGBA(imageData, x, y);
-		    if ((r !== r2) || (g !== g2) || (b !== b2) || (a !== a2)) {
+		    var rgba2 = getRGBA(imageData, x, y);
+		    if (matchColor(rgba, rgba2, fuzz) === false) {
 			return num;
 		    }
 		}
@@ -50,8 +76,8 @@ function matchColorLineNum(imageData, rgba, isVert, start, d) {
 	} else { // d < 0
 	    for (var y = start ; y >= 0 ; y+= d) {
 		for (var x = 0 ; x < width ; x++) {
-		    var [r2,g2,b2,a2] = getRGBA(imageData, x, y);
-		    if ((r !== r2) || (g !== g2) || (b !== b2) || (a !== a2)) {
+		    var rgba2 = getRGBA(imageData, x, y);
+		    if (matchColor(rgba, rgba2, fuzz) === false) {
 			return num;
 		    }
 		}
@@ -62,8 +88,8 @@ function matchColorLineNum(imageData, rgba, isVert, start, d) {
 	if (d > 0) {
 	    for (var x = start ; x < width ; x+= d) {
 		for (var y = 0 ; y < height ; y++) {
-		    var [r2,g2,b2,a2] = getRGBA(imageData, x, y);
-		    if ((r !== r2) || (g !== g2) || (b !== b2) || (a !== a2)) {
+		    var rgba2 = getRGBA(imageData, x, y);
+		    if (matchColor(rgba, rgba2, fuzz) === false) {
 			return num;
 		    }
 		}
@@ -74,8 +100,8 @@ function matchColorLineNum(imageData, rgba, isVert, start, d) {
 	} else { // d < 0
 	    for (var x = start ; x >= 0 ; x+= d) {
 		for (var y = 0 ; y < height ; y++) {
-		    var [r2,g2,b2,a2] = getRGBA(imageData, x, y);
-		    if ((r !== r2) || (g !== g2) || (b !== b2) || (a !== a2)) {
+		    var rgba2 = getRGBA(imageData, x, y);
+		    if (matchColor(rgba, rgba2, fuzz) === false) {
 			return num;
 		    }
 		}
@@ -83,30 +109,28 @@ function matchColorLineNum(imageData, rgba, isVert, start, d) {
 	    }
 	}
     }
-    console.debug("perfect color match", isVert, start, d, num);
+    // console.debug("perfect color match", isVert, start, d, num);
     return num;
 }
 
-function drawTrim(srcCanvas, dstCanvas) {
+function drawTrim(srcCanvas, dstCanvas, fuzz) {
     // console.debug("drawTrim");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-
     var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-
     var baseRGBA = getRGBA(srcImageData, 0, 0);
-    var minX = matchColorLineNum(srcImageData, baseRGBA,
+    var minX = matchColorLineNum(srcImageData, baseRGBA, fuzz,
 				 false, 0, 1);
-    var maxX = srcWidth - matchColorLineNum(srcImageData, baseRGBA,
-					     false, srcWidth - 1, -1);
-    var minY = matchColorLineNum(srcImageData, baseRGBA,
+    var maxX = srcWidth - matchColorLineNum(srcImageData, baseRGBA, fuzz,
+					    false, srcWidth - 1, -1, fuzz);
+    var minY = matchColorLineNum(srcImageData, baseRGBA, fuzz,
 				 true, 0, 1);
-    var maxY = srcHeight - matchColorLineNum(srcImageData, baseRGBA,
-					    true, srcHeight - 1, -1);
-    console.debug("minX, minY, maxX, maxY:", minX, minY, maxX, maxY);
-    var dstWidth  = maxX - minX;
-    var dstHeight = maxY - minY;
+    var maxY = srcHeight - matchColorLineNum(srcImageData, baseRGBA, fuzz,
+					     true, srcHeight - 1, -1);
+    // console.debug("minX, minY, maxX, maxY:", minX, minY, maxX, maxY);
+    var dstWidth  = (maxX > minX)?(maxX - minX):1;
+    var dstHeight = (maxY > minY)?(maxY - minY):1;
     dstCanvas.width  = dstWidth;
     dstCanvas.height = dstHeight;
     //
