@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2017/06/23- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Gravity </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body bgcolor="lightgray">
+    <div class="container">
+      <div class="controlPanel">
+	<div style="float:left">
+	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+	  <br />
+	  dstWidth:<input id="dstWidthRange" type="range" min="16" max="2048" step="1" value="200">:<input type="text" id="dstWidthText" size="5">
+	  <br />
+	  dstHeight:<input id="dstHeightRange" type="range" min="16" max="2048" step="1" value="200">:<input type="text" id="dstHeightText" size="5">
+	</div>
+	<div style="float:left">
+	  gravity:<table id="gravityTable"> </table>
+	</div>
+	<div>
+          Out-side fill style:  <br />
+          <select id="outfillSelect" size="5">
+            <option value="black" selected> 黒埋め </option>
+            <option value="transparent"   > 透明  </option>
+            <option value="edge"          > エッジ拡張 </option>
+            <option value="tile"          > タイル補完 </option>
+            <option value="mirror"        > ミラー補完 </option>
+            <option value="white"         > 白埋め </option>
+          </select>
+	</div>
+      </div> <!-- controlPanel -->
+      <div style="clear:both">
+	<canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+	<canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+      </div>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="gravity.js"> </script>
+  </body>
+</html>
