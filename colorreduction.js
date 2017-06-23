@@ -15,24 +15,24 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndQuantize(srcImage, srcCanvas);
+	    drawSrcImageAndColorReduction(srcImage, srcCanvas);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
-		     drawSrcImageAndQuantize(srcImage, srcCanvas);
+		     drawSrcImageAndColorReduction(srcImage, srcCanvas);
 		 } );
 }
 
-function drawSrcImageAndQuantize(srcImage, srcCanvas) {
+function drawSrcImageAndColorReduction(srcImage, srcCanvas) {
     var quantizeMethod = document.getElementById("quantizeMethod").value;
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     document.getElementById("nColorSrc").value = "";
     document.getElementById("nColorDst").value = "";
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     document.getElementById("nColorSrc").value = getColorNum(srcCanvas);
-    drawQuantize(srcCanvas, dstCanvas,quantizeMethod);
+    drawColorReduction(srcCanvas, dstCanvas,quantizeMethod);
     document.getElementById("nColorDst").value = getColorNum(dstCanvas);
 
     var paletteCanvas = document.getElementById("paletteCanvas");
@@ -48,13 +48,13 @@ function drawSrcImageAndQuantize(srcImage, srcCanvas) {
     drawPalette(paletteCanvas, palette);
 }
 
-function drawQuantize(srcCanvas, dstCanvas, quantizeMethod) {
+function drawColorReduction(srcCanvas, dstCanvas, quantizeMethod) {
     switch (quantizeMethod) {
     case "uniform": // 均等量子化法
-	drawQuantize_uniform(srcCanvas, dstCanvas);
+	drawColorReduction_uniform(srcCanvas, dstCanvas);
 	break;
     case "popularity": // 頻度法
-	drawQuantize_popularity(srcCanvas, dstCanvas);
+	drawColorReduction_popularity(srcCanvas, dstCanvas);
 	break;
     default:
 	console.error("Unknown quantizeMethod:"+quantizeMethod);
@@ -65,8 +65,8 @@ function drawQuantize(srcCanvas, dstCanvas, quantizeMethod) {
 /*
  * 均等量子化法 (uniform quqntization)
  */
-function drawQuantize_uniform(srcCanvas, dstCanvas) {
-    // console.debug("drawQuantize");
+function drawColorReduction_uniform(srcCanvas, dstCanvas) {
+    // console.debug("drawColorReduction");
     //
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -97,8 +97,8 @@ function drawQuantize_uniform(srcCanvas, dstCanvas) {
 /*
  * 頻度法 popularity algorithm
  */
-function drawQuantize_popularity(srcCanvas, dstCanvas) {
-    // console.debug("drawQuantize");
+function drawColorReduction_popularity(srcCanvas, dstCanvas) {
+    // console.debug("drawColorReduction");
     //
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
