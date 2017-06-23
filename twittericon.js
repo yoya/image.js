@@ -117,7 +117,7 @@ function main() {
 	    if (url !== null) {
 		var html = "Theme Image (c) <a href=\"" + url + "\" target=\"_blank\"\> " + url + " </a>";
 		console.log(html);
-		document.getElementById("imageConvertright").innerHTML = html;
+		document.getElementById("imageCopyright").innerHTML = html;
 	    }
 	}
     }
