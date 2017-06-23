@@ -14,7 +14,7 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndResize(srcImage, srcCanvas, dstCanvas);
+	    drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -25,11 +25,11 @@ function main() {
 		  "cubicCRange":"cubicCText",
 		  "lobeRange":"lobeText"},
 		 function() {
-		     drawSrcImageAndResize(srcImage, srcCanvas, dstCanvas);
+		     drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas);
 		 } );
 }
 
-function drawSrcImageAndResize(srcImage, srcCanvas, dstCancas) {
+function drawSrcImageAndRescale(srcImage, srcCanvas, dstCancas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     var params = {
@@ -40,7 +40,7 @@ function drawSrcImageAndResize(srcImage, srcCanvas, dstCancas) {
 	lobe:  parseFloat(document.getElementById("lobeRange").value)
     };
     drawGraph(params)
-    drawResize(srcCanvas, dstCanvas, params);
+    drawRescale(srcCanvas, dstCanvas, params);
 }
 
 function makeFilterKernel(params, srcWidth, srcHeight, dstWidth, dstHeight) {
@@ -79,7 +79,7 @@ function makeFilterKernel(params, srcWidth, srcHeight, dstWidth, dstHeight) {
 }
 
 
-function drawResize(srcCanvas, dstCanvas, params) {
+function drawRescale(srcCanvas, dstCanvas, params) {
     var scale = params.scale;
     var srcWidth  = srcCanvas.width;
     var srcHeight = srcCanvas.height;
@@ -99,7 +99,7 @@ function drawResize(srcCanvas, dstCanvas, params) {
 	    var dstOffset = 4 * (dstX + dstY * dstWidth);
 	    var srcX = dstX / scale;
 	    var srcY = dstY / scale;
-	    var [r,g,b,a] = resizePixel(srcX, srcY, srcImageData, filterType, filterKernel);
+	    var [r,g,b,a] = rescalePixel(srcX, srcY, srcImageData, filterType, filterKernel);
 	    dstData[dstOffset]   = r;
 	    dstData[dstOffset+1] = g;
 	    dstData[dstOffset+2] = b;
@@ -164,7 +164,7 @@ function getPixel_BiLinear(imageData, x, y) {
     return rgba;
 }
 
-function resizePixel(srcX, srcY, srcImageData, filterType, filterKernel) {
+function rescalePixel(srcX, srcY, srcImageData, filterType, filterKernel) {
     var rgba = null;
     switch (filterType) {
     case "NN":
