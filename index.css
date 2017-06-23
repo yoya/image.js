@@ -6,6 +6,11 @@ input {
     border-radius: 20%;
 }
 
+table {
+    border: medium solid gray;
+    border-radius: 10%;
+}
+
 .noCR {
   display: inline-block; // IE
   display: inline;      // Mozilla
