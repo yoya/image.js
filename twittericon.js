@@ -17,8 +17,8 @@ function main() {
 	srcImage = new Image();
 	srcImage.onload = function() {
 	    var bilinear = false;
-	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
-				bilinear, overlapImage);
+	    drawSrcImageAndConvert(srcImage, srcCanvas, dstCanvas,
+				   bilinear, overlapImage);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -33,15 +33,15 @@ function main() {
 		 function(e) {
 		     // console.debug(e);
 		     var bilinear = false;
-		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
-					 bilinear, overlapImage);
+		     drawSrcImageAndConvert(srcImage, srcCanvas, dstCanvas,
+					    bilinear, overlapImage);
 		 } );
     bindFunction({"bilinearButton":null},
 		 function(e) {
 		     // console.debug(e);
 		     var bilinear = true;
-		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
-					 bilinear, overlapImage);
+		     drawSrcImageAndConvert(srcImage, srcCanvas, dstCanvas,
+					    bilinear, overlapImage);
 		 } );
     
     var loadOverlapImage = function(file) {
@@ -49,8 +49,8 @@ function main() {
 	image.onload = function() {
 	    overlapImage = image;
 	    var bilinear = false;
-	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
-				bilinear, overlapImage);
+	    drawSrcImageAndConvert(srcImage, srcCanvas, dstCanvas,
+				   bilinear, overlapImage);
 	}
 	image.src = file;
     }
@@ -59,8 +59,8 @@ function main() {
 	if (overlap === "none") {
 	    overlapImage = null;
 	    var bilinear = false;
-	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
-				bilinear, overlapImage);
+	    drawSrcImageAndConvert(srcImage, srcCanvas, dstCanvas,
+				   bilinear, overlapImage);
 	} else {
 	    var file = null;
 	    var url = null;
@@ -117,7 +117,7 @@ function main() {
 	    if (url !== null) {
 		var html = "Theme Image (c) <a href=\"" + url + "\" target=\"_blank\"\> " + url + " </a>";
 		console.log(html);
-		document.getElementById("imageCopyright").innerHTML = html;
+		document.getElementById("imageConvertright").innerHTML = html;
 	    }
 	}
     }
@@ -128,8 +128,8 @@ function main() {
 		     selectOverlapImage(overlap);
 		 } );
 }
-function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas,
-			     bilinear, overlapImage) {
+function drawSrcImageAndConvert(srcImage, srcCanvas, dstCancas,
+				bilinear, overlapImage) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var guide = document.getElementById("guideCheckbox").checked;
     var guideColor = document.getElementById("guideColorText").value;
@@ -140,9 +140,9 @@ function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas,
     var srcProjY = parseFloat(document.getElementById("srcProjYRange").value);
     var srcProjR = parseFloat(document.getElementById("srcProjRRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawCopy(srcCanvas, dstCanvas, bilinear, outfill, guide, guideColor,
-	     proj, srcProjX, srcProjY, srcProjR,
-	     overlapImage);
+    drawConvert(srcCanvas, dstCanvas, bilinear, outfill, guide, guideColor,
+		proj, srcProjX, srcProjY, srcProjR,
+		overlapImage);
 }
 
 function getRGBA_NN(imageData, x, y, outfill) {
@@ -230,10 +230,10 @@ function getRGBAfromHexColor(hexCode) {
     return rgba;
 }
 
-function drawCopy(srcCanvas, dstCanvas, bilinear, outfill, guide, guideColor,
-		  proj, srcProjX, srcProjY, srcProjR,
-		  overlapImage) {
-    // console.debug("drawCopy");
+function drawConvert(srcCanvas, dstCanvas, bilinear, outfill, guide, guideColor,
+		     proj, srcProjX, srcProjY, srcProjR,
+		     overlapImage) {
+    // console.debug("drawConvert");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
