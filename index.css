@@ -2,6 +2,9 @@
   2017/02/26- yoya@awm.jp
 */
 
+div {
+    margin: 4px
+}
 input {
     border-radius: 20%;
 }
