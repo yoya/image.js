@@ -12,37 +12,37 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var gravityTable = document.getElementById("gravityTable");
     var gravity = 5; // center
     var dstWidth = parseFloat(document.getElementById("dstWidthRange").value);
     var dstHeight = parseFloat(document.getElementById("dstHeightRange").value);
     var outfill = document.getElementById("outfillSelect").value;
     outfill = outfillStyleNumber(outfill);
+
+    var drawImageAndResize = function() {
+	var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+	drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+	dstWidth  = srcCanvas.width;
+	dstHeight = srcCanvas.height;
+	document.getElementById("dstWidthRange").value = dstWidth;
+	document.getElementById("dstWidthText").value  = dstWidth;
+	document.getElementById("dstHeightRange").value = dstHeight;
+	document.getElementById("dstHeightText").value  = dstHeight;
+	drawResize(srcCanvas, dstCanvas, dstWidth, dstHeight, gravity, outfill);
+    }
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
-	srcImage.onload = function() {
-	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-	    dstWidth  = srcCanvas.width;
-	    dstHeight = srcCanvas.height;
-	    document.getElementById("dstWidthRange").value = dstWidth;
-	    document.getElementById("dstWidthText").value  = dstWidth;
-	    document.getElementById("dstHeightRange").value = dstHeight;
-	    document.getElementById("dstHeightText").value  = dstHeight;
-	    drawResize(srcCanvas, dstCanvas, dstWidth, dstHeight, gravity, outfill);
-	}
+	srcImage.onload = drawImageAndResize;
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
-		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-		     drawResize(srcCanvas, dstCanvas, dstWidth, dstHeight, gravity, outfill);
+		     drawImageAndResize();
 		 } );
     bindFunction({"dstWidthRange":"dstWidthText",
 		  "dstHeightRange":"dstHeightText",
 		  "outfillSelect":null},
 		 function() {
-		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     dstWidth = parseFloat(document.getElementById("dstWidthRange").value);
 		     dstHeight = parseFloat(document.getElementById("dstHeightRange").value);
 		     outfill = document.getElementById("outfillSelect").value;
