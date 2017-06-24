@@ -8,10 +8,12 @@ div {
 input {
     border-radius: 20%;
 }
-
+select {
+    border-radius: 7%;
+}
 table {
     border: medium solid gray;
-    border-radius: 10%;
+    border-radius: 7%;
 }
 
 .noCR {
