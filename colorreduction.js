@@ -26,6 +26,14 @@ function main() {
 }
 
 function drawSrcImageAndColorReduction(srcImage, srcCanvas) {
+    var div = loadingStart();
+    var id = setTimeout(function() {
+	drawSrcImageAndColorReduction_(srcImage, srcCanvas);
+	loadingEnd(div);
+    }, 100);
+}
+
+function drawSrcImageAndColorReduction_(srcImage, srcCanvas) {
     var quantizeMethod = document.getElementById("quantizeMethod").value;
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     document.getElementById("nColorSrc").value = "";
