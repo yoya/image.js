@@ -7,20 +7,26 @@
 </head>
 <body bgcolor="lightgray">
   <div class="container">
-    <div class="noCR">
-      Quantize Method: <select id="quantizeMethod" size="6">
-        <option value="uniform" selected> 均等量子化 </option>
-        <option value="popularity"> 頻度法 </option>
-        <option value="linearCut"> 線形分割 </option>
-        <option value="medianCut">  中央値分割 </option>
-        <option value="populationEqualization"> 頻度均等化 </option>
-	<option value="kMeans"> K-平均法 </option>
-      </select> </br>
-      nColor Src:<input id="nColorSrc" type="text" size="6" readonly>
-      nColor Dst:<input id="nColorDst" type="text" size="6" readonly>
-      <br />
-      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="640">:<input type="text" id="maxWidthHeightText">
-    </div>
+    <div class="controlPanel">
+      <div style="float:left">
+	Quantize Method: <br />
+	<select id="quantizeMethod" size="6">
+          <option value="uniform" selected> 均等量子化 </option>
+          <option value="popularity"> 頻度法 </option>
+          <option value="linearCut"> 線形分割 </option>
+          <option value="medianCut">  中央値分割 </option>
+          <option value="populationEqualization"> 頻度均等化 </option>
+	  <option value="kMeans"> K-平均法 </option>
+	</select>
+	</div>
+      <div style="float:left">
+	nColor Src:<input id="nColorSrc" type="text" size="6" readonly> <br />
+	nColor Dst:<input id="nColorDst" type="text" size="6" readonly> <br />
+	maxWidthHeight:<br />
+	<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="640">:<br />
+	<input type="text" id="maxWidthHeightText">
+      </div>
+    </div> <!-- controlPanel -->
     <canvas id="paletteCanvas" class="borderGreen" width=200 height=200> paletteCanvas </canvas>
     </br>
     <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
