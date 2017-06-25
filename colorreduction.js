@@ -47,7 +47,7 @@ function drawSrcImageAndColorReduction(srcImage, srcCanvas) {
     }
     worker = new Worker("worker/colorreduction.js");
     worker.onmessage = function(e) {
-	var [dstImageData] = [e.data.image];
+	var [dstImageData, palette] = [e.data.image, e.data.palette];
 	var dstWidth = dstImageData.width;
 	var dstHeight = dstImageData.height;
 	dstCanvas.width  = dstWidth;
@@ -55,15 +55,6 @@ function drawSrcImageAndColorReduction(srcImage, srcCanvas) {
 	dstCtx.putImageData(dstImageData, 0, 0, 0, 0, dstWidth, dstHeight);
 	//
 	var paletteCanvas = document.getElementById("paletteCanvas");
-	var paletteHist = getColorHistogram(dstImageData);
-	var paletteNum = Object.keys(paletteHist).length;
-	var palette = new Uint32Array(paletteNum);
-	var i = 0;
-	for (var colorId in paletteHist) {
-	    colorId = parseFloat(colorId);
-	    palette[i] = colorId;
-	    i++;
-	}
 	drawPalette(paletteCanvas, palette);
 	document.getElementById("nColorDst").value = getColorNum(dstImageData);
 	loadingEnd(div);
