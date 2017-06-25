@@ -19,7 +19,8 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+		  "quantizeMethod":null},
 		 function() {
 		     drawSrcImageAndColorReduction(srcImage, srcCanvas);
 		 } );
