@@ -124,49 +124,32 @@ var filter2Matrix = {
 	3],
 };
 
+var worker = null;
+
 function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, filterMatrix, filterWindow) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawConvolution(srcCanvas, dstCanvas, filterMatrix, filterWindow);
-}
-
-function convolution(srcImageData, srcX, srcY, filterMatrix, convWindow) {
-    var startX = srcX - (convWindow-1)/2, endX = startX + convWindow;
-    var startY = srcY - (convWindow-1)/2, endY = startY + convWindow;
-    var i = 0;
-    var [r2, g2, b2, a2] = [0,0,0,0];
-    for (var y = startY ; y < endY ; y++) {
-	for (var x = startX ; x < endX ; x++) {
-	    var [r, g, b, a] = getRGBA(srcImageData, x, y);
-	    r2 += r * filterMatrix[i];
-	    g2 += g * filterMatrix[i];
-	    b2 += b * filterMatrix[i];
-	    i++;
-	}
-    }
-    return [r2, g2, b2, a];
-}
-
-function drawConvolution(srcCanvas, dstCanvas, filterMatrix, filterWindow) {
-    // console.debug("drawConvolution");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
-    var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var dstWidth  = srcWidth;
-    var dstHeight = srcHeight;
-    dstCanvas.width  = dstWidth;
-    dstCanvas.height = dstHeight;
+    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     //
-    var filter = document.getElementById("filterSelect").value;
-    //
-    var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-    var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-    for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var srcX = dstX, srcY = dstY;
-	    var rgba = convolution(srcImageData, srcX, srcY, filterMatrix, filterWindow);
-	    setRGBA(dstImageData, dstX, dstY, rgba);
-	}
+    var div = loadingStart();
+    var srcImageData = srcCanvas.getContext("2d").getImageData(0, 0, srcCanvas.width, srcCanvas.height);
+    if (worker) {
+	worker.terminate();
     }
-    dstCtx.putImageData(dstImageData, 0, 0);
+    worker = new Worker("worker/convolution.js");
+    worker.onmessage = function(e) {
+	var [dstImageData] = [e.data.image];
+	var dstWidth = dstImageData.width;
+	var dstHeight = dstImageData.height;
+	dstCanvas.width  = dstWidth;
+	dstCanvas.height = dstHeight;
+	dstCtx.putImageData(dstImageData, 0, 0, 0, 0, dstWidth, dstHeight);
+	loadingEnd(div);
+	worker = null;
+    }
+    worker.postMessage({image:srcImageData,
+			filterMatrix:filterMatrix, filterWindow:filterWindow},
+                       [srcImageData.data.buffer]);
 }
+
