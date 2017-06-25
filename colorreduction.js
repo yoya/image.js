@@ -25,6 +25,8 @@ function main() {
 		 } );
 }
 
+var worker = null;
+
 function drawSrcImageAndColorReduction(srcImage, srcCanvas) {
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -38,7 +40,11 @@ function drawSrcImageAndColorReduction(srcImage, srcCanvas) {
     var srcImageData = srcCtx.getImageData(0, 0, srcCanvas.width,
 					   srcCanvas.height);
     document.getElementById("nColorSrc").value = getColorNum(srcImageData);
-    var worker = new Worker("worker/colorreduction.js");
+
+    if (worker) {
+	worker.terminate();
+    }
+    worker = new Worker("worker/colorreduction.js");
     worker.onmessage = function(e) {
 	var [dstImageData] = [e.data.image];
 	var dstWidth = dstImageData.width;
@@ -60,6 +66,7 @@ function drawSrcImageAndColorReduction(srcImage, srcCanvas) {
 	drawPalette(paletteCanvas, palette);
 	document.getElementById("nColorDst").value = getColorNum(dstImageData);
 	loadingEnd(div);
+	worker = null;
     }
     worker.postMessage({image:srcImageData, method:quantizeMethod},
 		       [srcImageData.data.buffer]);
