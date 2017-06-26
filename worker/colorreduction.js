@@ -12,7 +12,18 @@ onmessage = function(e) {
     var srcHeight = srcImageData.height;
     var dstImageData = new ImageData(srcWidth, srcHeight);
     drawColorReduction(srcImageData, dstImageData, quantizeMethod);
-    postMessage({image:dstImageData}, [dstImageData.data.buffer]);
+    //
+    var paletteHist = getColorHistogram(dstImageData);
+    var paletteNum = Object.keys(paletteHist).length;
+    var palette = new Uint32Array(paletteNum);
+    var i = 0;
+    for (var colorId in paletteHist) {
+	colorId = parseFloat(colorId);
+	palette[i] = colorId;
+	i++;
+    }
+    postMessage({image:dstImageData, palette:palette},
+		[dstImageData.data.buffer]);
 }
 
 function drawColorReduction(srcImageData, dstImageData, quantizeMethod) {
