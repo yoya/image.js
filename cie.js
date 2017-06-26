@@ -91,10 +91,15 @@ function drawDiagram(dstCanvas, cieArr, hist) {
     var colorspace = document.getElementById("colorspaceSelect").value;
     var tristimulus = document.getElementById("tristimulusCheckbox").checked;
     var guide = document.getElementById("guideCheckbox").checked;
-    dstCanvas.width  = dstCanvas.width ; // clear
+    var dstWidth = dstCanvas.width, dstHeight = dstCanvas.height;
+    //
+    dstCanvas.width  = dstWidth ; // clear
     drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus, guide);
     if (hist !== null) {
-	drawDiagramPoint(dstCanvas, hist, colorspace);
+	var dstCtx = dstCanvas.getContext("2d");
+	var dstImageData = dstCtx.getImageData(0, 0, dstWidth, dstHeight)
+	drawDiagramPoint(dstImageData, hist, colorspace);
+	dstCtx.putImageData(dstImageData, 0, 0, 0, 0, dstWidth, dstHeight);
     }
 }
 
@@ -240,11 +245,8 @@ function drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus, guide) {
     ctx.restore();
 }
 
-function drawDiagramPoint(dstCanvas, hist, colorspace) {
-    var width = dstCanvas.width, height = dstCanvas.height;
-    var ctx = dstCanvas.getContext("2d");
-    ctx.save();
-    ctx.fillStyle = "black";
+function drawDiagramPoint(dstImageData, hist, colorspace) {
+    var width = dstImageData.width, height = dstImageData.height;
     for (var colorId in hist) {
 	var [r,g,b,a] = colorId2RGBA(colorId);
 	if (a === 0) {
@@ -258,9 +260,8 @@ function drawDiagramPoint(dstCanvas, hist, colorspace) {
 	    var uava = xy2uava(xy);
 	    var [gx, gy] = graphTrans(uava, width, height);
 	}
-	ctx.fillRect(gx, gy, 0.5, 0.5);
+	setRGBA(dstImageData, Math.round(gx), Math.round(gy), [0,0,0, 255]);
     }
-    ctx.restore();
 }
 
 function drawGraphBase(canvas, cieArr, cie31Arr, guide) {
