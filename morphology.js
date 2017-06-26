@@ -21,6 +21,8 @@ function main() {
 	srcImage = new Image();
 	srcImage.onload = function() {
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+	    dstCanvas.width  = srcCanvas.width;
+	    dstCanvas.height = srcCanvas.height;
 	    drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow);
 	}
 	srcImage.src = dataURL;
@@ -48,6 +50,8 @@ function main() {
 		 function() {
 		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+		     dstCanvas.width  = srcCanvas.width;
+		     dstCanvas.height = srcCanvas.height;
 		     drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow);
 
 		 } );
@@ -117,9 +121,7 @@ function drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filt
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var dstWidth = srcWidth, dstHeight = srcHeight;
-    dstCanvas.width  = dstWidth;
-    dstCanvas.height = dstHeight;
+    var dstWidth = dstCanvas.width, dstHeight = dstCanvas.height;
     var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
     var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
     if (worker) {
@@ -131,8 +133,6 @@ function drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filt
 	var [dstImageData] = [e.data.image];
 	var dstWidth = dstImageData.width;
         var dstHeight = dstImageData.height;
-	dstCanvas.width  = dstWidth;
-        dstCanvas.height = dstHeight;
         dstCtx.putImageData(dstImageData, 0, 0, 0, 0, dstWidth, dstHeight);
 	loadingEnd(div);
         worker = null;
