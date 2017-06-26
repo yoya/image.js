@@ -87,6 +87,8 @@ function main() {
     loadCIEXYZdata();
 }
 
+var worker = null;
+
 function drawDiagram(dstCanvas, cieArr, hist) {
     var colorspace = document.getElementById("colorspaceSelect").value;
     var tristimulus = document.getElementById("tristimulusCheckbox").checked;
@@ -98,8 +100,17 @@ function drawDiagram(dstCanvas, cieArr, hist) {
     if (hist !== null) {
 	var dstCtx = dstCanvas.getContext("2d");
 	var dstImageData = dstCtx.getImageData(0, 0, dstWidth, dstHeight)
-	drawDiagramPoint(dstImageData, hist, colorspace);
-	dstCtx.putImageData(dstImageData, 0, 0, 0, 0, dstWidth, dstHeight);
+	if (worker) {
+            worker.terminate();
+	}
+	var div = loadingStart();
+	worker = new Worker("worker/cie.js");
+	worker.onmessage = function(e) {
+            var [imageData] = [e.data.image];
+	    dstCtx.putImageData(imageData, 0, 0, 0, 0, dstWidth, dstHeight);
+	    loadingEnd(div);
+	}
+	worker.postMessage({image:dstImageData, hist:hist, colorspace:colorspace}, [dstImageData.data.buffer]);
     }
 }
 
@@ -243,25 +254,6 @@ function drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus, guide) {
 	ctx.stroke();
     }
     ctx.restore();
-}
-
-function drawDiagramPoint(dstImageData, hist, colorspace) {
-    var width = dstImageData.width, height = dstImageData.height;
-    for (var colorId in hist) {
-	var [r,g,b,a] = colorId2RGBA(colorId);
-	if (a === 0) {
-	    continue;
-	}
-	var lxyz = sRGB2XYZ([r,g,b]);
-	var xy = XYZ2xy(lxyz);
-	if (colorspace === "ciexy") {
-	    var [gx, gy] = graphTrans(xy, width, height);
-	} else {
-	    var uava = xy2uava(xy);
-	    var [gx, gy] = graphTrans(uava, width, height);
-	}
-	setRGBA(dstImageData, Math.round(gx), Math.round(gy), [0,0,0, 255]);
-    }
 }
 
 function drawGraphBase(canvas, cieArr, cie31Arr, guide) {
