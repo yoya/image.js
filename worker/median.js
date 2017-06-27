@@ -9,25 +9,15 @@ importScripts("../lib/canvas.js");
 onmessage = function(e) {
     var [srcImageData, filter, filterWindow] = [e.data.image, e.data.filter,
 						e.data.filterWindow];
-    var srcWidth = srcImageData.width;
-    var srcHeight = srcImageData.height;
-    var dstImageData = new ImageData(srcWidth, srcHeight);
-    drawMedianFilter_worker(srcImageData, dstImageData, filter, filterWindow);
-    postMessage({image:dstImageData}, [dstImageData.data.buffer]);
-}
-
-function drawMedianFilter_worker(srcImageData, dstImageData, filter, filterWindow) {
-    console.debug("drawMedianFilter_worker:", filter, filterWindow);
-    var srcWidth = srcImageData.width, srcHeight = srcImageData.height;
-    var dstWidth  = dstImageData.width, dstHeight = dstImageData.height;
-    //
-    for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var srcX = dstX, srcY = dstY;
-	    var rgba = medianFilter(srcImageData, srcX, srcY, filter, filterWindow);
-	    setRGBA(dstImageData, dstX, dstY, rgba);
+    var width = srcImageData.width, height = srcImageData.height;
+    var dstImageData = new ImageData(width, height);
+    for (var y = 0 ; y < height; y++) {
+        for (var x = 0 ; x < width; x++) {
+	    var rgba = medianFilter(srcImageData, x, y, filter, filterWindow);
+	    setRGBA(dstImageData, x, y, rgba);
 	}
     }
+    postMessage({image:dstImageData}, [dstImageData.data.buffer]);
 }
 
 function medianFilter(srcImageData, srcX, srcY, filter, filterWindow) {
