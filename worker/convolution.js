@@ -8,7 +8,16 @@ importScripts("../lib/canvas.js");
 
 onmessage = function(e) {
     var [srcImageData, filterMatrix, filterWindow] = [e.data.image, e.data.filterMatrix, e.data.filterWindow];
-    var dstImageData = drawConvolution(srcImageData, filterMatrix, filterWindow);
+    var width = srcImageData.width, height = srcImageData.height;
+    var dstImageData = new ImageData(width, height);
+    //
+    for (var y = 0 ; y < height; y++) {
+        for (var x = 0 ; x < width; x++) {
+	    var rgba = convolution(srcImageData, x, y,
+				   filterMatrix, filterWindow);
+	    setRGBA(dstImageData, x, y, rgba);
+	}
+    }
     postMessage({image:dstImageData}, [dstImageData.data.buffer]);
 }
 
@@ -29,21 +38,3 @@ function convolution(srcImageData, srcX, srcY, filterMatrix, convWindow) {
     var [r, g, b, a] = getRGBA(srcImageData, srcX, srcY);
     return [r2, g2, b2, a];
 }
-
-function drawConvolution(srcImageData, filterMatrix, filterWindow) {
-    // console.debug("drawConvolution");
-    var srcWidth = srcImageData.width, srcHeight = srcImageData.height;
-    var dstWidth  = srcWidth;
-    var dstHeight = srcHeight;
-    var dstImageData = new ImageData(dstWidth, dstHeight);
-    //
-    for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var srcX = dstX, srcY = dstY;
-	    var rgba = convolution(srcImageData, srcX, srcY, filterMatrix, filterWindow);
-	    setRGBA(dstImageData, dstX, dstY, rgba);
-	}
-    }
-    return dstImageData;
-}
-
