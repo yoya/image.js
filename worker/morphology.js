@@ -39,7 +39,7 @@ function morphologyFilter(srcImageData, srcX, srcY,
     for (var y = startY ; y < endY ; y++) {
 	for (var x = startX ; x < endX ; x++) {
 	    if (structureTable[i]) {
-		var [r, g, b, a] = getRGBA(srcImageData, x, y);
+		var [r, g, b, a] = getRGBA(srcImageData, x, y, OUTFILL_EDGE);
 		rArr[j] = r;
 		gArr[j] = g;
 		bArr[j] = b;

@@ -33,7 +33,7 @@ function medianFilter(srcImageData, srcX, srcY, filter, filterWindow) {
     var i = 0;
     for (var y = startY ; y < endY ; y++) {
 	for (var x = startX ; x < endX ; x++) {
-	    var [r, g, b, a] = getRGBA(srcImageData, x, y);
+	    var [r, g, b, a] = getRGBA(srcImageData, x, y, OUTFILL_EDGE);
 	    rArr[i] = r;
 	    gArr[i] = g;
 	    bArr[i] = b;
