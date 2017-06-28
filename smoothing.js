@@ -18,7 +18,7 @@ function main() {
     var filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
     var sigma = parseFloat(document.getElementById("sigmaRange").value);
     var filterMatrix = makeFilterMatrix(filter, filterWindow, sigma);
-    document.getElementById("sigmaText").style = "background-color: lightgray";
+    // document.getElementById("sigmaText").style = "background-color: lightgray";
     //
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
@@ -53,11 +53,13 @@ function main() {
 			 document.getElementById("sigmaText").value = document.getElementById("sigmaRange").value;
 		     }
 		     if (filter === "gaussianS") {
-			 document.getElementById("sigmaText").style = "background-color: white";
-			 document.getElementById("filterWindowText").style = "background-color: lightgray";
+			 ;
+			 // document.getElementById("sigmaText").style = "background-color: white";
+			 // document.getElementById("filterWindowText").style = "background-color: lightgray";
 		     } else {
-			 document.getElementById("filterWindowText").style = "background-color: white";
-			 document.getElementById("sigmaText").style = "background-color: lightgray";
+			 ;
+			 // document.getElementById("filterWindowText").style = "background-color: white";
+			 // document.getElementById("sigmaText").style = "background-color: lightgray";
 		     }
 		     bindTableFunction("filterMatrixTable", function(table, values, width) {
 			 filterMatrix = values;
