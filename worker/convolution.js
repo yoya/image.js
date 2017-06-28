@@ -28,7 +28,7 @@ function convolution(srcImageData, srcX, srcY, filterMatrix, convWindow) {
     var [r2, g2, b2, a2] = [0,0,0,0];
     for (var y = startY ; y < endY ; y++) {
 	for (var x = startX ; x < endX ; x++) {
-	    var [r, g, b, a] = getRGBA(srcImageData, x, y);
+	    var [r, g, b, a] = getRGBA(srcImageData, x, y, OUTFILL_EDGE);
 	    r2 += r * filterMatrix[i];
 	    g2 += g * filterMatrix[i];
 	    b2 += b * filterMatrix[i];
