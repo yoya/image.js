@@ -1,0 +1,37 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2017/06/28- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> Smoothing </title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body bgcolor="lightgray">
+  <div class="container">
+    <div>
+      <div id="controlPanel" style="float:left">
+        Smoothing Filter:  <br />
+	<div style="float:left; ">
+          <select id="filterSelect" size="2">
+            <option value="average"          > 移動平均 </option>
+	    <option value="gaussian" selected> ガウシアン </option>
+          </select>
+	</div>
+	<div>
+          maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText">
+	  <br />
+          filterWindow:<input id="filterWindowRange" type="range" min="1" max="11" step="2" value="5">:<input type="text" id="filterWindowText">
+	  <br />
+	  <div> filterMatrix:<table id="filterMatrixTable"> </table> </div>
+	</div>
+      </div>  
+    <div style="clear:both">
+    <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+    <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+  </div>
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/canvas.js"> </script>
+  <script type="text/javascript" src="lib/loading.js"> </script>
+  <script type="text/javascript" src="smoothing.js"> </script>
+</body>
+</html>
