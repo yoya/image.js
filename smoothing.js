@@ -54,7 +54,9 @@ function main() {
 		     }
 		     if (filter === "gaussianS") {
 			 document.getElementById("sigmaText").style = "background-color: white";
+			 document.getElementById("filterWindowText").style = "background-color: lightgray";
 		     } else {
+			 document.getElementById("filterWindowText").style = "background-color: white";
 			 document.getElementById("sigmaText").style = "background-color: lightgray";
 		     }
 		     bindTableFunction("filterMatrixTable", function(table, values, width) {
