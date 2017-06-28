@@ -16,7 +16,9 @@ function main() {
     var filterMatrixTable = document.getElementById("filterMatrixTable");
     var filter = document.getElementById("filterSelect").value;
     var filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
-    var filterMatrix = makeFilterMatrix(filter, filterWindow);
+    var sigma = parseFloat(document.getElementById("sigmaRange").value);
+    var filterMatrix = makeFilterMatrix(filter, filterWindow, sigma);
+    document.getElementById("sigmaText").style = "background-color: lightgray";
     //
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
@@ -31,11 +33,30 @@ function main() {
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
 		 } );
     bindFunction({"filterSelect":null,
-		  "filterWindowRange":"filterWindowText"},
+		  "filterWindowRange":"filterWindowText",
+		  "sigmaRange":"sigmaText"},
 		 function() {
 		     filter = document.getElementById("filterSelect").value;
 		     filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
-		     filterMatrix = makeFilterMatrix(filter, filterWindow);
+		     sigma = parseFloat(document.getElementById("sigmaRange").value);
+		     if (filter === "gaussianS") {
+			 filterWindow = Math.floor(sigma * 5 - 3) * 2 + 1;
+			 filterWindow = (filterWindow < 1)?1:filterWindow;
+		     }
+		     filterMatrix = makeFilterMatrix(filter, filterWindow, sigma);
+
+		     if (filter === "gaussianP") {
+			 var center = (filterWindow*filterWindow - 1) / 2;
+			 var centerValue = filterMatrix[center];
+			 sigma = 1 / Math.sqrt(2 * Math.PI * centerValue);
+			 document.getElementById("sigmaRange").value = sigma;
+			 document.getElementById("sigmaText").value = document.getElementById("sigmaRange").value;
+		     }
+		     if (filter === "gaussianS") {
+			 document.getElementById("sigmaText").style = "background-color: white";
+		     } else {
+			 document.getElementById("sigmaText").style = "background-color: lightgray";
+		     }
 		     bindTableFunction("filterMatrixTable", function(table, values, width) {
 			 filterMatrix = values;
 			 filterWindow = width;
@@ -50,7 +71,6 @@ function main() {
 	filterWindow = width;
 	 drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
     }, filterMatrix, filterWindow);
-    console.log(filterMatrixTable);
 }
 
 function gaussian(x, y, sigma) {
@@ -72,8 +92,7 @@ function pascalTriangle(n) {
     return arr;
 }
 
-function makeFilterMatrix(filter, filterWindow) {
-
+function makeFilterMatrix(filter, filterWindow, sigma) {
     var filterArea = filterWindow * filterWindow;
     var filterMatrix = new Float32Array(filterArea);
     var i = 0;
@@ -81,7 +100,7 @@ function makeFilterMatrix(filter, filterWindow) {
     case "average":
 	filterMatrix = filterMatrix.map(function(v) { return 1; });
 	break;
-    case "gaussian":
+    case "gaussianP":
 	var pt = pascalTriangle(filterWindow - 1);
 	for (var y = 0 ; y < filterWindow; y++) {
 	    for (var x = 0 ; x < filterWindow; x++) {
@@ -89,14 +108,24 @@ function makeFilterMatrix(filter, filterWindow) {
 	    }
 	}1
 	break;
+    case "gaussianS":
+	var center = Math.floor(filterWindow/2);
+	for (var y = 0 ; y < filterWindow; y++) {
+	    for (var x = 0 ; x < filterWindow; x++) {
+		var dx = Math.abs(x - center);
+		var dy = Math.abs(y - center);
+		filterMatrix[i++] = gaussian(dx, dy, sigma);
+	    }
+	}
+	break;
     }
     // division by sum
-    console.debug("filterMatrix:", filterMatrix);
-    var sum = filterMatrix.reduce(function(p, v) {return p+v; });;
-    console.debug("sum", sum);
-    filterMatrix = filterMatrix.map(function(v) {
-	return v / sum;
-    });
+    var total = filterMatrix.reduce(function(p, v) {return p+v; });;
+    if (total !== 0) {
+	filterMatrix = filterMatrix.map(function(v) {
+	    return v / total;
+	});
+    }
     return filterMatrix;
 }
 
