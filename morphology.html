@@ -10,7 +10,7 @@
     <div id="controlPanel">
       <div style="float:left">
         Filter:  <br />	
-	<div style="position:relative; left: 0%; float:left; ">
+	<div style="float:left">
           <select id="filterSelect" size="8">
             <option value="min"    selected> 最小値 </option>
             <option value="max"            > 最大値 </option>
@@ -20,7 +20,7 @@
       </div>
       <div style="float:left">
         structure Type:  <br />	
-	<div style="position:relative; left: 0%; float:left; ">
+	<div style="float:left">
           <select id="structureTypeSelect" size="8">
             <option value="square" selected> 正方形(square) </option>
 	    <option value="cross"          > 十字(cross) </option>
@@ -30,9 +30,9 @@
         </div>
       </div>
       <div style="float:left">
-        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="480">:<input type="text" id="maxWidthHeightText">
+        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
 	<br />
-        filterWindow:<input id="filterWindowRange" type="range" min="1" max="11" step="2" value="5">:<input type="text" id="filterWindowText">
+        filterWindow:<input id="filterWindowRange" type="range" min="1" max="11" step="2" value="5">:<input type="text" id="filterWindowText" size="3">
 	<br />
 	structureTable :<table id="structureTable"> </table>
       </div>

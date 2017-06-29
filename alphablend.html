@@ -10,7 +10,7 @@
     <div id="controlPanel"  style="float:left">
       <div style="float:left">
         Alpha Blend Method:  <br />
-	<div  style="position:relative; left: 30%; float:left; ">
+	<div style="float:left ;">
           <select id="methodSelect" size="6">
             <option value="plus" selected> 加算 </option>
             <option value="minus"        > 減算 </option>
@@ -19,16 +19,17 @@
           </select>
 	</div>
       </div >
-      <div>
+      <div style="float:left">
 	linearGamma:<input id="linearGammaCheckbox" type="checkbox" />
       </div>
       <div style="float:left">
-        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="480">:<input type="text" id="maxWidthHeightText">
-	<br />
-	ratio1:<input id="ratio1Range" type="range" min="0.0" max="1.0" step="0.1" value="0.5">:<input type="text" id="ratio1Text">
-	ratio2:<input id="ratio2Range" type="range" min="0.0" max="1.0" step="0.1" value="0.5">:<input type="text" id="ratio2Text">
+        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+      </div>
+      <div style="float:left">
+	ratio1:<input id="ratio1Range" type="range" min="0.0" max="1.0" step="0.1" value="0.5">:<input type="text" id="ratio1Text" size="4">
+	ratio2:<input id="ratio2Range" type="range" min="0.0" max="1.0" step="0.1" value="0.5">:<input type="text" id="ratio2Text" size="4">
         <br />
-        ratio:<input id="ratioRange" type="range" min="0.0" max="1.0" step="0.1" value="0.5">:<input type="text" id="ratioText">
+        ratio:<input id="ratioRange" type="range" min="0.0" max="1.0" step="0.1" value="0.5">:<input type="text" id="ratioText" size="4">
       </div>
     </div> <!-- controlPanel -->
     <br />
