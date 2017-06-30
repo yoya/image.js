@@ -22,8 +22,12 @@
           filterWindow:<input id="filterWindowRange" type="range" min="1" max="9" step="2" value="5">:<input type="text" id="filterWindowText">
 	  <br />
 	  sigma:<input id="sigmaRange" type="range" min="0.5" max="1.5" step="0.01" value="1.0"/>
-	    <input id="sigmaText" type="text" size="4"/> <br>
-	  </div>
+	  <input id="sigmaText" type="text" size="4"/>
+	  <br />
+	  bilateral :<input id="bilateralCheckbox" type="checkbox" /> (未調整)
+	  colorScale:<input id="colorScaleRange" type="range" min="1" max="100" step="1" value="10"/>
+	  <input id="colorScaleText" type="text" size="4"/>
+	</div>
 	<div style="float:left; ">
 	    filterMatrix:<table id="filterMatrixTable"> </table>
 	  </div>
@@ -35,6 +39,7 @@
   </div>
   <script type="text/javascript" src="lib/drop.js"> </script>
   <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/math.js"> </script>
   <script type="text/javascript" src="lib/canvas.js"> </script>
   <script type="text/javascript" src="lib/loading.js"> </script>
   <script type="text/javascript" src="smoothing.js"> </script>

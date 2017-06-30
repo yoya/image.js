@@ -17,31 +17,37 @@ function main() {
     var filter = document.getElementById("filterSelect").value;
     var filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
     var sigma = parseFloat(document.getElementById("sigmaRange").value);
+    var colorScale = parseFloat(document.getElementById("colorScaleRange").value);
     var filterMatrix = makeFilterMatrix(filter, filterWindow, sigma);
     // document.getElementById("sigmaText").style = "background-color: lightgray";
     //
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
+	    drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow, sigma, colorScale);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     //
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
-		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
+		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow, sigma, colorScale);
 		 } );
     bindFunction({"filterSelect":null,
 		  "filterWindowRange":"filterWindowText",
-		  "sigmaRange":"sigmaText"},
+		  "sigmaRange":"sigmaText",
+		  "bilateralCheckbox":null,
+		  "colorScaleRange":"colorScaleText",},
 		 function() {
 		     filter = document.getElementById("filterSelect").value;
 		     filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
 		     sigma = parseFloat(document.getElementById("sigmaRange").value);
+		     var colorScale = parseFloat(document.getElementById("colorScaleRange").value);
 		     if (filter === "gaussianS") {
 			 filterWindow = Math.floor(sigma * 5 - 3) * 2 + 1;
 			 filterWindow = (filterWindow < 1)?1:filterWindow;
+			 document.getElementById("filterWindowRange").value = filterWindow;
+			 document.getElementById("filterWindowText").value = document.getElementById("filterWindowRange").value;
 		     }
 		     filterMatrix = makeFilterMatrix(filter, filterWindow, sigma);
 
@@ -64,37 +70,19 @@ function main() {
 		     bindTableFunction("filterMatrixTable", function(table, values, width) {
 			 filterMatrix = values;
 			 filterWindow = width;
-			 drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
+			 drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow, sigma, colorScale);
 		     }, filterMatrix, filterWindow);
-		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
+		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow, sigma, colorScale);
 		     setTableValues("filterMatrixTable", filterMatrix);
 		 } );
     //
     bindTableFunction("filterMatrixTable", function(table, values, width) {
 	filterMatrix = values;
 	filterWindow = width;
-	 drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
+	 drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow, sigma, colorScale);
     }, filterMatrix, filterWindow);
 }
 
-function gaussian(x, y, sigma) {
-    var sigma2 = sigma * sigma;
-    return Math.exp(- (x*x + y*y) / (2 * sigma2)) / (2 * Math.PI * sigma2);
-}
-
-function pascalTriangle(n) {
-    var arr = new Uint16Array(n + 1);
-    if (n <= 1) {
-	return (n <= 0)?[1]:[1, 1];
-    }
-    var arr1 = pascalTriangle(n-1);
-    arr[0] = arr1[0];
-    for (var i = 1 ; i < n ; i++) {
-	arr[i] = arr1[i-1] +  arr1[i];
-    }
-    arr[n] = arr1[n-1];
-    return arr;
-}
 
 function makeFilterMatrix(filter, filterWindow, sigma) {
     var filterArea = filterWindow * filterWindow;
@@ -135,8 +123,9 @@ function makeFilterMatrix(filter, filterWindow, sigma) {
 
 var worker = null;
 
-function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, filterMatrix, filterWindow) {
+function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, filterMatrix, filterWindow, sigma, colorScale) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    var bilateral = document.getElementById("bilateralCheckbox").checked;
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
@@ -158,7 +147,9 @@ function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, filterMatrix
 	worker = null;
     }
     worker.postMessage({image:srcImageData,
-			filterMatrix:filterMatrix, filterWindow:filterWindow},
+			filterMatrix:filterMatrix, filterWindow:filterWindow,
+			sigma:sigma,
+			bilateral:bilateral,  colorScale:colorScale},
                        [srcImageData.data.buffer]);
 }
 
