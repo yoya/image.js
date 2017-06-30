@@ -48,7 +48,8 @@ function main() {
 		  "redRatioRange":"redRatioText",
 		  "greenRatioRange":"greenRatioText",
 		  "blueRatioRange":"blueRatioText",
-		  "ampRange":"ampText"},
+		  "ampRange":"ampText",
+		  "densityRange":"densityText"},
 		 function(target) {
 		     if (target.id === "ejectButton") {
 			 offCanvas = null;
@@ -96,7 +97,8 @@ function drawRandomAndHistogram(canvas, offCanvas, histCanvas) {
     var greenRatio = parseFloat(document.getElementById("greenRatioRange").value);
     var blueRatio = parseFloat(document.getElementById("blueRatioRange").value);
     var amp = parseFloat(document.getElementById("ampRange").value);
-    drawRandom(canvas, offCanvas, width, height, redRatio, greenRatio, blueRatio, amp);
+    var density = parseFloat(document.getElementById("densityRange").value);
+    drawRandom(canvas, offCanvas, width, height, redRatio, greenRatio, blueRatio, amp, density);
     var redHist   = getColorHistogramList(canvas, "red");
     var greenHist = getColorHistogramList(canvas, "green");
     var blueHist  = getColorHistogramList(canvas, "blue");
@@ -127,7 +129,7 @@ function randomRGBA(redRatio, greenRatio, blueRatio) {
 	    Math.floor(b * 256), 255 ];
 }
 
-function drawRandom(canvas, offCanvas, width, height, redRatio, greenRatio, blueRatio, amp) {
+function drawRandom(canvas, offCanvas, width, height, redRatio, greenRatio, blueRatio, amp, density) {
     // console.debug("drawRandom");
     var ctx = canvas.getContext("2d");
     canvas.width  = width;
@@ -137,9 +139,11 @@ function drawRandom(canvas, offCanvas, width, height, redRatio, greenRatio, blue
     if (offCanvas === null) {
 	for (var y = 0 ; y < height; y++) {
             for (var x = 0 ; x < width; x++) {
-		var [r,g,b] = randomRGBA(redRatio, greenRatio, blueRatio);
-		var rgba = [ amp * r,  amp * g, amp * b, 255];
-		setRGBA(imageData, x, y, rgba);
+		if (Math.random() < 1/density) {
+		    var [r,g,b] = randomRGBA(redRatio, greenRatio, blueRatio);
+		    var rgba = [ amp * r,  amp * g, amp * b, 255];
+		    setRGBA(imageData, x, y, rgba);
+		}
 	    }
 	}
     } else {
@@ -147,9 +151,13 @@ function drawRandom(canvas, offCanvas, width, height, redRatio, greenRatio, blue
 	var offImageData = offCtx.getImageData(0, 0, offCanvas.width, offCanvas.height);
 	for (var y = 0 ; y < height; y++) {
             for (var x = 0 ; x < width; x++) {
-		var [r1,g1,b1,a1] = getRGBA(offImageData, x, y, "edge");
-		var [r2,g2,b2] = randomRGBA(redRatio, greenRatio, blueRatio);
-		var rgba = [ r1 + amp*2*(r2 - 127),  g1 + amp*2*(g2 - 127), b1 + amp*2*(b2 - 127), a1];
+		if (Math.random() < 1/density) {
+		    var [r1,g1,b1,a1] = getRGBA(offImageData, x, y, "edge");
+		    var [r2,g2,b2] = randomRGBA(redRatio, greenRatio, blueRatio);
+		    var rgba = [ r1 + amp*2*(r2 - 127),  g1 + amp*2*(g2 - 127), b1 + amp*2*(b2 - 127), a1];
+		} else {
+		    var rgba = getRGBA(offImageData, x, y, "edge");
+		}
 		setRGBA(imageData, x, y, rgba);
 	    }
 	}
