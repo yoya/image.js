@@ -49,6 +49,7 @@ function drawSrcImageAndRescale(srcImage, srcCanvas, dstCancas) {
     if (worker) {
 	worker.terminate();
     }
+    var div = loadingStart();
     worker = new Worker("worker/rescale.js");
     worker.onmessage = function(e) {
 	var [dstImageData] = [e.data.image];
@@ -57,6 +58,7 @@ function drawSrcImageAndRescale(srcImage, srcCanvas, dstCancas) {
 	dstCanvas.width = dstWidth;
 	dstCanvas.height = dstHeight;
 	dstCtx.putImageData(dstImageData, 0, 0);
+	loadingEnd(div);
     }
     worker.postMessage({image:srcImageData, params:params},
                        [srcImageData.data.buffer]);
