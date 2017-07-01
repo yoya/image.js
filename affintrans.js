@@ -125,65 +125,29 @@ function affin2Matrix(affin, canvas) {
 	
 };
 
-function affinTransform(srcX, srcY, mat) {
-    var dstX = srcX*mat[0] + srcY*mat[1] + mat[2];
-    var dstY = srcX*mat[3] + srcY*mat[4] + mat[5];
-    return [dstX, dstY];
-}
-
-// http://www.cg.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/tech23.html
-function invertMatrix(mat, matWindow) {
-    var invMat = null;
-    switch(matWindow) {
-    case 3:
-	var [a11, a12, a13, a21, a22, a23, a31, a32, a33] = mat;
-	var det = a11*a22*a33 + a21*a32*a13 + a31*a12*a23 - a11*a32*a23 - a31*a22*a13 - a21*a12*a33;
-	invMat = [a22*a33-a23*a32, a13*a32-a12*a33, a12*a23-a13*a22,
-		  a23*a31-a21*a33, a11*a33-a13*a31, a13*a21-a11*a23,
-		  a21*a32-a22*a31, a12*a31-a11*a32, a11*a22-a12*a21];
-	invMat = invMat.map(function(v) { return v/det; });
-	break;
-    default:
-	console.error("Invalid matWindow:"+matWindow);
-	break;
-    }
-    return invMat;
-}
-
-function scaleAffinTransform(x, y, width, height, mat) {
-    var [dstX1, dstY1] = affinTransform(x, y, mat);
-    var [dstX2, dstY2] = affinTransform(x+width, y, mat);
-    var [dstX3, dstY3] = affinTransform(x, y+height, mat);
-    var [dstX4, dstY4] = affinTransform(x+width, y+height, mat);
-    var maxX = Math.max(dstX1, dstX2, dstX3, dstX4);
-    var minX = Math.min(dstX1, dstX2, dstX3, dstX4);
-    var maxY = Math.max(dstY1, dstY2, dstY3, dstY4);
-    var minY = Math.min(dstY1, dstY2, dstY3, dstY4);
-    return [maxX - minX, maxY - minY];
-}
-
+var worker = null;
 
 function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill) {
     // console.debug("drawAffinTransform");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var [dstWidth, dstHeight] = scaleAffinTransform(0, 0, srcWidth, srcHeight, affinMatrix);
-    dstWidth = Math.floor(dstWidth); dstHeight = Math.floor(dstHeight);
-    dstCanvas.width  = dstWidth;
-    dstCanvas.height = dstHeight;
-    var invMat = invertMatrix(affinMatrix, 3);
-    //
     var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-    var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-    for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var [srcX, srcY] = affinTransform(dstX, dstY, invMat);
-	    srcX = Math.round(srcX);
-	    srcY = Math.round(srcY);
-	    var rgba = getRGBA(srcImageData, srcX, srcY, outfill);
-	    setRGBA(dstImageData, dstX, dstY, rgba);
-	}
+    if (worker) {
+	worker.terminate();
     }
-    dstCtx.putImageData(dstImageData, 0, 0);
+    var div = loadingStart();
+    worker = new Worker("worker/affintrans.js");
+    worker.onmessage = function(e) {
+	var [dstImageData] = [e.data.image];
+	var dstWidth = dstImageData.width;
+	var dstHeight = dstImageData.height;
+	dstCanvas.width  = dstWidth;
+	dstCanvas.height = dstHeight;
+	dstCtx.putImageData(dstImageData, 0, 0);
+	loadingEnd(div);
+    }
+    worker.postMessage({image:srcImageData,
+			affinMatrix:affinMatrix, outfill:outfill},
+                       [srcImageData.data.buffer]);
 }
