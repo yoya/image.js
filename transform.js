@@ -81,7 +81,7 @@ function makeAffinMatrix(canvas, rotateAroundZero) {
 
 var worker = new Worker("worker/transform.js");
 var workerRunning = false;
-var workerQueue = [];
+var workerNext = null;
 
 function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, rotateAroundZero, outfill, rel) {
     // console.debug("drawAffinTransform");
@@ -101,8 +101,9 @@ function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, rotateAroundZero,
 	dstCtx.putImageData(dstImageData, 0, 0);
 	loadingEnd(div);
 	workerRunning = false;
-	if (0 < workerQueue.length) {
-	    var [message, transferHint] = workerQueue.shift();
+	if (workerNext !== null) {
+	    var [message, transferHint] = workerNext;
+	    workerNext = null;
 	    workerRunning = true;
 	    worker.postMessage(message, transferHint);
 	}
@@ -111,10 +112,7 @@ function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, rotateAroundZero,
 		   rotateAroundZero:rotateAroundZero, outfill:outfill}
     var transferHint = [srcImageData.data.buffer];
     if (workerRunning) {
-	if (1 < workerQueue.length) {
-	    workerQueue.shift();
-	}
-	workerQueue.push([message, transferHint]);
+	workerNext = [message, transferHint];
     } else {
 	workerRunning = true;
 	worker.postMessage(message, transferHint);
