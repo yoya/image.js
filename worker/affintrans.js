@@ -7,24 +7,6 @@
 importScripts("../lib/matrix.js");
 importScripts("../lib/canvas.js");
 
-function affinTransform(srcX, srcY, mat) {
-    var dstX = srcX*mat[0] + srcY*mat[1] + mat[2];
-    var dstY = srcX*mat[3] + srcY*mat[4] + mat[5];
-    return [dstX, dstY];
-}
-
-function scaleAffinTransform(x, y, width, height, mat) {
-    var [dstX1, dstY1] = affinTransform(x, y, mat);
-    var [dstX2, dstY2] = affinTransform(x+width, y, mat);
-    var [dstX3, dstY3] = affinTransform(x, y+height, mat);
-    var [dstX4, dstY4] = affinTransform(x+width, y+height, mat);
-    var maxX = Math.max(dstX1, dstX2, dstX3, dstX4);
-    var minX = Math.min(dstX1, dstX2, dstX3, dstX4);
-    var maxY = Math.max(dstY1, dstY2, dstY3, dstY4);
-    var minY = Math.min(dstY1, dstY2, dstY3, dstY4);
-    return [maxX - minX, maxY - minY];
-}
-
 onmessage = function(e) {
     console.debug("worker/onmessage:", e);
     var srcImageData = e.data.image;
@@ -46,4 +28,22 @@ onmessage = function(e) {
 	}
     }
     postMessage({image:dstImageData}, [dstImageData.data.buffer]);
+}
+
+function affinTransform(srcX, srcY, mat) {
+    var dstX = srcX*mat[0] + srcY*mat[1] + mat[2];
+    var dstY = srcX*mat[3] + srcY*mat[4] + mat[5];
+    return [dstX, dstY];
+}
+
+function scaleAffinTransform(x, y, width, height, mat) {
+    var [dstX1, dstY1] = affinTransform(x, y, mat);
+    var [dstX2, dstY2] = affinTransform(x+width, y, mat);
+    var [dstX3, dstY3] = affinTransform(x, y+height, mat);
+    var [dstX4, dstY4] = affinTransform(x+width, y+height, mat);
+    var maxX = Math.max(dstX1, dstX2, dstX3, dstX4);
+    var minX = Math.min(dstX1, dstX2, dstX3, dstX4);
+    var maxY = Math.max(dstY1, dstY2, dstY3, dstY4);
+    var minY = Math.min(dstY1, dstY2, dstY3, dstY4);
+    return [maxX - minX, maxY - minY];
 }
