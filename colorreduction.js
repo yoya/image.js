@@ -37,7 +37,6 @@ function drawSrcImageAndColorReduction(srcImage, srcCanvas) {
     document.getElementById("nColorDst").value = "";
     var srcImageData = srcCanvas.getContext("2d").getImageData(0, 0, srcCanvas.width, srcCanvas.height);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    var div = loadingStart();
     var srcImageData = srcCtx.getImageData(0, 0, srcCanvas.width,
 					   srcCanvas.height);
     document.getElementById("nColorSrc").value = getColorNum(srcImageData);
@@ -45,6 +44,7 @@ function drawSrcImageAndColorReduction(srcImage, srcCanvas) {
     if (worker) {
 	worker.terminate();
     }
+    var div = loadingStart();
     worker = new Worker("worker/colorreduction.js");
     worker.onmessage = function(e) {
 	var [dstImageData, palette] = [e.data.image, e.data.palette];

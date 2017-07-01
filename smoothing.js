@@ -130,11 +130,11 @@ function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, filterMatrix
     var dstCtx = dstCanvas.getContext("2d");
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     //
-    var div = loadingStart();
     var srcImageData = srcCanvas.getContext("2d").getImageData(0, 0, srcCanvas.width, srcCanvas.height);
     if (worker) {
 	worker.terminate();
     }
+    var div = loadingStart();
     worker = new Worker("worker/smoothing.js");
     worker.onmessage = function(e) {
 	var [dstImageData] = [e.data.image];
