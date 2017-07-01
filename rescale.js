@@ -174,62 +174,8 @@ function rescalePixel(srcX, srcY, srcImageData, filterType, filterKernel) {
 	rgba = getPixel_BiLinear(srcImageData, srcX, srcY);
 	break;
     default:
+	rgba = [255, 0, 0, 255];
 	break;
     }
     return rgba;
-}
-
-function cubicBCcoefficient(b, c) {
-    var p = 12 - 9 * b - 6 * c;
-    var q = -18 + 12 * b + 6 * c;
-    var r = 0;
-    var s = 6 - 2 * b;
-    var t = -b - 6 * c;
-    var u = 6 * b + 30 * c;
-    var v = -12 * b - 48 * c;
-    var w = 8 * b + 24 * c;
-    return [p, q, r, s, t, u, v, w];
-}
-function cubicBC(x, coeff) {
-    var [p, q, r, s, t, u, v, w] = coeff;
-    var y = 0;
-    var ax = Math.abs(x);
-    if (ax < 1) {
-	y = (1/6) * (p*(ax*ax*ax) + q*(ax*ax) + r*(ax) + s);
-    } else if (ax < 2) {
-	y = (1/6) * (t*(ax*ax*ax) + u*(ax*ax) + v*(ax) + w);
-    }
-    return y;
-}
-
-function sinc(x) {
-    var pi_x = Math.PI * x;
-    return Math.sin(pi_x) / pi_x;
-}
-
-function sincFast(x) {
-    var xx = x * x;
-    // quantim depth 8
-    var c0 = 0.173610016489197553621906385078711564924e-2;
-    var c1 = -0.384186115075660162081071290162149315834e-3;
-    var c2 = 0.393684603287860108352720146121813443561e-4;
-    var c3 = -0.248947210682259168029030370205389323899e-5;
-    var c4 = 0.107791837839662283066379987646635416692e-6;
-    var c5 = -0.324874073895735800961260474028013982211e-8;
-    var c6 = 0.628155216606695311524920882748052490116e-10;
-    var c7 = -0.586110644039348333520104379959307242711e-12;
-    var p =
-	c0+xx*(c1+xx*(c2+xx*(c3+xx*(c4+xx*(c5+xx*(c6+xx*c7))))));
-    return (xx-1.0)*(xx-4.0)*(xx-9.0)*(xx-16.0)*p;
-}
-
-function lanczos(x, lobe) {
-    if (x === 0) {
-	return 0;
-    }
-    if (Math.abs(x) < lobe) {
-	//return sinc(x) * sinc(x/lobe);
-	return sincFast(x) * sincFast(x/lobe);
-    }
-    return 0;
 }
