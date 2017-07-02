@@ -80,41 +80,9 @@ function makeAffinMatrix(canvas, rotateAroundZero) {
 };
 
 var worker = new Worker("worker/transform.js");
-var workerRunning = false;
-var workerNext = null;
 
 function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, rotateAroundZero, outfill, rel) {
-    // console.debug("drawAffinTransform");
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtx = dstCanvas.getContext("2d");
-    var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-
-    var div = loadingStart();
-
-    worker.onmessage = function(e) {
-	var [dstImageData] = [e.data.image];
-	var dstWidth = dstImageData.width;
-	var dstHeight = dstImageData.height;
-	dstCanvas.width  = dstWidth;
-	dstCanvas.height = dstHeight;
-	dstCtx.putImageData(dstImageData, 0, 0);
-	loadingEnd(div);
-	workerRunning = false;
-	if (workerNext !== null) {
-	    var [message, transferHint] = workerNext;
-	    workerNext = null;
-	    workerRunning = true;
-	    worker.postMessage(message, transferHint);
-	}
-    }
-    var message = {image:srcImageData, affinMatrix:affinMatrix,
-		   rotateAroundZero:rotateAroundZero, outfill:outfill}
-    var transferHint = [srcImageData.data.buffer];
-    if (workerRunning) {
-	workerNext = [message, transferHint];
-    } else {
-	workerRunning = true;
-	worker.postMessage(message, transferHint);
-    }
+    var params = {affinMatrix:affinMatrix,
+		  rotateAroundZero:rotateAroundZero, outfill:outfill}
+    workerProcess(worker, srcCanvas, dstCanvas, params);
 }
