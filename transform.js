@@ -79,10 +79,10 @@ function makeAffinMatrix(canvas, rotateAroundZero) {
     return mat;
 };
 
-var worker = new Worker("worker/transform.js");
+var worker = new workerProcess("worker/transform.js");
 
-function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, rotateAroundZero, outfill, rel) {
+function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, rotateAroundZero, outfill, sync) {
     var params = {affinMatrix:affinMatrix,
 		  rotateAroundZero:rotateAroundZero, outfill:outfill}
-    workerProcess(worker, srcCanvas, dstCanvas, params);
+    worker.process(srcCanvas, dstCanvas, params, sync);
 }

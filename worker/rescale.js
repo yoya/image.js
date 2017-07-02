@@ -9,8 +9,9 @@ importScripts("../lib/math.js");
 importScripts("../lib/interpolate.js");
 
 onmessage = function(e) {
+    // console.debug("worker/rescale onmessage", e);
     var srcImageData = e.data.image;
-    var params = e.data.params;
+    var params = e.data;
     var scale = params.scale;
     var filterType = params.filterType;
     var srcWidth  = srcImageData.width;

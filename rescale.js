@@ -23,18 +23,16 @@ function main() {
 		  "cubicBRange":"cubicBText",
 		  "cubicCRange":"cubicCText",
 		  "lobeRange":"lobeText"},
-		 function() {
-		     drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas);
+		 function(target, rel) {
+		     drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas, rel);
 		 } );
 }
 
-var worker = null;
+var worker = new workerProcess("worker/rescale.js");
 
-function drawSrcImageAndRescale(srcImage, srcCanvas, dstCancas) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+function drawSrcImageAndRescale(srcImage, srcCanvas, dstCancas, sync) {
+    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);    
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtx = dstCanvas.getContext("2d");
     var params = {
 	filterType: document.getElementById("filterType").value,
 	scale: parseFloat(document.getElementById("scaleRange").value),
@@ -42,25 +40,6 @@ function drawSrcImageAndRescale(srcImage, srcCanvas, dstCancas) {
 	cubicC:parseFloat(document.getElementById("cubicCRange").value),
 	lobe:  parseFloat(document.getElementById("lobeRange").value)
     };
-    drawGraph(params)
-    var srcWidth  = srcCanvas.width;
-    var srcHeight = srcCanvas.height;
-    var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-    if (worker) {
-	worker.terminate();
-    }
-    var div = loadingStart();
-    worker = new Worker("worker/rescale.js");
-    worker.onmessage = function(e) {
-	var [dstImageData] = [e.data.image];
-	var dstWidth  = dstImageData.width;
-	var dstHeight = dstImageData.height;
-	dstCanvas.width = dstWidth;
-	dstCanvas.height = dstHeight;
-	dstCtx.putImageData(dstImageData, 0, 0);
-	loadingEnd(div);
-    }
-    worker.postMessage({image:srcImageData, params:params},
-                       [srcImageData.data.buffer]);
+    drawGraph(params);
+    worker.process(srcCanvas, dstCanvas, params, sync);
 }
-
