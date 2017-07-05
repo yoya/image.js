@@ -14,11 +14,12 @@ function main() {
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var fuzz = parseFloat(document.getElementById("fuzzRange").value);
+    var margin = parseFloat(document.getElementById("marginRange").value);
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-	    drawTrim(srcCanvas, dstCanvas, fuzz);
+	    drawTrim(srcCanvas, dstCanvas, fuzz, margin);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -26,12 +27,14 @@ function main() {
 		 function() {
 		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-		     drawTrim(srcCanvas, dstCanvas, fuzz);
+		     drawTrim(srcCanvas, dstCanvas, fuzz, margin);
 		 } );
-    bindFunction({"fuzzRange":"fuzzText"},
+    bindFunction({"fuzzRange":"fuzzText",
+		  "marginRange":"marginText"},
 		 function() {
 		     fuzz = parseFloat(document.getElementById("fuzzRange").value);
-		     drawTrim(srcCanvas, dstCanvas, fuzz);
+		     margin = parseFloat(document.getElementById("marginRange").value);
+		     drawTrim(srcCanvas, dstCanvas, fuzz, margin);
 		 } );
 }
 
@@ -113,7 +116,7 @@ function matchColorLineNum(imageData, rgba, fuzz, isVert, start, d) {
     return num;
 }
 
-function drawTrim(srcCanvas, dstCanvas, fuzz) {
+function drawTrim(srcCanvas, dstCanvas, fuzz, margin) {
     // console.debug("drawTrim");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -129,6 +132,12 @@ function drawTrim(srcCanvas, dstCanvas, fuzz) {
     var maxY = srcHeight - matchColorLineNum(srcImageData, baseRGBA, fuzz,
 					     true, srcHeight - 1, -1);
     // console.debug("minX, minY, maxX, maxY:", minX, minY, maxX, maxY);
+    // console.debug("margin:", margin);
+    minX = (minX < margin)?0:(minX - margin);
+    maxX = (srcWidth <= (maxX + margin)) ? (srcWidth-1) : (maxX + margin);
+    minY = (minY < margin) ? 0 : (minY - margin);
+    maxY = (srcHeight <= (maxY + margin)) ? (srcHeight-1) : (maxY + margin);
+    //
     var dstWidth  = (maxX > minX)?(maxX - minX):1;
     var dstHeight = (maxY > minY)?(maxY - minY):1;
     dstCanvas.width  = dstWidth;
