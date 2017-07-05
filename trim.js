@@ -66,7 +66,7 @@ function matchColorLineNum(imageData, rgba, fuzz, isVert, start, d) {
     if (isVert) {
 	if (d > 0) {
 	    for (var y = start ; y < height ; y+= d) {
-		for (var x = 0 ; x < width ; x++) {
+		for (var x = 0 ; x < width ;a x++) {
 		    var rgba2 = getRGBA(imageData, x, y);
 		    if (matchColor(rgba, rgba2, fuzz) === false) {
 			return num;
@@ -126,11 +126,11 @@ function drawTrim(srcCanvas, dstCanvas, fuzz, margin) {
     var minX = matchColorLineNum(srcImageData, baseRGBA, fuzz,
 				 false, 0, 1);
     var maxX = srcWidth - matchColorLineNum(srcImageData, baseRGBA, fuzz,
-					    false, srcWidth - 1, -1, fuzz);
+					    false, srcWidth-1, -1);
     var minY = matchColorLineNum(srcImageData, baseRGBA, fuzz,
 				 true, 0, 1);
     var maxY = srcHeight - matchColorLineNum(srcImageData, baseRGBA, fuzz,
-					     true, srcHeight - 1, -1);
+					     true, srcHeight-1, -1);
     // console.debug("minX, minY, maxX, maxY:", minX, minY, maxX, maxY);
     // console.debug("margin:", margin);
     minX = (minX < margin)?0:(minX - margin);
