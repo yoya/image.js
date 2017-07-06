@@ -20,7 +20,8 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "linearGammaCheckbox":null},
+		  "linearGammaCheckbox":null,
+		  "inverseCheckbox":null},
 		 function() {
 		     drawSrcImageAndVinette(srcImage, srcCanvas, dstCanvas);
 		 } );
@@ -28,12 +29,13 @@ function main() {
 function drawSrcImageAndVinette(srcImage, srcCanvas, dstCancas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var linearGamma = document.getElementById("linearGammaCheckbox").checked;
+    var inverse = document.getElementById("inverseCheckbox").checked;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawVinette(srcCanvas, dstCanvas, linearGamma);
+    drawVinette(srcCanvas, dstCanvas, linearGamma, inverse);
 }
 
 
-function drawVinette(srcCanvas, dstCanvas, linearGamma) {
+function drawVinette(srcCanvas, dstCanvas, linearGamma, inverse) {
     // console.debug("drawVinette");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -45,11 +47,14 @@ function drawVinette(srcCanvas, dstCanvas, linearGamma) {
     var dstImageData = dstCtx.createImageData(width, height);
     for (var y = 0 ; y < height; y++) {
         for (var x = 0 ; x < width; x++) {
-	    var longSide = Math.max(width, height);
-            var dx = (x - (width  / 2)) / (longSide / 2);
-            var dy = (y - (height / 2)) / (longSide / 2);
+	    var slant = Math.sqrt(width*width + height*height);
+            var dx = (x - (width  / 2)) / (slant/2);
+            var dy = (y - (height / 2)) / (slant/2);
             var r = Math.sqrt(dx*dx + dy*dy);
-	    var factor = Math.pow(Math.cos(r/2.0), 4);
+	    var factor = Math.pow(Math.cos(r/2), 4);
+	    if (inverse) {
+		factor = 1 / factor;
+	    }
 	    if (linearGamma) {
 		var rgba = getRGBA(srcImageData, x, y);
 		var [lr, lg, lb, la] = sRGB2linearRGB(rgba);
