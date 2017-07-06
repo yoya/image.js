@@ -9,6 +9,7 @@
     <div class="container">
       <div class="controlPanel">
 	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+	linearGamma:<input id="linearGammaCheckbox" type="checkbox" />
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
@@ -16,6 +17,7 @@
     <script type="text/javascript" src="lib/drop.js"> </script>
     <script type="text/javascript" src="lib/bind.js"> </script>
     <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="lib/color.js"> </script>
     <script type="text/javascript" src="vinette.js"> </script>
   </body>
 </html>
