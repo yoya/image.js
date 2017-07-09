@@ -17,12 +17,12 @@ table {
 }
 
 .noCR {
-  display: inline-block; // IE
-  display: inline;      // Mozilla
+  display: inline-block; /* IE */
+  display: inline;      /* Mozilla */
 }
 .CR {
-  display: block; // IE
-  display: block;      // Mozilla
+  display: block; /* IE */
+  display: block;      /* Mozilla */
 }
 
 .borderRed { border: thick solid red; }
