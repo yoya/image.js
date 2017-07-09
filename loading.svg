@@ -2,6 +2,25 @@
      xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
+    <style>
+      #rod1 { animation-delay: 0s; }
+      #rod2 { animation-delay: -1s; }
+      #rod3 { animation-delay: -2s; }
+      .rodRotate {
+          -webkit-animation:spin 3s linear infinite;
+          -moz-animation:spin 3s linear infinite;
+          animation:spin 3s linear infinite;
+          -webkit-transform-origin: 50% 50%;
+          -moz-transform-origin: 50% 50%;
+          -o-transform-origin: 50% 50%;
+          transform-origin: 50% 50%;
+    }
+    @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+    @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+    @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+    </style>
+  </defs>
+  <defs>
     <linearGradient id="gradRC" gradientUnits="userSpaceOnUse"
 		    x1="0" x2="0" y1="0" y2="100">
       <stop offset="0" stop-color="#f00"> </stop>
@@ -23,23 +42,11 @@
     <ellipse id="rod" cx="50" cy="50" rx="20" ry="50" style="mix-blend-mode:darken;"> </ellipse>
   </defs>
   <g style="isolation:auto">
-    <use xlink:href="#rod" fill="url(#gradRC)">
-      <animateTransform
-	  attributeName="transform" attributeType="XML"
-	  type="rotate" from="0 50,50" to="360 50,50"
-	  dur="2s" repeatCount="indefinite" />
+    <use xlink:href="#rod" fill="url(#gradRC)" id="rod1" class="rodRotate">
     </use>
-    <use xlink:href="#rod" fill="url(#gradGM)">
-      <animateTransform
-	  attributeName="transform" attributeType="XML"
-	  type="rotate" from="120 50,50" to="480 50,50"
-	  dur="2s" repeatCount="indefinite" />
+    <use xlink:href="#rod" fill="url(#gradGM)" id="rod2" class="rodRotate">
     </use>
-    <use xlink:href="#rod" fill="url(#gradBY)">
-      <animateTransform
-	  attributeName="transform" attributeType="XML"
-	  type="rotate" from="240 50,50" to="600 50,50"
-	  dur="2s" repeatCount="indefinite" />
+    <use xlink:href="#rod" fill="url(#gradBY)" id="rod3" class="rodRotate">
     </use>
   </g>
 </svg>
