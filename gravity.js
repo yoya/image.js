@@ -19,7 +19,7 @@ function main() {
     var outfill = document.getElementById("outfillSelect").value;
     outfill = outfillStyleNumber(outfill);
 
-    var drawImageAndResize = function() {
+    var drawImageAndGravity = function(rel) {
 	var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 	drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	dstWidth  = srcCanvas.width;
@@ -28,26 +28,26 @@ function main() {
 	document.getElementById("dstWidthText").value  = dstWidth;
 	document.getElementById("dstHeightRange").value = dstHeight;
 	document.getElementById("dstHeightText").value  = dstHeight;
-	drawResize(srcCanvas, dstCanvas, dstWidth, dstHeight, gravity, outfill);
+	drawGravity(srcCanvas, dstCanvas, dstWidth, dstHeight, gravity, outfill, rel);
     }
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
-	srcImage.onload = drawImageAndResize;
+	srcImage.onload = drawImageAndGravity;
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
-		     drawImageAndResize();
+		 function(target, rel) {
+		     drawImageAndGravity(rel);
 		 } );
     bindFunction({"dstWidthRange":"dstWidthText",
 		  "dstHeightRange":"dstHeightText",
 		  "outfillSelect":null},
-		 function() {
+		 function(target, rel) {
 		     dstWidth = parseFloat(document.getElementById("dstWidthRange").value);
 		     dstHeight = parseFloat(document.getElementById("dstHeightRange").value);
 		     outfill = document.getElementById("outfillSelect").value;
 		     outfill = outfillStyleNumber(outfill);
-		     drawResize(srcCanvas, dstCanvas, dstWidth, dstHeight, gravity, outfill);
+		     drawGravity(srcCanvas, dstCanvas, dstWidth, dstHeight, gravity, outfill, rel);
 		 } );
     var gravityTable = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     gravityTable[gravity-1] = 1;
@@ -59,40 +59,14 @@ function main() {
 	    }
 	}
 	// console.debug(gravity);
-	drawResize(srcCanvas, dstCanvas, dstWidth, dstHeight, gravity, outfill);
+	drawGravity(srcCanvas, dstCanvas, dstWidth, dstHeight, gravity, outfill, true);
     }, gravityTable, 3, "radio");
 }
 
-function gravityLayout(srcSize, dstSize, gravity) {
-    // console.debug("gravityLayout:",srcSize, dstSize, gravity);
-    if (gravity == 0) { // left or top
-	return 0;
-    } else if (gravity === 1) { // center
-	return Math.floor((dstSize - srcSize) / 2);
-    } else { // right or buttom
-	return dstSize - srcSize;
-    }
-}
+var worker = new workerProcess("worker/gravity.js");
 
-function drawResize(srcCanvas, dstCanvas, dstWidth, dstHeight, gravity, outfill) {
-    // console.debug("drawResize");
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtx = dstCanvas.getContext("2d");
-    var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    dstCanvas.width  = dstWidth;
-    dstCanvas.height = dstHeight;
-    //
-    var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-    var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-    var offsetX = gravityLayout(srcWidth, dstWidth, (gravity-1)%3);
-    var offsetY = gravityLayout(srcHeight, dstHeight, Math.floor((gravity-1)/3));
-    for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var srcX = dstX - offsetX;
-	    var srcY = dstY - offsetY;
-	    var rgba = getRGBA(srcImageData, srcX, srcY, outfill);
-	    setRGBA(dstImageData, dstX, dstY, rgba);
-	}
-    }
-    dstCtx.putImageData(dstImageData, 0, 0);
+function drawGravity(srcCanvas, dstCanvas, dstWidth, dstHeight, gravity, outfill, sync) {
+    var params = {gravity:gravity, dstWidth:dstWidth, dstHeight:dstHeight,
+		  outfill:outfill};
+    worker.process(srcCanvas, dstCanvas, params, sync);
 }
