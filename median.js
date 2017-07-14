@@ -21,49 +21,29 @@ function main() {
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    dstCanvas.width = srcCanvas.width;
 	    dstCanvas.height = srcCanvas.height;
-	    drawMedianFilter(srcCanvas, dstCanvas, filter, filterWindow);
+	    drawMedianFilter(srcCanvas, dstCanvas, filter, filterWindow, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"filterSelect":null, "filterWindowRange":"filterWindowText"},
-		 function() {
+		 function(target, rel) {
 		     filter = document.getElementById("filterSelect").value;
 		     filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
-		     drawMedianFilter(srcCanvas, dstCanvas, filter, filterWindow);
+		     drawMedianFilter(srcCanvas, dstCanvas, filter, filterWindow, rel);
 		 } );
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+		 function(target, rel) {
 		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     dstCanvas.width = srcCanvas.width;
 		     dstCanvas.height = srcCanvas.height;
-		     drawMedianFilter(srcCanvas, dstCanvas, filter, filterWindow);
+		     drawMedianFilter(srcCanvas, dstCanvas, filter, filterWindow, rel);
 		 } );
 }
 
-var worker = null;
+var worker = new workerProcess("worker/median.js");
 
-function drawMedianFilter(srcCanvas, dstCanvas, filter, filterWindow) {
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtx = dstCanvas.getContext("2d");
-    var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var dstWidth = srcWidth, dstHeight = srcHeight;
-    var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-    var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-    if (worker) {
-        worker.terminate();
-    }
-    var div = loadingStart();
-    worker = new Worker("worker/median.js");
-    worker.onmessage = function(e) {
-	var [dstImageData] = [e.data.image];
-	var dstWidth = dstImageData.width;
-        var dstHeight = dstImageData.height;
-        dstCtx.putImageData(dstImageData, 0, 0, 0, 0, dstWidth, dstHeight);
-	loadingEnd(div);
-        worker = null;
-    }
-    worker.postMessage({image:srcImageData, filter:filter,
-			filterWindow:filterWindow},
-                       [srcImageData.data.buffer]);
+function drawMedianFilter(srcCanvas, dstCanvas, filter, filterWindow, sync) {
+    var params = {filter:filter, filterWindow:filterWindow};
+    worker.process(srcCanvas, dstCanvas, params, sync);
 }
