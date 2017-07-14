@@ -12,15 +12,15 @@ onmessage = function(e) {
     var srcImageData = e.data.image;
     var affinMatrix = e.data.affinMatrix;
     var affinMatrix = e.data.affinMatrix;
-    var rotateAroundZero = e.data.rotateAroundZero;
+    var rotateRoundCenter = e.data.rotateRoundCenter;
     var outfill = e.data.outfill;
     var srcWidth = srcImageData.width, srcHeight = srcImageData.height;
-    if (rotateAroundZero) {
-	var [dstWidth, dstHeight] = [srcWidth * 2 , srcHeight * 2];
-    } else {
+    if (rotateRoundCenter) {
 	var hypotenuse = Math.sqrt(srcWidth*srcWidth + srcHeight*srcHeight);
 	var [dstWidth, dstHeight] = [hypotenuse, hypotenuse];
 	dstWidth = Math.ceil(dstWidth); dstHeight = Math.ceil(dstHeight);
+    } else {
+	var [dstWidth, dstHeight] = [srcWidth * 2 , srcHeight * 2];
     }
     var invMat = invertMatrix(affinMatrix, 3);
     //
@@ -28,17 +28,17 @@ onmessage = function(e) {
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
 	    var srcX, srcY;
-	    if (rotateAroundZero) {
+	    if (rotateRoundCenter) {
+		[srcX, srcY] = affinTransform(dstX, dstY, invMat);
+	    } else {
 		[srcX, srcY] = affinTransform(dstX - dstWidth / 2,
 					      dstY - dstHeight / 2,
 					      invMat);
-	    } else {
-		[srcX, srcY] = affinTransform(dstX, dstY, invMat);
 	    }
 	    srcX = Math.round(srcX);
 	    srcY = Math.round(srcY);
 	    var rgba = getRGBA(srcImageData, srcX, srcY, outfill);
-	    if (rotateAroundZero) {
+	    if (rotateRoundCenter) {
 		if ((dstX == (dstWidth / 2)) || (dstY === (dstHeight / 2))) {
 		    var [r, g, b, a] = rgba;
 		    rgba = [r * a, g * a,  b * a, 255];
@@ -55,7 +55,6 @@ function affinTransform(srcX, srcY, mat) {
     var dstY = srcX*mat[3] + srcY*mat[4] + mat[5];
     return [dstX, dstY];
 }
-
 
 function scaleAffinTransform(x, y, width, height, mat) {
     var [dstX1, dstY1] = affinTransform(x, y, mat);
