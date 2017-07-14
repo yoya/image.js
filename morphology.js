@@ -23,36 +23,36 @@ function main() {
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    dstCanvas.width  = srcCanvas.width;
 	    dstCanvas.height = srcCanvas.height;
-	    drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow);
+	    drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"filterSelect":null},
-		 function() {
+		 function(target, rel) {
 		     filter = document.getElementById("filterSelect").value;
-		     drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow);
+		     drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow, rel);
 		 });
     bindFunction({"structureTypeSelect":null,
 		  "filterWindowRange":"filterWindowText"},
-		 function() {
+		 function(target, rel) {
 		     structureType = document.getElementById("structureTypeSelect").value;
 		     filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
 		     structureTable = makeStructureTable(structureType, filterWindow);
-		     drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow);
+		     drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow, rel);
 		     bindTableFunction("structureTable", function(table, values, width) {
 			 // console.debug(values, width);
 			 structureTable = values;
 			 filterWindow = width;
-			 drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow);
+			 drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow, true);
 		     }, structureTable, filterWindow, "checkbox");
 		 } );
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+		 function(target, rel) {
 		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     dstCanvas.width  = srcCanvas.width;
 		     dstCanvas.height = srcCanvas.height;
-		     drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow);
+		     drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow, rel);
 
 		 } );
     bindTableFunction("structureTable", function(table, values, width) {
@@ -115,30 +115,9 @@ function makeStructureTable(structureType, filterWindow) {
     return structureTable;
 }   
 
-var worker = null;
+var worker = new workerProcess("worker/morphology.js");
 
-function drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow) {
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtx = dstCanvas.getContext("2d");
-    var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var dstWidth = dstCanvas.width, dstHeight = dstCanvas.height;
-    var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-    var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-    if (worker) {
-        worker.terminate();
-    }
-    var div = loadingStart();
-    worker = new Worker("worker/morphology.js");
-    worker.onmessage = function(e) {
-	var [dstImageData] = [e.data.image];
-	var dstWidth = dstImageData.width;
-        var dstHeight = dstImageData.height;
-        dstCtx.putImageData(dstImageData, 0, 0, 0, 0, dstWidth, dstHeight);
-	loadingEnd(div);
-        worker = null;
-    }
-    worker.postMessage({image:srcImageData, filter:filter,
-			structureTable:structureTable,
-			filterWindow:filterWindow},
-                       [srcImageData.data.buffer]);
+function drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow, sync) {
+    var params = {filter:filter, structureTable:structureTable, filterWindow:filterWindow};
+    worker.process(srcCanvas, dstCanvas, params, sync);
 }
