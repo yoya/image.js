@@ -26,31 +26,31 @@ function main() {
 	    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    affinMatrix = affin2Matrix(affin, srcCanvas);
-	    drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill);
+	    drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     //
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+		 function(target, rel) {
 		     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     affinMatrix = affin2Matrix(affin, srcCanvas);
-		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill);
+		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill, rel);
 		 } );
     bindFunction({"affinSelect":null, "outfillSelect":null},
-		 function() {
+		 function(target, rel) {
 		     affin = document.getElementById("affinSelect").value;
 		     outfill = document.getElementById("outfillSelect").value;
 		     outfill = outfillStyleNumber(outfill);
 		     affinMatrix = affin2Matrix(affin, srcCanvas);
-		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill);
+		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill, rel);
 		     setTableValues("affinMatrixTable", affinMatrix);
 		 } );
     //
     bindTableFunction("affinMatrixTable", function(table, values, width) {
 	affinMatrix = values;
-	drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill);
+	drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill, true);
     }, affinMatrix, affinWindow);
 }
 
@@ -125,29 +125,9 @@ function affin2Matrix(affin, canvas) {
 	
 };
 
-var worker = null;
+var worker = new workerProcess("worker/affintrans.js");
 
-function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill) {
-    // console.debug("drawAffinTransform");
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtx = dstCanvas.getContext("2d");
-    var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-    if (worker) {
-	worker.terminate();
-    }
-    var div = loadingStart();
-    worker = new Worker("worker/affintrans.js");
-    worker.onmessage = function(e) {
-	var [dstImageData] = [e.data.image];
-	var dstWidth = dstImageData.width;
-	var dstHeight = dstImageData.height;
-	dstCanvas.width  = dstWidth;
-	dstCanvas.height = dstHeight;
-	dstCtx.putImageData(dstImageData, 0, 0);
-	loadingEnd(div);
-    }
-    worker.postMessage({image:srcImageData,
-			affinMatrix:affinMatrix, outfill:outfill},
-                       [srcImageData.data.buffer]);
+function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill, sync) {
+    var params = {affinMatrix:affinMatrix, outfill:outfill};
+    worker.process(srcCanvas, dstCanvas, params, sync);
 }
