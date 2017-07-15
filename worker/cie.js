@@ -8,10 +8,12 @@ importScripts("../lib/color.js");
 importScripts("../lib/canvas.js");
 
 onmessage = function(e) {
-    var [imageData, hist, colorspace] = [e.data.image, e.data.hist,
-					 e.data.colorspace];
-    var imagaData = drawDiagramPoint(imageData, hist, colorspace);
-    postMessage({image:imageData}, [imageData.data.buffer]);
+    var imageData = e.data.image; // ignore this
+    var diagramBaseImageData = e.data.diagramBaseImageData;
+    var hist = e.data.hist;
+    var colorspace = e.data.colorspace;
+    var dstImageData = drawDiagramPoint(diagramBaseImageData, hist, colorspace);
+    postMessage({image:dstImageData}, [dstImageData.data.buffer]);
 }
 
 function graphTrans(xy, width, height) {

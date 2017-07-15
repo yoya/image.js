@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     console.debug("cie main()");
     var srcCanvas = document.getElementById("srcCanvas");
+    var diagramBaseCanvas = document.getElementById("diagramBaseCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     var cieSelect = document.getElementById("cieSelect").value;
@@ -34,7 +35,7 @@ function main() {
 			cie31Arr = arr;
 			cieArr = cie31Arr;
 			drawGraph(graphCanvas, cieArr, cie31Arr);
-			drawDiagram(dstCanvas, cieArr, hist);
+			drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, true);
 		    } else {
 			cie64Arr = arr;
 		    }
@@ -47,7 +48,7 @@ function main() {
 	}
     }
     bindFunction({"cieSelect":null},
-		 function() {
+		 function(target, rel) {
 		     console.debug("cieSelect event");
 		     cieSelect = document.getElementById("cieSelect").value;
 		     if (cieSelect === "ciexyz31") {
@@ -56,21 +57,21 @@ function main() {
 			 cieArr = cie64Arr;
 		     }
 		     drawGraph(graphCanvas, cieArr, cie31Arr);
-		     drawDiagram(dstCanvas, cieArr, hist);
+		     drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, rel);
 		 } );
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+		 function(target, rel) {
 		     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     hist = getColorHistogram(srcCanvas);
-		     drawDiagram(dstCanvas, cieArr, hist);
+		     drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, rel);
 		 } );
     bindFunction({"colorspaceSelect":null,
 		  "tristimulusCheckbox":null,
 		  "guideCheckbox":null},
-		 function() {
+		 function(target, rel) {
 		     drawGraph(graphCanvas, cieArr, cie31Arr);
-		     drawDiagram(dstCanvas, cieArr, hist);
+		     drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, rel);
 		 } );
     //
     dropFunction(document, function(dataURL) {
@@ -80,37 +81,29 @@ function main() {
 	    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    hist = getColorHistogram(srcCanvas);
-	    drawDiagram(dstCanvas, cieArr, hist);
+	    drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     loadCIEXYZdata();
 }
 
-var worker = null;
+var worker = new workerProcess("worker/cie.js");
 
-function drawDiagram(dstCanvas, cieArr, hist) {
+function drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, sync) {
     var colorspace = document.getElementById("colorspaceSelect").value;
     var tristimulus = document.getElementById("tristimulusCheckbox").checked;
     var guide = document.getElementById("guideCheckbox").checked;
     var dstWidth = dstCanvas.width, dstHeight = dstCanvas.height;
     //
-    dstCanvas.width  = dstWidth ; // clear
-    drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus, guide);
-    if (hist !== null) {
-	var dstCtx = dstCanvas.getContext("2d");
-	var dstImageData = dstCtx.getImageData(0, 0, dstWidth, dstHeight)
-	if (worker) {
-            worker.terminate();
-	}
-	var div = loadingStart();
-	worker = new Worker("worker/cie.js");
-	worker.onmessage = function(e) {
-            var [imageData] = [e.data.image];
-	    dstCtx.putImageData(imageData, 0, 0, 0, 0, dstWidth, dstHeight);
-	    loadingEnd(div);
-	}
-	worker.postMessage({image:dstImageData, hist:hist, colorspace:colorspace}, [dstImageData.data.buffer]);
+    drawDiagramBase(diagramBaseCanvas, cieArr, colorspace, tristimulus, guide);
+    if (hist === null) {
+	copyCanvas(diagramBaseCanvas, dstCanvas);
+    } else {
+	var diagramBaseCtx = diagramBaseCanvas.getContext("2d");
+	var diagramBaseImageData = diagramBaseCtx.getImageData(0, 0, diagramBaseCanvas.width, diagramBaseCanvas.height);
+	var params = {diagramBaseImageData:diagramBaseImageData, hist:hist, colorspace:colorspace};
+	worker.process(srcCanvas, dstCanvas, params, sync);
     }
 }
 
