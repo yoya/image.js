@@ -126,6 +126,7 @@ function graphTransRev(xy, width, height) {
 }
 
 function drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus, guide) {
+    dstCanvas.width = dstCanvas.width;
     var xyArr = [], rgbArr = [];
     for (var i = 0, n = cieArr.length ; i < n; i++) {
 	var data = cieArr[i];
