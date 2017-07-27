@@ -66,7 +66,7 @@ function matchColorLineNum(imageData, rgba, fuzz, isVert, start, d) {
     if (isVert) {
 	if (d > 0) {
 	    for (var y = start ; y < height ; y+= d) {
-		for (var x = 0 ; x < width ;a x++) {
+		for (var x = 0 ; x < width ; x++) {
 		    var rgba2 = getRGBA(imageData, x, y);
 		    if (matchColor(rgba, rgba2, fuzz) === false) {
 			return num;
