@@ -19,22 +19,22 @@ function main() {
 	srcImage = new Image();
 	srcImage.onload = function() {
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-	    drawMosaic(srcCanvas, dstCanvas, blockSize, blockType);
+	    drawMosaic(srcCanvas, dstCanvas, blockSize, blockType, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+		 function(target, rel) {
 		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-		     drawMosaic(srcCanvas, dstCanvas, blockSize, blockType);
+		     drawMosaic(srcCanvas, dstCanvas, blockSize, blockType, rel);
 		 } );
     bindFunction({"blockSizeRange":"blockSizeText",
 		  "blockTypeSelect":null},
-		 function() {
+		 function(target, rel) {
 		     blockSize = parseFloat(document.getElementById("blockSizeRange").value);
 		     blockType = document.getElementById("blockTypeSelect").value;
-		     drawMosaic(srcCanvas, dstCanvas, blockSize, blockType);
+		     drawMosaic(srcCanvas, dstCanvas, blockSize, blockType, rel);
 		 } );
 }
 
