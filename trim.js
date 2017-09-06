@@ -19,22 +19,22 @@ function main() {
 	srcImage = new Image();
 	srcImage.onload = function() {
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-	    drawTrim(srcCanvas, dstCanvas, fuzz, margin);
+	    drawTrim(srcCanvas, dstCanvas, fuzz, margin, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+		 function(target, rel) {
 		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-		     drawTrim(srcCanvas, dstCanvas, fuzz, margin);
+		     drawTrim(srcCanvas, dstCanvas, fuzz, margin, rel);
 		 } );
     bindFunction({"fuzzRange":"fuzzText",
 		  "marginRange":"marginText"},
-		 function() {
+		 function(target, rel) {
 		     fuzz = parseFloat(document.getElementById("fuzzRange").value);
 		     margin = parseFloat(document.getElementById("marginRange").value);
-		     drawTrim(srcCanvas, dstCanvas, fuzz, margin);
+		     drawTrim(srcCanvas, dstCanvas, fuzz, margin, rel);
 		 } );
 }
 
