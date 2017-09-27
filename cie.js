@@ -15,13 +15,24 @@ function main() {
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     var cieSelect = document.getElementById("cieSelect").value;
     var cieArr = null;
-    var cie31Arr = null, cie64Arr = null;
+    var cie31Arr = null, cie64Arr = null, cieJVArr = null;
     var hist = null;
     var loadCIEXYZdata = function() {
-	var cieList = [31, 64];
+	var cieList = ["31", "64", "jv"];
 	for (var i in cieList) {
 	    var cie = cieList[i];
-	    var file = (cie === 31)?"data/ciexyz31.json":"data/ciexyz64.json";
+	    var file = null;
+	    switch (cie) {
+	    case "31":
+		file = "data/ciexyz31.json";
+		break;
+	    case "64":
+		file = "data/ciexyz64.json";
+		break;
+	    case "jv":
+		file = "data/ciexyzjv.json";
+		break;
+	    }
 	    var xhr = new XMLHttpRequest();
 	    xhr.onreadystatechange = function() {
 		if (this.readyState === 4) {
@@ -31,13 +42,15 @@ function main() {
 			var lw =  e[0]; // length of wave
 			return (370 < lw) && (lw < 720);
 		    });
-		    if (cie === 31) { // cieSelect as default
+		    if (cie === "31") { // cieSelect as default
 			cie31Arr = arr;
 			cieArr = cie31Arr;
 			drawGraph(graphCanvas, cieArr, cie31Arr);
 			drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, true);
-		    } else {
+		    } else if (cie === "64") {
 			cie64Arr = arr;
+		    } else { // "jv"
+			cieJVArr = arr;
 		    }
 		}
 	    };
@@ -53,8 +66,10 @@ function main() {
 		     cieSelect = document.getElementById("cieSelect").value;
 		     if (cieSelect === "ciexyz31") {
 			 cieArr = cie31Arr;
-		     } else {
+		     } else if (cieSelect === "ciexyz64") {
 			 cieArr = cie64Arr;
+		     } else { // "ciexyzjv"
+			 cieArr = cieJVArr;
 		     }
 		     drawGraph(graphCanvas, cieArr, cie31Arr);
 		     drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, rel);
