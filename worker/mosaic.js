@@ -4,7 +4,6 @@
  * 2017/09/04- (c) yoya@awm.jp worker
  */
 
-importScripts("../lib/matrix.js");
 importScripts("../lib/canvas.js");
 
 onmessage = function(e) {
