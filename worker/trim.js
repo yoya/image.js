@@ -50,7 +50,7 @@ function matchColorV(v, v2, fuzz) {
 	var min = v2, max = v;
     }
     if (max === 0) {
-	return 0
+	return true;
     }
     return ((max-min)/max <= fuzz);
 }
