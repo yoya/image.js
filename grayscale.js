@@ -48,7 +48,8 @@ function drawGrayscale(srcCanvas, dstCanvas, equation) {
     //
     var srcImageData = srcCtx.getImageData(0, 0, width, height);
     var dstImageData = dstCtx.createImageData(width, height);
-    var func = new Function("R","G","B", "return " + equation);
+    var define = "var max=Math.max, min=Math.min ; "
+    var func = new Function("R","G","B", define+"return " + equation);
     for (var y = 0 ; y < height; y++) {
         for (var x = 0 ; x < width; x++) {
 	    var [r, g, b, a] = getRGBA(srcImageData, x, y);

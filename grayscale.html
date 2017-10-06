@@ -35,7 +35,15 @@
       <canvas class="dstCanvas borderBlue" width=200 height=200> </canvas>
     </div>
     <div class="box">
-      <div> Math.max(R,G,B) </div>
+      <div> (max(R,G,B)+min(R,G,B))/2// HSL </div>
+      <canvas class="dstCanvas borderBlue" width=200 height=200> </canvas>
+    </div>
+    <div class="box">
+      <div> max(R,G,B) // HSV </div>
+      <canvas class="dstCanvas borderBlue" width=200 height=200> </canvas>
+    </div>
+    <div class="box">
+      <div> linearRGB2sRGB(sRGB2XYZ([R,G,B]))[1] // CIEXYZ </div>
       <canvas class="dstCanvas borderBlue" width=200 height=200> </canvas>
     </div>
   </div> <!-- container -->
@@ -46,3 +54,4 @@
   <script type="text/javascript" src="grayscale.js"> </script>
 </body>
 </html>
+o
