@@ -31,11 +31,11 @@ function main() {
 function drawSrcImageAndGrayscale(srcImage, srcCanvas, dstCanvasArr) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    dstCanvasArr.forEach(function(dstCanvas) {
+    for (var dstCanvas of dstCanvasArr) {
 	var equation = dstCanvas.parentNode.innerText;
 	console.debug("equation", equation);
 	drawGrayscale(srcCanvas, dstCanvas, equation);
-    });
+    }
 }
 
 function drawGrayscale(srcCanvas, dstCanvas, equation) {
