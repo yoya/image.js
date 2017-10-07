@@ -31,7 +31,8 @@ function main() {
 function drawSrcImageAndGrayscale(srcImage, srcCanvas, dstCanvasArr) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    for (var dstCanvas of dstCanvasArr) {
+    for (var i = 0, n = dstCanvasArr ; i < n ; i++) {
+	var dstCanvas = dstCanvasArr[i];
 	var equation = dstCanvas.parentNode.innerText;
 	console.debug("equation", equation);
 	drawGrayscale(srcCanvas, dstCanvas, equation);
