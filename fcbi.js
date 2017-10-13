@@ -40,11 +40,6 @@ function meanRGBA(rgba1, rgba2) {
     return [(r1+r2)/2, (g1+g2)/2, (b1+b2)/2, (a1+a2)/2];
 }
 
-function getLuma(imageData, x, y) {
-    var rgba = getRGBA(imageData, x, y);
-    return lumaFromRGBA(rgba);
-}
-
 var g_timeoutList = [];
 
 function drawFCBI(srcCanvas, dstCanvas) {
