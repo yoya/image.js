@@ -15,61 +15,34 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndVinette(srcImage, srcCanvas, dstCanvas);
+	    drawSrcImageAndVinette(srcImage, srcCanvas, dstCanvas, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+		  "radiusRange":"radiusText",
 		  "linearGammaCheckbox":null,
 		  "inverseCheckbox":null},
-		 function() {
-		     drawSrcImageAndVinette(srcImage, srcCanvas, dstCanvas);
+		 function(target, rel) {
+		     drawSrcImageAndVinette(srcImage, srcCanvas, dstCanvas, rel);
 		 } );
 }
-function drawSrcImageAndVinette(srcImage, srcCanvas, dstCancas) {
+
+function drawSrcImageAndVinette(srcImage, srcCanvas, dstCancas, sync) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    var radius = parseFloat(document.getElementById("radiusRange").value);
     var linearGamma = document.getElementById("linearGammaCheckbox").checked;
     var inverse = document.getElementById("inverseCheckbox").checked;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawVinette(srcCanvas, dstCanvas, linearGamma, inverse);
+    drawVinette(srcCanvas, dstCanvas, radius, linearGamma, inverse, sync);
 }
 
 
-function drawVinette(srcCanvas, dstCanvas, linearGamma, inverse) {
-    // console.debug("drawVinette");
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtx = dstCanvas.getContext("2d");
-    var width = srcCanvas.width, height = srcCanvas.height;
-    dstCanvas.width  = width;
-    dstCanvas.height = height;
-    //
-    var srcImageData = srcCtx.getImageData(0, 0, width, height);
-    var dstImageData = dstCtx.createImageData(width, height);
-    for (var y = 0 ; y < height; y++) {
-        for (var x = 0 ; x < width; x++) {
-	    var slant = Math.sqrt(width*width + height*height);
-            var dx = (x - (width  / 2)) / (slant/2);
-            var dy = (y - (height / 2)) / (slant/2);
-            var r = Math.sqrt(dx*dx + dy*dy);
-	    var factor = Math.pow(Math.cos(r/2), 4);
-	    if (inverse) {
-		factor = 1 / factor;
-	    }
-	    if (linearGamma) {
-		var rgba = getRGBA(srcImageData, x, y);
-		var [lr, lg, lb, la] = sRGB2linearRGB(rgba);
-		lr *= factor;
-		lg *= factor;
-		lb *= factor;
-		[r, g, b, a] = linearRGB2sRGB([lr, lg, lb, la]);
-	    } else {
-		var [r, g, b, a] = getRGBA(srcImageData, x, y);
-		r *= factor;
-		g *= factor;
-		b *= factor;
-	    }
-	    setRGBA(dstImageData, x, y, [r, g, b, a]);
-	}
-    }
-    dstCtx.putImageData(dstImageData, 0, 0);
+    
+var worker = new workerProcess("worker/vinette.js");
+
+function drawVinette(srcCanvas, dstCanvas, radius, linearGamma, inverse, sync) {
+    var params = {radius:radius, linearGamma:linearGamma, inverse:inverse};
+    console.log(srcCanvas.width);
+    worker.process(srcCanvas, dstCanvas, params, sync);
 }
