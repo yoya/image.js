@@ -37,12 +37,9 @@ function drawSrcImageAndVinette(srcImage, srcCanvas, dstCancas, sync) {
     drawVinette(srcCanvas, dstCanvas, radius, linearGamma, inverse, sync);
 }
 
-
-    
 var worker = new workerProcess("worker/vinette.js");
 
 function drawVinette(srcCanvas, dstCanvas, radius, linearGamma, inverse, sync) {
     var params = {radius:radius, linearGamma:linearGamma, inverse:inverse};
-    console.log(srcCanvas.width);
     worker.process(srcCanvas, dstCanvas, params, sync);
 }
