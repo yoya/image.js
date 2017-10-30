@@ -12,7 +12,8 @@
   <div class="container">
     <div id="controlPanel">
       <div>
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="300">:<input type="text" id="maxWidthHeightText">
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="300">:<input type="text" id="maxWidthHeightText" size="5">
+	grayscale:<input id="grayscaleRange" type="range" min="0" max="1" step="0.05" value="1">:<input type="text" id="grayscaleText" size="4">
       </div>
     </div> <!-- controlPanel -->
     <div class="box">
@@ -50,7 +51,8 @@
   <script type="text/javascript" src="lib/drop.js"> </script>
   <script type="text/javascript" src="lib/bind.js"> </script>
   <script type="text/javascript" src="lib/canvas.js"> </script>
-  <script type="text/javascript" src="lib/color.js"> </script>
+  <script type="text/javascript" src="lib/loading.js"> </script>
+  <script type="text/javascript" src="lib/worker.js"> </script>
   <script type="text/javascript" src="grayscale.js"> </script>
 </body>
 </html>
