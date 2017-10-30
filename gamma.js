@@ -20,14 +20,14 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas);
+	    drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "gammaRange":"gammaText",
 		  "gammaReciprocalRange":"gammaReciprocalText"},
-		 function(target) {
+		 function(target, rel) {
 		     console.debug(target.id);
 		     if ((target.id === "gammaRange") || (target.id === "gammaText")) {
 			 gammaReciprocalRange.value = 1.0 / parseFloat(gammaRange.value);
@@ -36,19 +36,18 @@ function main() {
 			 gammaRange.value = 1.0 / parseFloat(gammaReciprocalRange.value);
 			 gammaText.value = gammaRange.value;
 		     }
-		     drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas);
+		     drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas, rel);
 		 } );
     gammaReciprocalRange.value = 1.0 / parseFloat(gammaRange.value);
     gammaReciprocalText.value = gammaReciprocalRange.value;
 }
-function drawSrcImageAndGamma(srcImage, srcCanvas, dstCancas, gammaCanvas) {
+function drawSrcImageAndGamma(srcImage, srcCanvas, dstCancas, gammaCanvas, sync) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var gamma = parseFloat(document.getElementById("gammaRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawGammaGraph(gammaCanvas, gamma);
-    drawGammaImage(srcCanvas, dstCanvas, gamma);
+    drawGammaImage(srcCanvas, dstCanvas, gamma, sync);
 }
-
 
 function drawGammaGraph(gammaCanvas, gamma) {
     var ctx = gammaCanvas.getContext("2d");
@@ -69,30 +68,10 @@ function drawGammaGraph(gammaCanvas, gamma) {
     ctx.fill();
 }
 
-function drawGammaImage(srcCanvas, dstCanvas, gamma) {
+var worker = new workerProcess("worker/gamma.js");
+
+function drawGammaImage(srcCanvas, dstCanvas, gamma, sync) {
     // console.debug("drawGammaImage");
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtx = dstCanvas.getContext("2d");
-    var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var dstWidth  = srcWidth;
-    var dstHeight = srcHeight;
-    dstCanvas.width  = dstWidth;
-    dstCanvas.height = dstHeight;
-    //
-    var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-    var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-    //
-    for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var srcX = dstX;
-	    var srcY = dstY;
-	    var [r, g, b, a] = getRGBA(srcImageData, srcX, srcY);
-	    r = Math.pow(r/255, gamma) * 255;
-	    g = Math.pow(g/255, gamma) * 255;
-	    b = Math.pow(b/255, gamma) * 255;
-	    a = Math.pow(a/255, gamma) * 255;
-	    setRGBA(dstImageData, dstX, dstY, [r, g, b, a]);
-	}
-    }
-    dstCtx.putImageData(dstImageData, 0, 0);
+    var params = {gamma:gamma};
+    worker.process(srcCanvas, dstCanvas, params, sync);
 }
