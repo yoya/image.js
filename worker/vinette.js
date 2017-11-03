@@ -43,6 +43,5 @@ onmessage = function(e) {
 	    setRGBA(dstImageData, x, y, [r, g, b, a]);
 	}
     }
-    console.log(dstImageData);
     postMessage({image:dstImageData}, [dstImageData.data.buffer]);
 }
