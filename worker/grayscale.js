@@ -1,7 +1,7 @@
 "use strict";
 /*
  * 2017/04/17- (c) yoya@awm.jp
- * 2017/10/30- (c) yoya@awm.jp
+ * 2017/10/30- (c) yoya@awm.jp WebWorker
  */
 
 importScripts("../lib/color.js");
