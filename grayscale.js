@@ -49,7 +49,6 @@ function drawSrcImageAndGrayscale(srcImage, srcCanvas, dstCanvasArr, sync) {
     }
 }
 
-
 function drawGrayscale(srcCanvas, dstCanvas, equation, grayscale, sync) {
     var params = {equation:equation, grayscale:grayscale};
     workers[equation].process(srcCanvas, dstCanvas, params, sync);
