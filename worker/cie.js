@@ -12,7 +12,8 @@ onmessage = function(e) {
     var diagramBaseImageData = e.data.diagramBaseImageData;
     var hist = e.data.hist;
     var colorspace = e.data.colorspace;
-    var dstImageData = drawDiagramPoint(diagramBaseImageData, hist, colorspace);
+    var pointSize = e.data.pointSize;
+    var dstImageData = drawDiagramPoint(diagramBaseImageData, hist, colorspace, pointSize);
     postMessage({image:dstImageData}, [dstImageData.data.buffer]);
 }
 
@@ -21,8 +22,10 @@ function graphTrans(xy, width, height) {
     return [x * width, (1 - y) * height];
 }
 
-function drawDiagramPoint(imageData, hist, colorspace) {
+function drawDiagramPoint(imageData, hist, colorspace, pointSize) {
     var width = imageData.width, height = imageData.height;
+    var pointRGBA = [0,0,0, 255];
+    var [dMin, dMax] = [-(pointSize/2-0.2),(pointSize/2-0.2)];
     for (var colorId in hist) {
 	var [r,g,b,a] = colorId2RGBA(colorId);
 	if (a === 0) {
@@ -36,7 +39,11 @@ function drawDiagramPoint(imageData, hist, colorspace) {
 	    var uava = xy2uava(xy);
 	    var [gx, gy] = graphTrans(uava, width, height);
 	}
-	setRGBA(imageData, Math.round(gx), Math.round(gy), [0,0,0, 255]);
+	for (var dy = dMin ; dy < dMax ; dy++) {
+	    for (var dx = dMin ; dx < dMax ; dx++) {
+		setRGBA(imageData, Math.round(gx+dx), Math.round(gy+dy), pointRGBA);
+	    }
+	}
     }
     return imageData;
 }

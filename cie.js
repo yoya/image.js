@@ -82,8 +82,10 @@ function main() {
 		     drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, rel);
 		 } );
     bindFunction({"colorspaceSelect":null,
+		  "pointSizeRange":"pointSizeText",
 		  "tristimulusCheckbox":null,
-		  "guideCheckbox":null},
+		  "guideCheckbox":null,
+		  },
 		 function(target, rel) {
 		     drawGraph(graphCanvas, cieArr, cie31Arr);
 		     drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, rel);
@@ -107,6 +109,7 @@ var worker = new workerProcess("worker/cie.js");
 
 function drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, sync) {
     var colorspace = document.getElementById("colorspaceSelect").value;
+    var pointSize = parseFloat(document.getElementById("pointSizeRange").value);
     var tristimulus = document.getElementById("tristimulusCheckbox").checked;
     var guide = document.getElementById("guideCheckbox").checked;
     var dstWidth = dstCanvas.width, dstHeight = dstCanvas.height;
@@ -117,7 +120,7 @@ function drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, sync) {
     } else {
 	var diagramBaseCtx = diagramBaseCanvas.getContext("2d");
 	var diagramBaseImageData = diagramBaseCtx.getImageData(0, 0, diagramBaseCanvas.width, diagramBaseCanvas.height);
-	var params = {diagramBaseImageData:diagramBaseImageData, hist:hist, colorspace:colorspace};
+	var params = {diagramBaseImageData:diagramBaseImageData, hist:hist, colorspace:colorspace, pointSize:pointSize};
 	worker.process(srcCanvas, dstCanvas, params, sync);
     }
 }
