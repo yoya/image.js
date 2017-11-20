@@ -27,14 +27,19 @@
         maxWidthHeight: <br />
 	<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
       </div>
-      <div>
-	sRGB:<input id="tristimulusCheckbox" type="checkbox" checked="checked" />
-	guide:<input id="guideCheckbox" type="checkbox" checked="checked" />
-      </div>
     </div> <!-- controlPanel -->
     <div>
       <canvas id="graphCanvas" class="borderGreen" width="371" height="150"> graph </canvas>
     </div>
+    </div> <!-- controlPanel 2 -->
+      <div>
+	sRGB:<input id="tristimulusCheckbox" type="checkbox" checked="checked" />
+	guide:<input id="guideCheckbox" type="checkbox" checked="checked" />
+        pointSize:<input id="pointSizeRange" type="range" min="1" max="16" step="1" value="2">:<input type="text" id="pointSizeText" size="5"> </br>
+      </div>
+    </div> <!-- controlPanel 2 -->
+
+
     <div style="clear:both"> </div>
     <div>
       <canvas id="diagramBaseCanvas" class="borderBlue" width="512" height="512" style="display:none"> diagram base </canvas>
