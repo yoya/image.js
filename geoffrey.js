@@ -1,6 +1,6 @@
 "use strict";
 /*
- * 2017/04/02- (c) yoya@awm.jp
+ * 2017/12/02- (c) yoya@awm.jp. All Rights Reserved.
  */
 
 document.addEventListener("DOMContentLoaded", function(event) {
