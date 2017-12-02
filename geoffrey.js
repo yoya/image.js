@@ -28,10 +28,10 @@ function vector3_minus(a, b) {
     return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 }
 function vector3_multiply(a, b) {
+    return [a[0] * b[0], a[1] * b[1], a[2] * b[2]];
+    /*
     var [a0, a1, a2] = a;
     var [b0, b1, b2] = b;
-    return [a0 * b0, a1 * b1, a2 * b2];
-    /*
     return [a1 * b2 - a2 * b1,
 	    a2 * b0 - a0 * b2,
 	    a0 * b1 - a1 * b0];
