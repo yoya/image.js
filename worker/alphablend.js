@@ -4,6 +4,7 @@
  * 2018/01/01- worker (c) yoya@awm.jp
  */
 
+importScripts("../lib/color.js");
 importScripts("../lib/canvas.js");
 
 onmessage = function(e) {
