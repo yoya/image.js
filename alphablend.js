@@ -38,7 +38,8 @@ function main() {
 	srcImage2 = new Image();
 	srcImage2.onload = function() {
 	    drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
-	    drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, linearGamma);
+	    drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas,
+			   linearGamma, true);
 	}
 	srcImage2.src = dataURL;
     }, "DataURL");
@@ -48,7 +49,7 @@ function main() {
 		  "ratioRange":"ratioText",
 		  "ratio1Range":"ratio1Text",
 		  "ratio2Range":"ratio2Text"},
-		 function(target) {
+		 function(target, rel) {
 		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     linearGamma = document.getElementById("linearGammaCheckbox").checked;
 		     if ((target.id === "ratioRange") || (target.id === "ratioText")) {
@@ -58,16 +59,19 @@ function main() {
 		     }
 		     drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
 		     drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
-		     drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, linearGamma);
+		     drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas,
+				    linearGamma, rel);
 		 } );
     bindFunction({"methodSelect":null},
-		 function() {
-		     drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas);
+		 function(target, rel) {
+		     drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas,
+				    linearGamma, true);
 		 } );
-    
 }
 
-function drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, linearGamma) {
+var  worker = new workerProcess("worker/alphablend.js");
+
+function drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, linearGamma, sync) {
     // console.debug("drawAlphaBrend")
     var method = document.getElementById("methodSelect").value;
     var ratio1 = parseFloat(document.getElementById("ratio1Range").value);
@@ -84,63 +88,8 @@ function drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, linearGamma) {
     //
     var srcImageData1 = srcCtx1.getImageData(0, 0, srcWidth1, srcHeight1);
     var srcImageData2 = srcCtx2.getImageData(0, 0, srcWidth2, srcHeight2);
-    
-    var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-
-    for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var srcX1 = dstX, srcY1 = dstY;
-	    var srcX2 = dstX, srcY2 = dstY;
-	    var rgba1 = getRGBA(srcImageData1, srcX1, srcY1);
-	    var rgba2 = getRGBA(srcImageData2, srcX2, srcY2);
-	    if (linearGamma) {
-		rgba1 = sRGB2linearRGB(rgba1);
-		rgba2 = sRGB2linearRGB(rgba2);
-		var [r1,g1,b1,a1] = rgba1;
-		var [r2,g2,b2,a2] = rgba2;
-	    } else {
-		var [r1,g1,b1,a1] = rgba1; // uint to double
-		var [r2,g2,b2,a2] = rgba2; // uint to double
-		[r1, g1, b1, a1] = [r1, g1, b1, a1].map(function(v) { return v/255; });
-		[r2, g2, b2, a2] = [r2, g2, b2, a2].map(function(v) { return v/255; });
-	    }
-	    var rgba;
-	    switch (method) {
-	    case "plus":
-		rgba = [r1*ratio1 + r2*ratio2,
-			g1*ratio1 + g2*ratio2,
-			b1*ratio1 + b2*ratio2,
-			(a1+a2)/2];
-		break;
-	    case "minus":
-		rgba = [r1*ratio1 - r2*ratio2,
-			g1*ratio1 - g2*ratio2,
-			b1*ratio1 - b2*ratio2,
-			(a1+a2)/2];
-		break;
-	    case "multi":
-		rgba = [r1*ratio1 * r2*ratio2,
-			g1*ratio1 * g2*ratio2,
-			b1*ratio1 * b2*ratio2,
-			(a1 + a2)/2];
-		break;
-	    case "div":
-		rgba = [r1*ratio1 / r2*ratio2,
-			g1*ratio1 / g2*ratio2,
-			b1*ratio1 / b2*ratio2,
-			(a1 + a2)/2];
-		break;
-	    default:
-		console.error("unknown method:"+method);
-		break;
-	    }
-	    if (linearGamma) {
-		rgba = linearRGB2sRGB(rgba);
-	    } else {
-		rgba = rgba.map(function(v) { return v*255; });
-	    }
-	    setRGBA(dstImageData, dstX, dstY, rgba);
-	}
-    }
-    dstCtx.putImageData(dstImageData, 0, 0);
+    //
+    var params = {method:method, ratio1:ratio1, ratio2:ratio2,
+		  linearGamma:linearGamma};
+    worker.process([srcCanvas1, srcCanvas2], dstCanvas, params, sync)
 }
