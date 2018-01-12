@@ -180,10 +180,10 @@ function getRGBA_BL(imageData, x, y, outfill) {
     var r12 = rx1 * ry2;
     var r21 = rx2 * ry1;
     var r22 = rx2 * ry2;
-    var rgba11 = getRGBA(imageData, x1, y1);
-    var rgba12 = getRGBA(imageData, x1, y2);
-    var rgba21 = getRGBA(imageData, x2, y1);
-    var rgba22 = getRGBA(imageData, x2, y2);
+    var rgba11 = getRGBA(imageData, x1, y1, outfill);
+    var rgba12 = getRGBA(imageData, x1, y2, outfill);
+    var rgba21 = getRGBA(imageData, x2, y1, outfill);
+    var rgba22 = getRGBA(imageData, x2, y2, outfill);
     for (var i = 0 ; i < 4 ; i++) {
 	rgba[i] = r11 * rgba11[i] +  r12 * rgba12[i] +
 	    r21 * rgba21[i] + r22 * rgba22[i];
