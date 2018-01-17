@@ -51,8 +51,6 @@ function getOrderFromXY(x, y, size) {
 
 function copyWithOrient(orderTable, dstX, dstY, tableWidth, unitWidth, 
 			orient, plus) {
-    console.log(orderTable, dstX, dstY, tableWidth, unitWidth,
-		orient, plus);
     var dx = 0, dy = 0;
     var rotFuncs = {
 	0: function(x, y) { return [x, y]; },
@@ -67,7 +65,6 @@ function copyWithOrient(orderTable, dstX, dstY, tableWidth, unitWidth,
     for (var y = 0 ; y < unitWidth ; y++) {
 	for (var x = 0 ; x < unitWidth ; x++) {
 	    var [x2, y2] = rotFuncs[orient](x, y);
-	    // console.log(dstX, dstY, x2, y2);
 	    orderTable[getOrderFromXY(dstX + x2, dstY + y2, tableWidth)] = orderTable[getOrderFromXY(x, y, tableWidth)] + plus;
 	}
     }1
@@ -77,7 +74,6 @@ function getOrderTable_Hilbert(orderTable, level, tableWidth) {
     var orient = 0;
     var dir = 0;
     for (var currLevel = 1 ; currLevel <= level ; currLevel++) {
-	console.log("currLevel", currLevel);
 	if (currLevel <= 1) {
             orderTable[getOrderFromXY(0, 0, tableWidth)] = 0;
 	    orderTable[getOrderFromXY(1, 0, tableWidth)] = 1;
@@ -87,7 +83,6 @@ function getOrderTable_Hilbert(orderTable, level, tableWidth) {
 	    var unitSize = Math.pow(2, currLevel) / 2;
 	    var plus = unitSize*unitSize;
 	    if ((currLevel % 2) === 0) {
-		console.log(currLevel % 2);
 		copyWithOrient(orderTable, unitSize, 0,        tableWidth, unitSize, 2, plus*3);
 		copyWithOrient(orderTable, unitSize, unitSize, tableWidth, unitSize, 4, plus*2);
 		copyWithOrient(orderTable, 0, unitSize,        tableWidth, unitSize, 4, plus);
