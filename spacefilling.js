@@ -124,10 +124,10 @@ function drawSpaceFilling(canvas) {
     var ctx = canvas.getContext("2d");
     var [x, y] = getPosition(0, level, width, height);
     ctx.beginPath();
-    ctx.strokeStyle = "rgb(127,255,255)";
+    ctx.strokeStyle = "rgb(255, 0, 0)";
     ctx.lineWidth = 1;
-    ctx.moveTo(x, y);
     ctx.arc(x, y, 3, 0, 2*Math.PI , false);
+    ctx.stroke();
     var orderTableRev = new Array(orderTable.length);
     for (var i = 0, n = orderTable.length ; i < n ; i++) {
 	var order = orderTable[i];
@@ -144,12 +144,13 @@ function drawSpaceFilling(canvas) {
     console.log(orderTableRev);
     var [prevX, prevY] = [x, y];
     for (var i = 1, n = orderTableRev.length ; i < n ; i++) {
-	ctx.beginPath();
-	ctx.moveTo(prevX, prevY);
 	var order = orderTableRev[i];
 	if ((i !== 0) && (! order)) {
 	    continue;
 	}
+	ctx.beginPath();
+	ctx.strokeStyle = ["rgb(255, 100, 100)","rgb(100, 255, 100)", "rgb(100, 100, 255)" ][i%3];
+	ctx.moveTo(prevX, prevY);
 	[x, y] = getPosition(order, level, width, height);
 	ctx.lineTo(x, y);
 	ctx.arc(x, y, 3, 0, 2*Math.PI , false);
