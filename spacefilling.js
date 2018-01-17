@@ -73,24 +73,18 @@ function copyWithOrient(orderTable, dstX, dstY, tableWidth, unitWidth,
 function getOrderTable_Hilbert(orderTable, level, tableWidth) {
     var orient = 0;
     var dir = 0;
+    orderTable[0] = 0;
     for (var currLevel = 1 ; currLevel <= level ; currLevel++) {
-	if (currLevel <= 1) {
-            orderTable[getOrderFromXY(0, 0, tableWidth)] = 0;
-	    orderTable[getOrderFromXY(1, 0, tableWidth)] = 1;
-	    orderTable[getOrderFromXY(1, 1, tableWidth)] = 2;
-	    orderTable[getOrderFromXY(0, 1, tableWidth)] = 3;
+	var unitSize = Math.pow(2, currLevel) / 2;
+	var plus = unitSize*unitSize;
+	if (currLevel % 2) {
+	    copyWithOrient(orderTable, unitSize, 0,        tableWidth, unitSize, 4, plus);
+	    copyWithOrient(orderTable, unitSize, unitSize, tableWidth, unitSize, 4, plus*2);
+	    copyWithOrient(orderTable, 0, unitSize,        tableWidth, unitSize, 2, plus*3);
 	} else {
-	    var unitSize = Math.pow(2, currLevel) / 2;
-	    var plus = unitSize*unitSize;
-	    if ((currLevel % 2) === 0) {
-		copyWithOrient(orderTable, unitSize, 0,        tableWidth, unitSize, 2, plus*3);
-		copyWithOrient(orderTable, unitSize, unitSize, tableWidth, unitSize, 4, plus*2);
-		copyWithOrient(orderTable, 0, unitSize,        tableWidth, unitSize, 4, plus);
-	    } else {
-		copyWithOrient(orderTable, unitSize, 0,        tableWidth, unitSize, 4, plus);
-		copyWithOrient(orderTable, unitSize, unitSize, tableWidth, unitSize, 4, plus*2);
-		copyWithOrient(orderTable, 0, unitSize,        tableWidth, unitSize, 2, plus*3);
-	    }
+	    copyWithOrient(orderTable, unitSize, 0,        tableWidth, unitSize, 2, plus*3);
+	    copyWithOrient(orderTable, unitSize, unitSize, tableWidth, unitSize, 4, plus*2);
+	    copyWithOrient(orderTable, 0, unitSize,        tableWidth, unitSize, 4, plus);
 	}
     }
 }
@@ -105,7 +99,6 @@ function getPosition(order, level, width, height) {
     var y = orderY * unitY + unitY / 2;
     return [x, y];
 }
-    
 
 function drawSpaceFilling(canvas) {
     var widthHeight = parseFloat(document.getElementById("widthHeightRange").value);
@@ -140,11 +133,11 @@ function drawSpaceFilling(canvas) {
     var [prevX, prevY] = [x, y];
     for (var i = 1, n = orderTableRev.length ; i < n ; i++) {
 	var order = orderTableRev[i];
-	if ((i !== 0) && (! order)) {
+	if ((i > 0) && (! order)) {
 	    continue;
 	}
 	ctx.beginPath();
-	ctx.strokeStyle = ["rgb(255, 127, 127)","rgb(0, 240, 0)", "rgb(127, 127, 255)" ][i%3];
+	ctx.strokeStyle = ["rgb(255, 127, 127)", "rgb(255,255, 0)","rgb(0, 240, 0)", "rgb(127, 127, 255)" ][i%4];
 	ctx.moveTo(prevX, prevY);
 	[x, y] = getPosition(order, level, width, height);
 	ctx.lineTo(x, y);
