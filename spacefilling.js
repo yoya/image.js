@@ -149,7 +149,7 @@ function drawSpaceFilling(canvas) {
 	    continue;
 	}
 	ctx.beginPath();
-	ctx.strokeStyle = ["rgb(255, 100, 100)","rgb(100, 255, 100)", "rgb(100, 100, 255)" ][i%3];
+	ctx.strokeStyle = ["rgb(255, 127, 127)","rgb(0, 240, 0)", "rgb(127, 127, 255)" ][i%3];
 	ctx.moveTo(prevX, prevY);
 	[x, y] = getPosition(order, level, width, height);
 	ctx.lineTo(x, y);
