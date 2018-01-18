@@ -14,15 +14,21 @@ function main() {
     var levelDownButton = document.getElementById("levelDownButton");
     var levelUpButton = document.getElementById("levelUpButton");
     var levelRange = document.getElementById("levelRange");
-    
     var colorsRange = document.getElementById("colorsRange");
+    var gapCheckbox = document.getElementById("gapCheckbox");
     var level = parseFloat(levelRange.value);
     var colors = parseFloat(colorsRange.value);
     var params = { level: level,
 		   colors: colors,
-		   orderTable: getOrderTable(level) };
-    bindFunction({"widthHeightRange":"widthHeightText"},
-		  function(target, rel) {
+		   orderTable: getOrderTable(level),
+		   gap:gapCheckbox.checked};
+    bindFunction({"widthHeightRange":"widthHeightText",
+		  "gapCheckbox":null},
+		 function(target, rel) {
+		     var id = target.id;
+		     if (id === "gapCheckbox") {
+			 params['gap'] = target.checked;
+		     }
 		      drawSpaceFilling(dstCanvas, params);
 		  } );
     bindFunction({"levelDownButton":null, "levelUpButton":null,
@@ -162,6 +168,7 @@ function drawSpaceFilling(canvas, params) {
     var level = params['level'];
     var colors = params['colors'];
     var orderTable = params['orderTable'];
+    var gap = params['gap'];
     var width = widthHeight;
     var height = widthHeight;
     canvas.width = width;
@@ -197,11 +204,12 @@ function drawSpaceFilling(canvas, params) {
 	ctx.beginPath();
 	var colorArr = colorArrArr[colors];
 	ctx.strokeStyle = colorArr[i % colorArr.length];
-	ctx.moveTo(prevX, prevY);
-	/*
-	ctx.moveTo(prevX + (Math.random() * 5 - 2.5,
-		   prevY + (Math.random() * 5 - 2.5
-	*/
+	if (gap) {
+	    ctx.moveTo(prevX + Math.random() * 5 - 2.5,
+		       prevY + Math.random() * 5 - 2.5);
+	} else {
+	    ctx.moveTo(prevX, prevY);
+	}
 	[x, y] = getPosition(order, level, width, height);
 	ctx.lineTo(x, y);
 	ctx.arc(x, y, 3, 0, 2*Math.PI , false);

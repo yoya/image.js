@@ -21,9 +21,16 @@
 	  <input id="colorsDownButton" type="button" value="<<" />
 	  <input type="text" id="colorsText" size="2" />
 	  <input id="colorsUpButton" type="button" value=">>" />
+	  <br />
+	  gap:<input id="gapCheckbox" type="checkbox" value="gap" />
 	</div>
       </div> <!-- controlPanel -->
-      <canvas id="dstCanvas" class="borderBlue" width=320 height=320> dstCanvas </canvas>
+      <div style="clear:both"> </div>
+      <div id="canvasPanel">
+	<canvas id="dstCanvas" class="borderBlue" width=320 height=320>
+	  dstCanvas
+	</canvas>
+      </div>  <!-- canvasPanel -->
     </div>  <!-- container -->
     <script type="text/javascript" src="lib/bind.js"> </script>
     <script type="text/javascript" src="lib/canvas.js"> </script>
