@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 function main() {
+    var elaspe = 500; // msec
     // console.debug("main");
     var dstCanvas = document.getElementById("dstCanvas");
     dstCanvas.style.backgroundColor = "black";
@@ -21,18 +22,16 @@ function main() {
     var gapTable = gapCheckbox.checked?getGapTable(level):null;
     var params = { level: level,
 		   colors: colors,
-		   orderTable: getOrderTable(level),
-		   gapTable:gapTable};
+		   orderTableRev: getOrderTableRev(level),
+		   gapTable: gapTable,
+		   elaspe: elaspe};
     bindFunction({"widthHeightRange":"widthHeightText",
 		  "gapCheckbox":null},
 		 function(target, rel) {
 		     var id = target.id;
 		     if (id === "gapCheckbox") {
-			 if (target.checked) {
-			     params['gapTable'] = getGapTable(level);
-			 } else {
-			     params['gapTable'] = null;
-			 }
+			 gapTable = gapCheckbox.checked?getGapTable(level):null;
+			 params['gapTable'] = gapTable;
 		     }
 		      drawSpaceFilling(dstCanvas, params);
 		  } );
@@ -49,8 +48,9 @@ function main() {
 		     var level = parseFloat(levelRange.value);
 		     levelText.value = level;
 		     params['level'] = level
-		     params['orderTable'] = getOrderTable(level);
-		     params['gapTable'] = getGapTable(level);
+		     params['orderTableRev'] = getOrderTableRev(level);
+		     gapTable = gapCheckbox.checked?getGapTable(level):null;
+		     params['gapTable'] = gapTable;
 		     drawSpaceFilling(dstCanvas, params);
 		 } );
     bindFunction({"colorsDownButton":null, "colorsUpButton":null,
@@ -68,6 +68,28 @@ function main() {
 		     params['colors'] = colors;
 		     drawSpaceFilling(dstCanvas, params);
 		 } );
+    var timerId = null;
+    bindFunction({"playButton":null, "stopButton":null },
+		 function(target, rel) {
+		     var id = target.id;
+			 if (timerId) {
+			     clearInterval(timerId);
+			     timerId = null;
+			 }
+		     if (id === "playButton") {
+			 params['cursol'] = 0;
+			 var ctx = new function() {
+			     this.canvas = dstCanvas;
+			     this.params = params;
+			     this.cursol = 0;
+			 }
+			 timerId = setInterval(playSpaceFilling.bind(ctx), elaspe);
+		     } else if (id === "colorsUpButton") {
+			 if (timerId) {
+			     clearInterval(timerId);
+			 }
+		     }
+		 } );
     drawSpaceFilling(dstCanvas, params);
 }
 
@@ -79,6 +101,23 @@ function getOrderTable(level) {
     // getOrderTable_Regular(orderTable);
     getOrderTable_Hilbert(orderTable, level, tableWidth);
     return orderTable;
+}
+
+function getOrderTableRev(level) {
+    var orderTable = getOrderTable(level);
+    var orderTableRev = new Array(orderTable.length);
+    for (var i = 0, n = orderTable.length ; i < n ; i++) {
+	var order = orderTable[i];
+	if ((i !== 0) && (order === 0)) {
+	    continue;
+	}
+	if (order in orderTableRev) {
+	    ;
+	} else {
+	    orderTableRev[order] = i;
+	}
+    }
+    return orderTableRev;
 }
 
 function getOrderTable_Regular(orderTable) {
@@ -149,12 +188,18 @@ function getGapTable(level) {
     return gapTable;
 }
 
+function getOrderXY(order, level) {
+    var size = Math.pow(2, level);
+    var orderX = order % size;
+    var orderY = (order - orderX) / size;
+    return [orderX, orderY];
+}
+
 function getPosition(order, level, width, height) {
     var size = Math.pow(2, level);
     var unitX = width / size;
     var unitY = height / size;
-    var orderX = order % size;
-    var orderY = (order - orderX) / size;
+    var [orderX, orderY] = getOrderXY(order, level);
     var x = orderX * unitX + unitX / 2;
     var y = orderY * unitY + unitY / 2;
     return [x, y];
@@ -182,7 +227,7 @@ function drawSpaceFilling(canvas, params) {
     var widthHeight = parseFloat(document.getElementById("widthHeightRange").value);
     var level = params['level'];
     var colors = params['colors'];
-    var orderTable = params['orderTable'];
+    var orderTableRev = params['orderTableRev'];
     var gapTable = params['gapTable'];
     var width = widthHeight;
     var height = widthHeight;
@@ -194,21 +239,8 @@ function drawSpaceFilling(canvas, params) {
     ctx.beginPath();
     ctx.strokeStyle = colorArrArr[colors][0];
     ctx.lineWidth = 1;
-    ctx.arc(x, y, 3, 0, 2*Math.PI , false);
+    ctx.arc(x, y, 3, 0, 2*Math.PI , false);x
     ctx.stroke();
-    var orderTableRev = new Array(orderTable.length);
-    for (var i = 0, n = orderTable.length ; i < n ; i++) {
-	var order = orderTable[i];
-	if ((i !== 0) && (order === 0)) {
-	    continue;
-	}
-	if (order in orderTableRev) {
-	    ;
-	} else {
-	    orderTableRev[order] = i;
-	}
-    }
-    // console.log(orderTable);
     // console.log(orderTableRev);
     var [prevX, prevY] = [x, y];
     for (var i = 1, n = orderTableRev.length ; i < n ; i++) {
@@ -218,7 +250,6 @@ function drawSpaceFilling(canvas, params) {
 	}
 	ctx.beginPath();
 	var colorArr = colorArrArr[colors];
-	ctx.strokeStyle = colorArr[i % colorArr.length];
 	if (gapTable) {
 	    ctx.moveTo(prevX + gapTable[i],
 		       prevY + gapTable[n + i]);
@@ -226,6 +257,13 @@ function drawSpaceFilling(canvas, params) {
 	    ctx.moveTo(prevX, prevY);
 	}
 	[x, y] = getPosition(order, level, width, height);
+	//ctx.strokeStyle = colorArr[i % colorArr.length];
+	var [orderX, orderY] = getOrderXY(order, level);
+	if (prevX == x) {
+	    ctx.strokeStyle = colorArr[orderX % colorArr.length];
+	} else {
+	    ctx.strokeStyle = colorArr[orderY % colorArr.length];
+	}
 	ctx.lineTo(x, y);
 	ctx.arc(x, y, 3, 0, 2*Math.PI , false);
 	ctx.stroke();
@@ -233,3 +271,56 @@ function drawSpaceFilling(canvas, params) {
     }
 }
 
+function drawCursolAnimation() {
+    var ratio = this.ratio;
+    if (ratio >= 1.0) {
+	clearInterval(this.timerId);
+    }
+    var canvas = this.canvas;
+    var [x1, y1] = [this.x1, this.y1];
+    var [x2, y2] = [this.x2, this.y2];
+    var ctx = canvas.getContext("2d");
+    var x = x1 * (1 - ratio) + x2 * ratio;
+    var y = y1 * (1 - ratio) + y2 * ratio;
+    ctx.beginPath();
+    ctx.strokeStyle = "rgb(255, 255, 255)";
+    ctx.arc(x, y, 10, 0, 2*Math.PI , false);
+    ctx.stroke();
+    this.ratio += this.step;
+}
+
+function drawCursol(canvas, params, cursol) {
+    var level = params['level'];
+    var orderTableRev = params['orderTableRev'];
+    var width = canvas.width;
+    var height = canvas.height;
+    var [x2, y2] = getPosition(orderTableRev[cursol], level, width, height);
+    if (cursol === 0) {
+	var [x1, y1] = [x2, y2];
+    } else {
+	var [x1, y1] = getPosition(orderTableRev[cursol-1], level, width, height);
+    }
+    var ctx = new function() {
+	this.canvas = dstCanvas;
+	this.x1 = x1;  this.y1 = y1;
+	this.x2 = x2;  this.y2 = y2;
+	this.ratio = 0;
+	this.step = 0.1;
+    }
+    var elapse = 300 * ctx.step;
+    ctx.timerId = setInterval(drawCursolAnimation.bind(ctx), elapse);
+}
+
+function playSpaceFilling() {
+    var canvas = this.canvas;
+    var params = this.params;
+    var cursol = this.cursol;
+    var orderTableRev = params['orderTableRev'];
+    if (cursol <=  orderTableRev.length) {
+	drawSpaceFilling(canvas, params);
+	if (cursol <  orderTableRev.length) {
+	    drawCursol(canvas, params, cursol);
+	    this.cursol++;
+	}
+    }
+}
