@@ -18,16 +18,21 @@ function main() {
     var gapCheckbox = document.getElementById("gapCheckbox");
     var level = parseFloat(levelRange.value);
     var colors = parseFloat(colorsRange.value);
+    var gapTable = gapCheckbox.checked?getGapTable(level):null;
     var params = { level: level,
 		   colors: colors,
 		   orderTable: getOrderTable(level),
-		   gap:gapCheckbox.checked};
+		   gapTable:gapTable};
     bindFunction({"widthHeightRange":"widthHeightText",
 		  "gapCheckbox":null},
 		 function(target, rel) {
 		     var id = target.id;
 		     if (id === "gapCheckbox") {
-			 params['gap'] = target.checked;
+			 if (target.checked) {
+			     params['gapTable'] = getGapTable(level);
+			 } else {
+			     params['gapTable'] = null;
+			 }
 		     }
 		      drawSpaceFilling(dstCanvas, params);
 		  } );
@@ -45,6 +50,7 @@ function main() {
 		     levelText.value = level;
 		     params['level'] = level
 		     params['orderTable'] = getOrderTable(level);
+		     params['gapTable'] = getGapTable(level);
 		     drawSpaceFilling(dstCanvas, params);
 		 } );
     bindFunction({"colorsDownButton":null, "colorsUpButton":null,
@@ -133,6 +139,15 @@ function getOrderTable_Hilbert(orderTable, level, tableWidth) {
 	}
     }
 }
+function getGapTable(level) {
+    var width = Math.pow(2, level);
+    var len = width * width * 2; // 2 = count([x.y]);
+    var gapTable = new Float32Array(len);
+    for (var i = 0; i < len ; i++) {
+	gapTable[i] = Math.random() * 5 - 2.5;
+    }
+    return gapTable;
+}
 
 function getPosition(order, level, width, height) {
     var size = Math.pow(2, level);
@@ -168,7 +183,7 @@ function drawSpaceFilling(canvas, params) {
     var level = params['level'];
     var colors = params['colors'];
     var orderTable = params['orderTable'];
-    var gap = params['gap'];
+    var gapTable = params['gapTable'];
     var width = widthHeight;
     var height = widthHeight;
     canvas.width = width;
@@ -204,9 +219,9 @@ function drawSpaceFilling(canvas, params) {
 	ctx.beginPath();
 	var colorArr = colorArrArr[colors];
 	ctx.strokeStyle = colorArr[i % colorArr.length];
-	if (gap) {
-	    ctx.moveTo(prevX + Math.random() * 5 - 2.5,
-		       prevY + Math.random() * 5 - 2.5);
+	if (gapTable) {
+	    ctx.moveTo(prevX + gapTable[i],
+		       prevY + gapTable[n + i]);
 	} else {
 	    ctx.moveTo(prevX, prevY);
 	}
