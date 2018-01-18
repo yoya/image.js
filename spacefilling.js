@@ -14,15 +14,20 @@ function main() {
     var levelDownButton = document.getElementById("levelDownButton");
     var levelUpButton = document.getElementById("levelUpButton");
     var levelRange = document.getElementById("levelRange");
+    
+    var colorsRange = document.getElementById("colorsRange");
     var level = parseFloat(levelRange.value);
+    var colors = parseFloat(colorsRange.value);
+    var params = { level: level,
+		   colors: colors,
+		   orderTable: getOrderTable(level) };
     bindFunction({"widthHeightRange":"widthHeightText"},
 		  function(target, rel) {
-		      drawSpaceFilling(dstCanvas, level);
+		      drawSpaceFilling(dstCanvas, params);
 		  } );
-    bindFunction({"widthHeightRange":"widthHeightText",
-		  "levelDownButton":null,
+    bindFunction({"levelDownButton":null, "levelUpButton":null,
 		  "levelRange":"levelText",
-		  "levelUpButton":null},
+		  },
 		 function(target, rel) {
 		     var id = target.id;
 		     if (id === "levelDownButton") {
@@ -30,11 +35,28 @@ function main() {
 		     } else if (id === "levelUpButton") {
 			 levelRange.value++;
 		     }
-		     levelText.value = levelRange.value;
-		     level = parseFloat(levelRange.value);
-		     drawSpaceFilling(dstCanvas, level);
+		     var level = parseFloat(levelRange.value);
+		     levelText.value = level;
+		     params['level'] = level
+		     params['orderTable'] = getOrderTable(level);
+		     drawSpaceFilling(dstCanvas, params);
 		 } );
-    drawSpaceFilling(dstCanvas);
+    bindFunction({"colorsDownButton":null, "colorsUpButton":null,
+		  "colorsRange":"colorsText",
+		  },
+		 function(target, rel) {
+		     var id = target.id;
+		     if (id === "colorsDownButton") {
+			 colorsRange.value--;
+		     } else if (id === "colorsUpButton") {
+			 colorsRange.value++;
+		     }
+		     var colors = parseFloat(colorsRange.value);
+		     colorsText.value = colors;
+		     params['colors'] = colors;
+		     drawSpaceFilling(dstCanvas, params);
+		 } );
+    drawSpaceFilling(dstCanvas, params);
 }
 
 function getOrderTable(level) {
@@ -117,18 +139,38 @@ function getPosition(order, level, width, height) {
     return [x, y];
 }
 
-function drawSpaceFilling(canvas, level) {
+
+function drawSpaceFilling(canvas, params) {
+    var red          = "rgb(255,  64,  64)";
+    var orange       = "rgb(255, 127,   0)";
+    var yellow       = "rgb(255, 255,   0)";
+    var yellowgreen  = "rgb(172, 255  , 0)";
+    var green        = "rgb(  0, 255, 172)";
+    var blue         = "rgb(100, 127, 255)";
+    var violet       = "rgb(200, 100, 255)";
+    var colorArrArr = [
+	[],
+	[green],
+	[red, blue],
+	[red, green, blue],
+	[red, yellow, green, blue],
+	[red, yellow, green, blue, violet],
+	[red, orange, yellow, green, blue, violet],
+	[red, orange, yellow, yellowgreen, green, blue, violet],
+    ];
     var widthHeight = parseFloat(document.getElementById("widthHeightRange").value);
+    var level = params['level'];
+    var colors = params['colors'];
+    var orderTable = params['orderTable'];
     var width = widthHeight;
     var height = widthHeight;
     canvas.width = width;
     canvas.height = height;
     // console.debug("drawSpaceFilling");
-    var orderTable = getOrderTable(level);
     var ctx = canvas.getContext("2d");
     var [x, y] = getPosition(0, level, width, height);
     ctx.beginPath();
-    ctx.strokeStyle = "rgb(255, 0, 0)";
+    ctx.strokeStyle = colorArrArr[colors][0];
     ctx.lineWidth = 1;
     ctx.arc(x, y, 3, 0, 2*Math.PI , false);
     ctx.stroke();
@@ -144,8 +186,8 @@ function drawSpaceFilling(canvas, level) {
 	    orderTableRev[order] = i;
 	}
     }
-    console.log(orderTable);
-    console.log(orderTableRev);
+    // console.log(orderTable);
+    // console.log(orderTableRev);
     var [prevX, prevY] = [x, y];
     for (var i = 1, n = orderTableRev.length ; i < n ; i++) {
 	var order = orderTableRev[i];
@@ -153,8 +195,13 @@ function drawSpaceFilling(canvas, level) {
 	    continue;
 	}
 	ctx.beginPath();
-	ctx.strokeStyle = ["rgb(255, 127, 127)", "rgb(255,255, 0)","rgb(0, 240, 0)", "rgb(127, 127, 255)" ][i%4];
+	var colorArr = colorArrArr[colors];
+	ctx.strokeStyle = colorArr[i % colorArr.length];
 	ctx.moveTo(prevX, prevY);
+	/*
+	ctx.moveTo(prevX + (Math.random() * 5 - 2.5,
+		   prevY + (Math.random() * 5 - 2.5
+	*/
 	[x, y] = getPosition(order, level, width, height);
 	ctx.lineTo(x, y);
 	ctx.arc(x, y, 3, 0, 2*Math.PI , false);
