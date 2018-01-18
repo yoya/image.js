@@ -8,8 +8,13 @@
   <body bgcolor="lightgray">
     <div class="container">
       <div class="controlPanel">
+
+	level:<input id="levelRange" type="range" min="1" max="7" step="1" value="3">:
+	<input id="levelDownButton" type="button" value="<<" />
+	<input type="text" id="levelText" size="2" />
+	<input id="levelUpButton" type="button" value=">>" />
+	<br />
 	widthHeight:<input id="widthHeightRange" type="range" min="64" max="2048" step="1" value="480">:<input type="text" id="widthHeightText" size="5">
-	level:<input id="levelRange" type="range" min="1" max="5" step="1" value="3">:<input type="text" id="levelText" size="2">
       </div> <!-- controlPanel -->
       <canvas id="dstCanvas" class="borderBlue" width=320 height=320> dstCanvas </canvas>
     </div>  <!-- container -->

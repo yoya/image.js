@@ -11,10 +11,27 @@ function main() {
     // console.debug("main");
     var dstCanvas = document.getElementById("dstCanvas");
     dstCanvas.style.backgroundColor = "black";
-    var level = 2;
+    var levelDownButton = document.getElementById("levelDownButton");
+    var levelUpButton = document.getElementById("levelUpButton");
+    var levelRange = document.getElementById("levelRange");
+    var level = parseFloat(levelRange.value);
+    bindFunction({"widthHeightRange":"widthHeightText"},
+		  function(target, rel) {
+		      drawSpaceFilling(dstCanvas, level);
+		  } );
     bindFunction({"widthHeightRange":"widthHeightText",
-		  "levelRange":"levelText"},
-		 function() {
+		  "levelDownButton":null,
+		  "levelRange":"levelText",
+		  "levelUpButton":null},
+		 function(target, rel) {
+		     var id = target.id;
+		     if (id === "levelDownButton") {
+			 levelRange.value--;
+		     } else if (id === "levelUpButton") {
+			 levelRange.value++;
+		     }
+		     levelText.value = levelRange.value;
+		     level = parseFloat(levelRange.value);
 		     drawSpaceFilling(dstCanvas, level);
 		 } );
     drawSpaceFilling(dstCanvas);
@@ -100,9 +117,8 @@ function getPosition(order, level, width, height) {
     return [x, y];
 }
 
-function drawSpaceFilling(canvas) {
+function drawSpaceFilling(canvas, level) {
     var widthHeight = parseFloat(document.getElementById("widthHeightRange").value);
-    var level = parseFloat(document.getElementById("levelRange").value);
     var width = widthHeight;
     var height = widthHeight;
     canvas.width = width;
