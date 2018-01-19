@@ -26,12 +26,17 @@ function main() {
 		   gapTable: gapTable,
 		   elaspe: elaspe};
     bindFunction({"widthHeightRange":"widthHeightText",
-		  "gapCheckbox":null},
+		  "gapCheckbox":null,
+		  "soundCheckbox":null
+		 },
 		 function(target, rel) {
 		     var id = target.id;
 		     if (id === "gapCheckbox") {
 			 gapTable = gapCheckbox.checked?getGapTable(level):null;
 			 params['gapTable'] = gapTable;
+		     }
+		     if (id === "soundCheckbox") {
+			 params['sound'] = target.checked;
 		     }
 		      drawSpaceFilling(dstCanvas, params);
 		  } );
@@ -72,10 +77,10 @@ function main() {
     bindFunction({"playButton":null, "stopButton":null },
 		 function(target, rel) {
 		     var id = target.id;
-			 if (timerId) {
-			     clearInterval(timerId);
-			     timerId = null;
-			 }
+		     if (timerId) {
+			 clearInterval(timerId);
+			 timerId = null;
+		     }
 		     if (id === "playButton") {
 			 params['cursol'] = 0;
 			 var ctx = new function() {
@@ -286,9 +291,11 @@ function drawCursolAnimation() {
 	var order = this.order2
 	var level = this.level;
 	clearInterval(this.timerId);
-	var [orderX, orderY] = getOrderXY(order, level);
-	noteOn(getScale(orderX), 0.5);
-	noteOn(getScale(orderY), 0.5);
+	if (this.sound) {
+	    var [orderX, orderY] = getOrderXY(order, level);
+	    noteOn(getScale(orderX), 0.5);
+	    noteOn(getScale(orderY), 0.5);
+	}
     }
     var canvas = this.canvas;
     var [x1, y1] = [this.x1, this.y1];
@@ -322,6 +329,7 @@ function drawCursol(canvas, params, cursol) {
 	this.order1 = order1;
 	this.order2 = order2;
 	this.level = params['level'];
+	this.sound = params['sound'];
     }
     var elapse = 300 * ctx.step;
     ctx.timerId = setInterval(drawCursolAnimation.bind(ctx), elapse);
