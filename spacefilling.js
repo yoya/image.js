@@ -178,6 +178,7 @@ function getOrderTable_Hilbert(orderTable, level, tableWidth) {
 	}
     }
 }
+
 function getGapTable(level) {
     var width = Math.pow(2, level);
     var len = width * width * 2; // 2 = count([x.y]);
@@ -271,10 +272,23 @@ function drawSpaceFilling(canvas, params) {
     }
 }
 
+function getScale(order) {
+    var scaleTable = [40, 44, 47];
+    var scaleNum = scaleTable.length;
+    var scale = scaleTable[order % scaleNum];
+    var octave = (order - (order % scaleNum)) / scaleNum;
+    return scale + octave * 12;
+}
+
 function drawCursolAnimation() {
     var ratio = this.ratio;
     if (ratio >= 1.0) {
+	var order = this.order2
+	var level = this.level;
 	clearInterval(this.timerId);
+	var [orderX, orderY] = getOrderXY(order, level);
+	noteOn(getScale(orderX), 0.5);
+	noteOn(getScale(orderY), 0.5);
     }
     var canvas = this.canvas;
     var [x1, y1] = [this.x1, this.y1];
@@ -307,6 +321,7 @@ function drawCursol(canvas, params, cursol) {
 	this.step = 0.1;
 	this.order1 = order1;
 	this.order2 = order2;
+	this.level = params['level'];
     }
     var elapse = 300 * ctx.step;
     ctx.timerId = setInterval(drawCursolAnimation.bind(ctx), elapse);
