@@ -283,8 +283,9 @@ function drawCursolAnimation() {
     var x = x1 * (1 - ratio) + x2 * ratio;
     var y = y1 * (1 - ratio) + y2 * ratio;
     ctx.beginPath();
-    ctx.strokeStyle = "rgb(255, 255, 255)";
-    ctx.arc(x, y, 10, 0, 2*Math.PI , false);
+    var v = Math.floor(ratio * 255);
+    ctx.strokeStyle = "rgb(" + [v,v,v].join(',')+")";
+    ctx.arc(x, y, 10 * ratio, 0, 2*Math.PI , false);
     ctx.stroke();
     this.ratio += this.step;
 }
@@ -294,18 +295,18 @@ function drawCursol(canvas, params, cursol) {
     var orderTableRev = params['orderTableRev'];
     var width = canvas.width;
     var height = canvas.height;
-    var [x2, y2] = getPosition(orderTableRev[cursol], level, width, height);
-    if (cursol === 0) {
-	var [x1, y1] = [x2, y2];
-    } else {
-	var [x1, y1] = getPosition(orderTableRev[cursol-1], level, width, height);
-    }
+    var order1 = (cursol <= 0)?orderTableRev[cursol]:orderTableRev[cursol-1];
+    var order2 = orderTableRev[cursol];
+    var [x1, y1] = getPosition(order1, level, width, height);
+    var [x2, y2] = getPosition(order2, level, width, height);
     var ctx = new function() {
 	this.canvas = dstCanvas;
 	this.x1 = x1;  this.y1 = y1;
 	this.x2 = x2;  this.y2 = y2;
 	this.ratio = 0;
 	this.step = 0.1;
+	this.order1 = order1;
+	this.order2 = order2;
     }
     var elapse = 300 * ctx.step;
     ctx.timerId = setInterval(drawCursolAnimation.bind(ctx), elapse);
