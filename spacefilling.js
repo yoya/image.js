@@ -296,9 +296,10 @@ function drawCursolAnimation() {
 	var level = this.level;
 	clearInterval(this.timerId);
 	if (0 < this.volume) {
+	    console.log(this.volume);
 	    var [orderX, orderY] = getOrderXY(order, level);
-	    noteOn(getScale(orderX), this.volume / 0.5);
-	    noteOn(getScale(orderY), this.volume / 0.5);
+	    noteOn(getScale(orderX), 0.5, this.volume / 0.5);
+	    noteOn(getScale(orderY), 0.5, this.volume / 0.5);
 	}
     }
     var canvas = this.canvas;
