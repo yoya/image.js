@@ -17,17 +17,20 @@ function main() {
     var levelRange = document.getElementById("levelRange");
     var colorsRange = document.getElementById("colorsRange");
     var gapCheckbox = document.getElementById("gapCheckbox");
+    var volumeRange = document.getElementById("volumeRange");
     var level = parseFloat(levelRange.value);
     var colors = parseFloat(colorsRange.value);
+    var volume = parseFloat(volumeRange.value);
     var gapTable = gapCheckbox.checked?getGapTable(level):null;
     var params = { level: level,
 		   colors: colors,
 		   orderTableRev: getOrderTableRev(level),
 		   gapTable: gapTable,
-		   elaspe: elaspe};
+		   elaspe: elaspe,
+		   volume:volume };
     bindFunction({"widthHeightRange":"widthHeightText",
 		  "gapCheckbox":null,
-		  "soundCheckbox":null
+		  "volumeRange":"volumeText",
 		 },
 		 function(target, rel) {
 		     var id = target.id;
@@ -35,8 +38,9 @@ function main() {
 			 gapTable = gapCheckbox.checked?getGapTable(level):null;
 			 params['gapTable'] = gapTable;
 		     }
-		     if (id === "soundCheckbox") {
-			 params['sound'] = target.checked;
+		     if (id === "volumeRange") {
+			 volume = parseFloat(volumeRange.value);
+			 params['volume'] = volume;
 		     }
 		      drawSpaceFilling(dstCanvas, params);
 		  } );
@@ -291,10 +295,10 @@ function drawCursolAnimation() {
 	var order = this.order2
 	var level = this.level;
 	clearInterval(this.timerId);
-	if (this.sound) {
+	if (0 < this.volume) {
 	    var [orderX, orderY] = getOrderXY(order, level);
-	    noteOn(getScale(orderX), 0.5);
-	    noteOn(getScale(orderY), 0.5);
+	    noteOn(getScale(orderX), this.volume / 0.5);
+	    noteOn(getScale(orderY), this.volume / 0.5);
 	}
     }
     var canvas = this.canvas;
@@ -329,7 +333,7 @@ function drawCursol(canvas, params, cursol) {
 	this.order1 = order1;
 	this.order2 = order2;
 	this.level = params['level'];
-	this.sound = params['sound'];
+	this.volume = params['volume'];
     }
     var elapse = 300 * ctx.step;
     ctx.timerId = setInterval(drawCursolAnimation.bind(ctx), elapse);
