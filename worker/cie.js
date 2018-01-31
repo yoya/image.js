@@ -11,9 +11,9 @@ onmessage = function(e) {
     var imageData = e.data.image; // ignore this
     var diagramBaseImageData = e.data.diagramBaseImageData;
     var hist = e.data.hist;
-    var colorspace = e.data.colorspace;
+    var chromaticity = e.data.chromaticity;
     var pointSize = e.data.pointSize;
-    var dstImageData = drawDiagramPoint(diagramBaseImageData, hist, colorspace, pointSize);
+    var dstImageData = drawDiagramPoint(diagramBaseImageData, hist, chromaticity, pointSize);
     postMessage({image:dstImageData}, [dstImageData.data.buffer]);
 }
 
@@ -22,7 +22,7 @@ function graphTrans(xy, width, height) {
     return [x * width, (1 - y) * height];
 }
 
-function drawDiagramPoint(imageData, hist, colorspace, pointSize) {
+function drawDiagramPoint(imageData, hist, chromaticity, pointSize) {
     var width = imageData.width, height = imageData.height;
     var pointRGBA = [0,0,0, 255];
     var [dMin, dMax] = [-(pointSize/2-0.2),(pointSize/2-0.2)];
@@ -33,7 +33,7 @@ function drawDiagramPoint(imageData, hist, colorspace, pointSize) {
 	}
 	var lxyz = sRGB2XYZ([r,g,b]);
 	var xy = XYZ2xy(lxyz);
-	if (colorspace === "ciexy") {
+	if (chromaticity === "ciexy") {
 	    var [gx, gy] = graphTrans(xy, width, height);
 	} else {
 	    var uava = xy2uava(xy);

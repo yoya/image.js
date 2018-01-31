@@ -81,7 +81,7 @@ function main() {
 		     hist = getColorHistogram(srcCanvas);
 		     drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, rel);
 		 } );
-    bindFunction({"colorspaceSelect":null,
+    bindFunction({"chromaticitySelect":null,
 		  "pointSizeRange":"pointSizeText",
 		  "tristimulusCheckbox":null,
 		  "guideCheckbox":null,
@@ -108,25 +108,25 @@ function main() {
 var worker = new workerProcess("worker/cie.js");
 
 function drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, sync) {
-    var colorspace = document.getElementById("colorspaceSelect").value;
+    var chromaticity = document.getElementById("chromaticitySelect").value;
     var pointSize = parseFloat(document.getElementById("pointSizeRange").value);
     var tristimulus = document.getElementById("tristimulusCheckbox").checked;
     var guide = document.getElementById("guideCheckbox").checked;
     var dstWidth = dstCanvas.width, dstHeight = dstCanvas.height;
     //
-    drawDiagramBase(diagramBaseCanvas, cieArr, colorspace, tristimulus, guide);
+    drawDiagramBase(diagramBaseCanvas, cieArr, chromaticity, tristimulus, guide);
     if (hist === null) {
 	copyCanvas(diagramBaseCanvas, dstCanvas);
     } else {
 	var diagramBaseCtx = diagramBaseCanvas.getContext("2d");
 	var diagramBaseImageData = diagramBaseCtx.getImageData(0, 0, diagramBaseCanvas.width, diagramBaseCanvas.height);
-	var params = {diagramBaseImageData:diagramBaseImageData, hist:hist, colorspace:colorspace, pointSize:pointSize};
+	var params = {diagramBaseImageData:diagramBaseImageData, hist:hist, chromaticity:chromaticity, pointSize:pointSize};
 	worker.process(srcCanvas, dstCanvas, params, sync);
     }
 }
 
 function drawGraph(canvas, cieArr, cie31Arr) {
-    var colorspace = document.getElementById("colorspaceSelect").value;
+    var chromaticity = document.getElementById("chromaticitySelect").value;
     var guide = document.getElementById("guideCheckbox").checked;
     canvas.width  = canvas.width ; // clear
     drawGraphBase(canvas, cieArr, cie31Arr, guide);
@@ -143,7 +143,7 @@ function graphTransRev(xy, width, height) {
     return [x / width, 1 - (y / height)];
 }
 
-function drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus, guide) {
+function drawDiagramBase(dstCanvas, cieArr, chromaticity, tristimulus, guide) {
     dstCanvas.width = dstCanvas.width;
     var xyArr = [], rgbArr = [];
     for (var i = 0, n = cieArr.length ; i < n; i++) {
@@ -152,7 +152,7 @@ function drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus, guide) {
 	lxyz = [lx, ly, lz];
 	var xy =  XYZ2xy(lxyz);
 	var rgb = XYZ2sRGB(lxyz);
-	if (colorspace === "ciexy") {
+	if (chromaticity === "ciexy") {
 	    xyArr.push(xy);
 	} else {
 	    var uava = xy2uava(xy);
@@ -226,7 +226,7 @@ function drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus, guide) {
     for (var y = 0 ; y < height ; y++) {
 	for (var x = 0 ; x < width ; x++) {
 	    var xy = graphTransRev([x, y], width, height);
-	    if (colorspace === "ciexy") {
+	    if (chromaticity === "ciexy") {
 		var lxyz = xy2XYZ(xy)
 	    } else {
 		xy = uava2xy(xy);
@@ -251,7 +251,7 @@ function drawDiagramBase(dstCanvas, cieArr, colorspace, tristimulus, guide) {
 				[0.1500, 0.0600]];
 	for (var i in tristimulus_sRGB) {
 	    var xy = tristimulus_sRGB[i];
-	    if (colorspace !== "ciexy") {
+	    if (chromaticity !== "ciexy") {
 		xy = xy2uava(xy);
 	    }
 	    var [gx, gy] = graphTrans(xy, width, height);
