@@ -232,7 +232,8 @@ function drawDiagramBase(dstCanvas, cieArr, chromaticity, tristimulus, guide) {
 		xy = uava2xy(xy);
 		var lxyz = xy2XYZ(xy);
 	    }
-	    var [r, g, b] = XYZ2sRGB(lxyz);
+	    var rgb = XYZ2sRGB(lxyz);
+	    var [r, g, b] =  normalizeRGBA_max(rgb);
 	    data[offset++] = r;
 	    data[offset++] = g;
 	    data[offset++] = b;
