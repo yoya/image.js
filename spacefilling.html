@@ -9,7 +9,7 @@
     <div class="container">
       <div class="controlPanel">
 	<div style="float:left">
-	  level:<input id="levelRange" type="range" min="1" max="7" step="1" value="3">:
+	  level:<input id="levelRange" type="range" min="1" max="7" step="1" value="4">:
 	  <input id="levelDownButton" type="button" value="<<" />
 	  <input type="text" id="levelText" size="2" />
 	  <input id="levelUpButton" type="button" value=">>" />
@@ -32,7 +32,24 @@
 	</div>
       </div> <!-- controlPanel -->
       <div style="clear:both"> </div>
-      <div id="canvasPanel">
+      <div style="float:left">
+        <select id="scaleSelect" size="10">
+	  <!-- https://en.wikibooks.org/wiki/Music_Theory/Chords -->
+	  <option value="CEG" selected> C major </option>
+          <option value="DFA"         > D minor </option>
+	  <!-- http://www.piano-keyboard-guide.com/piano-chords-chart.html -->
+	  <option value="CE-G-"       > C diminished </option>
+	  <option value="CEG+"       > C augmented </option>
+	  <option value="CFG"       > C suspended </option>
+	  <option value="CEGA"       > C major 6th </option>
+	  <option value="DFAH"       > D minor 6th </option>
+	  <!-- https://en.wikipedia.org/wiki/Hexatonic_scale -->
+	  <option value="CDEF+G+A+C"  > hexatonic </option>
+	  <!-- https://en.wikipedia.org/wiki/Istrian_scale -->
+	  <option value="EFGA-BH"     > istrian </option>
+        </select>
+      </div>
+	<div id="canvasPanel" style="float:left">
 	<canvas id="dstCanvas" class="borderBlue" width=320 height=320>
 	  dstCanvas
 	</canvas>

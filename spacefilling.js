@@ -18,10 +18,12 @@ function main() {
     var gapCheckbox = document.getElementById("gapCheckbox");
     var volumeRange = document.getElementById("volumeRange");
     var tempoRange = document.getElementById("tempoRange");
+    var scaleSelect = document.getElementById("scaleSelect");
     var level = parseFloat(levelRange.value);
     var colors = parseFloat(colorsRange.value);
     var volume = parseFloat(volumeRange.value);
     var tempo = parseFloat(tempoRange.value);
+    var scaleString = scaleSelect.value;
     var elapse = 60 / tempo * 1000 / 2;
     var gapTable = gapCheckbox.checked?getGapTable(level):null;
     var params = { level: level,
@@ -31,11 +33,13 @@ function main() {
 		   elapse: elapse,
 		   volume:volume,
 		   tempo:tempo,
+		   scaleString:scaleString,
 		   cancel:false};
     bindFunction({"widthHeightRange":"widthHeightText",
 		  "gapCheckbox":null,
 		  "volumeRange":"volumeText",
 		  "tempoRange":"tempoText",
+		  "scaleSelect":null,
 		 },
 		 function(target, rel) {
 		     var id = target.id;
@@ -50,6 +54,9 @@ function main() {
 			 elapse = 60 / tempo * 1000 / 2; // 8th note
 			 params['tempo'] = tempo;
 			 params['elapse'] = elapse;
+		     } else if (id === 'scaleSelect') {
+			 scaleString = scaleSelect.value;
+			 params['scaleString'] = scaleString;
 		     }
 		     drawSpaceFilling(dstCanvas, params);
 		  } );
@@ -301,12 +308,12 @@ var scaleNotenameTable = {
 };
 
 
-function getScale(order) {
-    var scaleTable = ['C', 'E', 'G'];
+function getScale(order, scaleString) {
+    var scaleTable = scaleString.split(/([A-H][+-]?)/).filter(function(a) { return a!==""; });
     var scaleNum = scaleTable.length;
     var orderMod = order % scaleNum;
-    if (order < 0) {
-	orderMod = - orderMod;
+    if (orderMod < 0) {
+	orderMod = scaleNum + orderMod;
     }
     var scaleNotename = scaleTable[orderMod];
     // 60: midi number for middle c tone
@@ -324,6 +331,7 @@ function getScale(order) {
 
 function drawCursolAnimation() {
     var ratio = this.ratio;
+    var scaleString = this.scaleString;
     if (ratio >= 1.0) {
 	var order = this.order2
 	var level = this.level;
@@ -332,8 +340,8 @@ function drawCursolAnimation() {
 	    var size = Math.pow(2, level);
 	    var [orderX, orderY] = getOrderXY(order, level);
 	    var elapse = this.elapse;
-	    noteOn(getScale(orderX - size/2), elapse/1000, this.volume * 0.5);
-	    noteOn(getScale(orderY - size/2), elapse/1000, this.volume * 0.5);
+	    noteOn(getScale(orderX - size/2, scaleString), elapse/1000, this.volume * 0.5);
+	    noteOn(getScale(orderY - size/2, scaleString), elapse/1000, this.volume * 0.5);
 	}
     }
     var canvas = this.canvas;
@@ -370,6 +378,7 @@ function drawCursol(canvas, params, cursol) {
 	this.elapse = params['elapse'];
 	this.level = params['level'];
 	this.volume = params['volume'];
+	this.scaleString = params['scaleString'];
     }
     var elapse = 300 * ctx.step;
     ctx.timerId = setInterval(drawCursolAnimation.bind(ctx), elapse);
