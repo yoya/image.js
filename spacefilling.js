@@ -292,12 +292,34 @@ function drawSpaceFilling(canvas, params) {
     }
 }
 
+var scaleNotenameTable = {
+    'C':0, 'C+':1, 'D+':1,
+    'D':2, 'D+':3, 'D-':3,
+    'E':4, 'F':5, 'F+':6, 'G-':6,
+    'G':7, 'G+':8, 'A-':8,
+    'A':9, 'A+':10, 'B':10, 'H':11,
+};
+
+
 function getScale(order) {
-    var scaleTable = [40, 44, 47];
+    var scaleTable = ['C', 'E', 'G'];
     var scaleNum = scaleTable.length;
-    var scale = scaleTable[order % scaleNum];
-    var octave = (order - (order % scaleNum)) / scaleNum;
-    return scale + octave * 12;
+    var orderMod = order % scaleNum;
+    if (order < 0) {
+	orderMod = - orderMod;
+    }
+    var scaleNotename = scaleTable[orderMod];
+    // 60: midi number for middle c tone
+    var scale = 60 + scaleNotenameTable[scaleNotename];
+    var octave = (order - (orderMod)) / scaleNum;
+    scale += octave * 12;
+    while (scale < 0) {
+	scale += 12;
+    }
+    while (127 < scale) {
+	scale -= 12;
+    }
+    return scale;
 }
 
 function drawCursolAnimation() {
@@ -307,10 +329,11 @@ function drawCursolAnimation() {
 	var level = this.level;
 	clearInterval(this.timerId);
 	if (0 < this.volume) {
+	    var size = Math.pow(2, level);
 	    var [orderX, orderY] = getOrderXY(order, level);
 	    var elapse = this.elapse;
-	    noteOn(getScale(orderX), elapse/1000, this.volume * 0.5);
-	    noteOn(getScale(orderY), elapse/1000, this.volume * 0.5);
+	    noteOn(getScale(orderX - size/2), elapse/1000, this.volume * 0.5);
+	    noteOn(getScale(orderY - size/2), elapse/1000, this.volume * 0.5);
 	}
     }
     var canvas = this.canvas;
