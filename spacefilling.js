@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 function main() {
-    var elaspe = 500; // msec
     // console.debug("main");
     var dstCanvas = document.getElementById("dstCanvas");
     dstCanvas.style.backgroundColor = "black";
@@ -18,31 +17,41 @@ function main() {
     var colorsRange = document.getElementById("colorsRange");
     var gapCheckbox = document.getElementById("gapCheckbox");
     var volumeRange = document.getElementById("volumeRange");
+    var tempoRange = document.getElementById("tempoRange");
     var level = parseFloat(levelRange.value);
     var colors = parseFloat(colorsRange.value);
     var volume = parseFloat(volumeRange.value);
+    var tempo = parseFloat(tempoRange.value);
+    var elapse = 60 / tempo * 1000 / 2;
     var gapTable = gapCheckbox.checked?getGapTable(level):null;
     var params = { level: level,
 		   colors: colors,
 		   orderTableRev: getOrderTableRev(level),
 		   gapTable: gapTable,
-		   elaspe: elaspe,
-		   volume:volume };
+		   elapse: elapse,
+		   volume:volume,
+		   tempo:tempo,
+		   cancel:false};
     bindFunction({"widthHeightRange":"widthHeightText",
 		  "gapCheckbox":null,
 		  "volumeRange":"volumeText",
+		  "tempoRange":"tempoText",
 		 },
 		 function(target, rel) {
 		     var id = target.id;
 		     if (id === "gapCheckbox") {
 			 gapTable = gapCheckbox.checked?getGapTable(level):null;
 			 params['gapTable'] = gapTable;
-		     }
-		     if (id === "volumeRange") {
+		     } else if ((id === "volumeRange") || (id === "volumeText")) {
 			 volume = parseFloat(volumeRange.value);
 			 params['volume'] = volume;
+		     } else if ((id === "tempoRange") || (id === "tempoText")) {
+			 tempo = parseFloat(tempoRange.value);
+			 elapse = 60 / tempo * 1000 / 2; // 8th note
+			 params['tempo'] = tempo;
+			 params['elapse'] = elapse;
 		     }
-		      drawSpaceFilling(dstCanvas, params);
+		     drawSpaceFilling(dstCanvas, params);
 		  } );
     bindFunction({"levelDownButton":null, "levelUpButton":null,
 		  "levelRange":"levelText",
@@ -86,16 +95,18 @@ function main() {
 			 timerId = null;
 		     }
 		     if (id === "playButton") {
+			 params['cancel'] = false;
 			 params['cursol'] = 0;
 			 var ctx = new function() {
 			     this.canvas = dstCanvas;
 			     this.params = params;
 			     this.cursol = 0;
 			 }
-			 timerId = setInterval(playSpaceFilling.bind(ctx), elaspe);
-		     } else if (id === "colorsUpButton") {
+			 timerId = setTimeout(playSpaceFilling.bind(ctx), elapse);
+		     } else if (id === "stopButton") {
+			 params['cancel'] = true;
 			 if (timerId) {
-			     clearInterval(timerId);
+			     ;
 			 }
 		     }
 		 } );
@@ -296,10 +307,10 @@ function drawCursolAnimation() {
 	var level = this.level;
 	clearInterval(this.timerId);
 	if (0 < this.volume) {
-	    console.log(this.volume);
 	    var [orderX, orderY] = getOrderXY(order, level);
-	    noteOn(getScale(orderX), 0.5, this.volume * 0.5);
-	    noteOn(getScale(orderY), 0.5, this.volume * 0.5);
+	    var elapse = this.elapse;
+	    noteOn(getScale(orderX), elapse/1000, this.volume * 0.5);
+	    noteOn(getScale(orderY), elapse/1000, this.volume * 0.5);
 	}
     }
     var canvas = this.canvas;
@@ -333,6 +344,7 @@ function drawCursol(canvas, params, cursol) {
 	this.step = 0.1;
 	this.order1 = order1;
 	this.order2 = order2;
+	this.elapse = params['elapse'];
 	this.level = params['level'];
 	this.volume = params['volume'];
     }
@@ -344,6 +356,9 @@ function playSpaceFilling() {
     var canvas = this.canvas;
     var params = this.params;
     var cursol = this.cursol;
+    if (params['cancel']) {
+	return ;
+    }
     var orderTableRev = params['orderTableRev'];
     if (cursol <=  orderTableRev.length) {
 	drawSpaceFilling(canvas, params);
@@ -352,4 +367,5 @@ function playSpaceFilling() {
 	    this.cursol++;
 	}
     }
+    setTimeout(playSpaceFilling.bind(this), this.params.elapse);
 }
