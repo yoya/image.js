@@ -1,3 +1,6 @@
 [submodule "dist/imageprocessing-labs"]
 	path = dist/imageprocessing-labs
 	url = git@github.com:wellflat/imageprocessing-labs.git
+[submodule "dist/imaya/zlib.js"]
+	path = dist/imaya/zlib.js
+	url = https://github.com/imaya/zlib.js.git
