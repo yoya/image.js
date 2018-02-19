@@ -9,6 +9,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 function addHTMLTable(elem, table) {
+    while (elem.firstChild) {
+	elem.removeChild(elem.firstChild);
+    }
+
     for (name in table) {
 	var value = table[name];
 	var tr = document.createElement("tr");
@@ -62,7 +66,10 @@ function main() {
 	var tagTable = icc.getTagTable();
 	var iccHeaderTable = document.getElementById("iccHeaderTable");
 	addHTMLTable(iccHeaderTable, header);
-	var iccTagTableContainer = document.getElementById("iccTagTableContainer");
+	var  iccTagTableContainer= document.getElementById("iccTagTableContainer");
+	while (iccTagTableContainer.firstChild) {
+	    iccTagTableContainer.removeChild(iccTagTableContainer.firstChild);
+	}
 	for (var idx in tagTable) {
 	    var tag = tagTable[idx];
 	    var tagDetail = icc.getTagDetail(tag);
