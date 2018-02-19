@@ -8,6 +8,23 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
+function addHTMLTable(elem, table) {
+    for (name in table) {
+	var value = table[name];
+	var tr = document.createElement("tr");
+	var th = document.createElement("th");
+	var td = document.createElement("td");
+	th.appendChild(document.createTextNode(name));
+	if ((typeof(value) !== "string") && (typeof(value) !== "number")) {
+	    value = Object.values(value).join(", ");
+	}
+	td.appendChild(document.createTextNode(value));
+	tr.appendChild(th);
+	tr.appendChild(td);
+	elem.appendChild(tr);
+    }
+}
+
 function main() {
     var containerNode = document.getElementById("ibv_container");
     //var imageClassList = [IO_JPEG, IO_PNG, IO_GIF, IO_TIFF, IO_BMP];
@@ -43,24 +60,22 @@ function main() {
 	}
 	var header = icc.getHeader();
 	var tagTable = icc.getTagTable();
-	console.log(header);
-	console.log(tagTable);
 	var iccHeaderTable = document.getElementById("iccHeaderTable");
-	for (name in header) {
-	    var value = header[name];
-	    var tr = document.createElement("tr");
-	    var th = document.createElement("th");
-	    var td = document.createElement("td");
-	    th.appendChild(document.createTextNode(name));
-	    if ((typeof(value) !== "string") && (typeof(value) !== "number")) {
-		value = Object.values(value).join(", ");
+	addHTMLTable(iccHeaderTable, header);
+	var iccTagTableContainer = document.getElementById("iccTagTableContainer");
+	for (var idx in tagTable) {
+	    var tag = tagTable[idx];
+	    var tagDetail = icc.getTagDetail(tag);
+	    switch (tag["Type"]) {
+	    case "desc":
+	    case "text":
+		var table = document.createElement("table");
+		table.style = "float:left;";
+		iccTagTableContainer.appendChild(table);
+		addHTMLTable(table, tagDetail);
+		break;
 	    }
-	    td.appendChild(document.createTextNode(value));
-	    tr.appendChild(th);
-	    tr.appendChild(td);
-	    iccHeaderTable.appendChild(tr);
 	}
-	var iccTagTable = document.getElementById("iccTagTable");
     }, "ArrayBuffer");
 }
 
