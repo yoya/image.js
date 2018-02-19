@@ -76,10 +76,14 @@ function main() {
 	    switch (tag["Type"]) {
 	    case "desc":
 	    case "text":
+	    case "XYZ ":
 		var table = document.createElement("table");
+		var caption = document.createElement("caption");
+		caption.appendChild(document.createTextNode(tag['Signature']));
 		table.style = "float:left;";
 		iccTagTableContainer.appendChild(table);
 		addHTMLTable(table, tagDetail);
+		table.appendChild(caption);
 		break;
 	    }
 	}
