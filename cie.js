@@ -7,6 +7,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
+var tristimulus_XYs_Table = {
+    //http://flat-display-2.livedoor.biz/archives/50594042.html
+    // https://en.wikipedia.org/wiki/ProPhoto_RGB_color_space
+    'srgb':    [[0.640, 0.330], [0.300, 0.600], [0.150, 0.060]],
+    'dcip3':   [[0.680, 0.320], [0.265, 0.690], [0.150, 0.060]],
+    'adobe':   [[0.640, 0.330], [0.210, 0.710], [0.150, 0.060]],
+    'prophoto':[[0.7347, 0.2653], [0.1596, 0.8404], [0.0366, 0.0001]],
+}
+
+
 function main() {
     console.debug("cie main()");
     var srcCanvas = document.getElementById("srcCanvas");
@@ -83,6 +93,7 @@ function main() {
 		 } );
     bindFunction({"chromaticitySelect":null,
 		  "pointSizeRange":"pointSizeText",
+		  "colorspaceSelect":null,
 		  "tristimulusCheckbox":null,
 		  "guideCheckbox":null,
 		  },
@@ -110,11 +121,12 @@ var worker = new workerProcess("worker/cie.js");
 function drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, sync) {
     var chromaticity = document.getElementById("chromaticitySelect").value;
     var pointSize = parseFloat(document.getElementById("pointSizeRange").value);
+    var colorspace = document.getElementById("colorspaceSelect").value;
     var tristimulus = document.getElementById("tristimulusCheckbox").checked;
     var guide = document.getElementById("guideCheckbox").checked;
     var dstWidth = dstCanvas.width, dstHeight = dstCanvas.height;
     //
-    drawDiagramBase(diagramBaseCanvas, cieArr, chromaticity, tristimulus, guide);
+    drawDiagramBase(diagramBaseCanvas, cieArr, chromaticity, colorspace, tristimulus, guide);
     if (hist === null) {
 	copyCanvas(diagramBaseCanvas, dstCanvas);
     } else {
@@ -143,7 +155,7 @@ function graphTransRev(xy, width, height) {
     return [x / width, 1 - (y / height)];
 }
 
-function drawDiagramBase(dstCanvas, cieArr, chromaticity, tristimulus, guide) {
+function drawDiagramBase(dstCanvas, cieArr, chromaticity, colorspace, tristimulus, guide) {
     dstCanvas.width = dstCanvas.width;
     var xyArr = [], rgbArr = [];
     for (var i = 0, n = cieArr.length ; i < n; i++) {
@@ -247,11 +259,9 @@ function drawDiagramBase(dstCanvas, cieArr, chromaticity, tristimulus, guide) {
 	ctx.beginPath();
 	ctx.strokeStyle = "rgba(100, 100, 100, 0.2)";
 	ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
-	var tristimulus_sRGB = [[0.6400, 0.3300	],
-				[0.3000, 0.6000],
-				[0.1500, 0.0600]];
-	for (var i in tristimulus_sRGB) {
-	    var xy = tristimulus_sRGB[i];
+	var tristimulus_XYs = tristimulus_XYs_Table[colorspace];
+	for (var i in tristimulus_XYs) {
+	    var xy = tristimulus_XYs[i];
 	    if (chromaticity !== "ciexy") {
 		xy = xy2uava(xy);
 	    }
