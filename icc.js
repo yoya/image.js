@@ -42,6 +42,8 @@ function main() {
     //var imageClassList = [IO_JPEG, IO_PNG, IO_GIF, IO_TIFF, IO_BMP];
     var imageClassList = [IO_JPEG, IO_PNG];
     dropFunction(document, function(buf) {
+	var  iccTableContainer= document.getElementById("iccTableContainer");
+	resetHTMLTable(iccTableContainer);
 	var consoleText = document.getElementById("consoleText");
 	var arr = new Uint8Array(buf);
 	var io = null;
@@ -74,12 +76,6 @@ function main() {
 	var tagTable = icc.getTagTable();
 	console.debug(header);
 	console.debug(tagTable);
-	var iccHeaderTable = document.getElementById("iccHeaderTable");
-	var  iccTableContainer= document.getElementById("iccTableContainer");
-	while (iccTableContainer.firstChild) {
-	    iccTableContainer.removeChild(iccTableContainer.firstChild);
-	}
-	resetHTMLTable(iccTableContainer);
 	addHTMLTable(iccTableContainer, "Header", header);
 	for (var idx in tagTable) {
 	    var tag = tagTable[idx];
