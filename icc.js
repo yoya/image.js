@@ -19,8 +19,8 @@ function addHTMLTable(elem, table) {
 	var th = document.createElement("th");
 	var td = document.createElement("td");
 	th.appendChild(document.createTextNode(name));
-	if ((typeof(value) !== "string") && (typeof(value) !== "number")) {
-	    value = Object.values(value).join(", ");
+	if (typeof(value) === "object") {
+	    value = value.toString();
 	}
 	td.appendChild(document.createTextNode(value));
 	tr.appendChild(th);
@@ -44,22 +44,22 @@ function main() {
 	    }
 	}
 	if (! io) {
-	    console.warn("can't accept format");
-	    consoleText.value = "can't accept format";
+	    console.warn("unknown image format");
+	    consoleText.value = "unknown image format";
 	    return ;
 	}
 	io.parse(arr);
         var iccdata = io.getICC();
 	io = null;
 	if (iccdata === null) {
-	    console.warn("can't find icc");
-	    consoleText.value = "can't find icc";
+	    console.warn("icc profile not found");
+	    consoleText.value = "icc profile not found";
 	    return ;
 	}
 	var icc = new IO_ICC();
 	if (icc.parse(iccdata) === false) {
-	    console.warn("icc parse error");
-	    consoleText.value = "icc parse error";
+	    console.warn("wrong icc profile");
+	    consoleText.value = "wrong icc profile";
 	    return ;
 	}
 	var header = icc.getHeader();
