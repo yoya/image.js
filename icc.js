@@ -40,7 +40,7 @@ function addHTMLTable(parentElem, captionText, table) {
 function main() {
     var containerNode = document.getElementById("ibv_container");
     //var imageClassList = [IO_JPEG, IO_PNG, IO_GIF, IO_TIFF, IO_BMP];
-    var imageClassList = [IO_JPEG, IO_PNG];
+    var imageClassList = [IO_ICC, IO_JPEG, IO_PNG];
     dropFunction(document, function(buf) {
 	var  iccTableContainer= document.getElementById("iccTableContainer");
 	resetHTMLTable(iccTableContainer);
