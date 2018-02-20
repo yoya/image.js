@@ -82,8 +82,12 @@ function main() {
 	console.debug(header);
 	console.debug(tagTable);
 	addHTMLTable(iccTableContainer, "Header", header);
+	var foundTagTable = {};
+	var doneFigureTable = {};
 	for (var idx in tagTable) {
 	    var tag = tagTable[idx];
+	    var signature = tag['Signature'];
+	    foundTagTable[signature] = true;
 	    var tagDetail = icc.getTagDetail(tag);
 	    switch (tag["Type"]) {
 	    case "desc":
@@ -93,8 +97,18 @@ function main() {
 		addHTMLTable(iccTableContainer, captionText, tagDetail);
 		break;
 	    }
+	    if (foundTagTable['rXYZ'] && foundTagTable['gXYZ'] && foundTagTable['bXYZ']) {
+		if (! doneFigureTable['CIEDiagramRGB']) {
+		    doneFigureTable['CIEDiagramRGB'] = true;
+		    console.log("trigram drawDiagramBase with tristimulus");
+		}
+	    }
+	    if (doneFigureTable['CIEDiagramRGB'] && foundTagTable['wtpt']) {
+		if (! doneFigureTable['CIEDiagramWpt']) {
+		    doneFigureTable['CIEDiagramWpt'] = true;
+		    console.log("drawDiagramBase with wtpt");
+		}
+	    }
 	}
     }, "ArrayBuffer");
 }
-
-
