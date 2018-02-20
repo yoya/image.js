@@ -27,6 +27,7 @@ function main() {
     var cieArr = null;
     var cie31Arr = null, cie64Arr = null, cieJVArr = null;
     var hist = null;
+    var params = {};
     var loadCIEXYZdata = function() {
 	var cieList = ["31", "64", "jv"];
 	for (var i in cieList) {
@@ -55,8 +56,14 @@ function main() {
 		    if (cie === "31") { // cieSelect as default
 			cie31Arr = arr;
 			cieArr = cie31Arr;
-			drawGraph(graphCanvas, cieArr, cie31Arr);
-			drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, true);
+			params = {
+			    'cieArr'  :cieArr,
+			    'cie31Arr':cie31Arr,
+			    'hist'    :hist,
+			    'sync'    :true
+			};
+			drawGraph(graphCanvas, params);
+			drawDiagram(diagramBaseCanvas, dstCanvas, params);
 		    } else if (cie === "64") {
 			cie64Arr = arr;
 		    } else { // "jv"
@@ -81,15 +88,26 @@ function main() {
 		     } else { // "ciexyzjv"
 			 cieArr = cieJVArr;
 		     }
-		     drawGraph(graphCanvas, cieArr, cie31Arr);
-		     drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, rel);
+		     params = {
+			 'cieArr'  :cieArr,
+			 'cie31Arr':cie31Arr,
+			 'hist'    :hist,
+			 'sync'    :rel
+		     };
+		     drawGraph(graphCanvas, params);
+		     drawDiagram(diagramBaseCanvas, dstCanvas, params);
 		 } );
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function(target, rel) {
 		     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     hist = getColorHistogram(srcCanvas);
-		     drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, rel);
+		     params = {
+			 'cieArr':cieArr,
+			 'hist'  :hist,
+			 'sync'  :rel
+		     };
+		     drawDiagram(diagramBaseCanvas, dstCanvas, params);
 		 } );
     bindFunction({"chromaticitySelect":null,
 		  "pointSizeRange":"pointSizeText",
@@ -98,8 +116,14 @@ function main() {
 		  "guideCheckbox":null,
 		  },
 		 function(target, rel) {
-		     drawGraph(graphCanvas, cieArr, cie31Arr);
-		     drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, rel);
+		     params = {
+			 'cieArr'  :cieArr,
+			 'cie31Arr':cie31Arr,
+			 'hist'    :hist,
+			 'sync'    :rel
+		     };
+		     drawGraph(graphCanvas, params);
+		     drawDiagram(diagramBaseCanvas, dstCanvas, params);
 		 } );
     //
     dropFunction(document, function(dataURL) {
@@ -109,7 +133,12 @@ function main() {
 	    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    hist = getColorHistogram(srcCanvas);
-	    drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, true);
+	    params = {
+		'cieArr':cieArr,
+		'hist'  :hist,
+		'sync'  :true
+	    };
+	    drawDiagram(diagramBaseCanvas, dstCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -118,7 +147,10 @@ function main() {
 
 var worker = new workerProcess("worker/cie.js");
 
-function drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, sync) {
+function drawDiagram(diagramBaseCanvas, dstCanvas, params) {
+    var cieArr = params['cieArr'];
+    var hist   = params['hist'];
+    var sync   = params['sync'];
     var chromaticity = document.getElementById("chromaticitySelect").value;
     var pointSize = parseFloat(document.getElementById("pointSizeRange").value);
     var colorspace = document.getElementById("colorspaceSelect").value;
@@ -126,7 +158,12 @@ function drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, sync) {
     var guide = document.getElementById("guideCheckbox").checked;
     var dstWidth = dstCanvas.width, dstHeight = dstCanvas.height;
     //
-    drawDiagramBase(diagramBaseCanvas, cieArr, chromaticity, colorspace, tristimulus, guide);
+    var params = { 'cieArr':cieArr,
+		   'chromaticity':chromaticity,
+		   'colorspace':colorspace,
+		   'tristimulus':tristimulus,
+		   'guide':guide };
+    drawDiagramBase(diagramBaseCanvas, params);
     if (hist === null) {
 	copyCanvas(diagramBaseCanvas, dstCanvas);
     } else {
@@ -137,11 +174,12 @@ function drawDiagram(diagramBaseCanvas, dstCanvas, cieArr, hist, sync) {
     }
 }
 
-function drawGraph(canvas, cieArr, cie31Arr) {
-    var chromaticity = document.getElementById("chromaticitySelect").value;
-    var guide = document.getElementById("guideCheckbox").checked;
+function drawGraph(canvas, params) {
+    var cieArr   = params['cieArr'];
+    var cie31Arr = params['cie31Arr'];
+    params['guide'] = document.getElementById("guideCheckbox").checked;
     canvas.width  = canvas.width ; // clear
-    drawGraphBase(canvas, cieArr, cie31Arr, guide);
+    drawGraphBase(canvas, params);
 }
 
 
@@ -155,7 +193,12 @@ function graphTransRev(xy, width, height) {
     return [x / width, 1 - (y / height)];
 }
 
-function drawDiagramBase(dstCanvas, cieArr, chromaticity, colorspace, tristimulus, guide) {
+function drawDiagramBase(dstCanvas, params) {
+    var cieArr       = params['cieArr'];
+    var chromaticity = params['chromaticity'];
+    var colorspace   = params['colorspace'];
+    var tristimulus  = params['tristimulus'];
+    var guide        = params['guide'];
     dstCanvas.width = dstCanvas.width;
     var xyArr = [], rgbArr = [];
     for (var i = 0, n = cieArr.length ; i < n; i++) {
@@ -279,8 +322,10 @@ function drawDiagramBase(dstCanvas, cieArr, chromaticity, colorspace, tristimulu
     ctx.restore();
 }
 
-function drawGraphBase(canvas, cieArr, cie31Arr, guide) {
-    // console.debug("drawGraphBase", canvas, cieArr);
+function drawGraphBase(canvas, params) {
+    var cieArr   = params['cieArr'];
+    var cie31Arr = params['cie31Arr'];
+    var guide    = params['guide'];
     canvas.style.backgroundColor = "black";
     var width = canvas.width;
     var height = canvas.height;
