@@ -46,6 +46,11 @@ function main() {
 	resetHTMLTable(iccTableContainer);
 	var consoleText = document.getElementById("consoleText");
 	var arr = new Uint8Array(buf);
+	// image preview
+	var previewImage = document.getElementById("previewImage");
+	var blob = new Blob( [ arr ], { type: "image/*" } );
+	previewImage.src = URL.createObjectURL(blob);
+	// icc profile dump
 	var io = null;
 	for (var imgClass of imageClassList) {
 	    if (imgClass.verifySig(arr)) {
