@@ -43,7 +43,6 @@ function main() {
     var imageClassList = [IO_JPEG, IO_PNG];
     dropFunction(document, function(buf) {
 	var consoleText = document.getElementById("consoleText");
-	consoleText.value = "----";
 	var arr = new Uint8Array(buf);
 	var io = null;
 	for (var imgClass of imageClassList) {
@@ -52,25 +51,25 @@ function main() {
 	    }
 	}
 	if (! io) {
-	    console.warn("unknown image format");
-	    consoleText.value = "unknown image format";
+	    console.warn("Unknown image format");
+	    consoleText.value = "Unknown image format\n"+consoleText.value;
 	    return ;
 	}
 	io.parse(arr);
         var iccdata = io.getICC();
 	io = null;
 	if (iccdata === null) {
-	    console.warn("icc profile not found");
-	    consoleText.value = "icc profile not found";
+	    console.warn("ICC profile not found");
+	    consoleText.value = "ICC profile not found\n"+consoleText.value;
 	    return ;
 	}
 	var icc = new IO_ICC();
 	if (icc.parse(iccdata) === false) {
-	    console.warn("wrong icc profile");
-	    consoleText.value = "wrong icc profile";
+	    console.warn("Wrong ICC profile");
+	    consoleText.value = "Wrong ICC profile\n"+consoleText.value;
 	    return ;
 	}
-	consoleText.value = "ICC OK!";
+	consoleText.value = "ICC reading Success!\n"+consoleText.value;
 	var header = icc.getHeader();
 	var tagTable = icc.getTagTable();
 	console.debug(header);
