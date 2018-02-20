@@ -7,7 +7,7 @@
 </head>
 <body>
   <div id="container">
-    <div id="controlPanel"  style="float:left">
+    <div id="controlPanel" style="float:left">
       <div>
         Color Matching Function: <br />
         <select id="cieSelect" size="3">
@@ -31,12 +31,22 @@
     <div>
       <canvas id="graphCanvas" class="borderGreen" width="371" height="150"> graph </canvas>
     </div>
-    </div> <!-- controlPanel 2 -->
-      <div>
-	sRGB:<input id="tristimulusCheckbox" type="checkbox" checked="checked" />
-	guide:<input id="guideCheckbox" type="checkbox" checked="checked" />
-        pointSize:<input id="pointSizeRange" type="range" min="1" max="16" step="1" value="2">:<input type="text" id="pointSizeText" size="5"> </br>
+    <div style="float:left">
+      <div style="float:left">
+        <select id="colorspaceSelect" size="4">
+          <option value="srgb" selected> sRGB </option>
+	  <option value="dcip3"        > DCI-P3 </option>
+	  <option value="adobe"        > Adobe RGB </option>
+	  <option value="prophoto"     > ProPhoto RGB </option>
+        </select>
+	:<input id="tristimulusCheckbox" type="checkbox" checked="checked" />
       </div>
+	<div style="float:left">
+	  guide:<input id="guideCheckbox" type="checkbox" checked="checked" />
+	  <br />
+          pointSize:<input id="pointSizeRange" type="range" min="1" max="16" step="1" value="2">:<input type="text" id="pointSizeText" size="5">
+	</div>
+    </div>
     </div> <!-- controlPanel 2 -->
 
 

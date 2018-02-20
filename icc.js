@@ -8,11 +8,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
-function addHTMLTable(elem, table) {
+function resetHTMLTable(elem) {
     while (elem.firstChild) {
 	elem.removeChild(elem.firstChild);
     }
+}
 
+function addHTMLTable(parentElem, captionText, table) {
+    var tableElem = document.createElement("table");
+    tableElem.style = "float:left;";
+    parentElem.appendChild(tableElem);
+    var caption = document.createElement("caption");
+    caption.appendChild(document.createTextNode(captionText));
+    tableElem.appendChild(caption);
     for (name in table) {
 	var value = table[name];
 	var tr = document.createElement("tr");
@@ -25,7 +33,7 @@ function addHTMLTable(elem, table) {
 	td.appendChild(document.createTextNode(value));
 	tr.appendChild(th);
 	tr.appendChild(td);
-	elem.appendChild(tr);
+	tableElem.appendChild(tr);
     }
 }
 
@@ -62,14 +70,18 @@ function main() {
 	    consoleText.value = "wrong icc profile";
 	    return ;
 	}
+	consoleText.value = "ICC OK!";
 	var header = icc.getHeader();
 	var tagTable = icc.getTagTable();
+	console.debug(header);
+	console.debug(tagTable);
 	var iccHeaderTable = document.getElementById("iccHeaderTable");
-	addHTMLTable(iccHeaderTable, header);
-	var  iccTagTableContainer= document.getElementById("iccTagTableContainer");
-	while (iccTagTableContainer.firstChild) {
-	    iccTagTableContainer.removeChild(iccTagTableContainer.firstChild);
+	var  iccTableContainer= document.getElementById("iccTableContainer");
+	while (iccTableContainer.firstChild) {
+	    iccTableContainer.removeChild(iccTableContainer.firstChild);
 	}
+	resetHTMLTable(iccTableContainer);
+	addHTMLTable(iccTableContainer, "Header", header);
 	for (var idx in tagTable) {
 	    var tag = tagTable[idx];
 	    var tagDetail = icc.getTagDetail(tag);
@@ -77,13 +89,8 @@ function main() {
 	    case "desc":
 	    case "text":
 	    case "XYZ ":
-		var table = document.createElement("table");
-		var caption = document.createElement("caption");
-		caption.appendChild(document.createTextNode(tag['Signature']));
-		table.style = "float:left;";
-		iccTagTableContainer.appendChild(table);
-		addHTMLTable(table, tagDetail);
-		table.appendChild(caption);
+		var captionText = tag['Signature'];
+		addHTMLTable(iccTableContainer, captionText, tagDetail);
 		break;
 	    }
 	}
