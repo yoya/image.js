@@ -8,7 +8,7 @@ importScripts("../lib/color.js");
 importScripts("../lib/canvas.js");
 
 onmessage = function(e) {
-    var imageData = e.data.image; // ignore this
+    // var imageData = e.data.image; // ignore this
     var diagramBaseImageData = e.data.diagramBaseImageData;
     var hist = e.data.hist;
     var chromaticity = e.data.chromaticity;
