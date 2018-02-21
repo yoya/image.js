@@ -21,47 +21,12 @@ function main() {
 	'tristimulus':document.getElementById("tristimulusCheckbox").checked,
 	'guide':document.getElementById("guideCheckbox").checked,
     };
-    var loadCIEXYZdata = function() {
-	var cieList = ["31", "64", "jv"];
-	for (var i in cieList) {
-	    var cie = cieList[i];
-	    var file = null;
-	    switch (cie) {
-	    case "31":
-		file = "data/ciexyz31.json";
-		break;
-	    case "64":
-		file = "data/ciexyz64.json";
-		break;
-	    case "jv":
-		file = "data/ciexyzjv.json";
-		break;
-	    }
-	    var xhr = new XMLHttpRequest();
-	    xhr.onreadystatechange = function() {
-		if (this.readyState === 4) {
-		    var cie = this.cie;
-		    var arr = JSON.parse(this.responseText);
-		    var arr = arr.filter(function(e) {
-			var lw =  e[0]; // length of wave
-			return (370 < lw) && (lw < 720);
-		    });
-		    if (cie === "31") { // cieSelect as default
-			params['cieArr'] = arr;
-			params['cie31Arr'] = arr;
-			drawGraph(graphCanvas, params, true);
-			drawDiagram(diagramBaseCanvas, dstCanvas, params, true);
-		    } else if (cie === "64") {
-			params['cie64Arr'] = arr;
-		    } else { // "jv"
-			params['cieJVArr'] = arr;
-		    }
-		}
-	    };
-	    xhr.cie = cie;
-	    xhr.open("GET", file, true); // async:true
-	    xhr.send(null);
-	    xhr = null;
+    var onCIEXYZdata = function(name, arr, isDefault) {
+	params[name] = arr;
+	if (isDefault) {
+	    params['cieArr'] = arr;
+	    drawGraph(graphCanvas, params, true);
+	    drawDiagram(diagramBaseCanvas, dstCanvas, params, true);
 	}
     }
     bindFunction({"cieSelect":null},
@@ -112,7 +77,7 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    loadCIEXYZdata();
+    loadCIEXYZdata(onCIEXYZdata);
 }
 
 var worker = new workerProcess("worker/cie.js");
