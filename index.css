@@ -25,12 +25,19 @@ table {
   display: block;      /* Mozilla */
 }
 
-.borderRed { border: thick solid red; }
-.borderGreen { border: thick solid green; }
-.borderBlue { border: thick solid blue; }
-
+/*
+.borderRed    { border: thick solid red; }
+.borderGreen  { border: thick solid green; }
+.borderBlue   { border: thick solid blue; }
 .borderYellow { border: thick solid yellow; }
-.borderBlack { border: thick solid black; }
-.borderGray { border: thick solid gray; }
+
+*/
+.borderRed    { border: thick solid #F66; }
+.borderGreen  { border: thick solid #4D4; }
+.borderBlue   { border: thick solid #66F; }
+.borderYellow { border: thick solid #FE0; }
+
+.borderBlack  { border: thick solid black; }
+.borderGray   { border: thick solid gray; }
 
 .bgWhite { background-color: white;}
