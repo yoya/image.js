@@ -14,8 +14,9 @@ function resetHTMLTable(elem) {
     }
 }
 
-function addHTMLTable(parentElem, captionText, table) {
+function addHTMLTable(parentElem, captionText, table, cssClass) {
     var tableElem = document.createElement("table");
+    tableElem.setAttribute('class', cssClass);
     tableElem.style = "float:left;";
     parentElem.appendChild(tableElem);
     var caption = document.createElement("caption");
@@ -81,7 +82,7 @@ function main() {
 	var tagTable = icc.getTagTable();
 	console.debug(header);
 	console.debug(tagTable);
-	addHTMLTable(iccTableContainer, "Header", header);
+	addHTMLTable(iccTableContainer, "Header", header, "borderRed");
 	var foundTagTable = {};
 	var doneFigureTable = {};
 	for (var idx in tagTable) {
@@ -94,19 +95,23 @@ function main() {
 	    case "text":
 	    case "XYZ ":
 		var captionText = tag['Signature'];
-		addHTMLTable(iccTableContainer, captionText, tagDetail);
+		addHTMLTable(iccTableContainer, captionText, tagDetail, "borderGreen");
 		break;
 	    }
 	    if (foundTagTable['rXYZ'] && foundTagTable['gXYZ'] && foundTagTable['bXYZ']) {
 		if (! doneFigureTable['CIEDiagramRGB']) {
 		    doneFigureTable['CIEDiagramRGB'] = true;
-		    console.log("trigram drawDiagramBase with tristimulus");
+		    var diagramBaseCanvas = document.createElement("canvas");
+		    diagramBaseCanvas.id ="diagramBaseCanvas";
+		    diagramBaseCanvas.setAttribute('class', "borderBlue");
+		    diagramBaseCanvas.width = 256;
+		    diagramBaseCanvas.height = 256;
+		    //iccTableContainer.appendChild(diagramBaseCanvas);
 		}
 	    }
 	    if (doneFigureTable['CIEDiagramRGB'] && foundTagTable['wtpt']) {
 		if (! doneFigureTable['CIEDiagramWpt']) {
 		    doneFigureTable['CIEDiagramWpt'] = true;
-		    console.log("drawDiagramBase with wtpt");
 		}
 	    }
 	}
