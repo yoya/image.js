@@ -117,30 +117,16 @@ function main() {
 	addHTMLTable(iccTableContainer, "Header", header, "borderRed");
 	var foundTagTable = {};
 	var doneFigureTable = {};
-        var tristimulus = [null, null, null];
 	for (var idx in tagTable) {
 	    var tag = tagTable[idx];
 	    var signature = tag['Signature'];
 	    var type = tag['Type'];
-	    foundTagTable[signature] = true;
 	    var tagDetail = icc.getTagDetail(tag);
+	    foundTagTable[signature] = tagDetail;
 	    var captionText = signature+" type:"+type+" (offset:"+tag['Offset']+" size:"+tag['Size']+")";
 	    addHTMLTable(iccTableContainer, captionText, tagDetail, "borderGreen");
 	    function iccXYZ2yx(iccXYZ) {
 		return XYZ2xy([iccXYZ['XYZ']['X'], iccXYZ['XYZ']['Y'], iccXYZ['XYZ']['Z']]);
-	    }
-	    if (type === "XYZ ") {
-		switch (signature) {
-		case 'rXYZ':
-		    tristimulus[0] = iccXYZ2yx(tagDetail);
-		    break;
-		case 'gXYZ':
-		    tristimulus[1] = iccXYZ2yx(tagDetail);
-			break;
-		case 'bXYZ':
-		    tristimulus[2] = iccXYZ2yx(tagDetail);
-		    break;
-		}
 	    }
 	    if (foundTagTable['rXYZ'] && foundTagTable['gXYZ'] && foundTagTable['bXYZ']) {
 		if (! doneFigureTable['CIEDiagramRGB']) {
@@ -151,7 +137,10 @@ function main() {
 		    diagramBaseCanvas.width = 256;
 		    diagramBaseCanvas.height = 256;
 		    iccTableContainer.appendChild(diagramBaseCanvas);
-		    params['tristimulus'] = tristimulus;
+		    params['tristimulus'] = [
+			    iccXYZ2yx(foundTagTable['rXYZ']),
+			    iccXYZ2yx(foundTagTable['gXYZ']),
+			    iccXYZ2yx(foundTagTable['bXYZ']) ];
 		    drawDiagramBase(diagramBaseCanvas, params, true);
 		}
 	    }
@@ -160,6 +149,55 @@ function main() {
 		    doneFigureTable['CIEDiagramWpt'] = true;
 		}
 	    }
+	    if (type === "curv") {
+		var curveCanvas = document.createElement("canvas");
+		curveCanvas.width  = 200;
+		curveCanvas.height = 200;
+		curveCanvas.setAttribute('class', "borderBlue");
+		var color = "gray";
+		switch (signature.substr(0, 1)) {
+		case 'r':
+		    color = "#F66";
+		    break;
+		case 'g':
+		    color = "#0B0";
+		    break;
+		case 'b':
+		    color = "#66F";
+		    break;
+		}
+		drawCurveGraph(curveCanvas, tagDetail, color);
+		iccTableContainer.appendChild(curveCanvas);
+	    }
 	}
     }, "ArrayBuffer");
+}
+
+function drawCurveGraph(canvas, data, color) {
+    var ctx = canvas.getContext("2d");
+    var width  = canvas.width
+    var height = canvas.height;
+    canvas.width  = width;
+    ctx.beginPath();
+    ctx.strokeStyle= color;
+    ctx.moveTo(0, height-1);
+    if (data['Count'] === 1) {
+	var gamma = data['Gamma'];
+	for (var x = 0 ; x < width ; x++) {
+	    var xx = x/width;
+	    var yy = Math.pow(xx, gamma)
+	    var y = yy * height;
+	    ctx.lineTo(x, height - y - 1);
+	}
+    } else {
+	var values = data['Values'];
+	for (var i = 0 , n = values.length; i < n ; i++) {
+	    var xx = i / n;
+	    var yy = values[i] / 0xFFFF;
+	    var x = xx * width;
+	    var y = yy * height;
+	    ctx.lineTo(x, height - y - 1);
+	}
+    }
+    ctx.stroke();
 }
