@@ -109,7 +109,7 @@ function main() {
 	    case "desc":
 	    case "text":
 	    case "XYZ ":
-		var captionText = signature;
+		var captionText = signature+"(offset:"+tag['Offset']+" size:"+tag['Size']+")";
 		addHTMLTable(iccTableContainer, captionText, tagDetail, "borderGreen");
 		break;
 	    }
