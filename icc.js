@@ -31,6 +31,20 @@ function addHTMLTable(parentElem, captionText, table, cssClass) {
 	var td = document.createElement("td");
 	th.appendChild(document.createTextNode(name));
 	if (typeof(value) === "object") {
+	    if (typeof value.length === 'number') {
+		var len = value.length;
+		if (len > 80) {
+		    var newValue = [];
+		    for (var i = 0 ; i < 8 ; i++) {
+			newValue.push(value[i])
+		    }
+		    newValue.push(" ... ");
+		    for (var i = 0 ; i < 8 ; i++) {
+			newValue.push(value[len - 8 + i]);;
+		    }
+		    value = newValue;
+		}
+	    }
 	    value = value.toString();
 	}
 	td.appendChild(document.createTextNode(value));
