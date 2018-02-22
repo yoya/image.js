@@ -105,14 +105,8 @@ function main() {
 	    var type = tag['Type'];
 	    foundTagTable[signature] = true;
 	    var tagDetail = icc.getTagDetail(tag);
-	    switch (type) {
-	    case "desc":
-	    case "text":
-	    case "XYZ ":
-		var captionText = signature+"(offset:"+tag['Offset']+" size:"+tag['Size']+")";
-		addHTMLTable(iccTableContainer, captionText, tagDetail, "borderGreen");
-		break;
-	    }
+	    var captionText = signature+" type:"+type+" (offset:"+tag['Offset']+" size:"+tag['Size']+")";
+	    addHTMLTable(iccTableContainer, captionText, tagDetail, "borderGreen");
 	    function iccXYZ2yx(iccXYZ) {
 		return XYZ2xy([iccXYZ['XYZ']['X'], iccXYZ['XYZ']['Y'], iccXYZ['XYZ']['Z']]);
 	    }
