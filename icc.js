@@ -22,7 +22,9 @@ function addHTMLTable(parentElem, captionText, table, cssClass) {
     var caption = document.createElement("caption");
     caption.appendChild(document.createTextNode(captionText));
     tableElem.appendChild(caption);
+    var hasDetail = false;
     for (name in table) {
+	hasDetail = true;
 	var value = table[name];
 	var tr = document.createElement("tr");
 	var th = document.createElement("th");
@@ -35,6 +37,9 @@ function addHTMLTable(parentElem, captionText, table, cssClass) {
 	tr.appendChild(th);
 	tr.appendChild(td);
 	tableElem.appendChild(tr);
+    }
+    if (hasDetail) {
+	tableElem.setAttribute('class', cssClass+" wordBreak");
     }
 }
 
