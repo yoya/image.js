@@ -19,11 +19,10 @@ function resetHTMLTable(elem) {
     }
 }
 
-function addHTMLTable(parentElem, captionText, table, cssClass) {
+function makeHTMLTable(captionText, table, cssClass) {
     var tableElem = document.createElement("table");
     tableElem.setAttribute('class', cssClass);
     tableElem.style = "float:left;";
-    parentElem.appendChild(tableElem);
     var caption = document.createElement("caption");
     caption.appendChild(document.createTextNode(captionText));
     tableElem.appendChild(caption);
@@ -71,6 +70,7 @@ function addHTMLTable(parentElem, captionText, table, cssClass) {
     if (hasDetail) {
 	tableElem.setAttribute('class', cssClass+" wordBreak");
     }
+    return tableElem;
 }
 
 function main() {
@@ -128,7 +128,8 @@ function main() {
 	var tagTable = icc.getTagTable();
 	console.debug(header);
 	console.debug(tagTable);
-	addHTMLTable(iccTableContainer, "Header", header, "borderRed");
+	var tableElem = makeHTMLTable("Header", header, "borderRed");
+	iccTableContainer.appendChild(tableElem);
 	var foundTagTable = {};
 	var doneFigureTable = {};
 	for (var idx in tagTable) {
@@ -138,7 +139,8 @@ function main() {
 	    var tagDetail = icc.getTagDetail(tag);
 	    foundTagTable[signature] = tagDetail;
 	    var captionText = signature+" (type:"+type+" size:"+tag['Size']+")";
-	    addHTMLTable(iccTableContainer, captionText, tagDetail, "borderGreen");
+	    var tableElem = makeHTMLTable(captionText, tagDetail, "borderGreen");
+	    iccTableContainer.appendChild(tableElem);
 	    function iccXYZ2yx(iccXYZ) {
 		return XYZ2xy([iccXYZ['XYZ']['X'], iccXYZ['XYZ']['Y'], iccXYZ['XYZ']['Z']]);
 	    }
