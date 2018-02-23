@@ -38,19 +38,30 @@ function addHTMLTable(parentElem, captionText, table, cssClass) {
 	if (typeof(value) === "object") {
 	    if (typeof value.length === 'number') {
 		var len = value.length;
-		if (len > 80) {
-		    var newValue = [];
-		    for (var i = 0 ; i < 8 ; i++) {
+		var newValue = [];
+		if (len > 0x10) {
+		    for (var i = 0 ; i < 4 ; i++) {
 			newValue.push(value[i])
 		    }
 		    newValue.push(" ... ");
-		    for (var i = 0 ; i < 8 ; i++) {
+		    for (var i = 0 ; i < 4 ; i++) {
 			newValue.push(value[len - 8 + i]);;
 		    }
-		    value = newValue;
+		} else {
+		    for (var i = 0 ; i < len ; i++) {
+			newValue.push(value[i])
+		    }
+		}
+		value = newValue;
+		if (typeof(value[0]) === "number") {
+		    value = value.map(function(v) {
+			return v = Math.round(v*1000) / 1000;
+		    });
 		}
 	    }
 	    value = value.toString();
+	} else if (typeof(value) === "number") {
+	    value = Math.round(value*1000)/1000;
 	}
 	td.appendChild(document.createTextNode(value));
 	tr.appendChild(th);
