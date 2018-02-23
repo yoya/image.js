@@ -8,6 +8,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
+var consoleText = document.getElementById("consoleText");
+function writeConsole(text) {
+    consoleText.value = text + "\n" + consoleText.value;
+}
+
 function resetHTMLTable(elem) {
     while (elem.firstChild) {
 	elem.removeChild(elem.firstChild);
@@ -77,7 +82,6 @@ function main() {
     dropFunction(document, function(buf) {
 	var  iccTableContainer= document.getElementById("iccTableContainer");
 	resetHTMLTable(iccTableContainer);
-	var consoleText = document.getElementById("consoleText");
 	var arr = new Uint8Array(buf);
 	// image preview
 	var previewImage = document.getElementById("previewImage");
@@ -92,7 +96,7 @@ function main() {
 	}
 	if (! io) {
 	    console.warn("Unknown image format");
-	    consoleText.value = "Unknown image format\n"+consoleText.value;
+	    writeConsole("Unknown image format");
 	    return ;
 	}
 	io.parse(arr);
@@ -100,16 +104,16 @@ function main() {
 	io = null;
 	if (iccdata === null) {
 	    console.warn("ICC profile not found");
-	    consoleText.value = "ICC profile not found\n"+consoleText.value;
+	    writeConsole("ICC profile not found");
 	    return ;
 	}
 	var icc = new IO_ICC();
 	if (icc.parse(iccdata) === false) {
 	    console.warn("Wrong ICC profile");
-	    consoleText.value = "Wrong ICC profile\n"+consoleText.value;
+	    writeConsole("Wrong ICC profile");
 	    return ;
 	}
-	consoleText.value = "ICC reading Success!\n"+consoleText.value;
+	writeConsole("ICC reading Success !");
 	var header = icc.getHeader();
 	var tagTable = icc.getTagTable();
 	console.debug(header);
