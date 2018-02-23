@@ -68,7 +68,6 @@ function main() {
     var imageClassList = [IO_ICC, IO_JPEG, IO_PNG];
     var params = {
 	'chromaticity':'ciexy',
-        'colorspace':'srgb',
         'tristimulus':true,
         'guide':true
     };
@@ -127,7 +126,7 @@ function main() {
 	    var type = tag['Type'];
 	    var tagDetail = icc.getTagDetail(tag);
 	    foundTagTable[signature] = tagDetail;
-	    var captionText = signature+" type:"+type+" (offset:"+tag['Offset']+" size:"+tag['Size']+")";
+	    var captionText = signature+" (type:"+type+" size:"+tag['Size']+")";
 	    addHTMLTable(iccTableContainer, captionText, tagDetail, "borderGreen");
 	    function iccXYZ2yx(iccXYZ) {
 		return XYZ2xy([iccXYZ['XYZ']['X'], iccXYZ['XYZ']['Y'], iccXYZ['XYZ']['Z']]);
@@ -138,7 +137,7 @@ function main() {
 		    var diagramBaseCanvas = document.createElement("canvas");
 		    diagramBaseCanvas.id ="diagramBaseCanvas";
 		    diagramBaseCanvas.setAttribute('class', "borderBlue");
-		    diagramBaseCanvas.width = 256;
+		    diagramBaseCanvas.width  = 256;
 		    diagramBaseCanvas.height = 256;
 		    iccTableContainer.appendChild(diagramBaseCanvas);
 		    params['tristimulus'] = [
