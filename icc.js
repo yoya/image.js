@@ -19,6 +19,38 @@ function resetHTMLTable(elem) {
     }
 }
 
+function omitArrayNotation(value) {
+    if (typeof(value) === "number") {
+	return Math.round(value*1000)/1000;
+    }
+    if ((typeof(value) !== "object") || (typeof value.length !== 'number')) {
+	return value;
+    }
+    var len = value.length;
+    var value2 = [];
+    var v;
+    if (len > 0x10) {
+	for (var i = 0 ; i < 4 ; i++) {
+	    v = omitArrayNotation(value[i]);
+	    value2.push(v);
+	}
+	value2.push(" ... ");
+	for (var i = 0 ; i < 4 ; i++) {
+	    v = omitArrayNotation(value[len - 8 + i]);
+	    value2.push(v);;
+	}
+    } else {
+	for (var i = 0 ; i < len ; i++) {
+	    v = omitArrayNotation(value[i]);
+	    value2.push(v)
+	}
+    }
+    return value2.map(function(v) {
+	return (typeof(v) === "number")?
+	    (Math.round(v*1000) / 1000):v;
+    }).toString();
+}
+
 function makeHTMLTable(captionText, table, cssClass) {
     var tableElem = document.createElement("table");
     tableElem.setAttribute('class', cssClass);
@@ -34,33 +66,7 @@ function makeHTMLTable(captionText, table, cssClass) {
 	var th = document.createElement("th");
 	var td = document.createElement("td");
 	th.appendChild(document.createTextNode(name));
-	if (typeof(value) === "object") {
-	    if (typeof value.length === 'number') {
-		var len = value.length;
-		var newValue = [];
-		if (len > 0x10) {
-		    for (var i = 0 ; i < 4 ; i++) {
-			newValue.push(value[i])
-		    }
-		    newValue.push(" ... ");
-		    for (var i = 0 ; i < 4 ; i++) {
-			newValue.push(value[len - 8 + i]);;
-		    }
-		} else {
-		    for (var i = 0 ; i < len ; i++) {
-			newValue.push(value[i])
-		    }
-		}
-		value = newValue;
-		value = value.map(function(v) {
-		    return (typeof(v) === "number")?
-			(Math.round(v*1000) / 1000):v;
-		});
-	    }
-	    value = value.toString();
-	} else if (typeof(value) === "number") {
-	    value = Math.round(value*1000)/1000;
-	}
+	value = omitArrayNotation(value);
 	td.appendChild(document.createTextNode(value));
 	tr.appendChild(th);
 	tr.appendChild(td);
