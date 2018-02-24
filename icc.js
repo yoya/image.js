@@ -214,6 +214,24 @@ function drawCurveGraph(canvas, caption, data, color) {
     var width  = canvas.width
     var height = canvas.height;
     canvas.width  = width;
+    // draw asix
+    for (var i = 0 ; i <= 10 ; i++) {
+	var xy = i * width / 10;
+	if (i%5 === 0){
+	    ctx.strokeStyle= "gray";
+	} else {
+	    ctx.strokeStyle= "lightgray";
+	}
+	ctx.beginPath();
+	ctx.moveTo(0, xy);
+	ctx.lineTo(width, xy);
+	ctx.stroke();
+	ctx.beginPath();
+	ctx.moveTo(xy, 0);
+	ctx.lineTo(xy, height);
+	ctx.stroke();
+    }
+    // draw Curve
     ctx.beginPath();
     ctx.strokeStyle= color;
     ctx.moveTo(0, height-1);
@@ -246,6 +264,24 @@ function drawParaCurveGraph(canvas, caption, data, color) {
     var width  = canvas.width
     var height = canvas.height;
     canvas.width  = width;
+    // draw asix
+    for (var i = 0 ; i <= 10 ; i++) {
+	var xy = i * width / 10;
+	if (i%5 === 0){
+	    ctx.strokeStyle= "gray";
+	} else {
+	    ctx.strokeStyle= "lightgray";
+	}
+	ctx.beginPath();
+	ctx.moveTo(0, xy);
+	ctx.lineTo(width, xy);
+	ctx.stroke();
+	ctx.beginPath();
+	ctx.moveTo(xy, 0);
+	ctx.lineTo(xy, height);
+	ctx.stroke();
+    }
+    // draw Curve
     ctx.beginPath();
     ctx.strokeStyle= color;
     ctx.moveTo(0, height-1);
