@@ -153,9 +153,10 @@ function main() {
 		    diagramBaseCanvas.height = 256;
 		    iccTableContainer.appendChild(diagramBaseCanvas);
 		    params['tristimulus'] = [
-			    iccXYZ2yx(foundTagTable['rXYZ']),
-			    iccXYZ2yx(foundTagTable['gXYZ']),
-			    iccXYZ2yx(foundTagTable['bXYZ']) ];
+			iccXYZ2yx(foundTagTable['rXYZ']),
+			iccXYZ2yx(foundTagTable['gXYZ']),
+			iccXYZ2yx(foundTagTable['bXYZ']) ];
+		    params['caption'] = "rXYZ, gXYZ, bXYZ";
 		    drawDiagramBase(diagramBaseCanvas, params, true);
 		}
 	    }
@@ -181,7 +182,9 @@ function main() {
 		    color = "#66F";
 		    break;
 		}
-		drawCurveGraph(curveCanvas, tagDetail, color);
+		drawCurveGraph(curveCanvas, signature, tagDetail, color);
+		iccTableContainer.appendChild(curveCanvas);
+	    }
 	    if (type === "para") {
 		var curveCanvas = document.createElement("canvas");
 		curveCanvas.width  = 200;
@@ -206,7 +209,7 @@ function main() {
     }, "ArrayBuffer");
 }
 
-function drawCurveGraph(canvas, data, color) {
+function drawCurveGraph(canvas, caption, data, color) {
     var ctx = canvas.getContext("2d");
     var width  = canvas.width
     var height = canvas.height;
@@ -232,6 +235,12 @@ function drawCurveGraph(canvas, data, color) {
 	    ctx.lineTo(x, height - y - 1);
 	}
     }
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillText(caption, width/2, 0);
+    ctx.stroke();
+}
+
 function drawParaCurveGraph(canvas, caption, data, color) {
     var ctx = canvas.getContext("2d");
     var width  = canvas.width
