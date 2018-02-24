@@ -159,6 +159,7 @@ function main() {
 		    doneFigureTable['CIEDiagramRGB'] = true;
 		    var diagramBaseCanvas = document.createElement("canvas");
 		    diagramBaseCanvas.id ="diagramBaseCanvas";
+		    diagramBaseCanvas.style = "float:left;";
 		    diagramBaseCanvas.setAttribute('class', "borderBlue");
 		    diagramBaseCanvas.width  = 256;
 		    diagramBaseCanvas.height = 256;
@@ -180,6 +181,7 @@ function main() {
 		var curveCanvas = document.createElement("canvas");
 		curveCanvas.width  = 200;
 		curveCanvas.height = 200;
+		curveCanvas.style = "float:left;";
 		curveCanvas.setAttribute('class', "borderBlue");
 		var color = "black";
 		switch (signature.substr(0, 1)) {
@@ -200,6 +202,7 @@ function main() {
 		var curveCanvas = document.createElement("canvas");
 		curveCanvas.width  = 200;
 		curveCanvas.height = 200;
+		curveCanvas.style = "float:left;";
 		curveCanvas.setAttribute('class', "borderBlue");
 		var color = "black";
 		switch (signature) {
