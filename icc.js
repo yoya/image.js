@@ -182,7 +182,6 @@ function main() {
 		    color = "#66F";
 		    break;
 		}
-		console.log(color);
 		drawCurveGraph(curveCanvas, signature, tagDetail, color);
 		iccTableContainer.appendChild(curveCanvas);
 	    }
