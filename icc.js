@@ -182,6 +182,24 @@ function main() {
 		    break;
 		}
 		drawCurveGraph(curveCanvas, tagDetail, color);
+	    if (type === "para") {
+		var curveCanvas = document.createElement("canvas");
+		curveCanvas.width  = 200;
+		curveCanvas.height = 200;
+		curveCanvas.setAttribute('class', "borderBlue");
+		var color = "gray";
+		switch (signature) {
+		case 'aarg':
+		    color = "#F66";
+		    break;
+		case 'aagg':
+		    color = "#0B0";
+		    break;
+		case 'aabg':
+		    color = "#66F";
+		    break;
+		}
+		drawParaCurveGraph(curveCanvas, signature, tagDetail, color);
 		iccTableContainer.appendChild(curveCanvas);
 	    }
 	}
@@ -214,5 +232,79 @@ function drawCurveGraph(canvas, data, color) {
 	    ctx.lineTo(x, height - y - 1);
 	}
     }
+function drawParaCurveGraph(canvas, caption, data, color) {
+    var ctx = canvas.getContext("2d");
+    var width  = canvas.width
+    var height = canvas.height;
+    canvas.width  = width;
+    ctx.beginPath();
+    ctx.strokeStyle= color;
+    ctx.moveTo(0, height-1);
+    switch (data['FunctionType']) {
+    case 0:
+	var [g] = data['Values'];
+	for (var x = 0 ; x < width ; x++) {
+	    var xx = x/width;
+	    var yy = Math.pow(xx, g);
+	    var y = yy * height;
+	    ctx.lineTo(x, height - y - 1);
+	}
+	break;
+    case 1:
+	var [g, a, b] = data['Values'];
+	for (var x = 0 ; x < width ; x++) {
+	    var xx = x/width, yy;
+	    if (xx >= (-b/a)) {
+		yy = Math.pow(a * xx + b, g);
+	    } else {
+		yy = 0;
+	    }
+	    var y = yy * height;
+	    ctx.lineTo(x, height - y - 1);
+	}
+	break;
+    case 2:
+	var [g, a, b, c] = data['Values'];
+	for (var x = 0 ; x < width ; x++) {
+	    var xx = x/width, yy;
+	    if (xx >= (-b/a)) {
+		yy = Math.pow(a * xx + b, g);
+	    } else {
+		yy = c;
+	    }
+	    var y = yy * height;
+	    ctx.lineTo(x, height - y - 1);
+	}
+	break;
+    case 3:
+	var [g, a, b, c, d] = data['Values'];
+	for (var x = 0 ; x < width ; x++) {
+	    var xx = x/width, yy;
+	    if (xx >= d) {
+		yy = Math.pow(a * xx + b, g);
+	    } else {
+		yy = c * xx;
+	    }
+	    var y = yy * height;
+	    ctx.lineTo(x, height - y - 1);
+	}
+	break;
+    case 4:
+	var [g, a, b, c, d, e, f] = data['Values'];
+	for (var x = 0 ; x < width ; x++) {
+	    var xx = x/width, yy;
+	    if (xx >= d) {
+		yy = Math.pow(a * xx + b, g) + c;
+	    } else {
+		yy = e * xx + f;
+	    }
+	    var y = yy * height;
+	    ctx.lineTo(x, height - y - 1);
+	}
+	break;
+    }
     ctx.stroke();
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillText(caption, width/2, 0);
 }
