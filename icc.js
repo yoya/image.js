@@ -182,6 +182,7 @@ function main() {
 		    color = "#66F";
 		    break;
 		}
+		console.log(color);
 		drawCurveGraph(curveCanvas, signature, tagDetail, color);
 		iccTableContainer.appendChild(curveCanvas);
 	    }
@@ -190,14 +191,17 @@ function main() {
 		curveCanvas.width  = 200;
 		curveCanvas.height = 200;
 		curveCanvas.setAttribute('class', "borderBlue");
-		var color = "gray";
+		var color = "black";
 		switch (signature) {
+		case 'rTRC':
 		case 'aarg':
 		    color = "#F66";
 		    break;
+		case 'gTRC':
 		case 'aagg':
 		    color = "#0B0";
 		    break;
+		case 'bTRC':
 		case 'aabg':
 		    color = "#66F";
 		    break;
