@@ -52,11 +52,10 @@ function makeHTMLTable(captionText, table, cssClass) {
 		    }
 		}
 		value = newValue;
-		if (typeof(value[0]) === "number") {
-		    value = value.map(function(v) {
-			return v = Math.round(v*1000) / 1000;
-		    });
-		}
+		value = value.map(function(v) {
+		    return (typeof(v) === "number")?
+			(Math.round(v*1000) / 1000):v;
+		});
 	    }
 	    value = value.toString();
 	} else if (typeof(value) === "number") {
