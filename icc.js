@@ -19,36 +19,41 @@ function resetHTMLTable(elem) {
     }
 }
 
-function omitArrayNotation(value) {
+function omitArrayNotation(value, level) {
     if (typeof(value) === "number") {
 	return Math.round(value*1000)/1000;
     }
     if ((typeof(value) !== "object") || (typeof value.length !== 'number')) {
 	return value;
     }
+    if (level) {
+	level++;
+    } else {
+	level = 1;
+    }
     var len = value.length;
     var value2 = [];
     var v;
     if (len > 0x10) {
 	for (var i = 0 ; i < 4 ; i++) {
-	    v = omitArrayNotation(value[i]);
+	    v = omitArrayNotation(value[i], level);
 	    value2.push(v);
 	}
 	value2.push(" ... ");
 	for (var i = 0 ; i < 4 ; i++) {
-	    v = omitArrayNotation(value[len - 8 + i]);
+	    v = omitArrayNotation(value[len - 8 + i], level);
 	    value2.push(v);;
 	}
     } else {
 	for (var i = 0 ; i < len ; i++) {
-	    v = omitArrayNotation(value[i]);
+	    v = omitArrayNotation(value[i], level);
 	    value2.push(v)
 	}
     }
     return value2.map(function(v) {
 	return (typeof(v) === "number")?
 	    (Math.round(v*1000) / 1000):v;
-    }).toString();
+    }).join((level<2)?", ":"_");
 }
 
 function makeHTMLTable(captionText, table, cssClass) {
