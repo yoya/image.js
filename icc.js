@@ -169,7 +169,7 @@ function main() {
 		curveCanvas.width  = 200;
 		curveCanvas.height = 200;
 		curveCanvas.setAttribute('class', "borderBlue");
-		var color = "gray";
+		var color = "black";
 		switch (signature.substr(0, 1)) {
 		case 'r':
 		    color = "#F66";
