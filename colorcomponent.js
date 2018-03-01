@@ -146,6 +146,16 @@ function colorComponent(imageData, x, y, component) {
 	    arr.push(a) ; return arr;
 	});
 	break;
+    case "xyb": // Xyb
+	var [x, y, b] = RGB2Xyb(rgba);
+	var rgb1 = Xyb2RGB([x, 0, 0]);
+	var rgb2 = Xyb2RGB([0, y, 0]); rgb2[0] *= 0.5; rgb2[1] *= 0.5;
+	var rgb3 = Xyb2RGB([0, 0, b]);
+	rgbaArr = [rgb1, rgb2, rgb3].map(function(arr) {
+	    var max = Math.max.apply(null, arr);
+	    arr.push(a) ; return arr;
+	});
+	break;
     default:
 	console.error("Illegal component:"+component);
     }
