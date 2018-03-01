@@ -35,9 +35,11 @@ table {
 .borderRed    { border: thick solid #F66; }
 .borderGreen  { border: thick solid #0B0; }
 .borderBlue   { border: thick solid #66F; }
+.borderCyan   { border: thick solid #0EE; }
+.borderMagenta {border: thick solid #F4F; }
 .borderYellow { border: thick solid #FE0; }
 
 .borderBlack  { border: thick solid black; }
-.borderGray   { border: thick solid gray; }
+.borderGray   { border: thick solid gray;  }
 
 .bgWhite { background-color: white;}
