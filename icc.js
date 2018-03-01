@@ -76,6 +76,7 @@ function makeHTMLTable(captionText, table, cssClass) {
 	tr.appendChild(th);
 	tr.appendChild(td);
 	tableElem.appendChild(tr);
+	tableElem.setAttribute('class', cssClass+" wordBreak");
     }
     if (hasDetail) {
 	tableElem.setAttribute('class', cssClass+" wordBreak");
