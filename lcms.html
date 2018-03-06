@@ -13,12 +13,35 @@
       <div style="float:left;">
 	<textarea id="srcDesc" cols="30"> sRGB (default) </textarea> <br />
 	<canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+	<br />
+	<div id="srcRGB">
+	  R:<input type="text" id="srcR" size="4"/>
+	  G:<input type="text" id="srcG" size="4"/>
+	  B:<input type="text" id="srcB" size="4"/>
+	</div>
+	<div id="srcCMYK">
+	  C:<input type="text" id="srcC" size="4"/>
+	  M:<input type="text" id="srcM" size="4"/>
+	  Y:<input type="text" id="srcY" size="4"/>
+	  K:<input type="text" id="srcK" size="4"/>
+	</div>
       </div>
-      <div>
+      <div style="float:left;">
 	<textarea id="dstDesc" cols="30"> sRGB (default) </textarea> <br />
 	<canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+	<br />
+	<div id="dstRGB">
+	  R:<input type="text" id="dstR" size="4"/>
+	  G:<input type="text" id="dstG" size="4"/>
+	  B:<input type="text" id="dstB" size="4"/>
+	</div>
+	<div id="dstCMYK">
+	  C:<input type="text" id="dstC" size="4"/>
+	  M:<input type="text" id="dstM" size="4"/>
+	  Y:<input type="text" id="dstY" size="4"/>
+	  K:<input type="text" id="dstK" size="4"/>
+	</div>
       </div>
-      <div style="clear:both"> </div>
     </div>  <!-- container -->
     
     <script type="text/javascript" src="lib/drop.js"> </script>
