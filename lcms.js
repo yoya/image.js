@@ -149,7 +149,27 @@ function main() {
 	}
     }, "ArrayBuffer");
     var updateOutputPixel = function(pixel) {
-	;
+	if (outputCS === cmsSigRgbData) {
+	    var [rr, gg, bb] = pixel;
+	    elems.dstRRange.value = rr;
+	    elems.dstGRange.value = gg;
+	    elems.dstBRange.value = bb;
+	    elems.dstRText.value = elems.dstRRange.value;
+	    elems.dstGText.value = elems.dstGRange.value;
+	    elems.dstBText.value = elems.dstBRange.value;
+	} else if (outputCS === cmsSigCmykData) {
+	    var [cc, mm, yy, kk] = pixel;
+	    elems.dstCRange.value = cc;
+	    elems.dstMRange.value = mm;
+	    elems.dstYRange.value = yy;
+	    elems.dstKRange.value = kk;
+	    elems.dstCText.value = elems.dstCRange.value;
+	    elems.dstMText.value = elems.dstMRange.value;
+	    elems.dstYText.value = elems.dstYRange.value;
+	    elems.dstKText.value = elems.dstKRange.value;
+	} else { //
+	    console.error("no supported colorspace:"+cs);
+	}
     }
     bindFunction({"srcRRange":"srcRText",
 		  "srcGRange":"srcGText",
@@ -159,38 +179,18 @@ function main() {
 		     var g = elems.srcGRange.value;
 		     var b = elems.srcBRange.value;
 		     var pixel = cmsDoTransform(transform, [r, g, b], 1);
-		     if (outputCS === cmsSigRgbData) {
-			 var [rr, gg, bb] = pixel;
-			 elems.dstRRange.value = rr;
-			 elems.dstGRange.value = gg;
-			 elems.dstBRange.value = bb;
-			 elems.dstRText.value = elems.dstRRange.value;
-			 elems.dstGText.value = elems.dstGRange.value;
-			 elems.dstBText.value = elems.dstBRange.value;
-		     } else if (outputCS === cmsSigCmykData) {
-			 var [cc, mm, yy, kk] = pixel;
-			 elems.dstCRange.value = cc;
-			 elems.dstMRange.value = bb;
-			 elems.dstYRange.value = yy;
-			 elems.dstKRange.value = kk;
-			 elems.dstCText.value = elems.dstCRange.value;
-			 elems.dstMText.value = elems.dstMRange.value;
-			 elems.dstYText.value = elems.dstYRange.value;
-			 elems.dstKText.value = elems.dstKRange.value;
-		     } else { //
-			 console.error("no supported colorspace:"+cs);
-		     }
+		     updateOutputPixel(pixel);
 		 });
     bindFunction({"srcCRange":"srcCText",
 		  "srcMRange":"srcMText",
 		  "srcYRange":"srcYText",
 		  "srcKRange":"srcKText"},
 		 function(target,rel) {
-		     var c = elems.srcCRange.value;
-		     var m = elems.srcMRange.value;
-		     var y = elems.srcYRange.value;
-		     var k = elems.srcKRange.value;
-		     var ret = cmsDoTransform(transform, [c, m, y, k], 1);
-		     console.log(ret);
+		     var cc = elems.srcCRange.value;
+		     var mm = elems.srcMRange.value;
+		     var yy = elems.srcYRange.value;
+		     var kk = elems.srcKRange.value;
+		     var pixel = cmsDoTransform(transform, [cc, mm, yy, kk], 1);
+		     updateOutputPixel(pixel);
 		 });
 }
