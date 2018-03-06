@@ -2,6 +2,7 @@ symbols=$(cat << EOS
 cmsOpenProfileFromMem
 cmsCreate_sRGBProfile
 cmsGetProfileInfoASCII
+cmsGetColorSpace
 cmsFormatterForColorspaceOfProfile
 cmsCreateTransform
 cmsReadTag
