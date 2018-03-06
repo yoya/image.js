@@ -14,14 +14,22 @@ var srcDesc = document.getElementById("srcDesc");
 var dstDesc = document.getElementById("dstDesc");
 // var canvases = [].map(id => document.getElementById(id));
 
-var divIds = ["srcRGB", "srcR", "srcG", "srcB",
-	      "srcCMYK", "srcC", "srcM", "srcY", "srcK",
-	      "dstRGB", "dstR", "dstG", "dstB",
-	      "dstCMYK", "dstC", "dstM", "dstY", "dstK"];
-var divs = {};
-for (var i in divIds) {
-    var id = divIds[i];
-    divs[id] = document.getElementById(id);
+var elemIds = ["srcRGB",
+	      "srcRRange", "srcGRange", "srcBRange",
+	      "srcRText", "srcGText", "srcBText",
+	      "srcCMYK",
+	      "srcCRange", "srcMRange", "srcYRange", "srcKRange",
+	      "srcCText", "srcMText", "srcYText", "srcKText",
+	      "dstRGB",
+	      "dstRRange", "dstGRange", "dstBRange",
+	      "dstRText", "dstGText", "dstBText",
+	      "dstCMYK",
+	      "dstCRange", "dstMRange", "dstYRange", "dstKRange",
+	      "dstCText", "dstMText", "dstYText", "dstKText" ];
+var elems = {};
+for (var i in elemIds) {
+    var id = elemIds[i];
+    elems[id] = document.getElementById(id);
 }
 
 function s2ui8a(s) {
@@ -59,13 +67,15 @@ function getColorant_xyY(hProfile) {
 
 var inputProfile  = cmsCreate_sRGBProfile();
 var outputProfile = cmsCreate_sRGBProfile();
+console.debug(inputProfile, outputProfile);
 var transform = makeTransform(inputProfile, outputProfile);
+console.debug("transform:"+transform);
+var inputCS = cmsGetColorSpace(inputProfile);
+var outputCS = cmsGetColorSpace(outputProfile);
 
-divs.srcCMYK.style.display = "none";
-divs.dstCMYK.style.display = "none";
+elems.srcCMYK.style.display = "none";
+elems.dstCMYK.style.display = "none";
 console.log("transform:"+transform);
-
-// c.transform = C.cmsCreateTransform(c.srcProfile, srcType, c.dstProfile, dstType, C.INTENT_PERCEPTUAL, C.cmsFLAGS_COPY_ALPHA)
 
 function main() {
     console.debug("main");
@@ -78,26 +88,30 @@ function main() {
 	    console.error("not ICC file");
 	    return ;
 	}
+	cmsCloseProfile(inputProfile);
 	inputProfile = h;
+	console.debug("transform__:"+transform);
+	cmsDeleteTransform(transform);
 	transform = makeTransform(inputProfile, outputProfile);
 	console.log("transform:"+transform);
 	var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
 	srcDesc.value = text;
 	var cs = cmsGetColorSpace(h);
+	inputCS = cs;
 	if (cs === cmsSigRgbData) {
-	    divs.srcRGB.style.display  = "block";
-	    divs.srcCMYK.style.display = "none";
+	    elems.srcRGB.style.display  = "block";
+	    elems.srcCMYK.style.display = "none";
 	    var xyY = getColorant_xyY(h);
 	    if (xyY) {
 		var [rxyY, gxyY, bxyY] = xyY;
 		console.log(rxyY);
 	    }
 	} else if (cs === cmsSigCmykData) {
-	    divs.srcRGB.style.display  = "none";
-	    divs.srcCMYK.style.display = "block";
+	    elems.srcRGB.style.display  = "none";
+	    elems.srcCMYK.style.display = "block";
 	    ;
 	} else {
-	    console.error("not supported colorspace:"+cs);
+	    console.error("no supported colorspace:"+cs);
 	}
     }, "ArrayBuffer");
     dropFunction(document, function(buf) {
@@ -109,26 +123,74 @@ function main() {
 	    console.error("not ICC file");
 	    return ;
 	}
+	cmsCloseProfile(outputProfile);
 	outputProfile = h;
+	cmsDeleteTransform(transform);
 	transform = makeTransform(inputProfile, outputProfile);
 	console.log("transform:"+transform);
 	var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
 	dstDesc.value = text;
 	var cs = cmsGetColorSpace(h);
+	outputCS = cs;
 	if (cs === cmsSigRgbData) {
-	    divs.dstRGB.style.display  = "block";
-	    divs.dstCMYK.style.display = "none";
+	    elems.dstRGB.style.display  = "block";
+	    elems.dstCMYK.style.display = "none";
 	    var xyY = getColorant_xyY(h);
 	    if (xyY) {
 		var [rxyY, gxyY, bxyY] = xyY;
 		console.log(rxyY);
 	    }
 	} else if (cs === cmsSigCmykData) {
-	    divs.dstRGB.style.display  = "none";
-	    divs.dstCMYK.style.display = "block";
+	    elems.dstRGB.style.display  = "none";
+	    elems.dstCMYK.style.display = "block";
 	    ;
 	} else {
-	    console.error("not supported colorspace:"+cs);
+	    console.error("no supported colorspace:"+cs);
 	}
     }, "ArrayBuffer");
+    var updateOutputPixel = function(pixel) {
+	;
+    }
+    bindFunction({"srcRRange":"srcRText",
+		  "srcGRange":"srcGText",
+		  "srcBRange":"srcBText"},
+		 function(target,rel) {
+		     var r = elems.srcRRange.value;
+		     var g = elems.srcGRange.value;
+		     var b = elems.srcBRange.value;
+		     var pixel = cmsDoTransform(transform, [r, g, b], 1);
+		     if (outputCS === cmsSigRgbData) {
+			 var [rr, gg, bb] = pixel;
+			 elems.dstRRange.value = rr;
+			 elems.dstGRange.value = gg;
+			 elems.dstBRange.value = bb;
+			 elems.dstRText.value = elems.dstRRange.value;
+			 elems.dstGText.value = elems.dstGRange.value;
+			 elems.dstBText.value = elems.dstBRange.value;
+		     } else if (outputCS === cmsSigCmykData) {
+			 var [cc, mm, yy, kk] = pixel;
+			 elems.dstCRange.value = cc;
+			 elems.dstMRange.value = bb;
+			 elems.dstYRange.value = yy;
+			 elems.dstKRange.value = kk;
+			 elems.dstCText.value = elems.dstCRange.value;
+			 elems.dstMText.value = elems.dstMRange.value;
+			 elems.dstYText.value = elems.dstYRange.value;
+			 elems.dstKText.value = elems.dstKRange.value;
+		     } else { //
+			 console.error("no supported colorspace:"+cs);
+		     }
+		 });
+    bindFunction({"srcCRange":"srcCText",
+		  "srcMRange":"srcMText",
+		  "srcYRange":"srcYText",
+		  "srcKRange":"srcKText"},
+		 function(target,rel) {
+		     var c = elems.srcCRange.value;
+		     var m = elems.srcMRange.value;
+		     var y = elems.srcYRange.value;
+		     var k = elems.srcKRange.value;
+		     var ret = cmsDoTransform(transform, [c, m, y, k], 1);
+		     console.log(ret);
+		 });
 }
