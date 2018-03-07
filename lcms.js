@@ -150,9 +150,9 @@ function main() {
     var updateOutputPixel = function(pixel) {
 	if (outputCS === cmsSigRgbData) {
 	    var [rr, gg, bb] = pixel;
-	    elems.dstRRange.value = rr;
-	    elems.dstGRange.value = gg;
-	    elems.dstBRange.value = bb;
+	    elems.dstRRange.value = rr * 255;
+	    elems.dstGRange.value = gg * 255;
+	    elems.dstBRange.value = bb * 255;
 	    elems.dstRText.value = elems.dstRRange.value;
 	    elems.dstGText.value = elems.dstGRange.value;
 	    elems.dstBText.value = elems.dstBRange.value;
@@ -177,7 +177,7 @@ function main() {
 		     var r = elems.srcRRange.value;
 		     var g = elems.srcGRange.value;
 		     var b = elems.srcBRange.value;
-		     var pixel = cmsDoTransform(transform, [r, g, b], 1);
+		     var pixel = cmsDoTransform(transform, [r/255, g/255, b/255], 1);
 		     updateOutputPixel(pixel);
 		 });
     bindFunction({"srcCRange":"srcCText",
