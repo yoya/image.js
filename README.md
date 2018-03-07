@@ -2,5 +2,4 @@ Drop & Convert Image Sample Demo
 
 # usage
 
-% git submodule init
-% git submodule update
+% git submodule update --init --recursive
