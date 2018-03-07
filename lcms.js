@@ -59,8 +59,9 @@ function getColorant_xyY(hProfile) {
     return [rxyY, gxyY, bxyY];
 }
 
-var inputProfile  = cmsCreate_sRGBProfile();
-var outputProfile = cmsCreate_sRGBProfile();
+var sRGBProfile = cmsCreate_sRGBProfile();
+var inputProfile  = sRGBProfile;
+var outputProfile = sRGBProfile;
 console.debug(inputProfile, outputProfile);
 var transform = makeTransform(inputProfile, outputProfile);
 console.debug("transform:"+transform);
@@ -82,7 +83,9 @@ function main() {
 	    console.error("not ICC file");
 	    return ;
 	}
-	cmsCloseProfile(inputProfile);
+	if (inputProfile !== sRGBProfile) {
+	    cmsCloseProfile(inputProfile);
+	}
 	inputProfile = h;
 	console.debug("transform__:"+transform);
 	cmsDeleteTransform(transform);
@@ -117,7 +120,9 @@ function main() {
 	    console.error("not ICC file");
 	    return ;
 	}
-	cmsCloseProfile(outputProfile);
+	if (outputProfile !== sRGBProfile) {
+	    cmsCloseProfile(outputProfile);
+	}
 	outputProfile = h;
 	cmsDeleteTransform(transform);
 	transform = makeTransform(inputProfile, outputProfile);
