@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
+var intent = INTENT_PERCEPTUAL;
+
 var srcText = document.getElementById("srcCanvas");
 var srcCanvas = document.getElementById("srcCanvas");
 var dstCanvas = document.getElementById("dstCanvas");
@@ -32,21 +34,13 @@ for (var i in elemIds) {
     elems[id] = document.getElementById(id);
 }
 
-function s2ui8a(s) {
-    var l = s.length;
-    var a = new Uint8Array(l);
-    for (var i = 0 ; i < l ; i++) {
-	a[i] = s.charAt(i);
-    }
-    return a;
-}
-
 function makeTransform(inputProfile, outputProfile) {
+    var inputIsFloat  = 1; // TRUE;
+    var outputIsFloat = 1; // TRUE;
     var inputFormat  = cmsFormatterForColorspaceOfProfile(inputProfile,
-							  0, 1 /*True*/);
+							  0, inputIsFloat);
     var outputFormat = cmsFormatterForColorspaceOfProfile(outputProfile,
-							  0, 1 /*True*/);
-    var intent = 1;
+							  0, outputIsFloat);
     return cmsCreateTransform(inputProfile, inputFormat,
 			      outputProfile, outputFormat,
 			      intent, cmsFLAGS_NOCACHE);
