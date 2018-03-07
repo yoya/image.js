@@ -7,8 +7,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
-var intent = INTENT_PERCEPTUAL;
-
 var srcText = document.getElementById("srcCanvas");
 var srcCanvas = document.getElementById("srcCanvas");
 var dstCanvas = document.getElementById("dstCanvas");
@@ -27,7 +25,8 @@ var elemIds = ["srcRGB",
 	       "dstRText", "dstGText", "dstBText",
 	       "dstCMYK",
 	       "dstCRange", "dstMRange", "dstYRange", "dstKRange",
-	       "dstCText", "dstMText", "dstYText", "dstKText" ];
+	       "dstCText", "dstMText", "dstYText", "dstKText",
+	       "intentSelect" ];
 var elems = {};
 for (var i in elemIds) {
     var id = elemIds[i];
@@ -67,6 +66,8 @@ var transform = makeTransform(inputProfile, outputProfile);
 console.debug("transform:"+transform);
 var inputCS = cmsGetColorSpace(inputProfile);
 var outputCS = cmsGetColorSpace(outputProfile);
+
+var intent = parseFloat(elems.intentSelect.value);
 
 elems.srcCMYK.style.display = "none";
 elems.dstCMYK.style.display = "none";
@@ -191,5 +192,8 @@ function main() {
 		     var kk = elems.srcKRange.value;
 		     var pixel = cmsDoTransform(transform, [cc, mm, yy, kk], 1);
 		     updateOutputPixel(pixel);
+    bindFunction({"intentSelect":null},
+		 function(target, rel) {
+		     intent = parseFloat(elems.intentSelect.value);
 		 });
 }
