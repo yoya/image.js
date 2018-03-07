@@ -111,6 +111,7 @@ function main() {
 	} else {
 	    console.error("no supported colorspace:"+cs);
 	}
+	transformAndUpdate();
     }, "ArrayBuffer");
     dropFunction(document, function(buf) {
 	var arr = new Uint8Array(buf);
@@ -147,8 +148,25 @@ function main() {
 	} else {
 	    console.error("no supported colorspace:"+cs);
 	}
+	transformAndUpdate();
     }, "ArrayBuffer");
-    var updateOutputPixel = function(pixel) {
+    var transformAndUpdate = function() {
+	// transform src to dst value
+	if (inputCS === cmsSigRgbData) {
+	    var r = elems.srcRRange.value;
+	    var g = elems.srcGRange.value;
+	    var b = elems.srcBRange.value;
+	    var pixel = cmsDoTransform(transform, [r/255, g/255, b/255], 1);
+	} else if (outputCS === cmsSigCmykData) {
+	    var cc = elems.srcCRange.value;
+	    var mm = elems.srcMRange.value;
+	    var yy = elems.srcYRange.value;
+	    var kk = elems.srcKRange.value;
+	    var pixel = cmsDoTransform(transform, [cc, mm, yy, kk], 1);
+	} else {
+	    console.error("no supported input colorspace:"+cs);
+	}
+	// update dst input value;
 	if (outputCS === cmsSigRgbData) {
 	    var [rr, gg, bb] = pixel;
 	    elems.dstRRange.value = rr * 255;
@@ -167,31 +185,23 @@ function main() {
 	    elems.dstMText.value = elems.dstMRange.value;
 	    elems.dstYText.value = elems.dstYRange.value;
 	    elems.dstKText.value = elems.dstKRange.value;
-	} else { //
-	    console.error("no supported colorspace:"+cs);
+	} else {
+	    console.error("no supported output colorspace:"+cs);
 	}
     }
     bindFunction({"srcRRange":"srcRText",
 		  "srcGRange":"srcGText",
 		  "srcBRange":"srcBText"},
 		 function(target,rel) {
-		     var r = elems.srcRRange.value;
-		     var g = elems.srcGRange.value;
-		     var b = elems.srcBRange.value;
-		     var pixel = cmsDoTransform(transform, [r/255, g/255, b/255], 1);
-		     updateOutputPixel(pixel);
+		     transformAndUpdate();
 		 });
     bindFunction({"srcCRange":"srcCText",
 		  "srcMRange":"srcMText",
 		  "srcYRange":"srcYText",
 		  "srcKRange":"srcKText"},
 		 function(target,rel) {
-		     var cc = elems.srcCRange.value;
-		     var mm = elems.srcMRange.value;
-		     var yy = elems.srcYRange.value;
-		     var kk = elems.srcKRange.value;
-		     var pixel = cmsDoTransform(transform, [cc, mm, yy, kk], 1);
-		     updateOutputPixel(pixel);
+		     transformAndUpdate();
+		 });
     bindFunction({"intentSelect":null},
 		 function(target, rel) {
 		     intent = parseFloat(elems.intentSelect.value);
