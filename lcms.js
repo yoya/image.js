@@ -15,17 +15,17 @@ var dstDesc = document.getElementById("dstDesc");
 // var canvases = [].map(id => document.getElementById(id));
 
 var elemIds = ["srcRGB",
-	      "srcRRange", "srcGRange", "srcBRange",
-	      "srcRText", "srcGText", "srcBText",
-	      "srcCMYK",
-	      "srcCRange", "srcMRange", "srcYRange", "srcKRange",
-	      "srcCText", "srcMText", "srcYText", "srcKText",
-	      "dstRGB",
-	      "dstRRange", "dstGRange", "dstBRange",
-	      "dstRText", "dstGText", "dstBText",
-	      "dstCMYK",
-	      "dstCRange", "dstMRange", "dstYRange", "dstKRange",
-	      "dstCText", "dstMText", "dstYText", "dstKText" ];
+	       "srcRRange", "srcGRange", "srcBRange",
+	       "srcRText", "srcGText", "srcBText",
+	       "srcCMYK",
+	       "srcCRange", "srcMRange", "srcYRange", "srcKRange",
+	       "srcCText", "srcMText", "srcYText", "srcKText",
+	       "dstRGB",
+	       "dstRRange", "dstGRange", "dstBRange",
+	       "dstRText", "dstGText", "dstBText",
+	       "dstCMYK",
+	       "dstCRange", "dstMRange", "dstYRange", "dstKRange",
+	       "dstCText", "dstMText", "dstYText", "dstKText" ];
 var elems = {};
 for (var i in elemIds) {
     var id = elemIds[i];
