@@ -205,5 +205,7 @@ function main() {
     bindFunction({"intentSelect":null},
 		 function(target, rel) {
 		     intent = parseFloat(elems.intentSelect.value);
+		     cmsDeleteTransform(transform);
+		     transform = makeTransform(inputProfile, outputProfile);
 		 });
 }
