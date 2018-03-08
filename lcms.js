@@ -77,8 +77,8 @@ function makeTransform() {
     transform = cmsCreateTransform(inputProfile, inputFormat,
 				   outputProfile, outputFormat,
 				   intent, cmsFLAGS_NOCACHE);
-    console.log("inputFormat, outputFormat, transform:", inputFormat, outputFormat, transform);
-    console.log(inputProfile, inputFormat, outputProfile, outputFormat, transform);
+    // console.debug("inputFormat, outputFormat, transform:", inputFormat, outputFormat, transform);
+    // console.debug(inputProfile, inputFormat, outputProfile, outputFormat, transform);
     var XYZFormat = isFloat?TYPE_XYZ_DBL:TYPE_XYZ_16;
     var labFormat = isFloat?TYPE_Lab_DBL:TYPE_Lab_16;
     transformInputXYZ = cmsCreateTransform(inputProfile, inputFormat,
@@ -139,12 +139,12 @@ function colorspaceUpdate() {
 }
 
 function main() {
-    console.debug("main");
+    // console.debug("main");
     dropFunction(srcCanvas, function(buf) {
 	var arr = new Uint8Array(buf);
 	var size = arr.length;
 	var h = cmsOpenProfileFromMem(arr, size);
-	console.log("input:"+h);
+	// console.debug("input:"+h);
 	if (! h) {
 	    console.error("not ICC file");
 	    return ;
@@ -153,9 +153,7 @@ function main() {
 	    cmsCloseProfile(inputProfile);
 	}
 	inputProfile = h;
-	console.debug("transform__:"+transform);
 	makeTransform();
-	console.log("transform:"+transform);
 	var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
 	elems.srcDesc.value = text;
 	var cs = cmsGetColorSpace(h);
@@ -180,7 +178,7 @@ function main() {
 	var arr = new Uint8Array(buf);
 	var size = arr.length;
 	var h = cmsOpenProfileFromMem(arr, size);
-	console.log("output:"+h);
+	// console.debug("output:"+h);
 	if (! h) {
 	    console.error("not ICC file");
 	    return ;
@@ -190,7 +188,7 @@ function main() {
 	}
 	outputProfile = h;
 	makeTransform();
-	console.log("transform:"+transform);
+	// console.log("transform:"+transform);
 	var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
 	elems.dstDesc.value = text;
 	var cs = cmsGetColorSpace(h);
@@ -245,7 +243,7 @@ function main() {
 		vv *= 255;
 	    }
 	    elems.dstVRange.value = vv;
-	    console.log(elems.dstVText, elems.dstVRange);
+	    // console.debug(elems.dstVText, elems.dstVRange);
 	    elems.dstVText.value = elems.dstVRange.value;
 	} else if (outputCS === cmsSigRgbData) {
 	    var [rr, gg, bb] = pixel;
