@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 var srcCanvas = document.getElementById("srcCanvas");
 var dstCanvas = document.getElementById("dstCanvas");
+var srcDiagramBaseCanvas = document.getElementById("srcDiagramBaseCanvas");
+var dstDiagramBaseCanvas = document.getElementById("dstDiagramBaseCanvas");
 var srcDesc = document.getElementById("srcDesc");
 var dstDesc = document.getElementById("dstDesc");
 // var canvases = [].map(id => document.getElementById(id));
@@ -144,19 +146,25 @@ function colorspaceUpdate() {
     }
 }
 
-function updateDiagramCanvas(canvas, transformXYZ, cs) {
+function updateDiagramBaseCanvas(canvas, transformXYZ, cs, pixel) {
     canvas.width = canvas.width; // clear canvas
     var params = diagramParams;
     params['caption'] = null;
     params['tristimulus'] = null;
     if (cs === cmsSigGrayData) {
-	;
+	params['drawPoints'] = [];
     } else if (cs === cmsSigRgbData) {
 	var rXYZ = cmsDoTransform(transformXYZ, [1, 0, 0], 1);
 	var gXYZ = cmsDoTransform(transformXYZ, [0, 1, 0], 1);
 	var bXYZ = cmsDoTransform(transformXYZ, [0, 0, 1], 1);
-	params['tristimulus'] = [
-	    cmsXYZ2xyY(rXYZ), cmsXYZ2xyY(gXYZ), cmsXYZ2xyY(bXYZ)
+	var rxyY = cmsXYZ2xyY(rXYZ);
+	var gxyY = cmsXYZ2xyY(gXYZ);
+	var bxyY = cmsXYZ2xyY(bXYZ);
+	params['tristimulus'] = [ rxyY, gxyY, bxyY ];
+	params['drawPoints'] = [
+	    { color:"red",   xy:rxyY },
+	    { color:"green", xy:gxyY },
+	    { color:"blue",  xy:bxyY },
 	];
     } else if (cs === cmsSigCmykData) {
 	var cXYZ = cmsDoTransform(transformXYZ, [100,   0,   0, 0], 1);
@@ -165,16 +173,34 @@ function updateDiagramCanvas(canvas, transformXYZ, cs) {
 	var rXYZ = cmsDoTransform(transformXYZ, [  0, 100, 100, 0], 1);
 	var yXYZ = cmsDoTransform(transformXYZ, [  0,   0, 100, 0], 1);
 	var gXYZ = cmsDoTransform(transformXYZ, [100,   0, 100, 0], 1);
-	params['tristimulus'] = [
-	    cmsXYZ2xyY(cXYZ), cmsXYZ2xyY(bXYZ),
-	    cmsXYZ2xyY(mXYZ), cmsXYZ2xyY(rXYZ),
-	    cmsXYZ2xyY(yXYZ), cmsXYZ2xyY(gXYZ)
+	var cxyY = cmsXYZ2xyY(cXYZ);
+	var bxyY = cmsXYZ2xyY(bXYZ);
+	var mxyY = cmsXYZ2xyY(mXYZ);
+	var rxyY = cmsXYZ2xyY(rXYZ);
+	var yxyY = cmsXYZ2xyY(yXYZ);
+	var gxyY = cmsXYZ2xyY(gXYZ);
+	params['tristimulus'] = [ cxyY, bxyY, mxyY, rxyY , yxyY, gxyY ];
+	params['drawPoints'] = [
+	    { color:"cyan",    xy:cxyY },
+	    { color:"blue",    xy:bxyY },
+	    { color:"magenta", xy:mxyY },
+	    { color:"red",     xy:rxyY },
+	    { color:"yellow",  xy:yxyY },
+	    { color:"green",   xy:gxyY },
 	];
-	console.log(params['tristimulus']);
     } else {
 	console.error("no supported colorspace:"+cs);
     }
     drawDiagramBase(canvas, params, true);
+    drawDiagramPoints(canvas, params, true);
+}
+
+function updateDiagramCanvasPoints(canvas, transformXYZ, pixel) {
+    var xyz = cmsDoTransform(transformXYZ, pixel, 1);
+    var xyY = cmsXYZ2xyY(xyz);
+    var params = diagramParams;
+    params['drawPoints'] = [{ color:"black", xy:xyY } ];
+    drawDiagramPoints(canvas, params, true);
 }
 
 function main() {
@@ -198,7 +224,8 @@ function main() {
 	var cs = cmsGetColorSpace(h);
 	inputCS = cs;
 	colorspaceUpdate();
-	updateDiagramCanvas(srcCanvas, transformInputXYZ, inputCS);
+	updateDiagramBaseCanvas(srcDiagramBaseCanvas, transformInputXYZ, inputCS);
+	copyCanvas(srcDiagramBaseCanvas, srcCanvas);
 	transformAndUpdate();
     }, "ArrayBuffer");
     dropFunction(document, function(buf) {
@@ -221,17 +248,19 @@ function main() {
 	var cs = cmsGetColorSpace(h);
 	outputCS = cs;
 	colorspaceUpdate();
-	updateDiagramCanvas(dstCanvas, transformOutputXYZ, outputCS);
+	updateDiagramBaseCanvas(dstDiagramBaseCanvas, transformOutputXYZ, outputCS);
+	copyCanvas(dstDiagramBaseCanvas, dstCanvas);
 	transformAndUpdate();
     }, "ArrayBuffer");
     var transformAndUpdate = function() {
 	// transform src to dst value
+	var srcPixel;
 	if (inputCS === cmsSigGrayData) {
 	    var v = elems.srcVRange.value;
 	    if (isFloat) {
 		v /= 255;
 	    }
-	    var pixel = cmsDoTransform(transform, [v], 1);
+	    srcPixel = [v];
 	} else if (inputCS === cmsSigRgbData) {
 	    var r = elems.srcRRange.value;
 	    var g = elems.srcGRange.value;
@@ -241,19 +270,20 @@ function main() {
 		g /= 255;
 		b /= 255;
 	    }
-	    var pixel = cmsDoTransform(transform, [r, g, b], 1);
+	    srcPixel = [r, g, b];
 	} else if (inputCS === cmsSigCmykData) {
 	    var cc = elems.srcCRange.value;
 	    var mm = elems.srcMRange.value;
 	    var yy = elems.srcYRange.value;
 	    var kk = elems.srcKRange.value;
-	    var pixel = cmsDoTransform(transform, [cc, mm, yy, kk], 1);
+	    srcPixel = [cc, mm, yy, kk];
 	} else {
 	    console.error("no supported input colorspace:"+inputCS);
 	}
+	var dstPixel = cmsDoTransform(transform, srcPixel, 1);
 	// update dst input value;
 	if (outputCS === cmsSigGrayData) {
-	    var [vv] = pixel;
+	    var [vv] = dstPixel;
 	    if (isFloat) {
 		vv *= 255;
 	    }
@@ -261,7 +291,7 @@ function main() {
 	    // console.debug(elems.dstVText, elems.dstVRange);
 	    elems.dstVText.value = elems.dstVRange.value;
 	} else if (outputCS === cmsSigRgbData) {
-	    var [rr, gg, bb] = pixel;
+	    var [rr, gg, bb] = dstPixel;
 	    if (isFloat) {
 		rr *= 255;
 		gg *= 255;
@@ -274,7 +304,7 @@ function main() {
 	    elems.dstGText.value = elems.dstGRange.value;
 	    elems.dstBText.value = elems.dstBRange.value;
 	} else if (outputCS === cmsSigCmykData) {
-	    var [cc, mm, yy, kk] = pixel;
+	    var [cc, mm, yy, kk] = dstPixel;
 	    elems.dstCRange.value = cc;
 	    elems.dstMRange.value = mm;
 	    elems.dstYRange.value = yy;
@@ -286,6 +316,7 @@ function main() {
 	} else {
 	    console.error("no supported output colorspace:"+outputCS);
 	}
+	return [srcPixel, dstPixel];
     }
     bindFunction({"srcRRange":"srcRText",
 		  "srcGRange":"srcGText",
@@ -295,7 +326,11 @@ function main() {
 		  "srcYRange":"srcYText",
 		  "srcKRange":"srcKText"},
 		 function(target,rel) {
-		     transformAndUpdate();
+		     var [srcPixel, dstPixel] = transformAndUpdate();
+		     copyCanvas(srcDiagramBaseCanvas, srcCanvas);
+		     copyCanvas(dstDiagramBaseCanvas, dstCanvas);
+		     updateDiagramCanvasPoints(srcCanvas, transformInputXYZ, srcPixel);
+		     updateDiagramCanvasPoints(dstCanvas, transformOutputXYZ, dstPixel);
 		 });
     bindFunction({"intentSelect":null},
 		 function(target, rel) {
@@ -306,8 +341,10 @@ function main() {
 	diagramParams[name] = arr;
 	if (isDefault) {
 	    diagramParams['cieArr'] = arr;
-	    updateDiagramCanvas(srcCanvas, transformInputXYZ, inputCS);
-	    updateDiagramCanvas(dstCanvas, transformOutputXYZ, outputCS);
+	    updateDiagramBaseCanvas(srcDiagramBaseCanvas, transformInputXYZ, inputCS);
+	    updateDiagramBaseCanvas(dstDiagramBaseCanvas, transformOutputXYZ, outputCS);
+	    copyCanvas(srcDiagramBaseCanvas, srcCanvas);
+	    copyCanvas(dstDiagramBaseCanvas, dstCanvas);
 	}
     }
     loadCIEXYZdata(onCIEXYZdata);
