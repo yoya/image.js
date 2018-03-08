@@ -14,6 +14,10 @@
 	<textarea id="srcDesc" cols="30"> sRGB (default) </textarea> <br />
 	<canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
 	<br />
+	<div id="srcGray">
+	  V:<input type="range" id="srcVRange" min="0" max="255" step="0.1" value="0" />
+	    <input type="text" id="srcVText" size="4" value="0" />  <br />
+	</div>
 	<div id="srcRGB">
 	  R:<input type="range" id="srcRRange" min="0" max="255" step="0.1" value="0" />
 	    <input type="text" id="srcRText" size="4" value="0" />  <br />
@@ -37,6 +41,10 @@
 	<textarea id="dstDesc" cols="30"> sRGB (default) </textarea> <br />
 	<canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
 	<br />
+	<div id="dstGray">
+	  V:<input type="range" id="dstVRange" min="0" max="255" step="0.1" value="0" disabled="disabled" />
+	    <input type="text" id="dstVText" size="4" value="0" readonly="readonly" /> <br />
+	</div>
 	<div id="dstRGB">
 	  R:<input type="range" id="dstRRange" min="0" max="255" step="0.1" value="0" disabled="disabled" />
 	    <input type="text" id="dstRText" size="4" value="0" readonly="readonly" /> <br />

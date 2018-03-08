@@ -7,19 +7,24 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
-var srcText = document.getElementById("srcCanvas");
 var srcCanvas = document.getElementById("srcCanvas");
 var dstCanvas = document.getElementById("dstCanvas");
 var srcDesc = document.getElementById("srcDesc");
 var dstDesc = document.getElementById("dstDesc");
 // var canvases = [].map(id => document.getElementById(id));
 
-var elemIds = ["srcRGB",
+var elemIds = ["srcGray",
+	       "srcVRange",
+	       "srcVText",
+	       "srcRGB",
 	       "srcRRange", "srcGRange", "srcBRange",
 	       "srcRText", "srcGText", "srcBText",
 	       "srcCMYK",
 	       "srcCRange", "srcMRange", "srcYRange", "srcKRange",
 	       "srcCText", "srcMText", "srcYText", "srcKText",
+	       "dstGray",
+	       "dstVRange",
+	       "dstVText",
 	       "dstRGB",
 	       "dstRRange", "dstGRange", "dstBRange",
 	       "dstRText", "dstGText", "dstBText",
@@ -58,6 +63,36 @@ function getColorant_xyY(hProfile) {
     return [rxyY, gxyY, bxyY];
 }
 
+function colorspaceUpdate() {
+    var cs;
+    cs = inputCS;
+    elems.srcGray.style.display = "none";
+    elems.srcRGB.style.display  = "none";
+    elems.srcCMYK.style.display = "none";
+    if (cs === cmsSigGrayData) {
+	elems.srcGray.style.display = "block";
+    } else if (cs === cmsSigRgbData) {
+	elems.srcRGB.style.display  = "block";
+    } else if (cs === cmsSigCmykData) {
+	elems.srcRGB.style.display  = "block";
+    } else {
+	console.error("no supported input colorspace:"+cs);
+    }
+    cs = outputCS;
+    elems.dstGray.style.display = "none";
+    elems.dstRGB.style.display  = "none";
+    elems.dstCMYK.style.display = "none";
+    if (cs === cmsSigGrayData) {
+	elems.dstGray.style.display = "block";
+    } else if (cs === cmsSigRgbData) {
+	elems.dstRGB.style.display  = "block";
+    } else if (cs === cmsSigCmykData) {
+	elems.dstCMYK.style.display = "block";
+    } else {
+	console.error("no supported output colorspace:"+cs);
+    }
+}
+
 var sRGBProfile = cmsCreate_sRGBProfile();
 var inputProfile  = sRGBProfile;
 var outputProfile = sRGBProfile;
@@ -69,9 +104,7 @@ var outputCS = cmsGetColorSpace(outputProfile);
 
 var intent = parseFloat(elems.intentSelect.value);
 
-elems.srcCMYK.style.display = "none";
-elems.dstCMYK.style.display = "none";
-console.log("transform:"+transform);
+colorspaceUpdate();
 
 function main() {
     console.debug("main");
@@ -93,20 +126,19 @@ function main() {
 	transform = makeTransform(inputProfile, outputProfile);
 	console.log("transform:"+transform);
 	var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
-	srcDesc.value = text;
+	elems.srcDesc.value = text;
 	var cs = cmsGetColorSpace(h);
 	inputCS = cs;
-	if (cs === cmsSigRgbData) {
-	    elems.srcRGB.style.display  = "block";
-	    elems.srcCMYK.style.display = "none";
+	colorspaceUpdate();
+	if (cs === cmsSigGrayData) {
+	    ;
+	} else if (cs === cmsSigRgbData) {
 	    var xyY = getColorant_xyY(h);
 	    if (xyY) {
 		var [rxyY, gxyY, bxyY] = xyY;
 		console.log(rxyY);
 	    }
 	} else if (cs === cmsSigCmykData) {
-	    elems.srcRGB.style.display  = "none";
-	    elems.srcCMYK.style.display = "block";
 	    ;
 	} else {
 	    console.error("no supported colorspace:"+cs);
@@ -130,29 +162,31 @@ function main() {
 	transform = makeTransform(inputProfile, outputProfile);
 	console.log("transform:"+transform);
 	var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
-	dstDesc.value = text;
+	elems.dstDesc.value = text;
 	var cs = cmsGetColorSpace(h);
 	outputCS = cs;
-	if (cs === cmsSigRgbData) {
-	    elems.dstRGB.style.display  = "block";
-	    elems.dstCMYK.style.display = "none";
+	colorspaceUpdate();
+	if (cs === cmsSigGrayData) {
+	    ;
+	} else if (cs === cmsSigRgbData) {
 	    var xyY = getColorant_xyY(h);
 	    if (xyY) {
 		var [rxyY, gxyY, bxyY] = xyY;
 		console.log(rxyY);
 	    }
 	} else if (cs === cmsSigCmykData) {
-	    elems.dstRGB.style.display  = "none";
-	    elems.dstCMYK.style.display = "block";
 	    ;
 	} else {
-	    console.error("no supported colorspace:"+cs);
+	    console.error("no supported output colorspace:"+cs);
 	}
 	transformAndUpdate();
     }, "ArrayBuffer");
     var transformAndUpdate = function() {
 	// transform src to dst value
-	if (inputCS === cmsSigRgbData) {
+	if (inputCS === cmsSigGrayData) {
+	    var v = elems.srcVRange.value;
+	    var pixel = cmsDoTransform(transform, [v/255], 1);
+	} else if (inputCS === cmsSigRgbData) {
 	    var r = elems.srcRRange.value;
 	    var g = elems.srcGRange.value;
 	    var b = elems.srcBRange.value;
@@ -167,7 +201,12 @@ function main() {
 	    console.error("no supported input colorspace:"+cs);
 	}
 	// update dst input value;
-	if (outputCS === cmsSigRgbData) {
+	if (outputCS === cmsSigGrayData) {
+	    var [vv] = pixel;
+	    elems.dstVRange.value = vv * 255;
+	    console.log(elems.dstVText, elems.dstVRange);
+	    elems.dstVText.value = elems.dstVRange.value;
+	} else if (outputCS === cmsSigRgbData) {
 	    var [rr, gg, bb] = pixel;
 	    elems.dstRRange.value = rr * 255;
 	    elems.dstGRange.value = gg * 255;
