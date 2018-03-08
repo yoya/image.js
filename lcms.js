@@ -55,6 +55,12 @@ var outputCS = cmsGetColorSpace(outputProfile);
 var intent = parseFloat(elems.intentSelect.value);
 var isFloat = 1; // TRUE
 
+var diagramParams = {
+    'chromaticity':'ciexy',
+    'tristimulus':true,
+    'guide':true
+}
+
 makeTransform();
 // console.debug("transform, transform(Input|Output)XYZ, transform(Input|Output)Lab", transform, transformInputXYZ,transformOutputXYZ, transformInputLab, transformOutputLab);
 
@@ -138,6 +144,39 @@ function colorspaceUpdate() {
     }
 }
 
+function updateDiagramCanvas(canvas, transformXYZ, cs) {
+    canvas.width = canvas.width; // clear canvas
+    var params = diagramParams;
+    params['caption'] = null;
+    params['tristimulus'] = null;
+    if (cs === cmsSigGrayData) {
+	;
+    } else if (cs === cmsSigRgbData) {
+	var rXYZ = cmsDoTransform(transformXYZ, [1, 0, 0], 1);
+	var gXYZ = cmsDoTransform(transformXYZ, [0, 1, 0], 1);
+	var bXYZ = cmsDoTransform(transformXYZ, [0, 0, 1], 1);
+	params['tristimulus'] = [
+	    cmsXYZ2xyY(rXYZ), cmsXYZ2xyY(gXYZ), cmsXYZ2xyY(bXYZ)
+	];
+    } else if (cs === cmsSigCmykData) {
+	var cXYZ = cmsDoTransform(transformXYZ, [100,   0,   0, 0], 1);
+	var bXYZ = cmsDoTransform(transformXYZ, [100, 100,   0, 0], 1);
+	var mXYZ = cmsDoTransform(transformXYZ, [  0, 100,   0, 0], 1);
+	var rXYZ = cmsDoTransform(transformXYZ, [  0, 100, 100, 0], 1);
+	var yXYZ = cmsDoTransform(transformXYZ, [  0,   0, 100, 0], 1);
+	var gXYZ = cmsDoTransform(transformXYZ, [100,   0, 100, 0], 1);
+	params['tristimulus'] = [
+	    cmsXYZ2xyY(cXYZ), cmsXYZ2xyY(bXYZ),
+	    cmsXYZ2xyY(mXYZ), cmsXYZ2xyY(rXYZ),
+	    cmsXYZ2xyY(yXYZ), cmsXYZ2xyY(gXYZ)
+	];
+	console.log(params['tristimulus']);
+    } else {
+	console.error("no supported colorspace:"+cs);
+    }
+    drawDiagramBase(canvas, params, true);
+}
+
 function main() {
     // console.debug("main");
     dropFunction(srcCanvas, function(buf) {
@@ -159,19 +198,7 @@ function main() {
 	var cs = cmsGetColorSpace(h);
 	inputCS = cs;
 	colorspaceUpdate();
-	if (cs === cmsSigGrayData) {
-	    ;
-	} else if (cs === cmsSigRgbData) {
-	    var xyY = getColorant_xyY(h);
-	    if (xyY) {
-		var [rxyY, gxyY, bxyY] = xyY;
-		console.log(rxyY);
-	    }
-	} else if (cs === cmsSigCmykData) {
-	    ;
-	} else {
-	    console.error("no supported colorspace:"+cs);
-	}
+	updateDiagramCanvas(srcCanvas, transformInputXYZ, inputCS);
 	transformAndUpdate();
     }, "ArrayBuffer");
     dropFunction(document, function(buf) {
@@ -194,19 +221,7 @@ function main() {
 	var cs = cmsGetColorSpace(h);
 	outputCS = cs;
 	colorspaceUpdate();
-	if (cs === cmsSigGrayData) {
-	    ;
-	} else if (cs === cmsSigRgbData) {
-	    var xyY = getColorant_xyY(h);
-	    if (xyY) {
-		var [rxyY, gxyY, bxyY] = xyY;
-		console.log(rxyY);
-	    }
-	} else if (cs === cmsSigCmykData) {
-	    ;
-	} else {
-	    console.error("no supported output colorspace:"+cs);
-	}
+	updateDiagramCanvas(dstCanvas, transformOutputXYZ, outputCS);
 	transformAndUpdate();
     }, "ArrayBuffer");
     var transformAndUpdate = function() {
@@ -227,7 +242,7 @@ function main() {
 		b /= 255;
 	    }
 	    var pixel = cmsDoTransform(transform, [r, g, b], 1);
-	} else if (outputCS === cmsSigCmykData) {
+	} else if (inputCS === cmsSigCmykData) {
 	    var cc = elems.srcCRange.value;
 	    var mm = elems.srcMRange.value;
 	    var yy = elems.srcYRange.value;
@@ -287,4 +302,13 @@ function main() {
 		     intent = parseFloat(elems.intentSelect.value);
 		     makeTransform();
 		 });
+    var onCIEXYZdata = function(name, arr, isDefault) {
+	diagramParams[name] = arr;
+	if (isDefault) {
+	    diagramParams['cieArr'] = arr;
+	    updateDiagramCanvas(srcCanvas, transformInputXYZ, inputCS);
+	    updateDiagramCanvas(dstCanvas, transformOutputXYZ, outputCS);
+	}
+    }
+    loadCIEXYZdata(onCIEXYZdata);
 }
