@@ -39,16 +39,57 @@ for (var i in elemIds) {
     elems[id] = document.getElementById(id);
 }
 
-function makeTransform(inputProfile, outputProfile) {
-    var inputIsFloat  = 1; // TRUE;
-    var outputIsFloat = 1; // TRUE;
+var sRGBProfile = cmsCreate_sRGBProfile();
+var inputProfile  = sRGBProfile;
+var outputProfile = sRGBProfile;
+
+var XYZProfile = cmsCreateXYZProfile()
+var LabProfile = cmsCreateLab4Profile(0); // NULL
+// console.debug("sRGBProfile, XYZProfile, LabProfile:", sRGBProfile, XYZProfile, LabProfile);
+
+var transform = 0;
+var transformInputXYZ, transformOutputXYZ;
+var transformInputLab, transformOutputLab;
+var inputCS = cmsGetColorSpace(inputProfile);
+var outputCS = cmsGetColorSpace(outputProfile);
+var intent = parseFloat(elems.intentSelect.value);
+var isFloat = 0; // TRUE
+
+makeTransform();
+// console.debug("transform, transform(Input|Output)XYZ, transform(Input|Output)Lab", transform, transformInputXYZ,transformOutputXYZ, transformInputLab, transformOutputLab);
+
+colorspaceUpdate();
+
+function makeTransform() {
     var inputFormat  = cmsFormatterForColorspaceOfProfile(inputProfile,
-							  0, inputIsFloat);
+							  0, isFloat);
     var outputFormat = cmsFormatterForColorspaceOfProfile(outputProfile,
-							  0, outputIsFloat);
-    return cmsCreateTransform(inputProfile, inputFormat,
-			      outputProfile, outputFormat,
-			      intent, cmsFLAGS_NOCACHE);
+							  0, isFloat);
+    if (transform) {
+	cmsDeleteTransform(transform);
+	cmsDeleteTransform(transformInputXYZ);
+	cmsDeleteTransform(transformOutputXYZ);
+	cmsDeleteTransform(transformInputLab);
+	cmsDeleteTransform(transformOutputLab);
+    }
+    transform = cmsCreateTransform(inputProfile, inputFormat,
+				   outputProfile, outputFormat,
+				   intent, cmsFLAGS_NOCACHE);
+    console.log(inputProfile, inputFormat, outputProfile, outputFormat, transform);
+    var XYZFormat = isFloat?TYPE_XYZ_DBL:TYPE_XYZ_16;
+    var labFormat = isFloat?TYPE_Lab_DBL:TYPE_Lab_16;
+    transformInputXYZ = cmsCreateTransform(inputProfile, inputFormat,
+					   XYZProfile, XYZFormat,
+					   intent, cmsFLAGS_NOCACHE);
+    transformOutputXYZ = cmsCreateTransform(outputProfile, outputFormat,
+					    XYZProfile, XYZFormat,
+					    intent, cmsFLAGS_NOCACHE);
+    transformInputLab = cmsCreateTransform(inputProfile, inputFormat,
+					   LabProfile, labFormat,
+					   intent, cmsFLAGS_NOCACHE);
+    transformOutputLab = cmsCreateTransform(outputProfile, outputFormat,
+					    LabProfile, labFormat,
+					    intent, cmsFLAGS_NOCACHE);
 }
 
 function getColorant_xyY(hProfile) {
@@ -94,19 +135,6 @@ function colorspaceUpdate() {
     }
 }
 
-var sRGBProfile = cmsCreate_sRGBProfile();
-var inputProfile  = sRGBProfile;
-var outputProfile = sRGBProfile;
-console.debug(inputProfile, outputProfile);
-var transform = makeTransform(inputProfile, outputProfile);
-console.debug("transform:"+transform);
-var inputCS = cmsGetColorSpace(inputProfile);
-var outputCS = cmsGetColorSpace(outputProfile);
-
-var intent = parseFloat(elems.intentSelect.value);
-
-colorspaceUpdate();
-
 function main() {
     console.debug("main");
     dropFunction(srcCanvas, function(buf) {
@@ -123,8 +151,7 @@ function main() {
 	}
 	inputProfile = h;
 	console.debug("transform__:"+transform);
-	cmsDeleteTransform(transform);
-	transform = makeTransform(inputProfile, outputProfile);
+	makeTransform();
 	console.log("transform:"+transform);
 	var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
 	elems.srcDesc.value = text;
@@ -159,8 +186,7 @@ function main() {
 	    cmsCloseProfile(outputProfile);
 	}
 	outputProfile = h;
-	cmsDeleteTransform(transform);
-	transform = makeTransform(inputProfile, outputProfile);
+	makeTransform();
 	console.log("transform:"+transform);
 	var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
 	elems.dstDesc.value = text;
@@ -242,7 +268,6 @@ function main() {
     bindFunction({"intentSelect":null},
 		 function(target, rel) {
 		     intent = parseFloat(elems.intentSelect.value);
-		     cmsDeleteTransform(transform);
-		     transform = makeTransform(inputProfile, outputProfile);
+		     makeTransform();
 		 });
 }
