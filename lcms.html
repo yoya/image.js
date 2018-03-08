@@ -17,6 +17,7 @@
       <div style="float:left;">
 	<textarea id="srcDesc" cols="50"> sRGB (default) </textarea> <br />
 	<canvas id="srcCanvas" class="borderRed" width=320 height=320> srcCanvas </canvas>
+	<canvas id="srcDiagramBaseCanvas" width=320 height=320 style="display: none"> srcDiagramBaseCanvas </canvas>
 	<br />
 	<div id="srcGray">
 	  V:<input type="range" id="srcVRange" class="colorSlider" min="0" max="255" step="0.01" value="0" />
@@ -44,6 +45,7 @@
       <div style="float:left;">
 	<textarea id="dstDesc" cols="50"> sRGB (default) </textarea> <br />
 	<canvas id="dstCanvas" class="borderBlue" width=320 height=320> dstCanvas </canvas>
+	<canvas id="dstDiagramBaseCanvas" width=320 height=320 style="display: none"> dstDiagramBaseCanvas </canvas>
 	<br />
 	<div id="dstGray">
 	  V:<input type="range" id="dstVRange" class="colorSlider" mim="0" max="255" step="0.01" value="0" disabled="disabled" />
