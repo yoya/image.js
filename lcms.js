@@ -13,7 +13,8 @@ var srcDesc = document.getElementById("srcDesc");
 var dstDesc = document.getElementById("dstDesc");
 // var canvases = [].map(id => document.getElementById(id));
 
-var elemIds = ["srcGray",
+var elemIds = ["srcDesc", "dstDesc",
+	       "srcGray",
 	       "srcVRange",
 	       "srcVText",
 	       "srcRGB",
@@ -74,7 +75,7 @@ function colorspaceUpdate() {
     } else if (cs === cmsSigRgbData) {
 	elems.srcRGB.style.display  = "block";
     } else if (cs === cmsSigCmykData) {
-	elems.srcRGB.style.display  = "block";
+	elems.srcCMYK.style.display  = "block";
     } else {
 	console.error("no supported input colorspace:"+cs);
     }
@@ -198,7 +199,7 @@ function main() {
 	    var kk = elems.srcKRange.value;
 	    var pixel = cmsDoTransform(transform, [cc, mm, yy, kk], 1);
 	} else {
-	    console.error("no supported input colorspace:"+cs);
+	    console.error("no supported input colorspace:"+inputCS);
 	}
 	// update dst input value;
 	if (outputCS === cmsSigGrayData) {
@@ -225,16 +226,13 @@ function main() {
 	    elems.dstYText.value = elems.dstYRange.value;
 	    elems.dstKText.value = elems.dstKRange.value;
 	} else {
-	    console.error("no supported output colorspace:"+cs);
+	    console.error("no supported output colorspace:"+outputCS);
 	}
     }
     bindFunction({"srcRRange":"srcRText",
 		  "srcGRange":"srcGText",
-		  "srcBRange":"srcBText"},
-		 function(target,rel) {
-		     transformAndUpdate();
-		 });
-    bindFunction({"srcCRange":"srcCText",
+		  "srcBRange":"srcBText",
+		  "srcCRange":"srcCText",
 		  "srcMRange":"srcMText",
 		  "srcYRange":"srcYText",
 		  "srcKRange":"srcKText"},
