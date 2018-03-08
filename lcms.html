@@ -4,6 +4,11 @@
     <meta charset="utf-8">
     <title> Little-CMS </title>
     <link rel="stylesheet" href="index.css">
+    <style>
+      .colorSlider {
+      width: 256px;
+      }
+    </style>
   </head>
   <body bgcolor="lightgray">
     <div class="container">
@@ -11,57 +16,57 @@
 	
       </div> <!-- controlPanel -->
       <div style="float:left;">
-	<textarea id="srcDesc" cols="30"> sRGB (default) </textarea> <br />
-	<canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+	<textarea id="srcDesc" cols="50"> sRGB (default) </textarea> <br />
+	<canvas id="srcCanvas" class="borderRed" width=320 height=320> srcCanvas </canvas>
 	<br />
 	<div id="srcGray">
-	  V:<input type="range" id="srcVRange" min="0" max="255" step="0.1" value="0" />
-	    <input type="text" id="srcVText" size="4" value="0" />  <br />
+	  V:<input type="range" id="srcVRange" class="colorSlider" min="0" max="255" step="0.01" value="0" />
+	    <input type="text" id="srcVText" size="6" value="0" />  <br />
 	</div>
 	<div id="srcRGB">
-	  R:<input type="range" id="srcRRange" min="0" max="255" step="0.1" value="0" />
-	    <input type="text" id="srcRText" size="4" value="0" />  <br />
-	  G:<input type="range" id="srcGRange" min="0" max="255" step="0.1" value="0" />
-	    <input type="text" id="srcGText" size="4" value="0"  />  <br />
-	  B:<input type="range" id="srcBRange" min="0" max="255" step="0.1" value="0" />
-	    <input type="text" id="srcBText" size="4" value="0" />
+	  R:<input type="range" id="srcRRange" class="colorSlider" min="0" max="255" step="0.01" value="0" />
+	    <input type="text" id="srcRText" size="6" value="0" />  <br />
+	  G:<input type="range" id="srcGRange" class="colorSlider" mim="0" max="255" step="0.01" value="0" />
+	    <input type="text" id="srcGText" size="6" value="0"  />  <br />
+	  B:<input type="range" id="srcBRange" class="colorSlider" mim="0" max="255" step="0.01" value="0" />
+	    <input type="text" id="srcBText" size="6" value="0" />
 	</div>
 	<div id="srcCMYK">
-	  C:<input type="range" id="srcCRange" min="0" max="100" step="0.1" value="0" />
-	    <input type="text" id="srcCText" size="4" value="0" /> <br />
-	  M:<input type="range" id="srcMRange" min="0" max="100" step="0.1" value="0" />
-	    <input type="text" id="srcMText" size="4" value="0" /> <br />
-	  Y:<input type="range" id="srcYRange" min="0" max="100" step="0.1" value="0" />
-	    <input type="text" id="srcYText" size="4" value="0" /> <br />
-	  K:<input type="range" id="srcKRange" min="0" max="100" step="0.1" value="0" />
-	    <input type="text" id="srcKText" size="4" value="0" />
+	  C:<input type="range" id="srcCRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
+	    <input type="text" id="srcCText" size="6" value="0" /> <br />
+	  M:<input type="range" id="srcMRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
+	    <input type="text" id="srcMText" size="6" value="0" /> <br />
+	  Y:<input type="range" id="srcYRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
+	    <input type="text" id="srcYText" size="6" value="0" /> <br />
+	  K:<input type="range" id="srcKRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
+	    <input type="text" id="srcKText" size="6" value="0" />
 	</div>
       </div>
       <div style="float:left;">
-	<textarea id="dstDesc" cols="30"> sRGB (default) </textarea> <br />
-	<canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+	<textarea id="dstDesc" cols="50"> sRGB (default) </textarea> <br />
+	<canvas id="dstCanvas" class="borderBlue" width=320 height=320> dstCanvas </canvas>
 	<br />
 	<div id="dstGray">
-	  V:<input type="range" id="dstVRange" min="0" max="255" step="0.1" value="0" disabled="disabled" />
-	    <input type="text" id="dstVText" size="4" value="0" readonly="readonly" /> <br />
+	  V:<input type="range" id="dstVRange" class="colorSlider" mim="0" max="255" step="0.01" value="0" disabled="disabled" />
+	    <input type="text" id="dstVText" size="6" value="0" readonly="readonly" /> <br />
 	</div>
 	<div id="dstRGB">
-	  R:<input type="range" id="dstRRange" min="0" max="255" step="0.1" value="0" disabled="disabled" />
-	    <input type="text" id="dstRText" size="4" value="0" readonly="readonly" /> <br />
-	  G:<input type="range" id="dstGRange" min="0" max="255" step="0.1" value="0" disabled="disabled" />
-	    <input type="text" id="dstGText" size="4" value="0" readonly="readonly" />  <br />
-	  B:<input type="range" id="dstBRange" min="0" max="255" step="0.1" value="0" disabled="disabled" />
-	    <input type="text" id="dstBText" size="4" value="0" readonly="readonly" />  <br />
+	  R:<input type="range" id="dstRRange" class="colorSlider" mim="0" max="255" step="0.01" value="0" class="colorSlider" disabled="disabled" />
+	    <input type="text" id="dstRText" size="6" value="0" readonly="readonly" /> <br />
+	  G:<input type="range" id="dstGRange" class="colorSlider" mim="0" max="255" step="0.01" value="0" disabled="disabled" />
+	    <input type="text" id="dstGText" size="6" value="0" readonly="readonly" />  <br />
+	  B:<input type="range" id="dstBRange" class="colorSlider" mim="0" max="255" step="0.01" value="0" disabled="disabled" />
+	    <input type="text" id="dstBText" size="6" value="0" readonly="readonly" />  <br />
 	</div>
 	<div id="dstCMYK">
-	  C:<input type="range" id="dstCRange" min="0" max="100" step="0.1" value="0" disabled="disabled" />
-	    <input type="text" id="dstCText" size="4" value="0" readonly="readonly" /> <br />
-	  M:<input type="range" id="dstMRange" min="0" max="100" step="0.1" value="0" disabled="disabled" />
-	    <input type="text" id="dstMText" size="4" value="0" readonly="readonly" /> <br />
-	  Y:<input type="range" id="dstYRange" min="0" max="100" step="0.1" value="0" disabled="disabled" />
-	    <input type="text" id="dstYText" size="4" value="0" readonly="readonly" /> <br />
-	  K:<input type="range" id="dstKRange" min="0" max="100" step="0.1" value="0" disabled="disabled" />
-	    <input type="text" id="dstKText" size="4" value="0" readonly="readonly" /> <br />
+	  C:<input type="range" id="dstCRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" disabled="disabled" />
+	    <input type="text" id="dstCText" size="6" value="0" readonly="readonly" /> <br />
+	  M:<input type="range" id="dstMRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" disabled="disabled" />
+	    <input type="text" id="dstMText" size="6" value="0" readonly="readonly" /> <br />
+	  Y:<input type="range" id="dstYRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" disabled="disabled" />
+	    <input type="text" id="dstYText" size="6" value="0" readonly="readonly" /> <br />
+	  K:<input type="range" id="dstKRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" disabled="disabled" />
+	    <input type="text" id="dstKText" size="6" value="0" readonly="readonly" /> <br />
 	</div>
       </div>
       <div style="float:left; ">
