@@ -53,7 +53,7 @@ var transformInputLab, transformOutputLab;
 var inputCS = cmsGetColorSpace(inputProfile);
 var outputCS = cmsGetColorSpace(outputProfile);
 var intent = parseFloat(elems.intentSelect.value);
-var isFloat = 0; // TRUE
+var isFloat = 1; // TRUE
 
 makeTransform();
 // console.debug("transform, transform(Input|Output)XYZ, transform(Input|Output)Lab", transform, transformInputXYZ,transformOutputXYZ, transformInputLab, transformOutputLab);
@@ -62,9 +62,11 @@ colorspaceUpdate();
 
 function makeTransform() {
     var inputFormat  = cmsFormatterForColorspaceOfProfile(inputProfile,
-							  0, isFloat);
+							  isFloat?0:2,
+							  isFloat);
     var outputFormat = cmsFormatterForColorspaceOfProfile(outputProfile,
-							  0, isFloat);
+							  isFloat?0:2,
+							  isFloat);
     if (transform) {
 	cmsDeleteTransform(transform);
 	cmsDeleteTransform(transformInputXYZ);
@@ -75,6 +77,7 @@ function makeTransform() {
     transform = cmsCreateTransform(inputProfile, inputFormat,
 				   outputProfile, outputFormat,
 				   intent, cmsFLAGS_NOCACHE);
+    console.log("inputFormat, outputFormat, transform:", inputFormat, outputFormat, transform);
     console.log(inputProfile, inputFormat, outputProfile, outputFormat, transform);
     var XYZFormat = isFloat?TYPE_XYZ_DBL:TYPE_XYZ_16;
     var labFormat = isFloat?TYPE_Lab_DBL:TYPE_Lab_16;
@@ -212,12 +215,20 @@ function main() {
 	// transform src to dst value
 	if (inputCS === cmsSigGrayData) {
 	    var v = elems.srcVRange.value;
-	    var pixel = cmsDoTransform(transform, [v/255], 1);
+	    if (isFloat) {
+		v /= 255;
+	    }
+	    var pixel = cmsDoTransform(transform, [v], 1);
 	} else if (inputCS === cmsSigRgbData) {
 	    var r = elems.srcRRange.value;
 	    var g = elems.srcGRange.value;
 	    var b = elems.srcBRange.value;
-	    var pixel = cmsDoTransform(transform, [r/255, g/255, b/255], 1);
+	    if (isFloat) {
+		r /= 255;
+		g /= 255;
+		b /= 255;
+	    }
+	    var pixel = cmsDoTransform(transform, [r, g, b], 1);
 	} else if (outputCS === cmsSigCmykData) {
 	    var cc = elems.srcCRange.value;
 	    var mm = elems.srcMRange.value;
@@ -230,14 +241,22 @@ function main() {
 	// update dst input value;
 	if (outputCS === cmsSigGrayData) {
 	    var [vv] = pixel;
-	    elems.dstVRange.value = vv * 255;
+	    if (isFloat) {
+		vv *= 255;
+	    }
+	    elems.dstVRange.value = vv;
 	    console.log(elems.dstVText, elems.dstVRange);
 	    elems.dstVText.value = elems.dstVRange.value;
 	} else if (outputCS === cmsSigRgbData) {
 	    var [rr, gg, bb] = pixel;
-	    elems.dstRRange.value = rr * 255;
-	    elems.dstGRange.value = gg * 255;
-	    elems.dstBRange.value = bb * 255;
+	    if (isFloat) {
+		rr *= 255;
+		gg *= 255;
+		bb *= 255;
+	    }
+	    elems.dstRRange.value = rr;
+	    elems.dstGRange.value = gg;
+	    elems.dstBRange.value = bb;
 	    elems.dstRText.value = elems.dstRRange.value;
 	    elems.dstGText.value = elems.dstGRange.value;
 	    elems.dstBText.value = elems.dstBRange.value;
