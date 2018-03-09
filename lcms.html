@@ -17,7 +17,7 @@
       </div> <!-- controlPanel -->
       <div style="float:left;">
         <select id="srcSelect" class="colorSpaceSelector">
-	  <option value="" selected> sRGB (Little-CMS) </option>
+	  <option value="rgb/sRGB_LittleCMS1.icc" selected> sRGB (LittleCMS v1)) </option>
 	  <option value="rgb/DisplayP3.icc" disabled="disabled"> Display P3 (Apple) </option>
 	  <option value="rgb/AdobeRGB1998.icc" disabled="disabled"> Adobe RGB 1998 (Adobe)</option>
 	  <option value="rgb/ISO22028-2_ROMM-RGB.icc" disabled="disabled"> ProPhoto RGB, ROMM RGB </option>
@@ -56,7 +56,7 @@
       </div>
       <div style="float:left;">
 	<select id="dstSelect" class="colorSpaceSelector">
-	  <option value="" selected> sRGB (Little-CMS) </option>
+	  <option value="rgb/sRGB_LittleCMS1.icc" selected> sRGB (LittleCMS v1)) </option>
 	  <option value="rgb/DisplayP3.icc" disabled="disabled"> Display P3 (Apple) </option>
 	  <option value="rgb/AdobeRGB1998.icc" disabled="disabled"> Adobe RGB 1998 (Adobe)</option>
 	  <option value="rgb/ISO22028-2_ROMM-RGB.icc" disabled="disabled"> ProPhoto RGB, ROMM RGB </option>
@@ -103,6 +103,7 @@
       </div>
     </div>  <!-- container -->
     
+    <script type="text/javascript" src="lib/utils.js"> </script>
     <script type="text/javascript" src="lib/drop.js"> </script>
     <script type="text/javascript" src="lib/bind.js"> </script>
     <script type="text/javascript" src="lib/canvas.js"> </script>
