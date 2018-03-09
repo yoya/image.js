@@ -15,7 +15,6 @@ var srcCanvas = document.getElementById("srcCanvas");
 var dstCanvas = document.getElementById("dstCanvas");
 var srcDiagramBaseCanvas = document.getElementById("srcDiagramBaseCanvas");
 var dstDiagramBaseCanvas = document.getElementById("dstDiagramBaseCanvas");
-// var canvases = [].map(id => document.getElementById(id));
 
 var elemIds = ["srcDesc", "dstDesc",
 	       "srcGray",
@@ -49,12 +48,11 @@ var outputProfile = sRGBProfile;
 
 var XYZProfile = cmsCreateXYZProfile()
 var LabProfile = cmsCreateLab4Profile(0); // NULL
-// console.debug("sRGBProfile, XYZProfile, LabProfile:", sRGBProfile, XYZProfile, LabProfile);
 
 var transform = 0;
 var transformInputXYZ, transformOutputXYZ;
 var transformInputLab, transformOutputLab;
-var inputCS = cmsGetColorSpace(inputProfile);
+var inputCS  = cmsGetColorSpace(inputProfile);
 var outputCS = cmsGetColorSpace(outputProfile);
 var intent = parseFloat(elems.intentSelect.value);
 var isFloat = 1; // TRUE
@@ -223,8 +221,7 @@ function updateInputProfile(buf) {
     makeTransform();
     var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
     elems.srcDesc.value = text;
-    var cs = cmsGetColorSpace(h);
-    inputCS = cs;
+    inputCS = cmsGetColorSpace(h);
     colorspaceUpdate();
     updateDiagramBaseCanvas(srcDiagramBaseCanvas, transformInputXYZ, inputCS);
     copyCanvas(srcDiagramBaseCanvas, srcCanvas);
@@ -253,8 +250,7 @@ function updateOutputProfile(buf) {
     // console.log("transform:"+transform);
     var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
     elems.dstDesc.value = text;
-    var cs = cmsGetColorSpace(h);
-    outputCS = cs;
+    outputCS = cmsGetColorSpace(h);
     colorspaceUpdate();
     updateDiagramBaseCanvas(dstDiagramBaseCanvas, transformOutputXYZ, outputCS);
     copyCanvas(dstDiagramBaseCanvas, dstCanvas);
