@@ -326,7 +326,7 @@ function main() {
 		     copyCanvas(srcDiagramBaseCanvas, srcCanvas);
 		     copyCanvas(dstDiagramBaseCanvas, dstCanvas);
 		     updateDiagramCanvasPoints(srcCanvas, transformInputXYZ, srcPixel);
-		     updateDiagramCanvasPoints(dstCanvas, transformOutputXYZ, dstPixel);
+		     // updateDiagramCanvasPoints(dstCanvas, transformOutputXYZ, dstPixel);
 		 });
     bindFunction({"intentSelect":null},
 		 function(target, rel) {
