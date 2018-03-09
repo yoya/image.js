@@ -204,9 +204,13 @@ function updateDiagramCanvasPoints(canvas, transformXYZ, pixel) {
 }
 
 function updateInputProfile(buf) {
-    var arr = new Uint8Array(buf);
-    var size = arr.length;
-    var h = cmsOpenProfileFromMem(arr, size);
+    if (buf) {
+	var arr = new Uint8Array(buf);
+	var size = arr.length;
+	var h = cmsOpenProfileFromMem(arr, size);
+    } else {
+	var h = sRGBProfile;
+    }
     // console.debug("input:"+h);
     if (! h) {
 	console.error("not ICC file");
@@ -229,9 +233,13 @@ function updateInputProfile(buf) {
 }
 
 function updateOutputProfile(buf) {
-    var arr = new Uint8Array(buf);
-    var size = arr.length;
-    var h = cmsOpenProfileFromMem(arr, size);
+    if (buf) {
+	var arr = new Uint8Array(buf);
+	var size = arr.length;
+	var h = cmsOpenProfileFromMem(arr, size);
+    } else {
+	var h = sRGBProfile;
+    }
     // console.debug("output:"+h);
     if (! h) {
 	console.error("not ICC file");
