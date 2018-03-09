@@ -104,19 +104,6 @@ function makeTransform() {
 					    intent, cmsFLAGS_NOCACHE);
 }
 
-function getColorant_xyY(hProfile) {
-    var rXYZ = cmsReadTag_XYZ(hProfile, cmsSigRedColorantTag);
-    if (! rXYZ) {
-	return null;
-    }
-    var gXYZ = cmsReadTag_XYZ(hProfile, cmsSigGreenColorantTag);
-    var bXYZ = cmsReadTag_XYZ(hProfile, cmsSigBlueColorantTag);
-    var rxyY = cmsXYZ2xyY(rXYZ);
-    var gxyY = cmsXYZ2xyY(gXYZ);
-    var bxyY = cmsXYZ2xyY(bXYZ);
-    return [rxyY, gxyY, bxyY];
-}
-
 function colorspaceUpdate() {
     var cs;
     cs = inputCS;
