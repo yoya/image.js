@@ -7,12 +7,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
+var srcSelect = document.getElementById("srcSelect");
+var dstSelect = document.getElementById("dstSelect");
+var srcDesc = document.getElementById("srcDesc");
+var dstDesc = document.getElementById("dstDesc");
 var srcCanvas = document.getElementById("srcCanvas");
 var dstCanvas = document.getElementById("dstCanvas");
 var srcDiagramBaseCanvas = document.getElementById("srcDiagramBaseCanvas");
 var dstDiagramBaseCanvas = document.getElementById("dstDiagramBaseCanvas");
-var srcDesc = document.getElementById("srcDesc");
-var dstDesc = document.getElementById("dstDesc");
 // var canvases = [].map(id => document.getElementById(id));
 
 var elemIds = ["srcDesc", "dstDesc",
@@ -56,6 +58,8 @@ var inputCS = cmsGetColorSpace(inputProfile);
 var outputCS = cmsGetColorSpace(outputProfile);
 var intent = parseFloat(elems.intentSelect.value);
 var isFloat = 1; // TRUE
+var srcProfiles = {};
+var dstProfiles = {};
 
 var diagramParams = {
     'chromaticity':'ciexy',
@@ -199,121 +203,166 @@ function updateDiagramCanvasPoints(canvas, transformXYZ, pixel) {
     drawDiagramPoints(canvas, params, true);
 }
 
+function updateInputProfile(buf) {
+    var arr = new Uint8Array(buf);
+    var size = arr.length;
+    var h = cmsOpenProfileFromMem(arr, size);
+    // console.debug("input:"+h);
+    if (! h) {
+	console.error("not ICC file");
+	return null;
+    }
+    if (inputProfile !== sRGBProfile) {
+	cmsCloseProfile(inputProfile);
+    }
+    inputProfile = h;
+    makeTransform();
+    var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
+    elems.srcDesc.value = text;
+    var cs = cmsGetColorSpace(h);
+    inputCS = cs;
+    colorspaceUpdate();
+    updateDiagramBaseCanvas(srcDiagramBaseCanvas, transformInputXYZ, inputCS);
+    copyCanvas(srcDiagramBaseCanvas, srcCanvas);
+    transformAndUpdate();
+    return text;
+}
+
+function updateOutputProfile(buf) {
+    var arr = new Uint8Array(buf);
+    var size = arr.length;
+    var h = cmsOpenProfileFromMem(arr, size);
+    // console.debug("output:"+h);
+    if (! h) {
+	console.error("not ICC file");
+	return null;
+    }
+    if (outputProfile !== sRGBProfile) {
+	cmsCloseProfile(outputProfile);
+    }
+    outputProfile = h;
+    makeTransform();
+    // console.log("transform:"+transform);
+    var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
+    elems.dstDesc.value = text;
+    var cs = cmsGetColorSpace(h);
+    outputCS = cs;
+    colorspaceUpdate();
+    updateDiagramBaseCanvas(dstDiagramBaseCanvas, transformOutputXYZ, outputCS);
+    copyCanvas(dstDiagramBaseCanvas, dstCanvas);
+    transformAndUpdate();
+    return text;
+}
+
+var transformAndUpdate = function() {
+    // transform src to dst value
+    var srcPixel;
+    if (inputCS === cmsSigGrayData) {
+	var v = elems.srcVRange.value;
+	if (isFloat) {
+	    v /= 255;
+	}
+	srcPixel = [v];
+    } else if (inputCS === cmsSigRgbData) {
+	var r = elems.srcRRange.value;
+	var g = elems.srcGRange.value;
+	var b = elems.srcBRange.value;
+	if (isFloat) {
+	    r /= 255;
+	    g /= 255;
+	    b /= 255;
+	}
+	srcPixel = [r, g, b];
+    } else if (inputCS === cmsSigCmykData) {
+	var cc = elems.srcCRange.value;
+	var mm = elems.srcMRange.value;
+	var yy = elems.srcYRange.value;
+	var kk = elems.srcKRange.value;
+	srcPixel = [cc, mm, yy, kk];
+    } else {
+	console.error("no supported input colorspace:"+inputCS);
+    }
+    var dstPixel = cmsDoTransform(transform, srcPixel, 1);
+    // update dst input value;
+    if (outputCS === cmsSigGrayData) {
+	var [vv] = dstPixel;
+	if (isFloat) {
+	    vv *= 255;
+	}
+	elems.dstVRange.value = vv;
+	// console.debug(elems.dstVText, elems.dstVRange);
+	elems.dstVText.value = elems.dstVRange.value;
+    } else if (outputCS === cmsSigRgbData) {
+	var [rr, gg, bb] = dstPixel;
+	if (isFloat) {
+	    rr *= 255;
+	    gg *= 255;
+	    bb *= 255;
+	}
+	elems.dstRRange.value = rr;
+	elems.dstGRange.value = gg;
+	elems.dstBRange.value = bb;
+	elems.dstRText.value = elems.dstRRange.value;
+	elems.dstGText.value = elems.dstGRange.value;
+	elems.dstBText.value = elems.dstBRange.value;
+    } else if (outputCS === cmsSigCmykData) {
+	var [cc, mm, yy, kk] = dstPixel;
+	elems.dstCRange.value = cc;
+	elems.dstMRange.value = mm;
+	elems.dstYRange.value = yy;
+	elems.dstKRange.value = kk;
+	elems.dstCText.value = elems.dstCRange.value;
+	elems.dstMText.value = elems.dstMRange.value;
+	elems.dstYText.value = elems.dstYRange.value;
+	elems.dstKText.value = elems.dstKRange.value;
+    } else {
+	console.error("no supported output colorspace:"+outputCS);
+    }
+    return [srcPixel, dstPixel];
+}
+
 function main() {
     // console.debug("main");
     dropFunction(srcCanvas, function(buf) {
-	var arr = new Uint8Array(buf);
-	var size = arr.length;
-	var h = cmsOpenProfileFromMem(arr, size);
-	// console.debug("input:"+h);
-	if (! h) {
-	    console.error("not ICC file");
-	    return ;
+	var text = updateInputProfile(buf);
+	if (text) {
+	    if (! srcProfiles[text]) {
+		srcProfiles[text] = buf;
+		var option = document.createElement("option");
+		option.value = text;
+		option.appendChild(document.createTextNode(text));
+		srcSelect.appendChild(option)
+	    }
+	    var options = srcSelect.options;
+	    for (var i = 0, n = options.length ; i < n ; i++) {
+		var option = options[i];
+		if (option.value === text) {
+		    options.selectedIndex = i;
+		    break;
+		}
+	    }
 	}
-	if (inputProfile !== sRGBProfile) {
-	    cmsCloseProfile(inputProfile);
-	}
-	inputProfile = h;
-	makeTransform();
-	var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
-	elems.srcDesc.value = text;
-	var cs = cmsGetColorSpace(h);
-	inputCS = cs;
-	colorspaceUpdate();
-	updateDiagramBaseCanvas(srcDiagramBaseCanvas, transformInputXYZ, inputCS);
-	copyCanvas(srcDiagramBaseCanvas, srcCanvas);
-	transformAndUpdate();
     }, "ArrayBuffer");
     dropFunction(document, function(buf) {
-	var arr = new Uint8Array(buf);
-	var size = arr.length;
-	var h = cmsOpenProfileFromMem(arr, size);
-	// console.debug("output:"+h);
-	if (! h) {
-	    console.error("not ICC file");
-	    return ;
+	var text = updateOutputProfile(buf);
+	if (text) {
+	    if (! dstProfiles[text]) {
+		dstProfiles[text] = buf;
+		var option = document.createElement("option");
+		option.value = text;
+		option.appendChild(document.createTextNode(text));
+		dstSelect.appendChild(option)
+	    }
+	    var options = dstSelect.options;
+	    for (var i = 0, n = options.length ; i < n ; i++) {
+		var option = options[i];
+		if (option.value === text) {
+		    options.selectedIndex = i;
+		    break;
+		}
+	    }
 	}
-	if (outputProfile !== sRGBProfile) {
-	    cmsCloseProfile(outputProfile);
-	}
-	outputProfile = h;
-	makeTransform();
-	// console.log("transform:"+transform);
-	var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
-	elems.dstDesc.value = text;
-	var cs = cmsGetColorSpace(h);
-	outputCS = cs;
-	colorspaceUpdate();
-	updateDiagramBaseCanvas(dstDiagramBaseCanvas, transformOutputXYZ, outputCS);
-	copyCanvas(dstDiagramBaseCanvas, dstCanvas);
-	transformAndUpdate();
     }, "ArrayBuffer");
-    var transformAndUpdate = function() {
-	// transform src to dst value
-	var srcPixel;
-	if (inputCS === cmsSigGrayData) {
-	    var v = elems.srcVRange.value;
-	    if (isFloat) {
-		v /= 255;
-	    }
-	    srcPixel = [v];
-	} else if (inputCS === cmsSigRgbData) {
-	    var r = elems.srcRRange.value;
-	    var g = elems.srcGRange.value;
-	    var b = elems.srcBRange.value;
-	    if (isFloat) {
-		r /= 255;
-		g /= 255;
-		b /= 255;
-	    }
-	    srcPixel = [r, g, b];
-	} else if (inputCS === cmsSigCmykData) {
-	    var cc = elems.srcCRange.value;
-	    var mm = elems.srcMRange.value;
-	    var yy = elems.srcYRange.value;
-	    var kk = elems.srcKRange.value;
-	    srcPixel = [cc, mm, yy, kk];
-	} else {
-	    console.error("no supported input colorspace:"+inputCS);
-	}
-	var dstPixel = cmsDoTransform(transform, srcPixel, 1);
-	// update dst input value;
-	if (outputCS === cmsSigGrayData) {
-	    var [vv] = dstPixel;
-	    if (isFloat) {
-		vv *= 255;
-	    }
-	    elems.dstVRange.value = vv;
-	    // console.debug(elems.dstVText, elems.dstVRange);
-	    elems.dstVText.value = elems.dstVRange.value;
-	} else if (outputCS === cmsSigRgbData) {
-	    var [rr, gg, bb] = dstPixel;
-	    if (isFloat) {
-		rr *= 255;
-		gg *= 255;
-		bb *= 255;
-	    }
-	    elems.dstRRange.value = rr;
-	    elems.dstGRange.value = gg;
-	    elems.dstBRange.value = bb;
-	    elems.dstRText.value = elems.dstRRange.value;
-	    elems.dstGText.value = elems.dstGRange.value;
-	    elems.dstBText.value = elems.dstBRange.value;
-	} else if (outputCS === cmsSigCmykData) {
-	    var [cc, mm, yy, kk] = dstPixel;
-	    elems.dstCRange.value = cc;
-	    elems.dstMRange.value = mm;
-	    elems.dstYRange.value = yy;
-	    elems.dstKRange.value = kk;
-	    elems.dstCText.value = elems.dstCRange.value;
-	    elems.dstMText.value = elems.dstMRange.value;
-	    elems.dstYText.value = elems.dstYRange.value;
-	    elems.dstKText.value = elems.dstKRange.value;
-	} else {
-	    console.error("no supported output colorspace:"+outputCS);
-	}
-	return [srcPixel, dstPixel];
-    }
     bindFunction({"srcRRange":"srcRText",
 		  "srcGRange":"srcGText",
 		  "srcBRange":"srcBText",
@@ -344,4 +393,60 @@ function main() {
 	}
     }
     loadCIEXYZdata(onCIEXYZdata);
+    //
+    var options;
+    options = srcSelect.options
+    for (var i = 0, n = options.length ; i < n ; i++) {
+	var option = options[i];
+	var file = option.value;
+	if (file !== "")  {
+	    var ctx = new function() {
+		this.file = file;
+		this.option = option;
+	    };
+	    loadICCProfile(ctx, function(ctx, buf) {
+		srcProfiles[ctx.file] = buf;
+		ctx.option.disabled = false;
+	    });
+	}
+    }
+    options = dstSelect.options
+    for (var i = 0, n = options.length ; i < n ; i++) {
+	var option = options[i];
+	var file = option.value;
+	if (file !== "")  {
+	    var ctx = new function() {
+		this.file = file;
+		this.option = option;
+	    };
+	    loadICCProfile(ctx, function(ctx, buf) {
+		dstProfiles[ctx.file] = buf;
+		ctx.option.disabled = false;
+	    });
+	}
+    }
+    bindFunction({"srcSelect":null},
+		 function(target,rel) {
+		     var buf = srcProfiles[target.value];
+		     updateInputProfile(buf);
+		 });
+    bindFunction({"dstSelect":null},
+		 function(target,rel) {
+		     var buf = dstProfiles[target.value];
+		     updateOutputProfile(buf);
+		 });
+}
+
+function loadICCProfile(ctx, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+	if (this.readyState === 4) {
+	    callback(this.ctx, this.response);
+	}
+    }
+    xhr.ctx = ctx;
+    xhr.responseType = "arraybuffer";
+    xhr.open("GET", "./icc/"+ctx.file, true); // async:true
+    xhr.send(null);
+    xhr = null;
 }

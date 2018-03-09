@@ -5,6 +5,7 @@
     <title> Little-CMS </title>
     <link rel="stylesheet" href="index.css">
     <style>
+      .colorSpaceSelector { width: 256px; }
       .colorSlider { width: 256px; }
       canvas { background-color:white; }
     </style>
@@ -15,7 +16,18 @@
 	
       </div> <!-- controlPanel -->
       <div style="float:left;">
-	<textarea id="srcDesc" cols="50"> sRGB (default) </textarea> <br />
+        <select id="srcSelect" class="colorSpaceSelector">
+	  <option value="" selected> sRGB (Little-CMS) </option>
+	  <option value="rgb/DisplayP3.icc" disabled="disabled"> Display P3 (Apple) </option>
+	  <option value="rgb/AdobeRGB1998.icc" disabled="disabled"> Adobe RGB 1998 (Adobe)</option>
+	  <option value="rgb/ISO22028-2_ROMM-RGB.icc" disabled="disabled"> ProPhoto RGB, ROMM RGB </option>
+	  <option value="cmyk/JapanColor2001Coated.icc" disabled="disabled"> Japan Color 2001 Coated (Adobe) </option>
+	  <option value="cmyk/JapanColor2011Coated.icc" disabled="disabled"> Japan Color 2011 Coated </option>
+	  <option value="cmyk/USWebCoatedSWOP.icc" disabled="disabled"> U.S. Web Coated (SWOP) v2 </option>
+	  <option value="cmyk/WebCoatedFOGRA28.icc" disabled="disabled"> Web Coated FOGRA28 </option>
+	  <option value="cmyk/UncoatedFOGRA29.icc" disabled="disabled"> Uncoated FOGRA29 </option>
+	</select> <br />
+	<textarea id="srcDesc" cols="50"> sRGB (Little-CMS) </textarea> <br />
 	<canvas id="srcCanvas" class="borderRed" width=320 height=320> srcCanvas </canvas>
 	<canvas id="srcDiagramBaseCanvas" width=320 height=320 style="display: none"> srcDiagramBaseCanvas </canvas>
 	<br />
@@ -43,6 +55,17 @@
 	</div>
       </div>
       <div style="float:left;">
+	<select id="dstSelect" class="colorSpaceSelector">
+	  <option value="" selected> sRGB (Little-CMS) </option>
+	  <option value="rgb/DisplayP3.icc" disabled="disabled"> Display P3 (Apple) </option>
+	  <option value="rgb/AdobeRGB1998.icc" disabled="disabled"> Adobe RGB 1998 (Adobe)</option>
+	  <option value="rgb/ISO22028-2_ROMM-RGB.icc" disabled="disabled"> ProPhoto RGB, ROMM RGB </option>
+	  <option value="cmyk/JapanColor2001Coated.icc" disabled="disabled"> JapanColor2001Coated (Adobe) </option>
+	  <option value="cmyk/JapanColor2011Coated.icc" disabled="disabled"> JapanColor2011Coated </option>
+	  <option value="cmyk/USWebCoatedSWOP.icc" disabled="disabled"> U.S. Web Coated (SWOP) v2 </option>
+	  <option value="cmyk/WebCoatedFOGRA28.icc" disabled="disabled"> Web Coated FOGRA28 </option>
+	  <option value="cmyk/UncoatedFOGRA29.icc" disabled="disabled"> Uncoated FOGRA29 </option>
+	</select> <br />
 	<textarea id="dstDesc" cols="50"> sRGB (default) </textarea> <br />
 	<canvas id="dstCanvas" class="borderBlue" width=320 height=320> dstCanvas </canvas>
 	<canvas id="dstDiagramBaseCanvas" width=320 height=320 style="display: none"> dstDiagramBaseCanvas </canvas>
