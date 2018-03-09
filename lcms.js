@@ -305,26 +305,30 @@ var transformAndUpdate = function() {
     } else if (outputCS === cmsSigRgbData) {
 	var [rr, gg, bb] = dstPixel;
 	if (isFloat) {
-	    rr *= 255;
-	    gg *= 255;
-	    bb *= 255;
+	    rr = Utils.round(rr * 255, 0.01);
+	    gg = Utils.round(gg * 255, 0.01);
+	    bb = Utils.round(bb * 255, 0.01);
 	}
 	elems.dstRRange.value = rr;
 	elems.dstGRange.value = gg;
 	elems.dstBRange.value = bb;
-	elems.dstRText.value = elems.dstRRange.value;
-	elems.dstGText.value = elems.dstGRange.value;
-	elems.dstBText.value = elems.dstBRange.value;
+	elems.dstRText.value = rr;
+	elems.dstGText.value = gg;
+	elems.dstBText.value = bb;
     } else if (outputCS === cmsSigCmykData) {
 	var [cc, mm, yy, kk] = dstPixel;
+	cc = Utils.round(cc, 0.01);
+	mm = Utils.round(mm, 0.01);
+	yy = Utils.round(yy, 0.01);
+	kk = Utils.round(kk, 0.01);
 	elems.dstCRange.value = cc;
 	elems.dstMRange.value = mm;
 	elems.dstYRange.value = yy;
 	elems.dstKRange.value = kk;
-	elems.dstCText.value = elems.dstCRange.value;
-	elems.dstMText.value = elems.dstMRange.value;
-	elems.dstYText.value = elems.dstYRange.value;
-	elems.dstKText.value = elems.dstKRange.value;
+	elems.dstCText.value = cc;
+	elems.dstMText.value = mm;
+	elems.dstYText.value = yy;
+	elems.dstKText.value = kk;
     } else {
 	console.error("no supported output colorspace:"+outputCS);
     }
