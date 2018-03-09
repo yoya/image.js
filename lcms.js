@@ -343,9 +343,29 @@ function updateDialogPoints() {
     updateDiagramPoints(dstCanvas, transformOutputXYZ, dstPixel);
 }
 
+function extractICCData(buf) {
+    var imageClassList = [IO_JPEG, IO_PNG];
+    var iccdata = null;
+    var arr = new Uint8Array(buf);
+    for (var i in imageClassList) {
+	var imgClass = imageClassList[i];
+	if (imgClass.verifySig(arr)) {
+	    console.log(i);
+	    var io = new imgClass();
+	    io.parse(arr);
+	    iccdata = io.getICC();
+	    if (iccdata) {
+		return iccdata.buffer;
+	    }
+	}
+    }
+    return buf;
+}
+
 function main() {
     // console.debug("main");
     dropFunction(srcCanvas, function(buf) {
+	buf = extractICCData(buf);
 	var text = updateInputProfile(buf);
 	updateDialogPoints();
 	if (text) {
@@ -367,6 +387,7 @@ function main() {
 	}
     }, "ArrayBuffer");
     dropFunction(document, function(buf) {
+	buf = extractICCData(buf);
 	var text = updateOutputProfile(buf);
 	updateDialogPoints();
 	if (text) {
