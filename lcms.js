@@ -60,7 +60,8 @@ var isFloat = 1; // TRUE
 var diagramParams = {
     'chromaticity':'ciexy',
     'tristimulus':true,
-    'guide':true
+    'guide':true,
+    'normalize':"distance"
 }
 
 makeTransform();
