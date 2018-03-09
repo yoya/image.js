@@ -35,7 +35,7 @@ var elemIds = ["srcDesc", "dstDesc",
 	       "dstCMYK",
 	       "dstCRange", "dstMRange", "dstYRange", "dstKRange",
 	       "dstCText", "dstMText", "dstYText", "dstKText",
-	       "intentSelect" ];
+	       "intentSelect", "BPCCheckbox" ];
 var elems = {};
 for (var i in elemIds) {
     var id = elemIds[i];
@@ -54,7 +54,7 @@ var transformInputXYZ, transformOutputXYZ;
 var transformInputLab, transformOutputLab;
 var inputCS  = cmsGetColorSpace(inputProfile);
 var outputCS = cmsGetColorSpace(outputProfile);
-var intent = parseFloat(elems.intentSelect.value);
+
 var isFloat = 1; // TRUE
 var srcProfiles = {};
 var dstProfiles = {};
@@ -72,6 +72,8 @@ makeTransform();
 colorspaceUpdate();
 
 function makeTransform() {
+    var intent = parseFloat(elems.intentSelect.value);
+
     var inputFormat  = cmsFormatterForColorspaceOfProfile(inputProfile,
 							  isFloat?0:2,
 							  isFloat);
@@ -85,9 +87,13 @@ function makeTransform() {
 	cmsDeleteTransform(transformInputLab);
 	cmsDeleteTransform(transformOutputLab);
     }
+    var flags = cmsFLAGS_NOCACHE | cmsFLAGS_HIGHRESPRECALC;
+    if (elems.BPCCheckbox.checked) {
+	flags |= cmsFLAGS_BLACKPOINTCOMPENSATION;
+    }
     transform = cmsCreateTransform(inputProfile, inputFormat,
 				   outputProfile, outputFormat,
-				   intent, cmsFLAGS_NOCACHE);
+				   intent, flags);
     // console.debug("inputFormat, outputFormat, transform:", inputFormat, outputFormat, transform);
     // console.debug(inputProfile, inputFormat, outputProfile, outputFormat, transform);
     var XYZFormat = isFloat?TYPE_XYZ_DBL:TYPE_XYZ_16;
@@ -381,9 +387,9 @@ function main() {
 		     updateDiagramCanvasPoints(srcCanvas, transformInputXYZ, srcPixel);
 		     // updateDiagramCanvasPoints(dstCanvas, transformOutputXYZ, dstPixel);
 		 });
-    bindFunction({"intentSelect":null},
+    bindFunction({"intentSelect":null,
+		  "BPCCheckbox":null},
 		 function(target, rel) {
-		     intent = parseFloat(elems.intentSelect.value);
 		     makeTransform();
 		 });
     var onCIEXYZdata = function(name, arr, isDefault) {

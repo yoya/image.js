@@ -54,6 +54,17 @@
 	    <input type="text" id="srcKText" size="6" value="0" />
 	</div>
       </div>
+      <div style="float:left; ">
+        <select id="intentSelect" size="4">
+	  <option value="0" selected> Perceptual </option>
+	  <option value="1"         > Relative Colorimetric </option>
+	  <option value="2"         > Saturation </option>
+	  <option value="3"         > Absolute Colorimetric </option>
+	</select>
+	<div>
+	  BPC:<input id="BPCCheckbox" type="checkbox" checked="checked"/>
+	</div>
+      </div>
       <div style="float:left;">
 	<select id="dstSelect" class="colorSpaceSelector">
 	  <option value="rgb/sRGB_LittleCMS1.icc" selected> sRGB (LittleCMS v1)) </option>
@@ -92,14 +103,6 @@
 	  K:<input type="range" id="dstKRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" disabled="disabled" />
 	    <input type="text" id="dstKText" size="6" value="0" readonly="readonly" /> <br />
 	</div>
-      </div>
-      <div style="float:left; ">
-        <select id="intentSelect" size="4">
-	  <option value="0" selected> Perceptual </option>
-	  <option value="1"         > Relative Colorimetric </option>
-	  <option value="2"         > Saturation </option>
-	  <option value="3"         > Absolute Colorimetric </option>
-	</select>
       </div>
     </div>  <!-- container -->
     
