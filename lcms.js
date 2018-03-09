@@ -197,7 +197,7 @@ function updateDiagramBaseCanvas(canvas, transformXYZ, cs, pixel) {
     drawDiagramPoints(canvas, params, true);
 }
 
-function updateDiagramCanvasPoints(canvas, transformXYZ, pixel) {
+function updateDiagramPoints(canvas, transformXYZ, pixel) {
     var xyz = cmsDoTransform(transformXYZ, pixel, 1);
     var xyY = cmsXYZ2xyY(xyz);
     var params = {
@@ -335,10 +335,19 @@ var transformAndUpdate = function() {
     return [srcPixel, dstPixel];
 }
 
+function updateDialogPoints() {
+    var [srcPixel, dstPixel] = transformAndUpdate();
+    copyCanvas(srcDiagramBaseCanvas, srcCanvas);
+    copyCanvas(dstDiagramBaseCanvas, dstCanvas);
+    updateDiagramPoints(srcCanvas, transformInputXYZ, srcPixel);
+    updateDiagramPoints(dstCanvas, transformOutputXYZ, dstPixel);
+}
+
 function main() {
     // console.debug("main");
     dropFunction(srcCanvas, function(buf) {
 	var text = updateInputProfile(buf);
+	updateDialogPoints();
 	if (text) {
 	    if (! srcProfiles[text]) {
 		srcProfiles[text] = buf;
@@ -359,6 +368,7 @@ function main() {
     }, "ArrayBuffer");
     dropFunction(document, function(buf) {
 	var text = updateOutputProfile(buf);
+	updateDialogPoints();
 	if (text) {
 	    if (! dstProfiles[text]) {
 		dstProfiles[text] = buf;
@@ -385,16 +395,13 @@ function main() {
 		  "srcYRange":"srcYText",
 		  "srcKRange":"srcKText"},
 		 function(target,rel) {
-		     var [srcPixel, dstPixel] = transformAndUpdate();
-		     copyCanvas(srcDiagramBaseCanvas, srcCanvas);
-		     copyCanvas(dstDiagramBaseCanvas, dstCanvas);
-		     updateDiagramCanvasPoints(srcCanvas, transformInputXYZ, srcPixel);
-		     updateDiagramCanvasPoints(dstCanvas, transformOutputXYZ, dstPixel);
+		     updateDialogPoints();
 		 });
     bindFunction({"intentSelect":null,
 		  "BPCCheckbox":null},
 		 function(target, rel) {
 		     makeTransform();
+		     updateDialogPoints();
 		 });
     var onCIEXYZdata = function(name, arr, isDefault) {
 	diagramParams[name] = arr;
@@ -402,8 +409,7 @@ function main() {
 	    diagramParams['cieArr'] = arr;
 	    updateDiagramBaseCanvas(srcDiagramBaseCanvas, transformInputXYZ, inputCS);
 	    updateDiagramBaseCanvas(dstDiagramBaseCanvas, transformOutputXYZ, outputCS);
-	    copyCanvas(srcDiagramBaseCanvas, srcCanvas);
-	    copyCanvas(dstDiagramBaseCanvas, dstCanvas);
+	    updateDialogPoints();
 	}
     }
     loadCIEXYZdata(onCIEXYZdata);
