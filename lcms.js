@@ -470,11 +470,13 @@ function main() {
 		 function(target,rel) {
 		     var buf = srcProfiles[target.value];
 		     updateInputProfile(buf);
+		     updateDialogPoints();
 		 });
     bindFunction({"dstSelect":null},
 		 function(target,rel) {
 		     var buf = dstProfiles[target.value];
 		     updateOutputProfile(buf);
+		     updateDialogPoints();
 		 });
 }
 
