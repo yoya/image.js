@@ -192,8 +192,10 @@ function updateDiagramBaseCanvas(canvas, transformXYZ, cs, pixel) {
 function updateDiagramCanvasPoints(canvas, transformXYZ, pixel) {
     var xyz = cmsDoTransform(transformXYZ, pixel, 1);
     var xyY = cmsXYZ2xyY(xyz);
-    var params = diagramParams;
-    params['drawPoints'] = [{ color:"black", xy:xyY } ];
+    var params = {
+	'chromaticity':'ciexy',
+	'drawPoints': [{ color:"black", xy:xyY } ]
+    };
     drawDiagramPoints(canvas, params, true);
 }
 
