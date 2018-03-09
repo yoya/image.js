@@ -158,14 +158,17 @@ function updateDiagramBaseCanvas(canvas, transformXYZ, cs, pixel) {
 	var rXYZ = cmsDoTransform(transformXYZ, [1, 0, 0], 1);
 	var gXYZ = cmsDoTransform(transformXYZ, [0, 1, 0], 1);
 	var bXYZ = cmsDoTransform(transformXYZ, [0, 0, 1], 1);
+	var wXYZ = cmsDoTransform(transformXYZ, [1, 1, 1], 1);
 	var rxyY = cmsXYZ2xyY(rXYZ);
 	var gxyY = cmsXYZ2xyY(gXYZ);
 	var bxyY = cmsXYZ2xyY(bXYZ);
+	var wxyY = cmsXYZ2xyY(wXYZ);
 	params['tristimulus'] = [ rxyY, gxyY, bxyY ];
 	params['drawPoints'] = [
 	    { color:"red",   xy:rxyY },
 	    { color:"green", xy:gxyY },
 	    { color:"blue",  xy:bxyY },
+	    { color:"white", xy:wxyY },
 	];
     } else if (cs === cmsSigCmykData) {
 	var cXYZ = cmsDoTransform(transformXYZ, [100,   0,   0, 0], 1);
@@ -174,12 +177,14 @@ function updateDiagramBaseCanvas(canvas, transformXYZ, cs, pixel) {
 	var rXYZ = cmsDoTransform(transformXYZ, [  0, 100, 100, 0], 1);
 	var yXYZ = cmsDoTransform(transformXYZ, [  0,   0, 100, 0], 1);
 	var gXYZ = cmsDoTransform(transformXYZ, [100,   0, 100, 0], 1);
+	var wXYZ = cmsDoTransform(transformXYZ, [  0,   0,   0, 0], 1);
 	var cxyY = cmsXYZ2xyY(cXYZ);
 	var bxyY = cmsXYZ2xyY(bXYZ);
 	var mxyY = cmsXYZ2xyY(mXYZ);
 	var rxyY = cmsXYZ2xyY(rXYZ);
 	var yxyY = cmsXYZ2xyY(yXYZ);
 	var gxyY = cmsXYZ2xyY(gXYZ);
+	var wxyY = cmsXYZ2xyY(wXYZ);
 	params['tristimulus'] = [ cxyY, bxyY, mxyY, rxyY , yxyY, gxyY ];
 	params['drawPoints'] = [
 	    { color:"cyan",    xy:cxyY },
@@ -188,6 +193,7 @@ function updateDiagramBaseCanvas(canvas, transformXYZ, cs, pixel) {
 	    { color:"red",     xy:rxyY },
 	    { color:"yellow",  xy:yxyY },
 	    { color:"green",   xy:gxyY },
+	    { color:"white",   xy:wxyY },
 	];
     } else {
 	console.error("no supported colorspace:"+cs);
