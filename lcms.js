@@ -481,7 +481,7 @@ function main() {
 		  "dstYRange":"dstYText",
 		  "dstKRange":"dstKText"},
 		 function(target,rel) {
->		     elems.transformForward.style.display = "none";
+		     elems.transformForward.style.display = "none";
 		     elems.transformInverse.style.display = "block";
 		     inverse = true; // dst => src conversion
 		     updateDiagramSrcDstPoints();
