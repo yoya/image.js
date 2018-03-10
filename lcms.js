@@ -214,6 +214,17 @@ function updateDiagramPoints(canvas, transformXYZ, pixel) {
     drawDiagramPoints(canvas, params, true);
 }
 
+function updateDiagramSrcDstPoints() {
+    var [srcPixel, dstPixel] = transformAndUpdate();
+    if (inverse) {
+	[srcPixel, dstPixel] = [dstPixel, srcPixel];
+    }
+    copyCanvas(srcDiagramBaseCanvas, srcCanvas);
+    copyCanvas(dstDiagramBaseCanvas, dstCanvas);
+    updateDiagramPoints(srcCanvas, transformInputXYZ, srcPixel);
+    updateDiagramPoints(dstCanvas, transformOutputXYZ, dstPixel);
+}
+
 function updateInputProfile(buf) {
     if (buf) {
 	var arr = new Uint8Array(buf);
@@ -384,17 +395,6 @@ var transformAndUpdate = function() {
     return [srcPixel, dstPixel];
 }
 
-function updateDialogPoints() {
-    var [srcPixel, dstPixel] = transformAndUpdate();
-    if (inverse) {
-	[srcPixel, dstPixel] = [dstPixel, srcPixel];
-    }
-    copyCanvas(srcDiagramBaseCanvas, srcCanvas);
-    copyCanvas(dstDiagramBaseCanvas, dstCanvas);
-    updateDiagramPoints(srcCanvas, transformInputXYZ, srcPixel);
-    updateDiagramPoints(dstCanvas, transformOutputXYZ, dstPixel);
-}
-
 function extractICCData(buf) {
     var imageClassList = [IO_JPEG, IO_PNG];
     var iccdata = null;
@@ -419,7 +419,7 @@ function main() {
     dropFunction(srcCanvas, function(buf) {
 	buf = extractICCData(buf);
 	var text = updateInputProfile(buf);
-	updateDialogPoints();
+	updateDiagramSrcDstPoints();
 	if (text) {
 	    if (! srcProfiles[text]) {
 		srcProfiles[text] = buf;
@@ -441,7 +441,7 @@ function main() {
     dropFunction(document, function(buf) {
 	buf = extractICCData(buf);
 	var text = updateOutputProfile(buf);
-	updateDialogPoints();
+	updateDiagramSrcDstPoints();
 	if (text) {
 	    if (! dstProfiles[text]) {
 		dstProfiles[text] = buf;
@@ -471,7 +471,7 @@ function main() {
 		     elems.transformForward.style.display = "block";
 		     elems.transformInverse.style.display = "none";
 		     inverse = false; // src => dst conversion
-		     updateDialogPoints();
+		     updateDiagramSrcDstPoints();
 		 });
     bindFunction({"dstRRange":"dstRText",
 		  "dstGRange":"dstGText",
@@ -481,16 +481,16 @@ function main() {
 		  "dstYRange":"dstYText",
 		  "dstKRange":"dstKText"},
 		 function(target,rel) {
-		     elems.transformForward.style.display = "none";
+>		     elems.transformForward.style.display = "none";
 		     elems.transformInverse.style.display = "block";
 		     inverse = true; // dst => src conversion
-		     updateDialogPoints();
+		     updateDiagramSrcDstPoints();
 		 });
     bindFunction({"intentSelect":null,
 		  "BPCCheckbox":null},
 		 function(target, rel) {
 		     makeTransform();
-		     updateDialogPoints();
+		     updateDiagramSrcDstPoints();
 		 });
     var onCIEXYZdata = function(name, arr, isDefault) {
 	diagramParams[name] = arr;
@@ -498,7 +498,7 @@ function main() {
 	    diagramParams['cieArr'] = arr;
 	    updateDiagramBaseCanvas(srcDiagramBaseCanvas, transformInputXYZ, inputCS);
 	    updateDiagramBaseCanvas(dstDiagramBaseCanvas, transformOutputXYZ, outputCS);
-	    updateDialogPoints();
+	    updateDiagramSrcDstPoints();
 	}
     }
     loadCIEXYZdata(onCIEXYZdata);
@@ -518,7 +518,7 @@ function main() {
 		ctx.option.disabled = false;
 		if (ctx.file === options[0].value) {
 		    updateInputProfile(buf);
-		    updateDialogPoints();
+		    updateDiagramSrcDstPoints();
 		}
 	    });
 	}
@@ -537,7 +537,7 @@ function main() {
 		ctx.option.disabled = false;
 		if (ctx.file === options[0].value) {
 		    updateOutputProfile(buf);
-		    updateDialogPoints();
+		    updateDiagramSrcDstPoints();
 		}
 	    });
 	}
@@ -546,13 +546,13 @@ function main() {
 		 function(target,rel) {
 		     var buf = srcProfiles[target.value];
 		     updateInputProfile(buf);
-		     updateDialogPoints();
+		     updateDiagramSrcDstPoints();
 		 });
     bindFunction({"dstSelect":null},
 		 function(target,rel) {
 		     var buf = dstProfiles[target.value];
 		     updateOutputProfile(buf);
-		     updateDialogPoints();
+		     updateDiagramSrcDstPoints();
 		 });
 }
 
