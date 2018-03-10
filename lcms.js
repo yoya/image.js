@@ -153,13 +153,14 @@ function updateDiagramBaseCanvas(canvas, transformXYZ, cs, pixel) {
     var params = diagramParams;
     params['caption'] = null;
     params['tristimulus'] = null;
+    var vMax = isFloat?1:255;
     if (cs === cmsSigGrayData) {
 	params['drawPoints'] = [];
     } else if (cs === cmsSigRgbData) {
-	var rXYZ = cmsDoTransform(transformXYZ, [1, 0, 0], 1);
-	var gXYZ = cmsDoTransform(transformXYZ, [0, 1, 0], 1);
-	var bXYZ = cmsDoTransform(transformXYZ, [0, 0, 1], 1);
-	var wXYZ = cmsDoTransform(transformXYZ, [1, 1, 1], 1);
+	var rXYZ = cmsDoTransform(transformXYZ, [vMax,    0,   0], 1);
+	var gXYZ = cmsDoTransform(transformXYZ, [  0,  vMax,   0], 1);
+	var bXYZ = cmsDoTransform(transformXYZ, [  0,     0, vMax], 1);
+	var wXYZ = cmsDoTransform(transformXYZ, [vMax, vMax, vMax], 1);
 	var rxyY = cmsXYZ2xyY(rXYZ);
 	var gxyY = cmsXYZ2xyY(gXYZ);
 	var bxyY = cmsXYZ2xyY(bXYZ);
