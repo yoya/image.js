@@ -67,13 +67,15 @@ var diagramParams = {
 }
 
 makeTransform();
-// console.debug("transform, transform(Input|Output)XYZ, transform(Input|Output)Lab", transform, transformInputXYZ,transformOutputXYZ, transformInputLab, transformOutputLab);
 
-colorspaceUpdate();
+colorSliderUpdate();
 
 function makeTransform() {
     var intent = parseFloat(elems.intentSelect.value);
-
+    var flags = cmsFLAGS_NOCACHE | cmsFLAGS_HIGHRESPRECALC;
+    if (elems.BPCCheckbox.checked) {
+	flags |= cmsFLAGS_BLACKPOINTCOMPENSATION;
+    }
     var inputFormat  = cmsFormatterForColorspaceOfProfile(inputProfile,
 							  isFloat?0:2,
 							  isFloat);
@@ -87,15 +89,9 @@ function makeTransform() {
 	cmsDeleteTransform(transformInputLab);
 	cmsDeleteTransform(transformOutputLab);
     }
-    var flags = cmsFLAGS_NOCACHE | cmsFLAGS_HIGHRESPRECALC;
-    if (elems.BPCCheckbox.checked) {
-	flags |= cmsFLAGS_BLACKPOINTCOMPENSATION;
-    }
     transform = cmsCreateTransform(inputProfile, inputFormat,
 				   outputProfile, outputFormat,
 				   intent, flags);
-    // console.debug("inputFormat, outputFormat, transform:", inputFormat, outputFormat, transform);
-    // console.debug(inputProfile, inputFormat, outputProfile, outputFormat, transform);
     var XYZFormat = isFloat?TYPE_XYZ_DBL:TYPE_XYZ_16;
     var labFormat = isFloat?TYPE_Lab_DBL:TYPE_Lab_16;
     transformInputXYZ = cmsCreateTransform(inputProfile, inputFormat,
@@ -112,7 +108,7 @@ function makeTransform() {
 					    intent, cmsFLAGS_NOCACHE);
 }
 
-function colorspaceUpdate() {
+function colorSliderUpdate() {
     var cs;
     cs = inputCS;
     elems.srcGray.style.display = "none";
