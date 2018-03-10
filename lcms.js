@@ -166,10 +166,10 @@ function updateDiagramBaseCanvas(canvas, transformXYZ, cs, pixel) {
 	var wxyY = cmsXYZ2xyY(wXYZ);
 	params['tristimulus'] = [ rxyY, gxyY, bxyY ];
 	params['drawPoints'] = [
-	    { stroke:"#F88", fill:"#F00", xy:rxyY },
-	    { stroke:"#8F8", fill:"#0F0", xy:gxyY },
-	    { stroke:"#88F", fill:"#00F", xy:bxyY },
-	    { stroke:"#FFF", fill:"#CCC", xy:wxyY },
+	    { stroke:"#A00F", fill:"#F008", xy:rxyY },
+	    { stroke:"#0A0F", fill:"#0F08", xy:gxyY },
+	    { stroke:"#00AF", fill:"#00F8", xy:bxyY },
+	    { stroke:"#FFFF", fill:"#CCC8", xy:wxyY },
 	];
     } else if (cs === cmsSigCmykData) {
 	var cXYZ = cmsDoTransform(transformXYZ, [100,   0,   0, 0], 1);
@@ -188,13 +188,13 @@ function updateDiagramBaseCanvas(canvas, transformXYZ, cs, pixel) {
 	var wxyY = cmsXYZ2xyY(wXYZ);
 	params['tristimulus'] = [ cxyY, bxyY, mxyY, rxyY , yxyY, gxyY ];
 	params['drawPoints'] = [
-	    { stroke:"#8FF", fill:"#0FF", xy:cxyY },
-	    { stroke:"#88F", fill:"#00F", xy:bxyY },
-	    { stroke:"#F8F", fill:"#F0F", xy:mxyY },
-	    { stroke:"#F88", fill:"#F00", xy:rxyY },
-	    { stroke:"#8F8", fill:"#0F0", xy:gxyY },
-	    { stroke:"#FF8", fill:"#FF0", xy:yxyY },
-	    { stroke:"#FFF", fill:"#CCC", xy:wxyY },
+	    { stroke:"#088F", fill:"#0FF8", xy:cxyY },
+	    { stroke:"#00AF", fill:"#00F8", xy:bxyY },
+	    { stroke:"#808F", fill:"#F0F8", xy:mxyY },
+	    { stroke:"#A00F", fill:"#F008", xy:rxyY },
+	    { stroke:"#880F", fill:"#FF08", xy:yxyY },
+	    { stroke:"#0A0F", fill:"#0F08", xy:gxyY },
+	    { stroke:"#FFFF", fill:"#CCC8", xy:wxyY },
 	];
     } else {
 	console.error("no supported colorspace:"+cs);
@@ -208,7 +208,7 @@ function updateDiagramPoints(canvas, transformXYZ, pixel) {
     var xyY = cmsXYZ2xyY(xyz);
     var params = {
 	'chromaticity':'ciexy',
-	'drawPoints': [{ stroke:"black", fill:"gray", xy:xyY } ]
+	'drawPoints': [{ stroke:"#00F", fill:"#8888", xy:xyY } ]
     };
     drawDiagramPoints(canvas, params, true);
 }
