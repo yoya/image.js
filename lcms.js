@@ -512,6 +512,7 @@ function main() {
 		ctx.option.disabled = false;
 		if (ctx.file === options[0].value) {
 		    updateInputProfile(buf);
+		    updateDialogPoints();
 		}
 	    });
 	}
@@ -530,6 +531,7 @@ function main() {
 		ctx.option.disabled = false;
 		if (ctx.file === options[0].value) {
 		    updateOutputProfile(buf);
+		    updateDialogPoints();
 		}
 	    });
 	}
