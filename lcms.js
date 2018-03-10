@@ -138,6 +138,9 @@ function colorSliderUpdate() {
 }
 
 function updateDiagramBaseCanvas(canvas, transformXYZ, cs, pixel) {
+    if (! diagramParams['cieArr']) {
+	return ;
+    }
     canvas.width = canvas.width; // clear canvas
     var params = diagramParams;
     params['caption'] = null;
