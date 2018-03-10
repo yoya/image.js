@@ -67,7 +67,6 @@ var diagramParams = {
 }
 
 makeTransform();
-
 colorSliderUpdate();
 
 function makeTransform() {
@@ -224,7 +223,7 @@ function updateInputProfile(buf) {
     var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
     elems.srcDesc.value = text;
     inputCS = cmsGetColorSpace(h);
-    colorspaceUpdate();
+    colorSliderUpdate();
     updateDiagramBaseCanvas(srcDiagramBaseCanvas, transformInputXYZ, inputCS);
     copyCanvas(srcDiagramBaseCanvas, srcCanvas);
     transformAndUpdate();
@@ -253,7 +252,7 @@ function updateOutputProfile(buf) {
     var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
     elems.dstDesc.value = text;
     outputCS = cmsGetColorSpace(h);
-    colorspaceUpdate();
+    colorSliderUpdate();
     updateDiagramBaseCanvas(dstDiagramBaseCanvas, transformOutputXYZ, outputCS);
     copyCanvas(dstDiagramBaseCanvas, dstCanvas);
     transformAndUpdate();
@@ -444,6 +443,9 @@ function main() {
 	    loadICCProfile(ctx, function(ctx, buf) {
 		srcProfiles[ctx.file] = buf;
 		ctx.option.disabled = false;
+		if (ctx.file === options[0].value) {
+		    updateInputProfile(buf);
+		}
 	    });
 	}
     }
@@ -459,6 +461,9 @@ function main() {
 	    loadICCProfile(ctx, function(ctx, buf) {
 		dstProfiles[ctx.file] = buf;
 		ctx.option.disabled = false;
+		if (ctx.file === options[0].value) {
+		    updateOutputProfile(buf);
+		}
 	    });
 	}
     }
