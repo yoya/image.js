@@ -35,7 +35,8 @@ var elemIds = ["srcDesc", "dstDesc",
 	       "dstCMYK",
 	       "dstCRange", "dstMRange", "dstYRange", "dstKRange",
 	       "dstCText", "dstMText", "dstYText", "dstKText",
-	       "intentSelect", "BPCCheckbox" ];
+	       "intentSelect", "BPCCheckbox",
+	       "transformForward", "transformInverse"];
 var elems = {};
 for (var i in elemIds) {
     var id = elemIds[i];
@@ -466,6 +467,8 @@ function main() {
 		  "srcYRange":"srcYText",
 		  "srcKRange":"srcKText"},
 		 function(target,rel) {
+		     elems.transformForward.style.display = "block";
+		     elems.transformInverse.style.display = "none";
 		     inverse = false; // src => dst conversion
 		     updateDialogPoints();
 		 });
@@ -477,6 +480,8 @@ function main() {
 		  "dstYRange":"dstYText",
 		  "dstKRange":"dstKText"},
 		 function(target,rel) {
+		     elems.transformForward.style.display = "none";
+		     elems.transformInverse.style.display = "block";
 		     inverse = true; // dst => src conversion
 		     updateDialogPoints();
 		 });
