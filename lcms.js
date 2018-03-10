@@ -49,7 +49,8 @@ var outputProfile = sRGBProfile;
 var XYZProfile = cmsCreateXYZProfile()
 var LabProfile = cmsCreateLab4Profile(0); // NULL
 
-var transform = 0;
+var transform = 0;    // input => output convertion
+var transformInverse; // output => input
 var transformInputXYZ, transformOutputXYZ;
 var transformInputLab, transformOutputLab;
 var inputCS  = cmsGetColorSpace(inputProfile);
@@ -58,6 +59,8 @@ var outputCS = cmsGetColorSpace(outputProfile);
 var isFloat = 1; // TRUE
 var srcProfiles = {};
 var dstProfiles = {};
+
+var inverse = false; // false: src=>dst conversion, true: dst=>src
 
 var diagramParams = {
     'chromaticity':'ciexy',
@@ -83,6 +86,7 @@ function makeTransform() {
 							  isFloat);
     if (transform) {
 	cmsDeleteTransform(transform);
+	cmsDeleteTransform(transformInverse);
 	cmsDeleteTransform(transformInputXYZ);
 	cmsDeleteTransform(transformOutputXYZ);
 	cmsDeleteTransform(transformInputLab);
@@ -91,6 +95,9 @@ function makeTransform() {
     transform = cmsCreateTransform(inputProfile, inputFormat,
 				   outputProfile, outputFormat,
 				   intent, flags);
+    transformInverse = cmsCreateTransform(outputProfile, outputFormat,
+					  inputProfile, inputFormat,
+					  intent, flags);
     var XYZFormat = isFloat?TYPE_XYZ_DBL:TYPE_XYZ_16;
     var labFormat = isFloat?TYPE_Lab_DBL:TYPE_Lab_16;
     transformInputXYZ = cmsCreateTransform(inputProfile, inputFormat,
@@ -265,76 +272,121 @@ function updateOutputProfile(buf) {
 var transformAndUpdate = function() {
     // transform src to dst value
     var srcPixel;
-    if (inputCS === cmsSigGrayData) {
-	var v = elems.srcVRange.value;
+    var cs = (! inverse)?inputCS:outputCS;
+    var srcRRange, srcGRange, srcBRange;
+    var srcCRange, srcMRange, srcYRange, srcKRange;
+    var dstRRange, dstGRange, dstBRange;
+    var dstCRange, dstMRange, dstYRange, dstKRange;
+    if (! inverse) {
+	srcRRange = elems.srcRRange;
+	srcGRange = elems.srcGRange;
+	srcBRange = elems.srcBRange;
+	srcCRange = elems.srcCRange;
+	srcMRange = elems.srcMRange;
+	srcYRange = elems.srcYRange;
+	srcKRange = elems.srcKRange;
+	dstRRange = elems.dstRRange;
+	dstGRange = elems.dstGRange;
+	dstBRange = elems.dstBRange;
+	dstCRange = elems.dstCRange;
+	dstMRange = elems.dstMRange;
+	dstYRange = elems.dstYRange;
+	dstKRange = elems.dstKRange;
+    } else {
+	srcRRange = elems.dstRRange;
+	srcGRange = elems.dstGRange;
+	srcBRange = elems.dstBRange;
+	srcCRange = elems.dstCRange;
+	srcMRange = elems.dstMRange;
+	srcYRange = elems.dstYRange;
+	srcKRange = elems.dstKRange;
+	dstRRange = elems.srcRRange;
+	dstGRange = elems.srcGRange;
+	dstBRange = elems.srcBRange;
+	dstCRange = elems.srcCRange;
+	dstMRange = elems.srcMRange;
+	dstYRange = elems.srcYRange;
+	dstKRange = elems.srcKRange;
+    }
+
+    if (cs === cmsSigGrayData) {
+	var v = srcVRange.value;
 	if (isFloat) {
 	    v /= 255;
 	}
 	srcPixel = [v];
-    } else if (inputCS === cmsSigRgbData) {
-	var r = elems.srcRRange.value;
-	var g = elems.srcGRange.value;
-	var b = elems.srcBRange.value;
+    } else if (cs === cmsSigRgbData) {
+	var r = srcRRange.value;
+	var g = srcGRange.value;
+	var b = srcBRange.value;
 	if (isFloat) {
 	    r /= 255;
 	    g /= 255;
 	    b /= 255;
 	}
 	srcPixel = [r, g, b];
-    } else if (inputCS === cmsSigCmykData) {
-	var cc = elems.srcCRange.value;
-	var mm = elems.srcMRange.value;
-	var yy = elems.srcYRange.value;
-	var kk = elems.srcKRange.value;
+    } else if (cs === cmsSigCmykData) {
+	var cc = srcCRange.value;
+	var mm = srcMRange.value;
+	var yy = srcYRange.value;
+	var kk = srcKRange.value;
 	srcPixel = [cc, mm, yy, kk];
     } else {
-	console.error("no supported input colorspace:"+inputCS);
+	console.error("no supported input? colorspace:"+cs);
     }
-    var dstPixel = cmsDoTransform(transform, srcPixel, 1);
+    if (! inverse) {
+	var dstPixel = cmsDoTransform(transform, srcPixel, 1);
+    } else {
+	var dstPixel = cmsDoTransform(transformInverse, srcPixel, 1);
+    }
     // update dst input value;
-    if (outputCS === cmsSigGrayData) {
+    var cs = (! inverse)?outputCS:inputCS;
+    if (cs === cmsSigGrayData) {
 	var [vv] = dstPixel;
 	if (isFloat) {
 	    vv *= 255;
 	}
-	elems.dstVRange.value = vv;
-	// console.debug(elems.dstVText, elems.dstVRange);
-	elems.dstVText.value = elems.dstVRange.value;
-    } else if (outputCS === cmsSigRgbData) {
+	dstVRange.value = vv;
+	// console.debug(dstVText, dstVRange);
+	dstVText.value = dstVRange.value;
+    } else if (cs === cmsSigRgbData) {
 	var [rr, gg, bb] = dstPixel;
 	if (isFloat) {
 	    rr = Utils.round(rr * 255, 0.01);
 	    gg = Utils.round(gg * 255, 0.01);
 	    bb = Utils.round(bb * 255, 0.01);
 	}
-	elems.dstRRange.value = rr;
-	elems.dstGRange.value = gg;
-	elems.dstBRange.value = bb;
-	elems.dstRText.value = rr;
-	elems.dstGText.value = gg;
-	elems.dstBText.value = bb;
-    } else if (outputCS === cmsSigCmykData) {
+	dstRRange.value = rr;
+	dstGRange.value = gg;
+	dstBRange.value = bb;
+	dstRText.value = rr;
+	dstGText.value = gg;
+	dstBText.value = bb;
+    } else if (cs === cmsSigCmykData) {
 	var [cc, mm, yy, kk] = dstPixel;
 	cc = Utils.round(cc, 0.01);
 	mm = Utils.round(mm, 0.01);
 	yy = Utils.round(yy, 0.01);
 	kk = Utils.round(kk, 0.01);
-	elems.dstCRange.value = cc;
-	elems.dstMRange.value = mm;
-	elems.dstYRange.value = yy;
-	elems.dstKRange.value = kk;
-	elems.dstCText.value = cc;
-	elems.dstMText.value = mm;
-	elems.dstYText.value = yy;
-	elems.dstKText.value = kk;
+	dstCRange.value = cc;
+	dstMRange.value = mm;
+	dstYRange.value = yy;
+	dstKRange.value = kk;
+	dstCText.value = cc;
+	dstMText.value = mm;
+	dstYText.value = yy;
+	dstKText.value = kk;
     } else {
-	console.error("no supported output colorspace:"+outputCS);
+	console.error("no supported output? colorspace:"+cs);
     }
     return [srcPixel, dstPixel];
 }
 
 function updateDialogPoints() {
     var [srcPixel, dstPixel] = transformAndUpdate();
+    if (inverse) {
+	[srcPixel, dstPixel] = [dstPixel, srcPixel];
+    }
     copyCanvas(srcDiagramBaseCanvas, srcCanvas);
     copyCanvas(dstDiagramBaseCanvas, dstCanvas);
     updateDiagramPoints(srcCanvas, transformInputXYZ, srcPixel);
@@ -414,6 +466,18 @@ function main() {
 		  "srcYRange":"srcYText",
 		  "srcKRange":"srcKText"},
 		 function(target,rel) {
+		     inverse = false; // src => dst conversion
+		     updateDialogPoints();
+		 });
+    bindFunction({"dstRRange":"dstRText",
+		  "dstGRange":"dstGText",
+		  "dstBRange":"dstBText",
+		  "dstCRange":"dstCText",
+		  "dstMRange":"dstMText",
+		  "dstYRange":"dstYText",
+		  "dstKRange":"dstKText"},
+		 function(target,rel) {
+		     inverse = true; // dst => src conversion
 		     updateDialogPoints();
 		 });
     bindFunction({"intentSelect":null,
