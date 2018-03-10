@@ -235,9 +235,9 @@ function drawCurveGraph(canvas, caption, data, color) {
     for (var i = 0 ; i <= 10 ; i++) {
 	var xy = i * width / 10;
 	if (i%5 === 0){
-	    ctx.strokeStyle= "gray";
-	} else {
 	    ctx.strokeStyle= "lightgray";
+	} else {
+	    ctx.strokeStyle= "gray";
 	}
 	ctx.beginPath();
 	ctx.moveTo(0, xy);
@@ -285,9 +285,9 @@ function drawParaCurveGraph(canvas, caption, data, color) {
     for (var i = 0 ; i <= 10 ; i++) {
 	var xy = i * width / 10;
 	if (i%5 === 0){
-	    ctx.strokeStyle= "gray";
-	} else {
 	    ctx.strokeStyle= "lightgray";
+	} else {
+	    ctx.strokeStyle= "gray";
 	}
 	ctx.beginPath();
 	ctx.moveTo(0, xy);
