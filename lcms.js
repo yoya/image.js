@@ -71,7 +71,7 @@ var diagramParams = {
 }
 
 makeTransform();
-colorSliderUpdate();
+updateSliderDisplay();
 
 function makeTransform() {
     var intent = parseFloat(elems.intentSelect.value);
@@ -115,7 +115,7 @@ function makeTransform() {
 					    intent, cmsFLAGS_NOCACHE);
 }
 
-function colorSliderUpdate() {
+function updateSliderDisplay() {
     var cs;
     cs = inputCS;
     elems.srcGray.style.display = "none";
@@ -216,9 +216,6 @@ function updateDiagramPoints(canvas, transformXYZ, pixel) {
 
 function updateDiagramSrcDstPoints() {
     var [srcPixel, dstPixel] = transformAndUpdate();
-    if (inverse) {
-	[srcPixel, dstPixel] = [dstPixel, srcPixel];
-    }
     copyCanvas(srcDiagramBaseCanvas, srcCanvas);
     copyCanvas(dstDiagramBaseCanvas, dstCanvas);
     updateDiagramPoints(srcCanvas, transformInputXYZ, srcPixel);
@@ -246,10 +243,9 @@ function updateInputProfile(buf) {
     var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
     elems.srcDesc.value = text;
     inputCS = cmsGetColorSpace(h);
-    colorSliderUpdate();
+    updateSliderDisplay();
     updateDiagramBaseCanvas(srcDiagramBaseCanvas, transformInputXYZ, inputCS);
-    copyCanvas(srcDiagramBaseCanvas, srcCanvas);
-    transformAndUpdate();
+    updateDiagramSrcDstPoints();
     return text;
 }
 
@@ -275,10 +271,9 @@ function updateOutputProfile(buf) {
     var text = cmsGetProfileInfoASCII(h, cmsInfoDescription, "en", "US");
     elems.dstDesc.value = text;
     outputCS = cmsGetColorSpace(h);
-    colorSliderUpdate();
+    updateSliderDisplay();
     updateDiagramBaseCanvas(dstDiagramBaseCanvas, transformOutputXYZ, outputCS);
-    copyCanvas(dstDiagramBaseCanvas, dstCanvas);
-    transformAndUpdate();
+    updateDiagramSrcDstPoints();
     return text;
 }
 
@@ -392,7 +387,11 @@ var transformAndUpdate = function() {
     } else {
 	console.error("no supported output? colorspace:"+cs);
     }
-    return [srcPixel, dstPixel];
+    if (! inverse) {
+	return [srcPixel, dstPixel];
+    } else {
+	return [dstPixel, srcPixel];
+    }
 }
 
 function extractICCData(buf) {
