@@ -514,6 +514,7 @@ function main() {
 		srcProfiles[ctx.file] = buf;
 		ctx.option.disabled = false;
 		if (ctx.file === options[0].value) {
+		    updateSelectIndex(srcSelect, ctx.file);
 		    updateInputProfile(buf);
 		    updateDiagramSrcDstPoints();
 		}
@@ -532,7 +533,8 @@ function main() {
 	    loadICCProfile(ctx, function(ctx, buf) {
 		dstProfiles[ctx.file] = buf;
 		ctx.option.disabled = false;
-		if (ctx.file === options[0].value) {
+		if (ctx.file === options[5].value) { // 5:JapanColorCoated2011
+		    updateSelectIndex(dstSelect, ctx.file);
 		    updateOutputProfile(buf);
 		    updateDiagramSrcDstPoints();
 		}
