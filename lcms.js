@@ -413,6 +413,24 @@ function extractICCData(buf) {
     return buf;
 }
 
+function updateSelectIndex(select, value) {
+    var options = select.options;
+    for (var i = 0, n = options.length ; i < n ; i++) {
+	var option = options[i];
+	if (option.value === value) {
+	    options.selectedIndex = i;
+	    break;
+	}
+    }
+}
+
+function addSelectItem(select, value, text) {
+    var option = document.createElement("option");
+    option.value = value;
+    option.appendChild(document.createTextNode(text?text:value));
+    select.appendChild(option);
+}
+
 function main() {
     // console.debug("main");
     dropFunction(srcCanvas, function(buf) {
@@ -422,19 +440,9 @@ function main() {
 	if (text) {
 	    if (! srcProfiles[text]) {
 		srcProfiles[text] = buf;
-		var option = document.createElement("option");
-		option.value = text;
-		option.appendChild(document.createTextNode(text));
-		srcSelect.appendChild(option)
+		addSelectItem(srcSelect, text, text+"hoge");
 	    }
-	    var options = srcSelect.options;
-	    for (var i = 0, n = options.length ; i < n ; i++) {
-		var option = options[i];
-		if (option.value === text) {
-		    options.selectedIndex = i;
-		    break;
-		}
-	    }
+	    updateSelectIndex(srcSelect, text);
 	}
     }, "ArrayBuffer");
     dropFunction(document, function(buf) {
@@ -444,19 +452,9 @@ function main() {
 	if (text) {
 	    if (! dstProfiles[text]) {
 		dstProfiles[text] = buf;
-		var option = document.createElement("option");
-		option.value = text;
-		option.appendChild(document.createTextNode(text));
-		dstSelect.appendChild(option)
+		addSelectItem(dstSelect, text, text+"hoge");
 	    }
-	    var options = dstSelect.options;
-	    for (var i = 0, n = options.length ; i < n ; i++) {
-		var option = options[i];
-		if (option.value === text) {
-		    options.selectedIndex = i;
-		    break;
-		}
-	    }
+	    updateSelectIndex(dstSelect, text);
 	}
     }, "ArrayBuffer");
     bindFunction({"srcRRange":"srcRText",
