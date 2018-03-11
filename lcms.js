@@ -531,39 +531,31 @@ function main() {
     }
     loadCIEXYZdata(onCIEXYZdata);
     //
-    var options;
-    options = srcSelect.options
+    var options = srcSelect.options;
+    var dstOptions = dstSelect.options;
     for (var i = 0, n = options.length ; i < n ; i++) {
 	var option = options[i];
 	var file = option.value;
+	var text = option.firstChild.textContent;
+	addSelectItem(dstSelect, file, text);
+	var dstOption = dstOptions[i];
 	if (file !== "")  {
 	    var ctx = new function() {
 		this.file = file;
 		this.option = option;
+		this.dstOption = dstOption;
 	    };
 	    loadICCProfile(ctx, function(ctx, buf) {
 		srcProfiles[ctx.file] = buf;
+		dstProfiles[ctx.file] = buf;
 		ctx.option.disabled = false;
+		ctx.dstOption.disabled = false;
 		if (ctx.file === options[0].value) {
 		    updateSelectIndex(srcSelect, ctx.file);
 		    updateInputProfile(buf);
 		    updateDiagramSrcDstPoints();
+
 		}
-	    });
-	}
-    }
-    options = dstSelect.options
-    for (var i = 0, n = options.length ; i < n ; i++) {
-	var option = options[i];
-	var file = option.value;
-	if (file !== "")  {
-	    var ctx = new function() {
-		this.file = file;
-		this.option = option;
-	    };
-	    loadICCProfile(ctx, function(ctx, buf) {
-		dstProfiles[ctx.file] = buf;
-		ctx.option.disabled = false;
 		if (ctx.file === options[5].value) { // 5:JapanColorCoated2011
 		    updateSelectIndex(dstSelect, ctx.file);
 		    updateOutputProfile(buf);
