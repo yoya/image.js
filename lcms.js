@@ -350,21 +350,21 @@ var transformAndUpdate = function() {
     }
 
     if (cs === cmsSigGrayData) {
-	var v = srcVRange.value;
+	var vv = srcVRange.value;
 	if (isFloat) {
-	    v /= 255;
+	    vv /= 255;
 	}
 	srcPixel = [v];
     } else if (cs === cmsSigRgbData) {
-	var r = srcRRange.value;
-	var g = srcGRange.value;
-	var b = srcBRange.value;
+	var rr = srcRRange.value;
+	var gg = srcGRange.value;
+	var bb = srcBRange.value;
 	if (isFloat) {
-	    r /= 255;
-	    g /= 255;
-	    b /= 255;
+	    rr /= 255;
+	    gg /= 255;
+	    bb /= 255;
 	}
-	srcPixel = [r, g, b];
+	srcPixel = [rr, gg, bb];
     } else if (cs === cmsSigCmykData) {
 	var cc = srcCRange.value;
 	var mm = srcMRange.value;
@@ -384,10 +384,9 @@ var transformAndUpdate = function() {
     if (cs === cmsSigGrayData) {
 	var [vv] = dstPixel;
 	if (isFloat) {
-	    vv *= 255;
+	    vv = Utils.round(vv * 255, 0.01);
 	}
 	dstVRange.value = vv;
-	// console.debug(dstVText, dstVRange);
 	dstVText.value = dstVRange.value;
     } else if (cs === cmsSigRgbData) {
 	var [rr, gg, bb] = dstPixel;
