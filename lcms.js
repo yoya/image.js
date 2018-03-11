@@ -283,8 +283,12 @@ var transformAndUpdate = function() {
     var cs = (! inverse)?inputCS:outputCS;
     var srcRRange, srcGRange, srcBRange;
     var srcCRange, srcMRange, srcYRange, srcKRange;
+    var srcRText, srcGText, srcBText;
+    var srcCText, srcMText, srcYText, srcKText;
     var dstRRange, dstGRange, dstBRange;
     var dstCRange, dstMRange, dstYRange, dstKRange;
+    var dstRText, dstGText, dstBText;
+    var dstCText, dstMText, dstYText, dstKText;
     if (! inverse) {
 	srcRRange = elems.srcRRange;
 	srcGRange = elems.srcGRange;
@@ -300,6 +304,20 @@ var transformAndUpdate = function() {
 	dstMRange = elems.dstMRange;
 	dstYRange = elems.dstYRange;
 	dstKRange = elems.dstKRange;
+	srcRText = elems.srcRText;
+	srcGText = elems.srcGText;
+	srcBText = elems.srcBText;
+	srcCText = elems.srcCText;
+	srcMText = elems.srcMText;
+	srcYText = elems.srcYText;
+	srcKText = elems.srcKText;
+	dstRText = elems.dstRText;
+	dstGText = elems.dstGText;
+	dstBText = elems.dstBText;
+	dstCText = elems.dstCText;
+	dstMText = elems.dstMText;
+	dstYText = elems.dstYText;
+	dstKText = elems.dstKText;
     } else {
 	srcRRange = elems.dstRRange;
 	srcGRange = elems.dstGRange;
@@ -315,6 +333,20 @@ var transformAndUpdate = function() {
 	dstMRange = elems.srcMRange;
 	dstYRange = elems.srcYRange;
 	dstKRange = elems.srcKRange;
+	srcRText = elems.dstRText;
+	srcGText = elems.dstGText;
+	srcBText = elems.dstBText;
+	srcCText = elems.dstCText;
+	srcMText = elems.dstMText;
+	srcYText = elems.dstYText;
+	srcKText = elems.dstKText;
+	dstRText = elems.srcRText;
+	dstGText = elems.srcGText;
+	dstBText = elems.srcBText;
+	dstCText = elems.srcCText;
+	dstMText = elems.srcMText;
+	dstYText = elems.srcYText;
+	dstKText = elems.srcKText;
     }
 
     if (cs === cmsSigGrayData) {
