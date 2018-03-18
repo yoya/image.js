@@ -60,11 +60,11 @@ function matrixMultiply(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Wind
     }
     var dstMatrix = [];
     var dstWidth = srcMatrix2Window;
-    var dstHeight= srcMatrix1Window;
+    var dstHeight= src1Height;
     for (var dstY = 0 ; dstY < dstHeight ; dstY++) {
 	for (var dstX = 0 ; dstX < dstWidth ; dstX++) {
 	    var dstV = 0;
-	    for (var i = 0 ; i < dstHeight ; i++) {
+	    for (var i = 0 ; i < src2Height ; i++) {
 		var srcX1 = i, srcY1 = dstY;
 		var srcX2 = dstX, srcY2 = i;
 		var srcV1 = srcMatrix1[srcX1 + srcY1 * srcMatrix1Window];
