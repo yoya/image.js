@@ -102,7 +102,6 @@ function main() {
 			 srcMatrix1 = extentMatrix(srcMatrix1, currentWindow1, newWindow1, srcMatrix1.length / currentWindow1);
 			 srcMatrix1Window = newWindow1;
 			 srcMatrix2 = extentMatrix(srcMatrix2, srcMatrix2Window, srcMatrix2Window, newWindow1);
-			 console.log("srcMatrix2, srcMatrix2Window, srcMatrix2Window, newWindow1:", srcMatrix2, srcMatrix2Window, srcMatrix2Window, newWindow1);
 			 bindTableFunction("srcMatrix1Table", function(table, values, width) {
 			     srcMatrix1 = getTableValues(table.id);
 			     updateDstMatrix(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
@@ -169,10 +168,8 @@ function matrixMultiply(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Wind
 }
 
 function updateDstMatrix(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window) {
-    console.debug("updateDstMatrix(", srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
     var dstMatrix = matrixMultiply(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
     var dstMatrixWindow = srcMatrix2Window;
-    console.log(dstMatrix, dstMatrixWindow);
     bindTableFunction("dstMatrixTable", function(table, values, width) {
 	setTableValues(table.id, dstMatrix); // constrain values
     }, dstMatrix, dstMatrixWindow);
