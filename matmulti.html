@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2017/04/02- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> matrix multiply </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body bgcolor="lightgray">
+    <div class="container">
+      <div class="controlPanel">
+      </div> <!-- controlPanel -->
+      <div style="float:left;">
+	<br />
+        <input id="srcMatrixWindow0UpButton" type="button" value="^^" /> <br />
+        <input type="text" id="srcMatrixWindow0" size="3" value="3" /> <br />
+	<input id="srcMatrixWindow0DownButton" type="button" value="vv" /> <br />
+      </div>
+      <div style="float:left;">
+	srcMatrix1:
+	<table id="srcMatrix1Table"> </table>
+	<div align="center">
+	  <input id="srcMatrixWindow1DownButton" type="button" value="<<" />
+          <input type="text" id="srcMatrixWindow1" size="3" value="3" />
+          <input id="srcMatrixWindow1UpButton" type="button" value=">>" />
+	</div>
+      </div>
+      <div style="float:left;">
+	srcMatrix2:<table id="srcMatrix2Table"> </table>
+	<div align="center">
+	  <input id="srcMatrixWindow2DownButton" type="button" value="<<" />
+          <input type="text" id="srcMatrixWindow2" size="3" value="3" />
+          <input id="srcMatrixWindow2UpButton" type="button" value=">>" />
+	</div>
+      </div>
+      <div style="clear:both"> </div>
+      <div>
+	dstMatrix:<table id="dstMatrixTable"> </table>
+      </div>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="matmulti.js"> </script>
+  </body>
+</html>
