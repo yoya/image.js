@@ -32,6 +32,12 @@ function main() {
     var srcMatrixWindow0UpButton = document.getElementById("srcMatrixWindow0UpButton");
     var srcMatrixWindow0Text = document.getElementById("srcMatrixWindow0Text");
     var srcMatrixWindow0DownButton = document.getElementById("srcMatrixWindow0DownButton");
+    var srcMatrixWindow1UpButton = document.getElementById("srcMatrixWindow1UpButton");
+    var srcMatrixWindow1Text = document.getElementById("srcMatrixWindow1Text");
+    var srcMatrixWindow1DownButton = document.getElementById("srcMatrixWindow1DownButton");
+    var srcMatrixWindow2UpButton = document.getElementById("srcMatrixWindow2UpButton");
+    var srcMatrixWindow2Text = document.getElementById("srcMatrixWindow2Text");
+    var srcMatrixWindow2DownButton = document.getElementById("srcMatrixWindow2DownButton");
 
     var srcMatrix1 = [1, 0, 0,
 		      0, 1, 0,
@@ -69,11 +75,67 @@ function main() {
 			 newWindow0 = parseFloat(srcMatrixWindow0Text.value);
 		     }
 		     if (newWindow0 != currentWindow0) {
-			 srcMatrix1 = extentMatrix(srcMatrix1, srcMatrix1Window, srcMatrix1Window, srcMatrix1Window*newWindow0);
+			 srcMatrix1 = extentMatrix(srcMatrix1, srcMatrix1Window, srcMatrix1Window, newWindow0);
 			 bindTableFunction("srcMatrix1Table", function(table, values, width) {
 			     srcMatrix1 = getTableValues(table.id);
 			     updateDstMatrix(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
 			 }, srcMatrix1, srcMatrix1Window);
+			 updateDstMatrix(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
+		     }
+
+		 });
+    bindFunction({ "srcMatrixWindow1DownButton":null,
+		   "srcMatrixWindow1UpButton":null,
+		   "srcMatrixWindow1Text":null },
+		 function(target, rel) {
+		     var id = target.id;
+		     var currentWindow1 = srcMatrix1Window;
+		     var newWindow1 = currentWindow1;
+		     if (id === "srcMatrixWindow1DownButton") {
+			 newWindow1--;
+		     } else if (id === "srcMatrixWindow1UpButton") {
+			 newWindow1++;
+		     } else {
+			 newWindow1 = parseFloat(srcMatrixWindow1Text.value);
+		     }
+		     if (newWindow1 != currentWindow1) {
+			 srcMatrix1 = extentMatrix(srcMatrix1, currentWindow1, newWindow1, srcMatrix1.length / currentWindow1);
+			 srcMatrix1Window = newWindow1;
+			 srcMatrix2 = extentMatrix(srcMatrix2, srcMatrix2Window, srcMatrix2Window, newWindow1);
+			 console.log("srcMatrix2, srcMatrix2Window, srcMatrix2Window, newWindow1:", srcMatrix2, srcMatrix2Window, srcMatrix2Window, newWindow1);
+			 bindTableFunction("srcMatrix1Table", function(table, values, width) {
+			     srcMatrix1 = getTableValues(table.id);
+			     updateDstMatrix(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
+			 }, srcMatrix1, srcMatrix1Window);
+			 bindTableFunction("srcMatrix2Table", function(table, values, width) {
+			     srcMatrix2 = getTableValues(table.id);
+			     updateDstMatrix(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
+			 }, srcMatrix2, srcMatrix2Window);
+			 updateDstMatrix(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
+		     }
+
+		 });
+    bindFunction({ "srcMatrixWindow2DownButton":null,
+		   "srcMatrixWindow2UpButton":null,
+		   "srcMatrixWindow2Text":null },
+		 function(target, rel) {
+		     var id = target.id;
+		     var currentWindow2 = srcMatrix2Window;
+		     var newWindow2 = currentWindow2;
+		     if (id === "srcMatrixWindow2DownButton") {
+			 newWindow2--;
+		     } else if (id === "srcMatrixWindow2UpButton") {
+			 newWindow2++;
+		     } else {
+			 newWindow2 = parseFloat(srcMatrixWindow2Text.value);
+		     }
+		     if (newWindow2 != currentWindow2) {
+			 srcMatrix2 = extentMatrix(srcMatrix2, srcMatrix2Window, newWindow2, srcMatrix2.length / currentWindow2);
+			 srcMatrix2Window = newWindow2;
+			 bindTableFunction("srcMatrix2Table", function(table, values, width) {
+			     srcMatrix2 = getTableValues(table.id);
+			     updateDstMatrix(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
+			 }, srcMatrix2, srcMatrix2Window);
 			 updateDstMatrix(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
 		     }
 
