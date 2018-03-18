@@ -50,7 +50,6 @@ function main() {
     updateDstMatrix(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
 }
 
-// 3x3 only
 function matrixMultiply(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window) {
     var src1Height = srcMatrix1.length / srcMatrix1Window;
     var src2Height = srcMatrix2.length / srcMatrix2Window;
