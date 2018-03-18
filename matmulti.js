@@ -7,12 +7,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
-function extentMatrix(matrix, currentWindow, newWindow, newSize) {
+function extentMatrix(matrix, currentWindow, newWindow, newHeight) {
     var currentSize = matrix.length;
+    var currentHeight = currentSize / currentWindow;
+    var newSize = newWindow * newHeight;
     var newMatrix = [];
     for (var y = 0 ; y < newSize / newWindow ; y++) {
 	for (var x = 0 ; x < newWindow ; x++) {
-	    if ((x < currentWindow) && (y < currentSize / currentWindow)) {
+	    if ((x < currentWindow) && (y < currentHeight)) {
 		newMatrix.push(matrix[x + y * currentWindow]);
 	    } else {
 		newMatrix.push(0);
