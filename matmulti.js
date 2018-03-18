@@ -7,6 +7,21 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
+function extentMatrix(matrix, currentWindow, newWindow, newSize) {
+    var currentSize = matrix.length;
+    var newMatrix = [];
+    for (var y = 0 ; y < newSize / newWindow ; y++) {
+	for (var x = 0 ; x < newWindow ; x++) {
+	    if ((x < currentWindow) && (y < currentSize / currentWindow)) {
+		newMatrix.push(matrix[x + y * currentWindow]);
+	    } else {
+		newMatrix.push(0);
+	    }
+	}
+    }
+    return newMatrix;
+}
+
 function main() {
     // console.debug("main");
     var srcMatrix1Table = document.getElementById("srcMatrix1Table");
