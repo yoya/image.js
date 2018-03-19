@@ -74,6 +74,9 @@ function main() {
 		     } else {
 			 newWindow0 = parseFloat(srcMatrixWindow0Text.value);
 		     }
+		     if (newWindow0 < 1) {
+			 newWindow0 = 1;
+		     }
 		     if (newWindow0 != currentWindow0) {
 			 srcMatrixWindow0Text.value = newWindow0 | 0;
 			 srcMatrix1 = extentMatrix(srcMatrix1, srcMatrix1Window, srcMatrix1Window, newWindow0);
@@ -98,6 +101,9 @@ function main() {
 			 newWindow1++;
 		     } else {
 			 newWindow1 = parseFloat(srcMatrixWindow1Text.value);
+		     }
+		     if (newWindow1 < 1) {
+			 newWindow1 = 1;
 		     }
 		     if (newWindow1 != currentWindow1) {
 			 srcMatrixWindow1Text.value = newWindow1 | 0;
@@ -129,6 +135,9 @@ function main() {
 			 newWindow2++;
 		     } else {
 			 newWindow2 = parseFloat(srcMatrixWindow2Text.value);
+		     }
+		     if (newWindow2 < 1) {
+			 newWindow2 = 1;
 		     }
 		     if (newWindow2 != currentWindow2) {
 			 srcMatrixWindow2Text.value = newWindow2 | 0;
