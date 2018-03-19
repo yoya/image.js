@@ -75,6 +75,7 @@ function main() {
 			 newWindow0 = parseFloat(srcMatrixWindow0Text.value);
 		     }
 		     if (newWindow0 != currentWindow0) {
+			 srcMatrixWindow0Text.value = newWindow0 | 0;
 			 srcMatrix1 = extentMatrix(srcMatrix1, srcMatrix1Window, srcMatrix1Window, newWindow0);
 			 bindTableFunction("srcMatrix1Table", function(table, values, width) {
 			     srcMatrix1 = getTableValues(table.id);
@@ -99,6 +100,7 @@ function main() {
 			 newWindow1 = parseFloat(srcMatrixWindow1Text.value);
 		     }
 		     if (newWindow1 != currentWindow1) {
+			 srcMatrixWindow1Text.value = newWindow1 | 0;
 			 srcMatrix1 = extentMatrix(srcMatrix1, currentWindow1, newWindow1, srcMatrix1.length / currentWindow1);
 			 srcMatrix1Window = newWindow1;
 			 srcMatrix2 = extentMatrix(srcMatrix2, srcMatrix2Window, srcMatrix2Window, newWindow1);
@@ -129,6 +131,7 @@ function main() {
 			 newWindow2 = parseFloat(srcMatrixWindow2Text.value);
 		     }
 		     if (newWindow2 != currentWindow2) {
+			 srcMatrixWindow2Text.value = newWindow2 | 0;
 			 srcMatrix2 = extentMatrix(srcMatrix2, srcMatrix2Window, newWindow2, srcMatrix2.length / currentWindow2);
 			 srcMatrix2Window = newWindow2;
 			 bindTableFunction("srcMatrix2Table", function(table, values, width) {
