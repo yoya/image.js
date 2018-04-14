@@ -16,7 +16,7 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    console.log(srcImage);
+	    // console.debug(srcImage);
 	    drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, true);
 	}
 	srcImage.src = dataURL;
@@ -24,6 +24,7 @@ function main() {
     //
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "thresholdRange":"thresholdText",
+		  "grayscaleCheckbox":null,
 		  "linearGammaCheckbox":null},
 		 function(target, rel) {
 		     drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, rel);
@@ -33,14 +34,17 @@ function main() {
 function drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, sync) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var threshold = parseFloat(document.getElementById("thresholdRange").value);
+    var grayscale = document.getElementById("grayscaleCheckbox").checked;
     var linearGamma = document.getElementById("linearGammaCheckbox").checked;
+    var params = {threshold:threshold,
+		  grayscale:grayscale,
+		  linearGamma:linearGamma};
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawBinary(srcCanvas, dstCanvas, threshold, linearGamma, sync);
+    drawBinary(srcCanvas, dstCanvas, params, sync);
 }
 
 var worker = new workerProcess("worker/binary.js");
 
-function drawBinary(srcCanvas, dstCanvas, threshold, linearGamma, sync) {
-    var params = {threshold:threshold, linearGamma:linearGamma};
+function drawBinary(srcCanvas, dstCanvas, params, sync) {
     worker.process(srcCanvas, dstCanvas, params, sync);
 }
