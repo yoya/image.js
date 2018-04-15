@@ -17,6 +17,11 @@ onmessage = function(e) {
     var define = "var max=Math.max, min=Math.min ; ";
     var func = new Function("R","G","B", define+"return " + equation);
     var grayscale_rev = 1 - grayscale;
+
+    if (0 <= equation.indexOf("(linear)")) {
+	linearGamma = true; // for CIE XYZ
+    }
+    
     for (var y = 0 ; y < height; y++) {
         for (var x = 0 ; x < width; x++) {
 	    var rgba = getRGBA(srcImageData, x, y);

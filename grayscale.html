@@ -14,7 +14,7 @@
       <div>
 	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="300">:<input type="text" id="maxWidthHeightText" size="5">
 	grayscale:<input id="grayscaleRange" type="range" min="0" max="1" step="0.05" value="1">:<input type="text" id="grayscaleText" size="4">
-	linearGamma:<input id="linearGammaCheckbox" type="checkbox" checked/>
+	linearGamma:<input id="linearGammaCheckbox" type="checkbox" />
       </div>
     </div> <!-- controlPanel -->
     <div class="box">
@@ -45,7 +45,7 @@
       <canvas class="dstCanvas borderBlue" width=200 height=200> </canvas>
     </div>
     <div class="box">
-      <div> RGB2XYZ([R,G,B])[1] </div>
+      <div> RGB2XYZ([R,G,B])[1] // (linear) </div>
       <canvas class="dstCanvas borderBlue" width=200 height=200> </canvas>
     </div>
   </div> <!-- container -->
