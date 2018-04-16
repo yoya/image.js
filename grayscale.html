@@ -33,6 +33,10 @@
       <canvas class="dstCanvas borderBlue" width=200 height=200> </canvas>
     </div>
     <div class="box">
+      <div>  0.3*R+0.6*G+0.1*B // BT.601 rough </div>
+      <canvas class="dstCanvas borderBlue" width=200 height=200> </canvas>
+    </div>
+    <div class="box">
       <div> 0.2126*R+0.7152*G+0.0722*B // BT.709 </div>
       <canvas class="dstCanvas borderBlue" width=200 height=200> </canvas>
     </div>
@@ -42,6 +46,14 @@
     </div>
     <div class="box">
       <div> max(R,G,B) // HSV </div>
+      <canvas class="dstCanvas borderBlue" width=200 height=200> </canvas>
+    </div>
+    <div class="box">
+      <div> [R,G,B].sort()[1] // Median </div>
+      <canvas class="dstCanvas borderBlue" width=200 height=200> </canvas>
+    </div>
+    <div class="box">
+      <div> G // Green only </div>
       <canvas class="dstCanvas borderBlue" width=200 height=200> </canvas>
     </div>
     <div class="box">
