@@ -40,7 +40,9 @@ function main() {
 		 } );
     gammaReciprocalRange.value = 1.0 / parseFloat(gammaRange.value);
     gammaReciprocalText.value = gammaReciprocalRange.value;
+    drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas, true);
 }
+
 function drawSrcImageAndGamma(srcImage, srcCanvas, dstCancas, gammaCanvas, sync) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var gamma = parseFloat(document.getElementById("gammaRange").value);
