@@ -7,7 +7,7 @@
   </head>
   <body bgcolor="lightgray">
     <div class="container">
-      <div class="controlPanel">
+	<div id="controlPanel" style="display:flex">
 	Clut Type:  <br />
 	<select id="clutTypeSelect" size="7">
           <option value="fire" selected> Fire </option>
@@ -22,8 +22,11 @@
           <option value="magenta"      > Magenta </option>
           <option value="yellow"       > Yellow </option>
 	</select>
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
-	<canvas id="clutCanvas" class="borderGray" width=256 height=20> clutCanvas </canvas>      
+	<div>
+	  <canvas id="clutCanvas" class="borderGray" width=256 height=20> clutCanvas </canvas>
+	  <br />
+	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+	</div>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="grayCanvas" class="borderGreen" width=200 height=200> grayCanvas </canvas>
