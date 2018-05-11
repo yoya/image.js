@@ -144,19 +144,19 @@ function pseudoColor(v, clutType) {
     return CLUT[clutType][v];
 }
 
-function drawPseudoColor(srcCanvas, dstCanvas, clutType) {
+function drawPseudoColor(grayCanvas, dstCanvas, clutType) {
     // console.debug("drawPseudoColor");
-    var srcCtx = srcCanvas.getContext("2d");
+    var grayCtx = grayCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
-    var width = srcCanvas.width, height = srcCanvas.height;
+    var width = grayCanvas.width, height = grayCanvas.height;
     dstCanvas.width  = width;
     dstCanvas.height = height;
     //
-    var srcImageData = srcCtx.getImageData(0, 0, width, height);
+    var grayImageData = grayCtx.getImageData(0, 0, width, height);
     var dstImageData = dstCtx.createImageData(width, height);
     for (var y = 0 ; y < height; y++) {
         for (var x = 0 ; x < width; x++) {
-	    var [r, g, b, a] = getRGBA(srcImageData, x, y);
+	    var [r, g, b, a] = getRGBA(grayImageData, x, y);
 	    [r, g, b] = pseudoColor(g, clutType);
 	    setRGBA(dstImageData, x, y, [r,g,b,a]);
 	}
