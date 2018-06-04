@@ -1,0 +1,17 @@
+<html>
+<head>
+  <title> k-means demo </title>
+</head>
+<body>
+  <div id="controllerContainer">
+    <input type="button" id="restartButton" value="Restart" />
+    nPoints:<input id="nPointsRange" type="range" min="10" max="100" step="1" value="50">:<input type="text" id="nPointsText" size="5">
+    nCenterPoints:<input id="nCenterPointsRange" type="range" min="2" max="10" step="1" value="5">:<input type="text" id="nCenterPointsText" size="5">
+  </div>
+  <div id="canvasContainer">
+    <canvas id="canvas" width="500" height="500"> </canvas>
+  </div>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="k-means.js"> </script>  
+</body>
+</html>
