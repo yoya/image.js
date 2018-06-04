@@ -14,10 +14,9 @@ var kMeansContext = function(canvas, nPoints, nCenterPoints) {
     this.centerPoints = null;
     //
     this.canvas = canvas;
-    this.status = 0; // 0:init:
+    this.status = 0; // 0:init: -1:stop
     this.progress = 0;
     this.timerId = null;
-    this.stop = false;
 }
 
 var Point = function(x, y, centerIndex) {
@@ -41,7 +40,7 @@ function main() {
 
 function restart() {
     if (kmc) {
-	kmc.stop = true;
+	kmc.status = -1; // stop
     }
     var nPoints = parseFloat(document.getElementById("nPointsRange").value);
     var nCenterPoints = parseFloat(document.getElementById("nCenterPointsRange").value);
@@ -125,7 +124,7 @@ function kMeansDrawPoints(kmc) {
 
 function kMeansAnimation() {
     var kmc = this;
-    if (kmc.stop) {
+    if (kmc.status < 0) { // stop
 	return ;
     }
     // console.debug(kmc.status);
