@@ -70,11 +70,14 @@ function revert(){
 	kmc.centerPrevPoints[i].x = kmc.centerInitPoints[i].x;
 	kmc.centerPrevPoints[i].y = kmc.centerInitPoints[i].y;
     }
+    if (kmc.status <= 0) {
+	kmc.timerId = setTimeout(kMeansAnimation.bind(kmc), 100);
+    }
     kmc.status = 1;
 }
 
 function restart() {
-    if (kmc.status === 0) {
+    if (kmc.status <= 0) { // 0 or -1
 	kmc.status = 1;
 	kmc.timerId = setTimeout(kMeansAnimation.bind(kmc), 100);
     }
@@ -195,6 +198,7 @@ function kMeansDrawPoints(kmc) {
 
 function kMeansAnimation() {
     var kmc = this;
+    // console.debug(kmc);
     if (kmc.status < 0) { // stop
 	return ;
     }
@@ -231,13 +235,27 @@ function kMeansAnimation() {
 	if (kmc.progress < kmc.nCenterPoints) {
 	    ;
 	} else {
-	    kmc.status = 1;
-	    kmc.progress = 0;
+	    var centerModified = false;
+	    for (var i = 0, n = kmc.nCenterPoints ; i < n ; i++) {
+		var point = kmc.centerPoints[i];
+		var prev = kmc.centerPrevPoints[i];
+		if ((point.x != prev.x) || (point.x != prev.x)) {
+		    centerModified = true;
+		    break;
+		}
+	    }
+	    if (centerModified) {
+		kmc.status = 1;
+		kmc.progress = 0;
+	    } else {
+		kmc.status = -1; // stop
+		kmc.progress = 0;
+		console.log("fine");
+	    }
 	}
 	break;
     }
     kmc.timerId = setTimeout(kMeansAnimation.bind(kmc), elapse);
-
 }
 
 function kMeans_1(kmc) { // neighbor point search
@@ -263,7 +281,7 @@ function kMeans_1(kmc) { // neighbor point search
     point.centerIndex = centerIndex;
 }
 
-function kMeans_2(kmc) {
+function kMeans_2(kmc) { // gravity center calculation
     var i = kmc.progress;
     var centerPoint = kmc.centerPoints[i];
     var centerPrevPoint = kmc.centerPrevPoints[i];
