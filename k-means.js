@@ -13,6 +13,7 @@ var kMeansContext = function(canvas, nPoints, nCenterPoints) {
     this.points = null;
     this.centerPoints = null;
     this.centerPrevPoints = null;
+    this.centerInitPoints = null;
     //
     this.canvas = canvas;
     this.status = 0; // 0:init: -1:stop
@@ -32,23 +33,52 @@ var kmc = null;
 function main() {
     console.debug("main");
     canvas.style.background = "black";
-    bindFunction({"restartButton":null,
-		  "nPointsRange":"nPointsText",
-		  "nCenterPointsRange":"nCenterPointsText"},
-		 function(target) { restart(); });
+    bindFunction({ "restartButton":null,
+		   "resetButton":null,
+		   "nPointsRange":"nPointsText",
+		   "nCenterPointsRange":"nCenterPointsText" },
+		 function(target) {
+		     if (target.id !== "restartButton") {
+			 reset();
+		     } else {
+			 revert();
+		     }
+		     restart();
+		 });
+    reset();
     restart();
 }
 
-function restart() {
-    if (kmc) {
-	kmc.status = -1; // stop
-    }
+function reset() {
     var nPoints = parseFloat(document.getElementById("nPointsRange").value);
     var nCenterPoints = parseFloat(document.getElementById("nCenterPointsRange").value);
+    if (kmc) {
+	kmc.status = -1; // stop
+	kmc = null;
+    }
     kmc = new kMeansContext(canvas, nPoints, nCenterPoints);
     kMeansSetup(kmc);
+}
+
+function revert(){
+    for (var i = 0, n = kmc.nPoints ; i < n ; i++) {
+	kmc.points[i].centerIndex = null;
+    }
+    for (var i = 0, n = kmc.nCenterPoints ; i < n ; i++) {
+	kmc.centerPoints[i].x = kmc.centerInitPoints[i].x;
+	kmc.centerPoints[i].y = kmc.centerInitPoints[i].y;
+	kmc.centerPrevPoints[i].x = kmc.centerInitPoints[i].x;
+	kmc.centerPrevPoints[i].y = kmc.centerInitPoints[i].y;
+    }
+    kmc.status = 1;
+}
+
+function restart() {
+    if (kmc.status === 0) {
+	kmc.status = 1;
+	kmc.timerId = setTimeout(kMeansAnimation.bind(kmc), 100);
+    }
     kMeansDrawPoints(kmc);
-    kmc.timerId = setTimeout(kMeansAnimation.bind(kmc), 100);
 }
 
 function kMeansSetup(kmc) {
@@ -64,15 +94,17 @@ function kMeansSetup(kmc) {
     kmc.points = points;
     var centerPoints = [];
     var centerPrevPoints = [];
+    var centerInitPoints = [];
     for (var i = 0, n = kmc.nCenterPoints ; i < n ; i++) {
 	var x = Math.random() * width;
 	var y = Math.random() * height;
 	centerPoints.push(new Point(x, y, i));
 	centerPrevPoints.push(new Point(x, y, i));
+	centerInitPoints.push(new Point(x, y, i));
     }
     kmc.centerPoints = centerPoints;
     kmc.centerPrevPoints = centerPrevPoints;
-    kmc.status = 1;
+    kmc.centerInitPoints = centerInitPoints;
 }
 
 function kMeansDrawPoints(kmc) {
