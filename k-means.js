@@ -12,6 +12,7 @@ var kMeansContext = function(canvas, nPoints, nCenterPoints) {
     this.nCenterPoints = nCenterPoints;
     this.points = null;
     this.centerPoints = null;
+    this.centerPrevPoints = null;
     //
     this.canvas = canvas;
     this.status = 0; // 0:init: -1:stop
@@ -62,12 +63,15 @@ function kMeansSetup(kmc) {
     }
     kmc.points = points;
     var centerPoints = [];
+    var centerPrevPoints = [];
     for (var i = 0, n = kmc.nCenterPoints ; i < n ; i++) {
 	var x = Math.random() * width;
 	var y = Math.random() * height;
 	centerPoints.push(new Point(x, y, i));
+	centerPrevPoints.push(new Point(x, y, i));
     }
     kmc.centerPoints = centerPoints;
+    kmc.centerPrevPoints = centerPrevPoints;
     kmc.status = 1;
 }
 
@@ -130,6 +134,20 @@ function kMeansDrawPoints(kmc) {
 	    ctx.stroke();
 	    ctx.closePath();
 	    ctx.restore();
+	    if ((kmc.status === 2) &&
+		(i === kmc.progress)) {
+		var prev = kmc.centerPrevPoints[i];
+		ctx.save();
+		ctx.beginPath();
+		var hue = 360 * i / kmc.nCenterPoints;
+		ctx.strokeStyle = "hsl("+hue+", 100%, 80%)";
+		ctx.fillStyle = "hsl("+hue+", 100%, 80%, 50%)";
+		ctx.arc(prev.x, prev.y, 10, 0, 2*Math.PI , false);
+		ctx.fill();
+		ctx.stroke();
+		ctx.closePath();
+		ctx.restore();
+	    }
 	}
     }
 }
@@ -207,6 +225,9 @@ function kMeans_1(kmc) { // neighbor point search
 function kMeans_2(kmc) {
     var i = kmc.progress;
     var centerPoint = kmc.centerPoints[i];
+    var centerPrevPoint = kmc.centerPrevPoints[i];
+    centerPrevPoint.x = centerPoint.x;
+    centerPrevPoint.y = centerPoint.y;
     var xSum = 0;
     var ySum = 0;
     var nSum = 0;
