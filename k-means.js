@@ -97,12 +97,18 @@ function kMeansDrawPoints(kmc) {
 	    // console.log("centerIndex !== null");
 	    var centerPoint = kmc.centerPoints[centerIndex];
 	    var hue = 360 * centerIndex / kmc.nCenterPoints;
+	    ctx.save();
 	    ctx.beginPath();
 	    ctx.strokeStyle = "hsla("+hue+", 100%, 80%, 50%)";
+	    if ((kmc.status === 1) &&
+		(i === kmc.progress)) {
+		ctx.lineWidth += 2;
+	    }
 	    ctx.moveTo(x, y);
 	    ctx.lineTo(centerPoint.x, centerPoint.y);
 	    ctx.stroke();
 	    ctx.closePath();
+	    ctx.restore();
 	}
     }
     if (kmc.centerPoints) {
@@ -110,14 +116,20 @@ function kMeansDrawPoints(kmc) {
 	    var point = kmc.centerPoints[i];
 	    var x = point.x;
 	    var y = point.y;
+	    ctx.save();
 	    ctx.beginPath();
 	    var hue = 360 * i / kmc.nCenterPoints;
 	    ctx.strokeStyle = "hsl("+hue+", 100%, 80%)";
 	    ctx.fillStyle = "hsl("+hue+", 100%, 80%, 50%)";
+	    if ((kmc.status === 2) &&
+		(i === kmc.progress)) {
+		ctx.lineWidth += 2;
+	    }
 	    ctx.arc(x, y, 10, 0, 2*Math.PI , false);
 	    ctx.fill();
 	    ctx.stroke();
 	    ctx.closePath();
+	    ctx.restore();
 	}
     }
 }
@@ -145,7 +157,28 @@ function kMeansAnimation() {
 	break;
     }
     kMeansDrawPoints(kmc);
+    switch (kmc.status) {
+    case 1:
+	kmc.progress ++;
+	if (kmc.progress < kmc.nPoints) {
+	    ;
+	} else {
+	    kmc.status = 2;
+	    kmc.progress = 0;
+	}
+	break;
+    case 2:	
+	kmc.progress ++;
+	if (kmc.progress < kmc.nCenterPoints) {
+	    ;
+	} else {
+	    kmc.status = 1;
+	    kmc.progress = 0;
+	}
+	break;
+    }
     kmc.timerId = setTimeout(kMeansAnimation.bind(kmc), elapse);
+
 }
 
 function kMeans_1(kmc) { // neighbor point search
@@ -169,13 +202,6 @@ function kMeans_1(kmc) { // neighbor point search
 	}
     }
     point.centerIndex = centerIndex;
-    kmc.progress = i+1;
-    if (kmc.progress < kmc.nPoints) {
-	;
-    } else {
-	kmc.status = 2;
-	kmc.progress = 0;
-    }
 }
 
 function kMeans_2(kmc) {
@@ -194,13 +220,6 @@ function kMeans_2(kmc) {
     }
     centerPoint.x = xSum / nSum;
     centerPoint.y = ySum / nSum;
-    kmc.progress = i+1;
-    if (kmc.progress < kmc.nCenterPoints) {
-	;
-    } else {
-	kmc.status = 1;
-	kmc.progress = 0;
-    }
 }
 
 function kMeans_clearCenterIndex(kmc) {
