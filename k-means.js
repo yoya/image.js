@@ -117,31 +117,17 @@ function kMeansDrawPoints(kmc) {
     }
     if (kmc.centerPoints) {
 	for (var i = 0, n = kmc.nCenterPoints ; i < n ; i++) {
+	    var hue = 360 * i / kmc.nCenterPoints;
 	    var point = kmc.centerPoints[i];
 	    var x = point.x;
 	    var y = point.y;
-	    ctx.save();
-	    ctx.beginPath();
-	    var hue = 360 * i / kmc.nCenterPoints;
-	    ctx.strokeStyle = "hsl("+hue+", 100%, 80%)";
-	    ctx.fillStyle = "hsl("+hue+", 100%, 80%, 50%)";
 	    if ((kmc.status === 2) &&
-		(i === kmc.progress)) {
-		ctx.lineWidth += 2;
-	    }
-	    ctx.arc(x, y, 10, 0, 2*Math.PI , false);
-	    ctx.fill();
-	    ctx.stroke();
-	    ctx.closePath();
-	    ctx.restore();
-	    if ((kmc.status === 2) &&
-		(i === kmc.progress)) {
+		(i <= kmc.progress)) {
 		var prev = kmc.centerPrevPoints[i];
 		ctx.save();
 		ctx.beginPath();
-		var hue = 360 * i / kmc.nCenterPoints;
-		ctx.strokeStyle = "hsl("+hue+", 100%, 80%)";
-		ctx.fillStyle = "hsl("+hue+", 100%, 80%, 50%)";
+		ctx.strokeStyle = "hsla("+hue+", 100%, 80%, 50%)";
+		ctx.fillStyle = "hsla("+hue+", 100%, 80%, 25%)";
 		ctx.arc(prev.x, prev.y, 10, 0, 2*Math.PI , false);
 		ctx.fill();
 		ctx.stroke();
@@ -149,17 +135,28 @@ function kMeansDrawPoints(kmc) {
 		//
 		ctx.save();
 		ctx.beginPath();
-		var hue = 360 * i / kmc.nCenterPoints;
-		ctx.strokeStyle = "hsla("+hue+", 100%, 80%, 55%)";
+		ctx.strokeStyle = "hsla("+hue+", 100%, 80%, 50%)";
 		ctx.lineWidth += 10;
 		ctx.lineCap = "round";
 		ctx.moveTo(prev.x, prev.y);
 		ctx.lineTo(x, y);
-		ctx.fill();
 		ctx.stroke();
 		ctx.closePath();
 		ctx.restore();
 	    }
+	    ctx.save();
+	    ctx.beginPath();
+	    ctx.strokeStyle = "hsl("+hue+", 100%, 80%)";
+	    ctx.fillStyle = "hsla("+hue+", 100%, 80%, 50%)";
+	    if ((kmc.status === 2) &&
+		(i <= kmc.progress)) {
+		ctx.lineWidth += 2;
+	    }
+	    ctx.arc(x, y, 10, 0, 2*Math.PI , false);
+	    ctx.fill();
+	    ctx.stroke();
+	    ctx.closePath();
+	    ctx.restore();
 	}
     }
 }
