@@ -146,6 +146,18 @@ function kMeansDrawPoints(kmc) {
 		ctx.fill();
 		ctx.stroke();
 		ctx.closePath();
+		//
+		ctx.save();
+		ctx.beginPath();
+		var hue = 360 * i / kmc.nCenterPoints;
+		ctx.strokeStyle = "hsla("+hue+", 100%, 80%, 55%)";
+		ctx.lineWidth += 10;
+		ctx.lineCap = "round";
+		ctx.moveTo(prev.x, prev.y);
+		ctx.lineTo(x, y);
+		ctx.fill();
+		ctx.stroke();
+		ctx.closePath();
 		ctx.restore();
 	    }
 	}
