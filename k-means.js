@@ -156,13 +156,13 @@ function kMeansDrawPoints(kmc) {
 	    var point = kmc.centerPoints[i];
 	    var x = point.x;
 	    var y = point.y;
-	    if ((kmc.status === 2) &&
+	    if ((kmc.status === 3) &&
 		(i <= kmc.progress)) {
 		var prev = kmc.centerPrevPoints[i];
 		ctx.save();
 		ctx.beginPath();
 		ctx.strokeStyle = "hsla("+hue+", 100%, 80%, 50%)";
-		ctx.fillStyle = "hsla("+hue+", 100%, 80%, 25%)";
+		ctx.fillStyle = "hsla("+hue+", 100%, 80%, 20%)";
 		ctx.arc(prev.x, prev.y, 10, 0, 2*Math.PI , false);
 		ctx.fill();
 		ctx.stroke();
@@ -182,9 +182,10 @@ function kMeansDrawPoints(kmc) {
 	    ctx.save();
 	    ctx.beginPath();
 	    ctx.strokeStyle = "hsl("+hue+", 100%, 80%)";
-	    ctx.fillStyle = "hsla("+hue+", 100%, 80%, 50%)";
-	    if ((kmc.status === 2) &&
-		(i <= kmc.progress)) {
+	    ctx.fillStyle = "hsla("+hue+", 100%, 80%, 20%)";
+	    ctx.lineWidth += 1;
+	    if (((kmc.status === 3) && (i <= kmc.progress)) ||
+		(kmc.status === 4)) {
 		ctx.lineWidth += 2;
 	    }
 	    ctx.arc(x, y, 10, 0, 2*Math.PI , false);
@@ -210,13 +211,23 @@ function kMeansAnimation() {
 	break;
     case 1: // neighbor point search
 	kMeans_1(kmc);
-	elapse = 100;
+	//elapse = 100;
+	elapse = 1000 * 5 / kmc.nPoints;
+	if (elapse > 200) {
+	    elapse = 200;
+	}
 	break;
-    case 2: // gravity center calculation
-	kMeans_2(kmc);
+    case 2: // rest
+	break;
+    case 3: // gravity center calculation
+	kMeans_3(kmc);
+	break;
+    case 4: // rest & clear centerindex
+	kMeans_4(kmc);
 	break;
     default:
-	return ;
+	console.error("illegal status:"+kmc.status);
+	return ; // stop
 	break;
     }
     kMeansDrawPoints(kmc);
@@ -230,28 +241,36 @@ function kMeansAnimation() {
 	    kmc.progress = 0;
 	}
 	break;
-    case 2:	
+    case 2:
+	kmc.status = 3;
+	break;
+    case 3:
 	kmc.progress ++;
 	if (kmc.progress < kmc.nCenterPoints) {
 	    ;
 	} else {
-	    var centerModified = false;
-	    for (var i = 0, n = kmc.nCenterPoints ; i < n ; i++) {
-		var point = kmc.centerPoints[i];
-		var prev = kmc.centerPrevPoints[i];
-		if ((point.x != prev.x) || (point.x != prev.x)) {
-		    centerModified = true;
-		    break;
-		}
+	    kmc.status = 4;
+	    kmc.progress = 0;
+	}
+	break;
+    case 4:
+	var centerModified = false;
+	for (var i = 0, n = kmc.nCenterPoints ; i < n ; i++) {
+	    var point = kmc.centerPoints[i];
+	    var prev = kmc.centerPrevPoints[i];
+	    if ((point.x != prev.x) || (point.x != prev.x)) {
+		centerModified = true;
+		break;
 	    }
-	    if (centerModified) {
-		kmc.status = 1;
-		kmc.progress = 0;
-	    } else {
-		kmc.status = -1; // stop
-		kmc.progress = 0;
-		console.log("fine");
 	    }
+	if (centerModified) {
+	    kmc.status = 1;
+	    kmc.progress = 0;
+	} else {
+	    kmc.status = -1; // stop
+	    kmc.progress = 0;
+	    console.log("fine");
+	    return ; // stop
 	}
 	break;
     }
@@ -265,9 +284,6 @@ function kMeans_1(kmc) { // neighbor point search
     var y = point.y;
     var minDistance = Number.MAX_VALUE;
     var centerIndex = null;
-    if (i === 0) {
-	kMeans_clearCenterIndex(kmc);
-    }
     for (var i2 = 0, n2 = kmc.nCenterPoints ; i2 < n2 ; i2++) {
 	var centerPoint = kmc.centerPoints[i2];
 	var x_diff = x - centerPoint.x;
@@ -281,7 +297,7 @@ function kMeans_1(kmc) { // neighbor point search
     point.centerIndex = centerIndex;
 }
 
-function kMeans_2(kmc) { // gravity center calculation
+function kMeans_3(kmc) { // gravity center calculation
     var i = kmc.progress;
     var centerPoint = kmc.centerPoints[i];
     var centerPrevPoint = kmc.centerPrevPoints[i];
@@ -298,11 +314,14 @@ function kMeans_2(kmc) { // gravity center calculation
 	    nSum ++;
 	}
     }
-    centerPoint.x = xSum / nSum;
-    centerPoint.y = ySum / nSum;
+    if (nSum > 0) {
+	centerPoint.x = xSum / nSum;
+	centerPoint.y = ySum / nSum;
+    }
 }
 
-function kMeans_clearCenterIndex(kmc) {
+
+function kMeans_4(kmc) { // clear centerindex
     for (var i = 0, n = kmc.nPoints ; i < n ; i++) {
 	kmc.points[i].centerIndex = null;
     }
