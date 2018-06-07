@@ -35,6 +35,8 @@ function main() {
     canvas.style.background = "black";
     bindFunction({ "restartButton":null,
 		   "resetButton":null,
+		   "widthRange":"widthText",
+		   "heightRange":"heightText",
 		   "nPointsRange":"nPointsText",
 		   "nCenterPointsRange":"nCenterPointsText" },
 		 function(target) {
@@ -50,6 +52,10 @@ function main() {
 }
 
 function reset() {
+    var width  = parseFloat(document.getElementById("widthRange").value);
+    var height = parseFloat(document.getElementById("heightRange").value);
+    canvas.width  = width;
+    canvas.height = height;
     var nPoints = parseFloat(document.getElementById("nPointsRange").value);
     var nCenterPoints = parseFloat(document.getElementById("nCenterPointsRange").value);
     if (kmc) {
