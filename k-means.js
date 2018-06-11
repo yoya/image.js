@@ -173,6 +173,7 @@ function kMeansDrawPoints(kmc) {
 		ctx.fill();
 		ctx.stroke();
 		ctx.closePath();
+		ctx.restore();
 		//
 		ctx.save();
 		ctx.beginPath();
