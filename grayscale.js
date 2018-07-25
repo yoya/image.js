@@ -24,7 +24,7 @@ function main() {
     }, "DataURL");
     //
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "grayscaleRange":"grayscaleText",
+		  "colorFactorRange":"colorFactorText",
 		  "linearGammaCheckbox":null},
 		 function(target, rel) {
 		     drawSrcImageAndGrayscale(srcImage, srcCanvas, dstCanvasArr, rel);
@@ -35,7 +35,7 @@ var workers = [];
 
 function drawSrcImageAndGrayscale(srcImage, srcCanvas, dstCanvasArr, sync) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var grayscale = parseFloat(document.getElementById("grayscaleRange").value);
+    var colorFactor = parseFloat(document.getElementById("colorFactorRange").value);
     var linearGamma = document.getElementById("linearGammaCheckbox").checked;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     for (var i = 0, n = dstCanvasArr.length ; i < n ; i++) {
@@ -47,11 +47,11 @@ function drawSrcImageAndGrayscale(srcImage, srcCanvas, dstCanvasArr, sync) {
 	} else {
 	    workers[equation] = new workerProcess("worker/grayscale.js");
 	}
-	drawGrayscale(srcCanvas, dstCanvas, equation, grayscale, linearGamma, sync);
+	drawGrayscale(srcCanvas, dstCanvas, equation, colorFactor, linearGamma, sync);
     }
 }
 
-function drawGrayscale(srcCanvas, dstCanvas, equation, grayscale, linearGamma, sync) {
-    var params = {equation:equation, grayscale:grayscale, linearGamma:linearGamma};
+function drawGrayscale(srcCanvas, dstCanvas, equation, colorFactor, linearGamma, sync) {
+    var params = {equation:equation, colorFactor:colorFactor, linearGamma:linearGamma};
     workers[equation].process(srcCanvas, dstCanvas, params, sync);
 }

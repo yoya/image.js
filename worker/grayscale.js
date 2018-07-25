@@ -10,22 +10,21 @@ importScripts("../lib/canvas.js");
 onmessage = function(e) {
     var srcImageData = e.data.image;
     var equation = e.data.equation;
-    var grayscale = e.data.grayscale;
+    var colorFactor = e.data.colorFactor;
     var linearGamma = e.data.linearGamma;
     var width = srcImageData.width, height = srcImageData.height;
     var dstImageData = new ImageData(width, height);
     var define = "var max=Math.max, min=Math.min ; ";
     var func = new Function("R","G","B", define+"return " + equation);
-    var grayscale_rev = 1 - grayscale;
 
     if (0 <= equation.indexOf("(linear)")) {
 	linearGamma = true; // for CIE XYZ
     }
-    
+
     for (var y = 0 ; y < height; y++) {
         for (var x = 0 ; x < width; x++) {
 	    var rgba = getRGBA(srcImageData, x, y);
-	    if (grayscale === 0) {
+	    if (colorFactor === 1.0) {
 		; // do nothing
 	    } else {
 		if (linearGamma) {
@@ -33,12 +32,12 @@ onmessage = function(e) {
 		}
 		var [r, g, b, a] = rgba;
 		var v = func(r, g, b);
-		if (grayscale === 1) {
+		if (colorFactor === 0) {
 		    rgba = [v, v, v, a];
 		} else {
-		    rgba = [grayscale_rev * r + grayscale * v,
-			    grayscale_rev * g + grayscale * v,
-			    grayscale_rev * b + grayscale * v,
+		    rgba = [r * colorFactor + v * (1-colorFactor),
+			    g * colorFactor + v * (1-colorFactor),
+			    b * colorFactor + v * (1-colorFactor),
 			    a];
 		}
 		if (linearGamma) {
