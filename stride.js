@@ -42,10 +42,6 @@ function main() {
 		 } );
 }
 
-function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas, maxWidthHeight, stride) {
-}
-
-
 function drawStride(srcCanvas, dstCanvas, stride) {
     // console.debug("drawCopy");
     var srcCtx = srcCanvas.getContext("2d");
