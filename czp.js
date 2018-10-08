@@ -16,20 +16,23 @@ function main() {
     var revRedCheckbox = document.getElementById("revRedCheckbox");
     var revGreenCheckbox = document.getElementById("revGreenCheckbox");
     var revBlueCheckbox = document.getElementById("revBlueCheckbox");
+    var scaleRange = document.getElementById("scaleRange");
     var params = {
 	"width":  parseFloat(widthRange.value),
 	"height": parseFloat(heightRange.value),
 	"theta": parseFloat(thetaRange.value),
 	"revRed":  revRedCheckbox.checked,
 	"revGreen":revGreenCheckbox.checked,
-	"revBlue": revBlueCheckbox.checked
+	"revBlue": revBlueCheckbox.checked,
+	"scale": parseFloat(scaleRange.value)
     };
     bindFunction({"widthRange":"widthText",
 		  "heightRange":"heightText",
 		  "thetaRange":"thetaText",
 		  "revRedCheckbox":null,
 		  "revGreenCheckbox":null,
-		  "revBlueCheckbox":null},
+		  "revBlueCheckbox":null,
+		  "scaleRange":"scaleText"},
 		 function() {
 		     params["width"]  = parseFloat(widthRange.value);
 		     params["height"] = parseFloat(heightRange.value);
@@ -37,6 +40,7 @@ function main() {
 		     params["revRed"]   = revRedCheckbox.checked;
 		     params["revGreen"] = revGreenCheckbox.checked;
 		     params["revBlue"]  = revBlueCheckbox.checked;
+		     params["scale"] = parseFloat(scaleRange.value);
 		     drawCZP(canvas, params);
 		 } );
     drawCZP(canvas, params);
@@ -52,12 +56,13 @@ function drawCZP(canvas, params) {
     var revRed   = params.revRed;
     var revGreen = params.revGreen;
     var revBlue  = params.revBlue;
+    var scale = params.scale;
     canvas.width  = width;
     canvas.height = height;
     //
     var imageData = ctx.createImageData(width, height);
-    var cx = Math.PI / width / 2;
-    var cy = Math.PI / height / 2;
+    var cx = Math.PI / width / 2  / scale;
+    var cy = Math.PI / height / 2 / scale;
     var t = theta * (2 * Math.PI) / 360;
     for (var y = 0 ; y < height; y++) {
         for (var x = 0 ; x < width; x++) {
