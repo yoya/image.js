@@ -54,7 +54,7 @@ function drawStride(srcCanvas, dstCanvas, stride) {
     //
     var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
     var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-    var n = 4 * srcImageData.width * srcImageData.height;
+    var n = srcImageData.data.length;
     for (var i = 0 ; i < n ; i++) {
 	dstImageData.data[i] = srcImageData.data[i];
     }
