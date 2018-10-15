@@ -47,21 +47,16 @@ function drawStride(srcCanvas, dstCanvas, stride) {
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var dstWidth  = srcWidth;
-    var dstHeight = srcHeight;
+    var dstWidth  = stride;
+    var dstHeight = Math.ceil(srcWidth * srcHeight / stride)
     dstCanvas.width  = dstWidth;
     dstCanvas.height = dstHeight;
     //
     var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
     var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-    for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var offset = dstX + dstWidth * dstY;
-	    var srcX = offset % stride;
-	    var srcY = Math.floor(offset / stride);
-	    var rgba = getRGBA(srcImageData, srcX, srcY);
-	    setRGBA(dstImageData, dstX, dstY, rgba);
-	}
+    var n = 4 * srcImageData.width * srcImageData.height;
+    for (var i = 0 ; i < n ; i++) {
+	dstImageData.data[i] = srcImageData.data[i];
     }
     dstCtx.putImageData(dstImageData, 0, 0);
 }
