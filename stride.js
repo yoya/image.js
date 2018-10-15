@@ -54,9 +54,7 @@ function drawStride(srcCanvas, dstCanvas, stride) {
     //
     var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
     var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-    var n = srcImageData.data.length;
-    for (var i = 0 ; i < n ; i++) {
-	dstImageData.data[i] = srcImageData.data[i];
-    }
+    // https://stackoverflow.com/questions/35563529/how-to-copy-typedarray-into-another-typedarray
+    dstImageData.data.set(srcImageData.data); // copy
     dstCtx.putImageData(dstImageData, 0, 0);
 }
