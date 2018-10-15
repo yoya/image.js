@@ -114,7 +114,7 @@ function randomValue(ratio) {
     }
     if (ratio < -0.5) {
 	v = v * (ratio + 1.5) ;
-    } else if (ratio > 0.5) {
+    } else if (0.5 < ratio) {
 	v = v * (1.5 - ratio) + (ratio - 0.5);
     }
     return v;
