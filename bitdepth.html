@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2018/10/16- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> copy </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body bgcolor="lightgray">
+    <div class="container">
+      <div class="controlPanel">
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+	srcBitDepth:<input id="srcBitDepthRange" type="range" min="1" max="8" step="1" value="8">:<input type="text" id="srcBitDepthText" size="2">
+	dstBitDepth:<input id="dstBitDepthRange" type="range" min="1" max="8" step="1" value="4">:<input type="text" id="dstBitDepthText" size="2">
+      </div> <!-- controlPanel -->
+      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="bitdepth.js"> </script>
+  </body>
+</html>
