@@ -67,6 +67,9 @@ function quantizeDepth(v, srcBitDepth, dstBitDepth, dither, srcX, srcY) {
 	// console.error("wrong dither method:", dither);
     }
     var depthRatio = maxValueByBitDepth[dstBitDepth] / maxValueByBitDepth[srcBitDepth];
+    if (srcBitDepth < dstBitDepth) {
+	ditherSpread *= depthRatio;
+    }
     return Math.round(v * depthRatio + ditherSpread);
 }
 
