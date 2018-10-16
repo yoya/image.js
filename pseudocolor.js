@@ -85,6 +85,17 @@ function makeCLUT() {
 	randomClut[r] = [i,i,i];
     }
     CLUT["random"] = randomClut;
+    //
+    var contourClut = [];
+    for (var i = 0 ; i < 256 ; i++) {
+	// var v = (i&1)?0:255
+	var v = 127;
+	if (i&2) {
+	    v = (i&1)?0:255
+	}
+	contourClut.push([v,v,v]);
+    }
+    CLUT["contour"] = contourClut;
 }
 
 var CLUTtemplate = {
