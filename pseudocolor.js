@@ -75,6 +75,7 @@ function makeCLUT() {
 	// console.debug(name, table);
 	CLUT[name] = table;
     }
+    //
     var randomClut = [];
     for (var i = 0 ; i < 256 ; i++) {
 	var r = 0;
@@ -83,9 +84,6 @@ function makeCLUT() {
 	} while ((r in randomClut) || (255 < r))
 	randomClut[r] = [i,i,i];
     }
-    console.log(randomClut);
-    randomClut = randomClut.sort(function() { Math.random() - 0.5; });
-    console.log(randomClut);
     CLUT["random"] = randomClut;
 }
 
