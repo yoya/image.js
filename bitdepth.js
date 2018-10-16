@@ -32,7 +32,6 @@ function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
     var srcBitDepth = parseFloat(document.getElementById("srcBitDepthRange").value);
     var dstBitDepth = parseFloat(document.getElementById("dstBitDepthRange").value);
     var dither = document.getElementById("ditherSelect").value;
-    console.log(document.getElementById("ditherSelect"));
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     var params = {
 	"srcBitDepth":srcBitDepth,
@@ -64,7 +63,7 @@ function quantizeDepth(v, srcBitDepth, dstBitDepth, dither, srcX, srcY) {
 	ditherSpread = Math.random() - 0.5;
 	break;
     default:
-	// console.error("wrong dither method:", dither);
+	console.error("wrong dither method:", dither);
     }
     var depthRatio = maxValueByBitDepth[dstBitDepth] / maxValueByBitDepth[srcBitDepth];
     if (srcBitDepth < dstBitDepth) {
