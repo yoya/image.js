@@ -40,6 +40,46 @@ function drawSrcImageAndRescale(srcImage, srcCanvas, dstCancas, sync) {
 	cubicC:parseFloat(document.getElementById("cubicCRange").value),
 	lobe:  parseFloat(document.getElementById("lobeRange").value)
     };
-    drawGraph(params);
+    drawFilterGraph(params);
     worker.process(srcCanvas, dstCanvas, params, sync);
+}
+
+function drawFilterGraph(params) {
+    var x_min = -4.2, x_max = 4.2;
+    var y_min = -1.2, y_max = 1.2;
+    var filterType = params["filterType"];
+    switch (filterType) {
+	case "NN":
+	var color = "#f00";
+	var points = [x_min, 0, -0.5, 0, -0.5, 1, 0.5, 1, 0.5, 0, x_max, 0];
+	break;
+	//
+	case "BiLinear":
+	var color = "#08f";
+	var points = [x_min, 0, -1, 0, 0, 1, 1, 0, x_max, 0];
+	break;
+	//
+	case "BiCubic":
+	var b = params["cubicB"];
+	var c = params["cubicC"];
+	var coeff = cubicBCcoefficient(b, c);
+	var points = [];
+	var color = "#0b0";
+	for (var x = x_min  ; x <= x_max ; x += 0.05) {
+	    var y = cubicBC(x, coeff);
+	    points.push(x, y);
+	}
+	break;
+	//
+	case "Lanczos":
+	var lobe = params["lobe"];
+	var points = [];
+	var color = "#fa0";
+	for (var x = x_min  ; x <= x_max ; x += 0.05) {
+	    var y = lanczos(x, lobe);
+	    points.push(x, y);
+	}
+	break;
+    }
+    drawGraph(points, color, [x_min, x_max], [y_min, y_max]);
 }
