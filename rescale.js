@@ -3,7 +3,9 @@
 * 2016/11/13- yoya@awm.jp . All Rights Reserved.
 */
 
-main();
+document.addEventListener("DOMContentLoaded", function(event) {
+    main();
+});
 
 function main() {
     // console.debug("main");
@@ -26,6 +28,7 @@ function main() {
 		 function(target, rel) {
 		     drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas, rel);
 		 } );
+    drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas, false);
 }
 
 var worker = new workerProcess("worker/rescale.js");
