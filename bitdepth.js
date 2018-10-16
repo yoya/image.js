@@ -21,7 +21,8 @@ function main() {
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "srcBitDepthRange":"srcBitDepthText",
-		  "dstBitDepthRange":"dstBitDepthText"},
+		  "dstBitDepthRange":"dstBitDepthText",
+		  "ditherSelect":null},
 		 function() {
 		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas);
 		 } );
@@ -30,10 +31,13 @@ function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var srcBitDepth = parseFloat(document.getElementById("srcBitDepthRange").value);
     var dstBitDepth = parseFloat(document.getElementById("dstBitDepthRange").value);
+    var dither = document.getElementById("ditherSelect").value;
+    console.log(document.getElementById("ditherSelect"));
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     var params = {
 	"srcBitDepth":srcBitDepth,
-	"dstBitDepth":dstBitDepth
+	"dstBitDepth":dstBitDepth,
+	"dither":dither
     };
     drawBitDepth(srcCanvas, dstCanvas, params);
 }
@@ -50,13 +54,26 @@ var maxValueByBitDepth = {
     8: 2*2*2*2*2*2*2*2 - 1,
 };
 
-function quantizeDepth(v, srcBitDepth, dstBitDepth) {
-    return Math.round(v * maxValueByBitDepth[dstBitDepth] / maxValueByBitDepth[srcBitDepth]);
+function quantizeDepth(v, srcBitDepth, dstBitDepth, dither, srcX, srcY) {
+    var ditherSpread = 0;
+    switch (dither) {
+    case "none":
+	ditherSpread = 0;
+	break;
+    case "random":
+	ditherSpread = Math.random() - 0.5;
+	break;
+    default:
+	// console.error("wrong dither method:", dither);
+    }
+    var depthRatio = maxValueByBitDepth[dstBitDepth] / maxValueByBitDepth[srcBitDepth];
+    return Math.round(v * depthRatio + ditherSpread);
 }
 
-function bitDepth(rgba, srcBitDepth, dstBitDepth) {
+function bitDepth(rgba, srcBitDepth, dstBitDepth, dither, srcX, srcY) {
     return rgba.map(function(v) {
-	v = quantizeDepth(v, srcBitDepth, dstBitDepth);
+	v = quantizeDepth(v, 8, srcBitDepth);
+	v = quantizeDepth(v, srcBitDepth, dstBitDepth, dither, srcX, srcY);
 	return quantizeDepth(v, dstBitDepth, 8);
     });
 }
@@ -65,6 +82,7 @@ function drawBitDepth(srcCanvas, dstCanvas, params) {
     // console.debug("drawBitDepth");
     var srcBitDepth = params.srcBitDepth;
     var dstBitDepth = params.dstBitDepth;
+    var dither = params.dither;
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
@@ -80,7 +98,8 @@ function drawBitDepth(srcCanvas, dstCanvas, params) {
 	    var srcX = dstX;
 	    var srcY = dstY;
 	    var rgba = getRGBA(srcImageData, srcX, srcY);
-	    rgba = bitDepth(rgba, srcBitDepth, dstBitDepth);
+	    rgba = bitDepth(rgba, srcBitDepth, dstBitDepth,
+			    dither, srcX, srcY);
 	    setRGBA(dstImageData, dstX, dstY, rgba);
 	}
     }
