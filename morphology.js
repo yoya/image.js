@@ -88,10 +88,11 @@ function makeStructureTable(structureType, filterWindow) {
 	break;
     case "circle":
 	var center = Math.floor(filterWindow/2);
+	var radius = center + 0.25;
 	for (var y = 0 ; y < filterWindow; y++) {
 	    for (var x = 0 ; x < filterWindow; x++) {
 		var dx = x - center, dy = y - center;
-		if ((dx*dx + dy*dy) <=  center*center) {
+		if ((dx*dx + dy*dy) <=  radius*radius) {
 		    structureTable[i] = 1;
 		}
 		i++;
