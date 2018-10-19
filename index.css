@@ -46,3 +46,6 @@ table {
 .borderGray   { border: thick solid gray;  }
 
 .bgWhite { background-color: white;}
+
+p  {float:left; margin:0px;}
+li {float:left; display:block; padding:8px; border: medium solid #ABC; }
