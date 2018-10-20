@@ -85,5 +85,12 @@ function drawFilterGraph(params) {
 	}
 	break;
     }
-    drawGraph(graphCanvas, points, color, [x_min, x_max], [y_min, y_max]);
+    var graph ={
+	canvas:graphCanvas,
+	lineColor:color,
+	lineWidth:2,
+	x_range:[x_min, x_max],
+	y_range:[y_min, y_max]
+    };
+    drawGraph(graph, points);
 }
