@@ -25,7 +25,7 @@ function main() {
 	params[name] = arr;
 	if (isDefault) {
 	    params['cieArr'] = arr;
-	    drawGraph(graphCanvas, params, true);
+	    drawSpectrumGraph(graphCanvas, params, true);
 	    drawDiagram(diagramBaseCanvas, dstCanvas, params, true);
 	}
     }
@@ -40,7 +40,7 @@ function main() {
 		     } else { // "ciexyzjv"
 			 params['cieArr'] = params['cieJVArr'];
 		     }
-		     drawGraph(graphCanvas, params, rel);
+		     drawSpectrumGraph(graphCanvas, params, rel);
 		     drawDiagram(diagramBaseCanvas, dstCanvas, params, rel);
 		 } );
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
@@ -62,7 +62,7 @@ function main() {
 		     params['colorspace'] = document.getElementById("colorspaceSelect").value;
 		     params['tristimulus'] = document.getElementById("tristimulusCheckbox").checked;
 		     params['guide'] = document.getElementById("guideCheckbox").checked;
-		     drawGraph(graphCanvas, params, rel);
+		     drawSpectrumGraph(graphCanvas, params, rel);
 		     drawDiagram(diagramBaseCanvas, dstCanvas, params, rel);
 		 } );
     //
