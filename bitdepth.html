@@ -9,17 +9,32 @@
     <div class="container">
       <div class="controlPanel" style="float:left">
 	<div style="float:left">
-          Dither method:  <br />
-	  <select id="ditherSelect" size="3">
-	    <option value="none" selected> 無し </option>
-	    <option value="random"       > ランダム </option>
-          </select>
-	</div>
-	<div style="float:left">
 	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
 	  <br />
-	  srcBitDepth:<input id="srcBitDepthRange" type="range" min="1" max="8" step="1" value="8">:<input type="text" id="srcBitDepthText" size="2">
-	  dstBitDepth:<input id="dstBitDepthRange" type="range" min="1" max="8" step="1" value="4">:<input type="text" id="dstBitDepthText" size="2">
+	  <div style="float:left">
+            量子化:  <br />
+	    <select id="quantizeSelect" size="3">
+	      <option value="nn" selected> 最近傍 </option>
+	      <option value="equalize"   > 均等化 </option>
+	      <option value="inverse"    > 逆変換 </option>
+            </select>
+	  </div>
+	  <div style="float:left">
+            Dither:  <br />
+	    <select id="ditherSelect" size="3">
+	      <option value="none" selected> 無し </option>
+	      <option value="random"       > ランダム </option>
+            </select>
+	  </div>
+	  <div id="canvasContainer" style="clear:both"> </div>
+	  <div style="float:left">
+	    srcBitDepth:<input id="srcBitDepthRange" type="range" min="1" max="8" step="1" value="8">:<input type="text" id="srcBitDepthText" size="2">
+	    <br />
+	    dstBitDepth:<input id="dstBitDepthRange" type="range" min="1" max="8" step="1" value="4">:<input type="text" id="dstBitDepthText" size="2">
+	  </div>
+	</div>
+	<div style="float:left">
+	  <canvas id="graphCanvas" class="borderGreen" width=256 height=256> graphCanvas </canvas>
 	</div>
       </div> <!-- controlPanel -->
       <div id="canvasContainer" style="clear:both">
@@ -31,6 +46,7 @@
       <script type="text/javascript" src="lib/drop.js"> </script>
       <script type="text/javascript" src="lib/bind.js"> </script>
       <script type="text/javascript" src="lib/canvas.js"> </script>
+      <script type="text/javascript" src="lib/graph.js"> </script>
       <script type="text/javascript" src="bitdepth.js"> </script>
     </div> <!-- canvasContainer -->
   </body>
