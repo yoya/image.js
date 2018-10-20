@@ -48,6 +48,7 @@ function drawSrcImageAndRescale(srcImage, srcCanvas, dstCancas, sync) {
 }
 
 function drawFilterGraph(params) {
+    var graphCanvas = document.getElementById("graphCanvas");
     var x_min = -4.2, x_max = 4.2;
     var y_min = -1.2, y_max = 1.2;
     var filterType = params["filterType"];
@@ -84,5 +85,5 @@ function drawFilterGraph(params) {
 	}
 	break;
     }
-    drawGraph(points, color, [x_min, x_max], [y_min, y_max]);
+    drawGraph(graphCanvas, points, color, [x_min, x_max], [y_min, y_max]);
 }
