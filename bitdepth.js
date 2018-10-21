@@ -153,7 +153,7 @@ function drawBitDepthGraph(srcCanvas, dstCanvas, graphCanvas) {
     var graph ={
 	canvas:graphCanvas,
 	lineColor:"",
-	lineWidth:2,
+	lineWidth:1,
 	x_range:[-10, 255+10],
 	y_range:[-10, 255+10],
 	lineType:"lines"
