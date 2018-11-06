@@ -21,7 +21,8 @@ function main() {
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "addRedRange":"addRedText", "addGreenRange":"addGreenText", "addBlueRange":"addBlueText",
-		  "multiRedRange":"multiRedText", "multiGreenRange":"multiGreenText", "multiBlueRange":"multiBlueText"},
+		  "multiRedRange":"multiRedText", "multiGreenRange":"multiGreenText", "multiBlueRange":"multiBlueText",
+		  "sigmoidRedRange":"sigmoidRedText", "sigmoidGreenRange":"sigmoidGreenText", "sigmoidBlueRange":"sigmoidBlueText"},
 		 function() {
 		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas);
 		 } );
@@ -35,15 +36,20 @@ function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCancas) {
     var multiRed    = parseFloat(document.getElementById("multiRedRange").value);
     var multiGreen  = parseFloat(document.getElementById("multiGreenRange").value);
     var multiBlue   = parseFloat(document.getElementById("multiBlueRange").value);
+    var sigmoidRed    = parseFloat(document.getElementById("sigmoidRedRange").value);
+    var sigmoidGreen  = parseFloat(document.getElementById("sigmoidGreenRange").value);
+    var sigmoidBlue   = parseFloat(document.getElementById("sigmoidBlueRange").value);
     drawColorTransform(srcCanvas, dstCanvas,
 		       addRed, addGreen, addBlue,
-		       multiRed, multiGreen, multiBlue);
+		       multiRed, multiGreen, multiBlue,
+		       sigmoidRed, sigmoidGreen, sigmoidBlue);
 }
 
 
 function drawColorTransform(srcCanvas, dstCanvas,
 			    addRed, addGreen, addBlue,
-			    multiRed, multiGreen, multiBlue) {
+			    multiRed, multiGreen, multiBlue,
+			    sigmoidRed, sigmoidGreen, sigmoidBlue) {
     // console.debug("drawColorTransform");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -55,6 +61,20 @@ function drawColorTransform(srcCanvas, dstCanvas,
     //
     var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
     var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
+    // -1.0 ~ 0 ~ 1.0 => 50 ~ 0 ~ 50
+    var sig_A_red   = Math.abs(sigmoidRed)   * 50;
+    var sig_A_green = Math.abs(sigmoidGreen) * 50;
+    var sig_A_blue  = Math.abs(sigmoidBlue)  * 50;
+    // -1.0 ~ 1.0 => -0.5 ~ 1.5
+    var sig_B_red   = 0.5 - sigmoidRed ;
+    var sig_B_green = 0.5 - sigmoidGreen;
+    var sig_B_blue  = 0.5 - sigmoidBlue;
+    var sig0_red   = sigmoid(0.0, sig_A_red,   sig_B_red);
+    var sig1_red   = sigmoid(1.0, sig_A_red,   sig_B_red);
+    var sig0_green = sigmoid(0.0, sig_A_green, sig_B_green);
+    var sig1_green = sigmoid(1.0, sig_A_green, sig_B_green);
+    var sig0_blue  = sigmoid(0.0, sig_A_blue,  sig_B_blue);
+    var sig1_blue  = sigmoid(1.0, sig_A_blue,  sig_B_blue);
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
 	    var srcX = dstX;
@@ -63,6 +83,24 @@ function drawColorTransform(srcCanvas, dstCanvas,
 	    r = r * multiRed   + addRed;
 	    g = g * multiGreen + addGreen;
 	    b = b * multiBlue  + addBlue;
+	    if (sigmoidRed) {
+		r /= 255;
+		r = (sigmoid(r, sig_A_red, sig_B_red) - sig0_red)
+		    / (sig1_red - sig0_red);
+		r *= 255;
+	    }
+	    if (sigmoidGreen) {
+		g /= 255;
+		g = (sigmoid(g, sig_A_green, sig_B_green) - sig0_green) /
+		    (sig1_green - sig0_green);
+		g *= 255;
+	    }
+	    if (sigmoidBlue) {
+		b /= 255;
+		b = (sigmoid(b, sig_A_blue, sig_B_blue) - sig0_blue) /
+		    (sig1_blue - sig0_blue);
+		b *= 255;
+	    }
 	    var rgba = [r, g, b, a];
 	    setRGBA(dstImageData, dstX, dstY, rgba);
 	}
