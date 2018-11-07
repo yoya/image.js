@@ -88,6 +88,10 @@ var color2Matrix = {
 	0.75, 0.25, 0.25, 0,
 	0.25, 0.50, 0.25, 0,
 	0.25, 0.25, 0.30, 0],
+    "sepia2":[
+	0.75, 0.20, 0.20, 0,
+	0.20, 0.60, 0.20, 0,
+	0.20, 0.20, 0.45, 0],
 };
 
 function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCancas, colorMatrix, colorWindow) {
