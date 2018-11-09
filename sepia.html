@@ -8,21 +8,21 @@
 <body>
   <div class="container">
     <div id="controlPanel"  style="float:left">
-      Color Filter:  <br />
       <div style="float:left">
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+	<br />
+	linear:<input id="linearCheckbox" type="checkbox" />
+	<br />
 	amount:<input id="amountRange" type="range" min="0.0" max="1.0" step="0.01" value="1.0">:<input type="text" id="amountText" size="5">
       </div>
+      <div style="float:left">
+	colorMatrix:<table id="colorMatrixTable" style="border:1 "> </table>
+      </div>
     </div>
-    colorMatrix:<table id="colorMatrixTable" style="border:1 "> </table>
-    <br />
-    linear:<input id="linearCheckbox" type="checkbox" />
-    <div>
-      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+    <div style="clear:both">
+      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
     </div>
-  </div>
-  <div style="clear:both">
-    <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
-    <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
   </div>
   <script type="text/javascript" src="lib/drop.js"> </script>
   <script type="text/javascript" src="lib/bind.js"> </script>
