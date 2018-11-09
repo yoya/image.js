@@ -21,7 +21,7 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, colorWindow);
+	    drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -29,20 +29,20 @@ function main() {
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "linearCheckbox":null},
 		 function() {
-		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, colorWindow);
+		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix);
 		 } );
     bindFunction({"colorSelect":null},
 		 function() {
 		     color = document.getElementById("colorSelect").value;
 		     colorMatrix = color2Matrix[color];
 		     console.log(colorMatrix);
-		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, colorWindow);
+		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix);
 		     setTableValues("colorMatrixTable", colorMatrix);
 		 } );
     //
     bindTableFunction("colorMatrixTable", function(table, values, width) {
 	colorMatrix = values;
-	drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, colorWindow);
+	drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix);
     }, colorMatrix, colorWindow);
     console.log(colorMatrixTable);
 }
@@ -94,11 +94,11 @@ var color2Matrix = {
 	0.20, 0.20, 0.45, 0],
 };
 
-function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCancas, colorMatrix, colorWindow) {
+function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCancas, colorMatrix) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var linear = document.getElementById("linearCheckbox").checked;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawColorTransform(srcCanvas, dstCanvas, colorMatrix, colorWindow, linear);
+    drawColorTransform(srcCanvas, dstCanvas, colorMatrix, linear);
 }
 
 function colorTransform(imageData, x, y, mat, linear) {
@@ -117,7 +117,7 @@ function colorTransform(imageData, x, y, mat, linear) {
     return [r2, g2, b2, a];
 }
 
-function drawColorTransform(srcCanvas, dstCanvas, colorMatrix, colorWindow, linear) {
+function drawColorTransform(srcCanvas, dstCanvas, colorMatrix, linear) {
     // console.debug("drawColorTransform");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
