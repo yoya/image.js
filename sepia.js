@@ -46,8 +46,8 @@ function main() {
 		 function() {
 		     amount = parseFloat(amountRange.value);
 		     colorMatrix = sepiaToneMatrix(amount);
-		     drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix);
 		     setTableValues("colorMatrixTable", colorMatrix);
+		     drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix);
 		 } );
     //
     bindTableFunction("colorMatrixTable", function(table, values, width) {
@@ -65,39 +65,43 @@ function drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCancas, colorMatrix) {
     drawSepiaTone(srcCanvas, dstCanvas, colorMatrix, linear);
 }
 
-function colorTransform(imageData, x, y, mat, linear) {
-    var [r, g, b, a] = getRGBA(imageData, x, y);
-    if (linear) {
-	[r, g, b] = sRGB2linearRGB([r, g, b]);
-	r *= 255; g *= 255; b *= 255;
-    }
+function colorTransform(rgb, mat) {
+    var [r, g, b] = rgb;
     var r2 = r*mat[0] + g*mat[1] + b*mat[2]  + 255*mat[3];
     var g2 = r*mat[4] + g*mat[5] + b*mat[6]  + 255*mat[7];
     var b2 = r*mat[8] + g*mat[9] + b*mat[10] + 255*mat[11];
+    return [r2, g2, b2];
+}
+
+function sepiaTone(rgba, colorMatrix, linear) {
+    var [r, g, b, a] = rgba;
     if (linear) {
-	r2 /= 255; g2 /= 255; b2 /= 255;
-	[r2, g2, b2] = linearRGB2sRGB([r2, g2, b2]);
+	[r, g, b] = sRGB2linearRGB([r,g,b]);
+	r *= 255; g *= 255; b *= 255;
     }
-    return [r2, g2, b2, a];
+    [r,g,b] = colorTransform([r,g,b], colorMatrix)
+    if (linear) {
+	r /= 255; g /= 255; b /= 255;
+	[r, g, b] = linearRGB2sRGB([r2, g2, b2]);
+    }
+    return [r, g, b, a];
 }
 
 function drawSepiaTone(srcCanvas, dstCanvas, colorMatrix, linear) {
     // console.debug("drawSepiaTone");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
-    var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var dstWidth  = srcWidth;
-    var dstHeight = srcHeight;
-    dstCanvas.width  = dstWidth;
-    dstCanvas.height = dstHeight;
+    var width = srcCanvas.width, height = srcCanvas.height;
+    dstCanvas.width  = width;
+    dstCanvas.height = height;
     //
-    var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-    var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-    for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var srcX = dstX, srcY = dstY;
-	    var rgba = colorTransform(srcImageData, srcX, srcY, colorMatrix, linear);
-	    setRGBA(dstImageData, dstX, dstY, rgba);
+    var srcImageData = srcCtx.getImageData(0, 0, width, height);
+    var dstImageData = dstCtx.createImageData(width, height);
+    for (var y = 0 ; y < height; y++) {
+        for (var x = 0 ; x < width; x++) {
+	    var rgba = getRGBA(srcImageData, x, y);
+	    rgba = sepiaTone(rgba, colorMatrix, linear);
+	    setRGBA(dstImageData, x, y, rgba);
 	}
     }
     dstCtx.putImageData(dstImageData, 0, 0);
