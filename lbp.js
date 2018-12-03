@@ -15,24 +15,27 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas);
+	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
-		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas);
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+		  "thresholdSelect": null},
+		 function(target, rel) {
+		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, rel);
 		 } );
-}
-function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
+ }
+function drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, sync) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    var threshold = document.getElementById("thresholdSelect").value;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawLBP(srcCanvas, dstCanvas);
+    drawLBP(srcCanvas, dstCanvas, threshold, sync);
 }
+
 
 var worker = new workerProcess("worker/lbp.js");
 
-function drawLBP(srcCanvas, dstCanvas, sync) {
-    var params = { };
+function drawLBP(srcCanvas, dstCanvas, threshold, sync) {
+    var params = { threshold:threshold };
     worker.process(srcCanvas, dstCanvas, params, sync);
 }

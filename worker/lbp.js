@@ -7,11 +7,12 @@ importScripts("../lib/canvas.js");
 
 onmessage = function(e) {
     var srcImageData = e.data.image;
+    var threshold = e.data.threshold;
     var width = srcImageData.width, height = srcImageData.height;
     var dstImageData = new ImageData(width, height);
     for (var y = 0 ; y < height; y++) {
         for (var x = 0 ; x < width; x++) {
-	    var rgba = LBP(srcImageData, x, y);
+	    var rgba = LBP(srcImageData, x, y, threshold);
 	    setRGBA(dstImageData, x, y, rgba);
 	}
     }
@@ -20,17 +21,32 @@ onmessage = function(e) {
 
 var LBPorder = [0, 1, 2, 5, 8, 7, 6, 3]; // clock-wise order
     
-function LBPbuild(arr) {
-    var center = arr[4];
+function LBPbuild(arr, threshold) {
+    var th;
     var v = 0;
+    switch (threshold) {
+    case "center":
+	th = arr[4];
+	break;
+    case "mean":
+	th= arr.reduce(function (a, b) { return a + b; } ) / 9;
+	break;
+    case "median":
+	var arr2 = arr.concat(); // array clone
+	arr2.sort();
+	th = arr2[4];
+	break;
+    default:
+	return ;
+    }
     for (var i = 0 ; i < 8 ; i++) {
 	v <<= 1;
-	v += (center < arr[LBPorder[i]])? 0 : 1
+	v += (th < arr[LBPorder[i]])? 0 : 1
     }
     return v;
 }
 
-function LBP(srcImageData, srcX, srcY) {
+function LBP(srcImageData, srcX, srcY, threshold) {
     var rArr = [], gArr = [], bArr = [];
     var [r, g, b, a] = getRGBA(srcImageData, srcX, srcY);
     for (var y = -1 ; y <= 1 ; y++) {
@@ -41,5 +57,7 @@ function LBP(srcImageData, srcX, srcY) {
 	    bArr.push(b)
 	}
     }
-    return [LBPbuild(rArr), LBPbuild(gArr), LBPbuild(bArr), a];
+    return [LBPbuild(rArr, threshold),
+	    LBPbuild(gArr, threshold),
+	    LBPbuild(bArr, threshold), a];
 }
