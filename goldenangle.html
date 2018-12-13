@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2018/12/14- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Golden Angle </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel">
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="256">:<input type="text" id="maxWidthHeightText" size="5">
+	unitWidth:<input id="unitWidthRange" type="range" min="1" max="1024" step="1" value="64">:<input type="text" id="unitWidthText" size="5">
+	unitHeight:<input id="unitHeightRange" type="range" min="1" max="1024" step="1" value="2048">:<input type="text" id="unitHeightText" size="5">
+      </div> <!-- controlPanel -->
+      <canvas id="hueCanvas" class="borderRed" width=200 height=200> hueCanvas </canvas>
+      <canvas id="colorCanvas" class="borderGreen" width=200 height=200> colorCanvas </canvas>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="lib/color.js"> </script>
+    <script type="text/javascript" src="goldenangle.js"> </script>
+  </body>
+</html>
