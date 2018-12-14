@@ -51,6 +51,7 @@ function drawColor(hueCanvas, colorCanvas, params) {
     var colorImageData = new ImageData(colorWidth, colorHeight);
     // https://en.wikipedia.org/wiki/Golden_angle
     var goldenAngle = 180 * (3 - Math.sqrt(5));
+    var goldenAngleT = Math.PI * (3 - Math.sqrt(5));
     //
     var hueCenterX = hueWidth  / 2;
     var hueCenterY = hueHeight / 2;
@@ -64,26 +65,31 @@ function drawColor(hueCanvas, colorCanvas, params) {
 	    var h = goldenAngle * unitXY;
 	    h = (h % 360) | 0;
 	    var color = "hsl("+h+", 100%, 50%)";
-	    var t = h / 360 * 2 * Math.PI;
+	    var t = (h / 360 * 2*Math.PI) - (Math.PI/2);
 	    var radiusRatio = (unitXYMax - unitXY) / unitXYMax;
 	    // hueCanvas
 	    hueCtx.beginPath();
 	    hueCtx.strokeStyle = color;
-	    hueCtx.arc(hueCenterX, hueCenterY, hueRadius * radiusRatio, 0, 2*Math.PI , false);
+	    hueCtx.lineWidth = 1;
+	    if (x || y) {
+		hueCtx.arc(hueCenterX, hueCenterY, hueRadius * radiusRatio, t - goldenAngleT,  t, false);
+	    } else {
+		hueCtx.arc(hueCenterX, hueCenterY, hueRadius * radiusRatio, 0,  2*Math.PI, false);
+	    }
 	    hueCtx.stroke();
+	    //
 	    hueCtx.beginPath();
 	    hueCtx.strokeStyle = color;
+	    hueCtx.lineWidth = 2;
 	    hueCtx.moveTo(hueCenterX, hueCenterY);
-	    hueCtx.lineTo(hueCenterX + hueRadius * Math.sin(t) * radiusRatio,
-			  hueCenterY - hueRadius * Math.cos(t) * radiusRatio)
+	    hueCtx.lineTo(hueCenterX + hueRadius * Math.cos(t) * radiusRatio,
+			  hueCenterY + hueRadius * Math.sin(t) * radiusRatio)
 	    hueCtx.stroke();
-	    hueCtx.closePath();
 	    // colorCanvas
 	    colorCtx.beginPath();
 	    colorCtx.fillStyle = color;
 	    colorCtx.rect(x, y, unitWidth, unitHeight);
 	    colorCtx.fill();
-	    colorCtx.closePath();
 	}
     }
 }
