@@ -56,27 +56,48 @@ function drawColor(hueCanvas, colorCanvas, params) {
     var hueCenterX = hueWidth  / 2;
     var hueCenterY = hueHeight / 2;
     var hueRadius = Math.min(hueWidth, hueHeight) / 2;
-    var unitXYMax = Math.ceil(colorWidth/unitWidth) + Math.ceil(colorHeight/unitHeight);
-    for (var y = 0 ; y < colorHeight; y += unitHeight) {
-        for (var x = 0 ; x < colorWidth; x += unitWidth) {
-	    var unitX = (x / unitWidth) | 0;
-	    var unitY = (y / unitHeight) | 0;
+    var unitXMax = Math.ceil(colorWidth/unitWidth)
+    var unitYMax = Math.ceil(colorHeight/unitHeight);
+    var unitXYMax = unitXMax + unitYMax;
+    for (var unitY = 0; unitY < unitYMax  ; unitY++) {
+	for (var unitX = 0 ; unitX  < unitXMax ; unitX++) {
+	    var x = unitX * unitWidth;
+	    var y = unitY * unitHeight;
 	    var unitXY = (unitX + unitY);
 	    var h = goldenAngle * unitXY;
 	    h = (h % 360) | 0;
-	    var color = "hsl("+h+", 100%, 50%)";
+	    var color  = "hsl("+h+", 100%, 50%)";
+	    var color2 = "hsla("+h+", 100%, 50%, 50%)";
 	    var t = (h / 360 * 2*Math.PI) - (Math.PI/2);
 	    var radiusRatio = (unitXYMax - unitXY) / unitXYMax;
 	    // hueCanvas
 	    hueCtx.beginPath();
-	    hueCtx.strokeStyle = color;
-	    hueCtx.lineWidth = 1;
+	    hueCtx.fillStyle = color2;
+	    hueCtx.moveTo(hueCenterX, hueCenterY);
+	    hueCtx.lineTo(hueCenterX + hueRadius * Math.cos(t) * radiusRatio,
+			  hueCenterY + hueRadius * Math.sin(t) * radiusRatio);
 	    if (x || y) {
-		hueCtx.arc(hueCenterX, hueCenterY, hueRadius * radiusRatio, t - goldenAngleT,  t, false);
+		hueCtx.arc(hueCenterX, hueCenterY, hueRadius * radiusRatio, t, t - goldenAngleT, true);
 	    } else {
 		hueCtx.arc(hueCenterX, hueCenterY, hueRadius * radiusRatio, 0,  2*Math.PI, false);
 	    }
-	    hueCtx.stroke();
+	    hueCtx.lineTo(hueCenterX, hueCenterY);
+	    hueCtx.closePath();
+	    hueCtx.fill();
+	    // colorCanvas
+	    colorCtx.beginPath();
+	    colorCtx.fillStyle = color;
+	    colorCtx.rect(x, y, unitWidth, unitHeight);
+	    colorCtx.fill();
+	}
+    }
+    for (var unitY = unitYMax  ; unitY >= 0 ; unitY--) {
+	for (var unitX = unitXMax  ; unitX >= 0 ; unitX--) {
+	    var unitXY = (unitX + unitY);
+	    var h = goldenAngle * unitXY;
+	    var t = (h / 360 * 2*Math.PI) - (Math.PI/2);
+	    var radiusRatio = (unitXYMax - unitXY) / unitXYMax;
+	    var color  = "hsl("+h+", 100%, 50%)";
 	    //
 	    hueCtx.beginPath();
 	    hueCtx.strokeStyle = color;
@@ -85,11 +106,6 @@ function drawColor(hueCanvas, colorCanvas, params) {
 	    hueCtx.lineTo(hueCenterX + hueRadius * Math.cos(t) * radiusRatio,
 			  hueCenterY + hueRadius * Math.sin(t) * radiusRatio)
 	    hueCtx.stroke();
-	    // colorCanvas
-	    colorCtx.beginPath();
-	    colorCtx.fillStyle = color;
-	    colorCtx.rect(x, y, unitWidth, unitHeight);
-	    colorCtx.fill();
 	}
     }
 }
