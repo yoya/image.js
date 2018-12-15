@@ -91,8 +91,8 @@ function drawColor(hueCanvas, colorCanvas, params) {
 	    colorCtx.fill();
 	}
     }
-    for (var unitY = unitYMax  ; unitY >= 0 ; unitY--) {
-	for (var unitX = unitXMax  ; unitX >= 0 ; unitX--) {
+    for (var unitY = unitYMax -1 ; unitY >= 0 ; unitY--) {
+	for (var unitX = unitXMax -1 ; unitX >= 0 ; unitX--) {
 	    var unitXY = (unitX + unitY);
 	    var h = goldenAngle * unitXY;
 	    var t = (h / 360 * 2*Math.PI) - (Math.PI/2);
