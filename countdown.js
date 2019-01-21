@@ -84,7 +84,7 @@ function drawCountDownTicks() {
         var radius = height/2;
         var offsetAngle = -Math.PI/2;
         var startAngle = offsetAngle;
-        var endAngle = offsetAngle + 2 * Math.PI * angle_ratio;
+        var endAngle = offsetAngle - 2 * Math.PI * (angle_ratio);
         // console.log("ratio:"+angle_ratio);
         ctx.beginPath();
         ctx.fillStyle ="blue";
