@@ -8,12 +8,16 @@
   <body>
     <div class="container">
       <div class="controlPanel">
+        <input id="playButton" type="button" value="Play"/>
+        <input id="stopButton" type="button" value="Stop"/>
+        <input id="downloadButton" type="button" value="Download"/>
 	width:<input id="widthRange" type="range" min="16" max="1920" step="1" value="960">
         :<input type="text" id="widthText" size="5">
         height:<input id="heightRange" type="range" min="16" max="1080" step="1" value="540">
         :<input type="text" id="heightText" size="5">
       </div> <!-- controlPanel -->
       <canvas id="canvas" width=200 height=200> srcCanvas </canvas>
+      <video id="video" width=200 height=200 src="" muted autoplay style="display:none"> </video>
     </div>  <!-- container -->
     <script type="text/javascript" src="lib/bind.js"> </script>
     <script type="text/javascript" src="lib/canvas.js"> </script>
