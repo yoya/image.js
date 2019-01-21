@@ -45,11 +45,7 @@ function main() {
                      params['width']  = parseFloat(widthRange.value);
                      params['height'] = parseFloat(heightRange.value);
                      params['backgroundImage'] = getTestcardImage(params.width, params.height);
-                     canvas.width  = params['width'];
-                     canvas.height = params['height'];
-                     video.width  = params['width'];
-                     video.height = params['height'];
-                     drawTestImage(params);
+                     drawBackgroundImage(params);
 		 } );
     bindFunction({"playButton":null},
 		 function(target, rel) {
@@ -65,14 +61,12 @@ function main() {
 		 } );
     params['backgroundImage'] = getTestcardImage(params.width, params.height);
     // start(params);
-    drawTestImage(params);
+    drawBackgroundImage(params);
 }
 
 var timerId = null;
 function start(params) {
     // downloadButton.disabled = true;
-    var canvas = params.canvas;
-    var video = params.video;
     var [width, height] = [params.width, params.height];
     canvas.width = width;
     canvas.height = height;
@@ -178,17 +172,21 @@ function download() {
   }, 100);
 }
 
-function drawTestImage(params) {
-    var canvas = params.canvas;
+function drawBackgroundImage(params) {
+    var [width, height] = [params.width, params.height];
+    canvas.width  = width;
+    canvas.height = height;
+    video.width  = width;
+    video.height = height;
     var backgroundImage = params.backgroundImage;
     var ctx = canvas.getContext("2d");
     ctx.putImageData(backgroundImage, 0, 0);
 }
+
 function drawCountDown() {
     var ticks = this.ticks ; this.ticks++;
     var count = this.count;
     var params = this.params;
-    var canvas = params.canvas;
     var elapse = params.elapse;
     var width = canvas.width, height = canvas.height;
     //
