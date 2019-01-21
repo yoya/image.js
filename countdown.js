@@ -213,11 +213,16 @@ function drawCountDown() {
         var startAngle = offsetAngle;
         var endAngle = offsetAngle - 2 * Math.PI * (angle_ratio);
         // console.log("ratio:"+angle_ratio);
+        var grad  = ctx.createRadialGradient(x,y,0,x,y,radius);
+        grad.addColorStop(0,'black');
+        grad.addColorStop(0.3,'#800');
+        grad.addColorStop(0.7,'#0B0');
+        grad.addColorStop(1,'#00F');
+        //
         ctx.beginPath();
-        ctx.fillStyle ="blue";
+        ctx.fillStyle = grad;
         ctx.moveTo(x, y);
         ctx.arc(x, y, radius, startAngle, endAngle, true);
-        ctx.lineTo(x, y);
         ctx.fill();
         //文字を描画
         var x = center_x, y = center_y;;
