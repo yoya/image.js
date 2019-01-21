@@ -225,7 +225,7 @@ function drawCountDown() {
         //文字を描画
         var x = center_x, y = center_y;;
         var fontSize = height/2;
-        var weight = 900
+        var weight = 900;
         var text = "" + count_number;
         ctx.font = ""+weight+" "+fontSize+"px Arial";
         ctx.textBaseline = "middle";
