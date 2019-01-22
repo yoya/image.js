@@ -210,6 +210,9 @@ function drawCountDown() {
         var offsetAngle = -Math.PI/2;
         var startAngle = offsetAngle;
         var endAngle = offsetAngle - 2 * Math.PI * (angle_ratio);
+        if (count_number == 0) {
+            endAngle = startAngle + 2*Math.PI;
+        }
         // console.log("ratio:"+angle_ratio);
         var grad  = ctx.createRadialGradient(x,y,0,x,y,radius);
         grad.addColorStop(0,'black');
