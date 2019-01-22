@@ -153,7 +153,17 @@ function drawSpectrum(dstCanvas, spectrum, maxSpectrumPower, color) {
 	spectrumPower[i] = s;
     }
     if (maxSpectrumPower === null) {
-	maxSpectrumPower = Math.max.apply(null, spectrumPower);
+        if (spectrumPower.length <  100) {
+	    maxSpectrumPower = Math.max.apply(null, spectrumPower);
+        } else {
+            maxSpectrumPower = 0;
+            for (var i = 0, n = spectrumPower.length ; i < n ; i++) {
+                var p = spectrumPower[i]
+                if (maxSpectrumPower < p) {
+                    maxSpectrumPower = p;
+                }
+            }
+        }
     }
     var i = 0;
     var normFactor = 255 / maxSpectrumPower;
