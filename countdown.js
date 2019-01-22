@@ -215,10 +215,9 @@ function drawCountDown() {
         }
         // console.log("ratio:"+angle_ratio);
         var grad  = ctx.createRadialGradient(x,y,0,x,y,radius);
-        grad.addColorStop(0,'black');
-        grad.addColorStop(0.3,'#800');
-        grad.addColorStop(0.7,'#0B0');
-        grad.addColorStop(1,'#00F');
+        grad.addColorStop(0,'#F8FFF0');
+        grad.addColorStop(0.8,'#450');
+        grad.addColorStop(1,'#420');
         //
         ctx.beginPath();
         ctx.fillStyle = grad;
