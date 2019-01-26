@@ -471,7 +471,7 @@ function main() {
 	if (text) {
 	    if (! srcProfiles[text]) {
 		srcProfiles[text] = buf;
-		addSelectItem(srcSelect, text, text+"hoge");
+		addSelectItem(srcSelect, text, text);
 	    }
 	    updateSelectIndex(srcSelect, text);
 	}
@@ -483,7 +483,7 @@ function main() {
 	if (text) {
 	    if (! dstProfiles[text]) {
 		dstProfiles[text] = buf;
-		addSelectItem(dstSelect, text, text+"hoge");
+		addSelectItem(dstSelect, text, text);
 	    }
 	    updateSelectIndex(dstSelect, text);
 	}
