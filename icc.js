@@ -186,13 +186,13 @@ function main() {
 		var color = "black";
 		switch (signature.substr(0, 1)) {
 		case 'r':
-		    color = "#F66";
+		    color = "#F55";
 		    break;
 		case 'g':
-		    color = "#0B0";
+		    color = "#0E0";
 		    break;
 		case 'b':
-		    color = "#66F";
+		    color = "#68F";
 		    break;
 		}
 		drawCurveGraph(curveCanvas, signature, tagDetail, color);
@@ -208,15 +208,15 @@ function main() {
 		switch (signature) {
 		case 'rTRC':
 		case 'aarg':
-		    color = "#F66";
+                    color = "#F55";
 		    break;
 		case 'gTRC':
 		case 'aagg':
-		    color = "#0B0";
+                    color = "#0E0";
 		    break;
 		case 'bTRC':
 		case 'aabg':
-		    color = "#66F";
+                    color = "#68F";
 		    break;
 		}
 		drawParaCurveGraph(curveCanvas, signature, tagDetail, color);
@@ -232,6 +232,7 @@ function drawCurveGraph(canvas, caption, data, color) {
     var height = canvas.height;
     canvas.width  = width;
     // draw asix
+    ctx.lineWidth = 1;
     for (var i = 0 ; i <= 10 ; i++) {
 	var xy = i * width / 10;
 	if (i%5 === 0){
@@ -249,6 +250,7 @@ function drawCurveGraph(canvas, caption, data, color) {
 	ctx.stroke();
     }
     // draw Curve
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.strokeStyle= color;
     ctx.moveTo(0, height-1);
@@ -282,6 +284,7 @@ function drawParaCurveGraph(canvas, caption, data, color) {
     var height = canvas.height;
     canvas.width  = width;
     // draw asix
+    ctx.lineWidth = 1;
     for (var i = 0 ; i <= 10 ; i++) {
 	var xy = i * width / 10;
 	if (i%5 === 0){
@@ -299,6 +302,7 @@ function drawParaCurveGraph(canvas, caption, data, color) {
 	ctx.stroke();
     }
     // draw Curve
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.strokeStyle= color;
     ctx.moveTo(0, height-1);
