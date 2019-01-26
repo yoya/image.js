@@ -154,7 +154,11 @@ function main() {
 	    function iccXYZ2yx(iccXYZ) {
 		return XYZ2xy([iccXYZ['XYZ']['X'], iccXYZ['XYZ']['Y'], iccXYZ['XYZ']['Z']]);
 	    }
-	    if (foundTagTable['rXYZ'] && foundTagTable['gXYZ'] && foundTagTable['bXYZ']) {
+	    if (foundTagTable['rXYZ'] && foundTagTable['gXYZ'] && foundTagTable['bXYZ'] && foundTagTable['wtpt']) {
+                var rXYZ = foundTagTable['rXYZ'];
+                var gXYZ = foundTagTable['gXYZ'];
+                var bXYZ = foundTagTable['btpt'];
+                var wXYZ = foundTagTable['wXYZ'];
 		if (! doneFigureTable['CIEDiagramRGB']) {
 		    doneFigureTable['CIEDiagramRGB'] = true;
 		    var diagramBaseCanvas = document.createElement("canvas");
@@ -164,17 +168,20 @@ function main() {
 		    diagramBaseCanvas.width  = 256;
 		    diagramBaseCanvas.height = 256;
 		    iccTableContainer.appendChild(diagramBaseCanvas);
-		    params['tristimulus'] = [
-			iccXYZ2yx(foundTagTable['rXYZ']),
-			iccXYZ2yx(foundTagTable['gXYZ']),
-			iccXYZ2yx(foundTagTable['bXYZ']) ];
-		    params['caption'] = "rXYZ, gXYZ, bXYZ";
+                    var rxy = iccXYZ2yx(foundTagTable['rXYZ'])
+		    var gxy = iccXYZ2yx(foundTagTable['gXYZ']);
+		    var bxy = iccXYZ2yx(foundTagTable['bXYZ']);
+                    var wxy = iccXYZ2yx(foundTagTable['wtpt']);
+		    params['tristimulus'] = [ rxy, gxy, bxy ];
+                    params['drawPoints'] = [
+	                { stroke:"#A00F", fill:"#F008", xy:rxy },
+	                { stroke:"#0A0F", fill:"#0F08", xy:gxy },
+	                { stroke:"#00AF", fill:"#00F8", xy:bxy },
+	                { stroke:"#FFFF", fill:"#CCC8", xy:wxy },
+                    ];
+		    params['caption'] = "rXYZ, gXYZ, bXYZ, wXYZ";
 		    drawDiagramBase(diagramBaseCanvas, params, true);
-		}
-	    }
-	    if (doneFigureTable['CIEDiagramRGB'] && foundTagTable['wtpt']) {
-		if (! doneFigureTable['CIEDiagramWpt']) {
-		    doneFigureTable['CIEDiagramWpt'] = true;
+                    drawDiagramPoints(diagramBaseCanvas, params, true);
 		}
 	    }
 	    if (type === "curv") {
