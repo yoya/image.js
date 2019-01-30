@@ -86,7 +86,7 @@ function makeHTMLTable(captionText, table, cssClass) {
 
 function main() {
     //var imageClassList = [IO_JPEG, IO_PNG, IO_GIF, IO_TIFF, IO_BMP];
-    var imageClassList = [IO_ICC, IO_JPEG, IO_PNG, IO_TIFF];
+    var imageClassList = [IO_ICC, IO_JPEG, IO_PNG, IO_TIFF, IO_BMP];
     var params = {
 	'chromaticity':'ciexy',
         'tristimulus':true,
