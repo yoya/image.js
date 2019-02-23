@@ -72,7 +72,8 @@ function drawColorChecker(canvas, params) {
     var border2 = params.border2;
     canvas.width = width;
     canvas.height = height;
-    canvas.style.backgroundColor = "#000000";
+    ctx.fillStyle = "#000000";  // black
+    ctx.fillRect(0, 0, width, height);
     var ctx = canvas.getContext("2d");
     var [cellWidth, cellHeight] = calcCellSize(params);
     var i = 0;
@@ -80,11 +81,8 @@ function drawColorChecker(canvas, params) {
         for (var xi = 0 ; xi < 6 ; xi++) {
             var x = border1 + xi * (cellWidth + border2);
             var y = border1 + yi * (cellHeight + border2);
-            ctx.beginPath();
             ctx.fillStyle = checkerColors[i];
-            ctx.rect(x, y, cellWidth, cellHeight);
-            ctx.fill();
-            ctx.closePath();
+            ctx.fillRect(x, y, cellWidth, cellHeight);
             i++;
         }
     }
