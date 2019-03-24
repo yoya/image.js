@@ -31,18 +31,19 @@
 	<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
       </div>
     </div> <!-- controlPanel -->
+
     <div>
       <canvas id="graphCanvas" class="borderGreen" width="371" height="150"> graph </canvas>
     </div>
     <div style="float:left">
       <div style="float:left">
+	<input id="tristimulusCheckbox" type="checkbox" checked="checked" />:
         <select id="colorspaceSelect" size="4">
           <option value="srgb" selected> sRGB </option>
 	  <option value="dcip3"        > DCI-P3 </option>
 	  <option value="adobe"        > Adobe RGB </option>
 	  <option value="prophoto"     > ProPhoto RGB </option>
         </select>
-	:<input id="tristimulusCheckbox" type="checkbox" checked="checked" />
       </div>
       <div style="float:left">
 	guide:<input id="guideCheckbox" type="checkbox" checked="checked" />
