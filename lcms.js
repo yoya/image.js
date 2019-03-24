@@ -26,6 +26,8 @@ var elemIds = ["srcDesc", "dstDesc",
 	       "srcCMYK",
 	       "srcCRange", "srcMRange", "srcYRange", "srcKRange",
 	       "srcCText", "srcMText", "srcYText", "srcKText",
+               "srcXYZ_XText", "srcXYZ_YText","srcXYZ_ZText",
+               "srcxyY_xText", "srcxyY_yText",
 	       "dstGray",
 	       "dstVRange",
 	       "dstVText",
@@ -35,6 +37,8 @@ var elemIds = ["srcDesc", "dstDesc",
 	       "dstCMYK",
 	       "dstCRange", "dstMRange", "dstYRange", "dstKRange",
 	       "dstCText", "dstMText", "dstYText", "dstKText",
+               "dstXYZ_XText", "dstXYZ_YText","dstXYZ_ZText",
+               "dstxyY_xText", "dstxyY_yText",
 	       "intentSelect", "BPCCheckbox",
 	       "transformForward", "transformInverse"];
 var elems = {};
@@ -285,10 +289,15 @@ var transformAndUpdate = function() {
     var srcCRange, srcMRange, srcYRange, srcKRange;
     var srcRText, srcGText, srcBText;
     var srcCText, srcMText, srcYText, srcKText;
+    var srcXYZ_XText, srcXYZ_YText, srcXYZ_ZText;
+    var srcxyY_xText, srcxyY_yText;
     var dstRRange, dstGRange, dstBRange;
     var dstCRange, dstMRange, dstYRange, dstKRange;
     var dstRText, dstGText, dstBText;
     var dstCText, dstMText, dstYText, dstKText;
+    var dstXYZ_XText, dstXYZ_YText, dstXYZ_ZText;
+    var dstxyY_xText, dstxyY_yText;
+    var srcTransformXYZ, dstTransformXYZ;
     if (! inverse) {
 	srcRRange = elems.srcRRange;
 	srcGRange = elems.srcGRange;
@@ -318,6 +327,18 @@ var transformAndUpdate = function() {
 	dstMText = elems.dstMText;
 	dstYText = elems.dstYText;
 	dstKText = elems.dstKText;
+        srcXYZ_XText = elems.srcXYZ_XText;
+        srcXYZ_YText = elems.srcXYZ_YText;
+        srcXYZ_ZText = elems.srcXYZ_ZText;
+        srcxyY_xText = elems.srcxyY_xText;
+        srcxyY_yText = elems.srcxyY_yText;
+        dstXYZ_XText = elems.dstXYZ_XText;
+        dstXYZ_YText = elems.dstXYZ_YText;
+        dstXYZ_ZText = elems.dstXYZ_ZText;
+        dstxyY_xText = elems.dstxyY_xText;
+        dstxyY_yText = elems.dstxyY_yText;
+        srcTransformXYZ = transformInputXYZ;
+        dstTransformXYZ = transformOutputXYZ;
     } else {
 	srcRRange = elems.dstRRange;
 	srcGRange = elems.dstGRange;
@@ -347,6 +368,18 @@ var transformAndUpdate = function() {
 	dstMText = elems.srcMText;
 	dstYText = elems.srcYText;
 	dstKText = elems.srcKText;
+        srcXYZ_XText = elems.dstXYZ_XText;
+        srcXYZ_YText = elems.dstXYZ_YText;
+        srcXYZ_ZText = elems.dstXYZ_ZText;
+        srcxyY_xText = elems.dstxyY_xText;
+        srcxyY_yText = elems.dstxyY_yText;
+        dstXYZ_XText = elems.srcXYZ_XText;
+        dstXYZ_YText = elems.srcXYZ_YText;
+        dstXYZ_ZText = elems.srcXYZ_ZText;
+        dstxyY_xText = elems.srcxyY_xText;
+        dstxyY_yText = elems.srcxyY_yText;
+        srcTransformXYZ = transformOutputXYZ;
+        dstTransformXYZ = transformInputXYZ;
     }
 
     if (cs === cmsSigGrayData) {
@@ -374,6 +407,13 @@ var transformAndUpdate = function() {
     } else {
 	console.error("no supported input? colorspace:"+cs);
     }
+    var xyz = cmsDoTransform(srcTransformXYZ, srcPixel, 1);
+    var xyY = cmsXYZ2xyY(xyz);
+    srcXYZ_XText.value = Utils.round(xyz[0], 0.001);
+    srcXYZ_YText.value = Utils.round(xyz[1], 0.001);
+    srcXYZ_ZText.value = Utils.round(xyz[2], 0.001);
+    srcxyY_xText.value = Utils.round(xyY[0], 0.001);
+    srcxyY_yText.value = Utils.round(xyY[1], 0.001);
     if (! inverse) {
 	var dstPixel = cmsDoTransform(transform, srcPixel, 1);
     } else {
@@ -418,6 +458,13 @@ var transformAndUpdate = function() {
     } else {
 	console.error("no supported output? colorspace:"+cs);
     }
+    var xyz = cmsDoTransform(dstTransformXYZ, dstPixel, 1);
+    var xyY = cmsXYZ2xyY(xyz);
+    dstXYZ_XText.value = Utils.round(xyz[0], 0.001);
+    dstXYZ_YText.value = Utils.round(xyz[1], 0.001);
+    dstXYZ_ZText.value = Utils.round(xyz[2], 0.001);
+    dstxyY_xText.value = Utils.round(xyY[0], 0.001);
+    dstxyY_yText.value = Utils.round(xyY[1], 0.001);
     if (! inverse) {
 	return [srcPixel, dstPixel];
     } else {
