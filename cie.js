@@ -17,6 +17,7 @@ function main() {
     var params = {
 	'chromaticity':document.getElementById("chromaticitySelect").value,
 	'pointSize':parseFloat(document.getElementById("pointSizeRange").value),
+        'pointDensity':parseFloat(document.getElementById("pointDensityRange").value),
 	'colorspace':document.getElementById("colorspaceSelect").value,
 	'tristimulus':document.getElementById("tristimulusCheckbox").checked,
 	'guide':document.getElementById("guideCheckbox").checked,
@@ -52,6 +53,7 @@ function main() {
 		 } );
     bindFunction({"chromaticitySelect":null,
 		  "pointSizeRange":"pointSizeText",
+                  "pointDensityRange":"pointDensityText",
 		  "colorspaceSelect":null,
 		  "tristimulusCheckbox":null,
 		  "guideCheckbox":null,
@@ -59,6 +61,7 @@ function main() {
 		 function(target, rel) {
 		     params['chromaticity'] = document.getElementById("chromaticitySelect").value;
 		     params['pointSize'] = parseFloat(document.getElementById("pointSizeRange").value);
+                     params['pointDensity'] = parseFloat(document.getElementById("pointDensityRange").value);
 		     params['colorspace'] = document.getElementById("colorspaceSelect").value;
 		     params['tristimulus'] = document.getElementById("tristimulusCheckbox").checked;
 		     params['guide'] = document.getElementById("guideCheckbox").checked;

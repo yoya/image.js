@@ -13,7 +13,8 @@ onmessage = function(e) {
     var hist = e.data.hist;
     var chromaticity = e.data.chromaticity;
     var pointSize = e.data.pointSize;
-    var dstImageData = drawDiagramPoint(diagramBaseImageData, hist, chromaticity, pointSize);
+    var pointDensity = e.data.pointDensity;
+    var dstImageData = drawDiagramPoint(diagramBaseImageData, hist, chromaticity, pointSize, pointDensity);
     postMessage({image:dstImageData}, [dstImageData.data.buffer]);
 }
 
@@ -22,11 +23,12 @@ function graphTrans(xy, width, height) {
     return [x * width, (1 - y) * height];
 }
 
-function drawDiagramPoint(imageData, hist, chromaticity, pointSize) {
+function drawDiagramPoint(imageData, hist, chromaticity, pointSize, pointDensity) {
     var width = imageData.width, height = imageData.height;
-    var pointRGBA = [0,0,0, 255];
     var [dMin, dMax] = [-(pointSize/2-0.2),(pointSize/2-0.2)];
+    var geoHist = new Float32Array(width * height);
     for (var colorId in hist) {
+        var count = hist[colorId]
 	var [r,g,b,a] = colorId2RGBA(colorId);
 	if (a === 0) {
 	    continue;
@@ -41,9 +43,21 @@ function drawDiagramPoint(imageData, hist, chromaticity, pointSize) {
 	}
 	for (var dy = dMin ; dy < dMax ; dy++) {
 	    for (var dx = dMin ; dx < dMax ; dx++) {
-		setRGBA(imageData, Math.round(gx+dx), Math.round(gy+dy), pointRGBA);
+                xy = Math.round(gx+dx) + width * Math.round(gy+dy);
+                geoHist[xy]+= pointDensity;
 	    }
 	}
+    }
+    for (var xy in geoHist) {
+        var density = geoHist[xy];
+        if (density <= 0) {
+            continue;
+        }
+        var x = xy % width;
+        var y = (xy - x) / width;
+        var [r, g, b, a] = getRGBA(imageData, x, y);
+        var rgba = [r * (1-density), g * (1-density), b * (1-density), 255];
+	setRGBA(imageData, x, y, rgba);
     }
     return imageData;
 }
