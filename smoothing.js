@@ -43,7 +43,7 @@ function main() {
 		     filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
 		     sigma = parseFloat(document.getElementById("sigmaRange").value);
 		     var colorScale = parseFloat(document.getElementById("colorScaleRange").value);
-		     if (filter === "gaussianS") {
+		     if (filter === "gaussian") {
 			 filterWindow = Math.floor(sigma * 5 - 3) * 2 + 1;
 			 filterWindow = (filterWindow < 1)?1:filterWindow;
 			 document.getElementById("filterWindowRange").value = filterWindow;
@@ -51,14 +51,14 @@ function main() {
 		     }
 		     filterMatrix = makeFilterMatrix(filter, filterWindow, sigma);
 
-		     if (filter === "gaussianP") {
+		     if (filter === "pascal") {
 			 var center = (filterWindow*filterWindow - 1) / 2;
 			 var centerValue = filterMatrix[center];
 			 sigma = 1 / Math.sqrt(2 * Math.PI * centerValue);
 			 document.getElementById("sigmaRange").value = sigma;
 			 document.getElementById("sigmaText").value = document.getElementById("sigmaRange").value;
 		     }
-		     if (filter === "gaussianS") {
+		     if (filter === "gaussian") {
 			 ;
 			 // document.getElementById("sigmaText").style = "background-color: white";
 			 // document.getElementById("filterWindowText").style = "background-color: lightgray";
@@ -92,7 +92,7 @@ function makeFilterMatrix(filter, filterWindow, sigma) {
     case "average":
 	filterMatrix = filterMatrix.map(function(v) { return 1; });
 	break;
-    case "gaussianP":
+    case "pascal":
 	var pt = pascalTriangle(filterWindow - 1);
 	for (var y = 0 ; y < filterWindow; y++) {
 	    for (var x = 0 ; x < filterWindow; x++) {
@@ -100,7 +100,7 @@ function makeFilterMatrix(filter, filterWindow, sigma) {
 	    }
 	}1
 	break;
-    case "gaussianS":
+    case "gaussian":
 	var center = Math.floor(filterWindow/2);
 	for (var y = 0 ; y < filterWindow; y++) {
 	    for (var x = 0 ; x < filterWindow; x++) {
