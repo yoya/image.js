@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2019/04/08- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Perceptron </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel">
+        <div>
+	  w1:<input id="w1Range" type="range" min="-1" max="1" step="0.1" value="1">:<input type="text" id="w1Text" size="5">
+          w2:<input id="w2Range" type="range" min="-1" max="1" step="0.1" value="1">:<input type="text" id="w2Text" size="5">
+        </div>
+        theta:<input id="thetaRange" type="range" min="0" max="1" step="0.1" value="1">:<input type="text" id="thetaText" size="5">
+        </div>
+      </div> <!-- controlPanel -->
+      <canvas id="graphCanvas" class="borderGreen" width=512 height=512> srcCanvas </canvas>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="lib/graph.js"> </script>
+    <script type="text/javascript" src="perceptron.js"> </script>
+  </body>
+</html>
