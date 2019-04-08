@@ -36,25 +36,29 @@ function drawPerceptron(graphCanvas) {
     for (var x = x_min ; x <= x_max; x += 0.02) {
         for (var y = y_min ; y <= y_max; y += 0.02) {
             var v = x * w1 + y * w2;
-            var rgbaColor = [255, 0, 0, 255];
-            if (v > 0) {
-                if (v < 1) { // transparent => red
-                    var rgbaColor = [255, 0, 0, v*255];
-                }  else {  // red => yellow
-                    var v2 = v - 1;
-                    var rgbaColor = [255, v2*255, 0, 255];
-                }
-            } else {
-                if (v > -1) { // transparent => cyan
-                    var rgbaColor = [0, 255, 255, -v*255];
-                } else { // cyan => blue
-                    var v2 = v + 1;
-                    var rgbaColor = [0, 255*(1+v2), 255, -v*255];
-                }
-            }
+            var rgbaColor = value2rgba(v);
             var point = [x, y, rgbaColor];
             points.push(point);
         }
     }
     drawGraph(graph, points);
+}
+
+function value2rgba(v) {
+    if (v > 0) {
+        if (v < 1) { // transparent => red
+            var rgbaColor = [255, 0, 0, v*255];
+        }  else {  // red => yellow
+            var v2 = v - 1;
+            var rgbaColor = [255, v2*255, 0, 255];
+        }
+    } else {
+        if (v > -1) { // transparent => cyan
+            var rgbaColor = [0, 255, 255, -v*255];
+        } else { // cyan => blue
+            var v2 = v + 1;
+            var rgbaColor = [0, 255*(1+v2), 255, -v*255];
+        }
+    }
+    return rgbaColor;
 }
