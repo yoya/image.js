@@ -1,6 +1,6 @@
 "use strict";
 /*
- * 2017/04/02- (c) yoya@awm.jp
+ * 2019/04/08- (c) yoya@awm.jp
  */
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -11,7 +11,8 @@ function main() {
     // console.debug("main");
     var graphCanvas = document.getElementById("graphCanvas");
     bindFunction({"w1Range":"w1Text",
-                  "w2Range":"w2Text"},
+                  "w2Range":"w2Text",
+                  "thetaRange":"thetaText"},
 		 function() {
                      drawPerceptron(graphCanvas);
 		 } );
@@ -22,10 +23,13 @@ function drawPerceptron(graphCanvas) {
     // console.debug("drawCopy");
     var w1 = parseFloat(document.getElementById("w1Range").value);
     var w2 = parseFloat(document.getElementById("w2Range").value);
+    var theta = parseFloat(document.getElementById("thetaRange").value);
     var [x_min, x_max] = [-2, 3];
     var [y_min, y_max] = [-2, 3];
     var graph ={
         canvas:graphCanvas,
+        lineColor:"white",
+        lineWidth:1,
         x_range:[x_min, x_max], y_range:[y_min, y_max],
         drawType: "points"
     };
@@ -42,6 +46,12 @@ function drawPerceptron(graphCanvas) {
         }
     }
     drawGraph(graph, points);
+    //
+    points = [x_min ,
+              (theta - w1*x_min)/w2 ,
+              x_max,
+              (theta - w1*x_max)/w2 ];
+    drawGraphLines(graph, points);
 }
 
 function value2rgba(v) {
