@@ -9,16 +9,23 @@
   <div class="container">
     <div>
       <div>
-        <div>
-          maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+        <div style="float:left">
+          <div>
+            maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+          </div>
+          <div>
+            gamma:<input id="gammaRange" type="range" min="0.25" max="4" step="0.01" value="1"> : <input type="text" id="gammaText" size="5">
+            <br />
+            gamma逆数: <input id="gammaReciprocalRange" type="range" min="0.25" max="4" step="0.01" value="1"> : <input type="text" id="gammaReciprocalText" size="5">
+          </div>
         </div>
         <div style="float:left">
-          gamma:<input id="gammaRange" type="range" min="0.25" max="4" step="0.01" value="1"> : <input type="text" id="gammaText" size="5">
-        </div>
-	<div style="clear:both">
-          gamma逆数: <input id="gammaReciprocalRange" type="range" min="0.25" max="4" step="0.01" value="1"> : <input type="text" id="gammaReciprocalText" size="5">
+          R <input id="RCheckbox" type="checkbox" checked> <br />
+          G <input id="GCheckbox" type="checkbox" checked> <br />
+          B <input id="BCheckbox" type="checkbox" checked> <br />
         </div>
       </div>
+      <div style="clear:both"> </div>
       <div>
         <canvas id="gammaCanvas" class="borderGreen" width=256 height=256> gammaCanvas </canvas>
       </div>

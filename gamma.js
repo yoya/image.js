@@ -26,7 +26,8 @@ function main() {
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "gammaRange":"gammaText",
-		  "gammaReciprocalRange":"gammaReciprocalText"},
+		  "gammaReciprocalRange":"gammaReciprocalText",
+                  "RCheckbox":null, "GCheckbox":null, "BCheckbox":null},
 		 function(target, rel) {
 		     console.debug(target.id);
 		     if ((target.id === "gammaRange") || (target.id === "gammaText")) {
@@ -46,9 +47,17 @@ function main() {
 function drawSrcImageAndGamma(srcImage, srcCanvas, dstCancas, gammaCanvas, sync) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var gamma = parseFloat(document.getElementById("gammaRange").value);
+    var R = document.getElementById("RCheckbox").checked;
+    var G = document.getElementById("GCheckbox").checked;
+    var B = document.getElementById("BCheckbox").checked;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawGammaGraph(gammaCanvas, gamma);
-    drawGammaImage(srcCanvas, dstCanvas, gamma, sync);
+    var params = {
+        RGamma: R?gamma:1.0,
+        GGamma: G?gamma:1.0,
+        BGamma: B?gamma:1.0
+    };
+    drawGammaImage(srcCanvas, dstCanvas, params, sync);
 }
 
 function drawGammaGraph(gammaCanvas, gamma) {
@@ -72,8 +81,7 @@ function drawGammaGraph(gammaCanvas, gamma) {
 
 var worker = new workerProcess("worker/gamma.js");
 
-function drawGammaImage(srcCanvas, dstCanvas, gamma, sync) {
+function drawGammaImage(srcCanvas, dstCanvas,params, sync) {
     // console.debug("drawGammaImage");
-    var params = {gamma:gamma};
     worker.process(srcCanvas, dstCanvas, params, sync);
 }
