@@ -26,7 +26,7 @@ function main() {
 	params[name] = arr;
 	if (isDefault) {
 	    params['cieArr'] = arr;
-	    drawSpectrumGraph(graphCanvas, params, true);
+	    drawSpectrumGraph(graphCanvas, params);
 	    drawDiagram(diagramBaseCanvas, dstCanvas, params, true);
 	}
     }
