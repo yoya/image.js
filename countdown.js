@@ -14,6 +14,7 @@ var video = document.getElementById("video");
 var playButton = document.getElementById("playButton");
 var stopButton = document.getElementById("stopButton");
 var downloadButton = document.getElementById("downloadButton");
+var typeSelect = document.getElementById("typeSelect");
 
 var stream = canvas.captureStream(24);
 video.srcObject = stream;
@@ -35,16 +36,18 @@ function main() {
         video:video,
         width: parseFloat(widthRange.value),
         height:parseFloat(heightRange.value),
+        type: typeSelect.value,
         elapse: 1000 / 24, // 24fps
         // elapse: 1000 / 4, // debug
         count: 10,
     };
     bindFunction({"widthRange":"widthText",
-                  "heightRange":"heightText"},
+                  "heightRange":"heightText",
+                  "typeSelect":null},
 		 function(target, rel) {
                      params['width']  = parseFloat(widthRange.value);
                      params['height'] = parseFloat(heightRange.value);
-                     params['backgroundImage'] = getTestcardImage(params.width, params.height);
+                     params['type'] = typeSelect.value;
                      drawBackgroundImage(params);
 		 } );
     bindFunction({"playButton":null},
@@ -59,7 +62,6 @@ function main() {
 		 function(target, rel) {
 		     download();
 		 } );
-    params['backgroundImage'] = getTestcardImage(params.width, params.height);
     // start(params);
     drawBackgroundImage(params);
 }
@@ -178,6 +180,20 @@ function drawBackgroundImage(params) {
     canvas.height = height;
     video.width  = width;
     video.height = height;
+    if (params.type === "testcard") {
+        params.backgroundImage = getTestcardImage(params.width, params.height);
+    } else {
+        var image = new ImageData(params.width, params.height);
+        var size = width * height * 4;
+        for (var i = 0 ; i < size ; ) {
+            var v = 127 + Math.random() * Math.random() * Math.random() * 72;
+            image.data[i++] = v;
+            image.data[i++] = v;
+            image.data[i++] = v;
+            image.data[i++] = 255; // alpha:255
+        }
+        params.backgroundImage = image;
+    }
     var backgroundImage = params.backgroundImage;
     var ctx = canvas.getContext("2d");
     ctx.putImageData(backgroundImage, 0, 0);
