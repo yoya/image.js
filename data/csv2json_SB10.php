@@ -29,6 +29,6 @@ for ($x = 2; $x < count($table[0]) ; $x += 3) {
             }
         }
     }
-    echo " }".PHP_EOL;
+    echo " },".PHP_EOL;
 }
 echo "]".PHP_EOL;
