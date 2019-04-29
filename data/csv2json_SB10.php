@@ -14,7 +14,7 @@ for ($x = 2; $x < count($table[0]) ; $x += 3) {
     $Age = $table[3][$x];
     $Conditions = $table[4][$x];
     $Name = $table[5][$x];
-    echo "  Number:$Number, ObserverID:'$ObserverID', Sex:'$Sex', Age:$Age, Conditions:'$Conditions', Name,'$Name',".PHP_EOL;
+    echo "  Number:$Number, ObserverID:'$ObserverID', Sex:'$Sex', Age:$Age, Conditions:'$Conditions', Name:'$Name',".PHP_EOL;
     echo "  WRGB:[".PHP_EOL;
     for ($y = 7 ; $y < count($table) ; $y++) {
         $W = $table[$y][1];
@@ -29,6 +29,7 @@ for ($x = 2; $x < count($table[0]) ; $x += 3) {
             }
         }
     }
+    echo "  ],".PHP_EOL;
     echo " },".PHP_EOL;
 }
 echo "]".PHP_EOL;
