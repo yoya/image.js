@@ -1,0 +1,51 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2019/04/30- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> CIE 10deg Color Matching Function (Indivisual) </title>
+  <link rel="stylesheet" href="index.css">
+  <style>
+    #dstCanvas { background-color:black; }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="controlPanel" style="float:left">
+      <div style="float:left">
+        <div style="float:left">
+          Sex:
+        </div>
+        <div style="float:left">
+          Male <input id="MCheckbox" type="checkbox" checked> <br />
+          Female <input id="FCheckbox" type="checkbox" checked> <br />
+        </div>
+      </div>
+      <div style="float:left">
+        Age min:<input id="ageMinRange" type="range" min="17" max="55" step="1" value="17"> : <input type="text" id="ageMinText" size="5">
+        <br />
+        Age max:<input id="ageMaxRange" type="range" min="17" max="55" step="1" value="55"> : <input type="text" id="ageMaxText" size="5">
+      </div>
+      <div style="float:left">
+        <div style="float:left">
+          Condition:
+        </div>
+        <div style="float:left">
+          I <input id="ICheckbox" type="checkbox" checked> <br />
+          II <input id="IICheckbox" type="checkbox" checked> <br />
+        </div>
+      </div>
+    </div> <!-- controlPanel -->
+    <div style="clear:both"> </div>
+    <div>
+      <canvas id="graphCanvas" class="borderGreen" width="742" height="300"> graph </canvas>
+    </div>
+  </div>  <!-- container -->
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/color.js"> </script>
+  <script type="text/javascript" src="lib/canvas.js"> </script>
+  <script type="text/javascript" src="lib/cie.js"> </script>
+  <script type="text/javascript" src="lib/loading.js"> </script>
+  <script type="text/javascript" src="lib/worker.js"> </script>
+  <script type="text/javascript" src="cie_ind.js"> </script>
+</body>
