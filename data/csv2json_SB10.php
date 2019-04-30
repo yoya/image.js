@@ -10,7 +10,7 @@ for ($x = 2; $x < count($table[0]) ; $x += 3) {
     echo " {".PHP_EOL;
     $Number = $table[0][$x];
     $ObserverID = $table[1][$x];
-    $Sex = $table[2][$x];
+    $Sex = strtoupper($table[2][$x]);
     $Age = $table[3][$x];
     $Conditions = $table[4][$x];
     $Name = $table[5][$x];

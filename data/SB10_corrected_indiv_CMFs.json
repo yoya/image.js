@@ -1000,7 +1000,7 @@
   ]
  },
  {
-  "Number":26, "ObserverID":"31/51", "Sex":"f", "Age":21, "Conditions":"II", "Name":"Miss J. M. Vigil",
+  "Number":26, "ObserverID":"31/51", "Sex":"F", "Age":21, "Conditions":"II", "Name":"Miss J. M. Vigil",
   "WRGB":[
     [392.16, 0.0093121600, -0.0021383400, 0.0276108700],
     [400.00, 0.0251592400, -0.0063050960, 0.0865592000],
