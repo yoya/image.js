@@ -40,6 +40,16 @@ function main() {
 		 function(target, rel) {
                      var id = target.id;
                      elems[id] = document.getElementById(id);
+                     if (target.id == "MCheckbox") {
+                         if (! elems["MCheckbox"].checked) {
+                             elems["FCheckbox"].checked = true;
+                         }
+                     }
+                     if (target.id == "FCheckbox") {
+                         if (! elems["FCheckbox"].checked) {
+                             elems["MCheckbox"].checked = true;
+                         }
+                     }
                      var ageMax = elems["ageMaxRange"].value;
                      var ageMin = elems["ageMinRange"].value
                      if (ageMin > ageMax) {
@@ -51,6 +61,16 @@ function main() {
                              ageMax = ageMin;
                              elems["ageMaxRange"].value = ageMax;
                              elems["ageMaxText"].value = ageMax;
+                         }
+                     }
+                     if (target.id == "ICheckbox") {
+                         if (! elems["ICheckbox"].checked) {
+                             elems["IICheckbox"].checked = true;
+                         }
+                     }
+                     if (target.id == "IICheckbox") {
+                         if (! elems["IICheckbox"].checked) {
+                             elems["ICheckbox"].checked = true;
                          }
                      }
                      var arr = params['cieArrAll'];
