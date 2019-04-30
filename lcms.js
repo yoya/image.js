@@ -204,8 +204,8 @@ function updateDiagramBaseCanvas(canvas, transformXYZ, cs, pixel) {
     } else {
 	console.error("no supported colorspace:"+cs);
     }
-    drawDiagramBase(canvas, params, true);
-    drawDiagramPoints(canvas, params, true);
+    drawDiagramBase(canvas, params);
+    drawDiagramPoints(canvas, params);
 }
 
 function updateDiagramPoints(canvas, transformXYZ, pixel) {
@@ -215,7 +215,7 @@ function updateDiagramPoints(canvas, transformXYZ, pixel) {
 	'chromaticity':'ciexy',
 	'drawPoints': [{ stroke:"#00F", fill:"#8888", xy:xyY } ]
     };
-    drawDiagramPoints(canvas, params, true);
+    drawDiagramPoints(canvas, params);
 }
 
 function updateDiagramSrcDstPoints() {
