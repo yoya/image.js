@@ -22,14 +22,22 @@ for ($x = 2; $x < count($table[0]) ; $x += 3) {
         $G = $table[$y][$x+1];
         $B = $table[$y][$x+2];
         if (($W != "") && ($R != "") && ($G != "") && ($B != "")) {
-            echo "    [$W, $R, $G, $B],".PHP_EOL;            
+            if ($y+1 < count($table)) {
+                echo "    [$W, $R, $G, $B],".PHP_EOL;
+            } else {
+                echo "    [$W, $R, $G, $B]".PHP_EOL;
+            }
         } else {
             if (($R != "") || ($G != "") || ($B != "")) {
                 fprintf(STDERR, "Error: W:'$W', R:'$R', G:'$G', B:'$B'".PHP_EOL);                
             }
         }
     }
-    echo "  ],".PHP_EOL;
-    echo " },".PHP_EOL;
+    echo "  ]".PHP_EOL;
+    if ($x + 3 < count($table[0])) {
+        echo " },".PHP_EOL;
+    } else {
+        echo " }".PHP_EOL;
+    }
 }
 echo "]".PHP_EOL;
