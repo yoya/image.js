@@ -21,6 +21,7 @@ for (var i in elemIds) {
 function main() {
     console.debug("cie_ind main()");
     var params = {
+        'guide':true,
         'xMin':400, 'xMax':700,
         'yMin':-0.7, 'yMax':4.0,
     };
@@ -28,6 +29,7 @@ function main() {
         params['cieArrAll'] = arr;
         params['cieArr'] = [];
 	drawSpectrumGraphBase(graphCanvas, params);
+        drawSpectrumGraphAxis(graphCanvas, params);
         for (var i = 0 ; i <  arr.length; i++) {
             var personalArr = arr[i];
 	    params['cieArr'] = personalArr["WRGB"];
@@ -90,6 +92,7 @@ function main() {
                      graphCanvas.width = graphCanvas.width;
                      params['cieArr'] = [];
 	             drawSpectrumGraphBase(graphCanvas, params);
+                     drawSpectrumGraphAxis(graphCanvas, params);
                      for (var i = 0 ; i <  arr.length; i++) {
                          var personalArr = arr[i];
 	                 params['cieArr'] = personalArr["WRGB"];
