@@ -59,8 +59,10 @@ function drawGeoffrey(canvas) {
     var ctx = dstCanvas.getContext("2d");
     //
     var imageData = new ImageData(width, height);
+    var minValue = -0.2;
+    var maxValue = 1.2;
     for (var x = 0 ; x < width; x++) {
-	var l = x/width;
+	var l = x/width * (maxValue - minValue) + minValue;
 	var [r, g, b] = Geoffrey(l);
 	for (var y = 0 ; y < height; y++) {
 	    setRGBA(imageData, x, y, [r*255,g*255,b*255, 255]);
