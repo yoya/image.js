@@ -26,7 +26,7 @@ function main() {
     };
     var onCIEXYZdata = function(arr) {
         params['cieArrAll'] = arr;
-        params['cieArr'] = arr[0]["WRGB"];
+        params['cieArr'] = [];
 	drawSpectrumGraphBase(graphCanvas, params);
         for (var i = 0 ; i <  arr.length; i++) {
             var personalArr = arr[i];
@@ -85,10 +85,10 @@ function main() {
                          if (! elems[p["Conditions"]+"Checkbox"].checked) {
                              return false;
                          }
-
                          return true;
                      });
                      graphCanvas.width = graphCanvas.width;
+                     params['cieArr'] = [];
 	             drawSpectrumGraphBase(graphCanvas, params);
                      for (var i = 0 ; i <  arr.length; i++) {
                          var personalArr = arr[i];
