@@ -21,6 +21,7 @@ function main() {
 	'colorspace':document.getElementById("colorspaceSelect").value,
 	'tristimulus':document.getElementById("tristimulusCheckbox").checked,
 	'guide':document.getElementById("guideCheckbox").checked,
+        'xMin':400, 'xMax':700,
     };
     var onCIEXYZdata = function(name, arr, isDefault) {
 	params[name] = arr;

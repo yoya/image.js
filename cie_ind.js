@@ -20,7 +20,10 @@ for (var i in elemIds) {
 
 function main() {
     console.debug("cie_ind main()");
-    var params = { };
+    var params = {
+        'xMin':400, 'xMax':700,
+        'yMin':-0.7, 'yMax':4.0,
+    };
     var onCIEXYZdata = function(arr) {
         params['cieArrAll'] = arr;
         params['cieArr'] = arr[0]["WRGB"];
