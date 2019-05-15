@@ -34,7 +34,6 @@ function drawPascalTriangle(canvas) {
         var y = i * unitY;
         var triangleArr = pascalTriangle(i);
         for (var j = 0 ; j < (i+1) ; j++) {
-            //var x = j*unitX; // XXX
             var x = (j+(nPascal-i-1)/2)*unitX; // centering
             var value = triangleArr[j];
             // https://en.wikipedia.org/wiki/Golden_angle
@@ -48,6 +47,11 @@ function drawPascalTriangle(canvas) {
             ctx.rect(x + unitX*0.1, y + unitY*0.1, unitX*0.9, unitY*0.9);
             ctx.fill()
             ctx.stroke()
+        }
+        for (var j = 0 ; j < (i+1) ; j++) {
+            //var x = j*unitX; // XXX
+            var x = (j+(nPascal-i-1)/2)*unitX; // centering
+            var value = triangleArr[j];
             // draw Text
             ctx.beginPath();
             ctx.textBaseline = "middle";
