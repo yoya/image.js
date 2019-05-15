@@ -49,7 +49,6 @@ function drawPascalTriangle(canvas) {
             ctx.stroke()
         }
         for (var j = 0 ; j < (i+1) ; j++) {
-            //var x = j*unitX; // XXX
             var x = (j+(nPascal-i-1)/2)*unitX; // centering
             var value = triangleArr[j];
             // draw Text
