@@ -13,7 +13,8 @@ function main() {
     bindFunction({"widthRange":"widthText",
 		  "heightRange":"heightText",
                   "nPascalRange":"nPascalText",
-                  "nColorRange":"nColorText"},
+                  "nColorRange":"nColorText",
+                  "bottomBarCheckbox":null},
 		 function() {
 		     drawPascalTriangle(dstCanvas);
 		 } );
@@ -25,6 +26,7 @@ function drawPascalTriangle(canvas) {
     var height = parseFloat(document.getElementById("heightRange").value);
     var nPascal = parseFloat(document.getElementById("nPascalRange").value);
     var nColor = parseFloat(document.getElementById("nColorRange").value);
+    var bottomBar = document.getElementById("bottomBarCheckbox").checked;
     canvas.width = width;
     canvas.height = height;
     var ctx = dstCanvas.getContext("2d");
@@ -61,6 +63,24 @@ function drawPascalTriangle(canvas) {
             ctx.font = ""+weight+" "+fontSize+"px Arial";
             ctx.fillStyle = "black";
             ctx.fillText(value, cx, cy);
+        }
+    }
+    if (bottomBar) {
+        var triangleArr = pascalTriangle(nPascal - 1);
+        var maxValue = Math.max.apply(null, triangleArr)
+        for (var i = 0 ; i < nPascal ; i++) {
+            var value = triangleArr[i];
+            var cx = i*unitX + unitX/2;
+            var x = cx - unitX/4;
+            var xUnit = unitX/2;
+            var y = height * (1 - value/maxValue);
+            var yUnit = height - y;
+            ctx.beginPath();
+            ctx.strokeStyle = "black";
+            ctx.fillStyle = "rgba(0, 0, 0, 20%)";
+            ctx.rect(x, y, xUnit, yUnit);
+            ctx.fill()
+            ctx.stroke()
         }
     }
 }
