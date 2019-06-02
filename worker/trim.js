@@ -42,16 +42,14 @@ onmessage = function(e) {
     postMessage({image:dstImageData}, [dstImageData.data.buffer]);
 }
 
-function matchColorV(v, v2, fuzz) {
-    if (v < v2) {
-	var min = v, max = v2;
+function matchColorV(v1, v2, fuzz) {
+    var diff;
+    if (v2 > v1) {
+        diff = v2 - v1;
     } else {
-	var min = v2, max = v;
+        diff = v1 - v2;
     }
-    if (max === 0) {
-	return true;
-    }
-    return ((max-min)/max <= fuzz);
+    return (diff/255 <= fuzz);
 }
 
 function matchColor(rgba, rgba2, fuzz) {
