@@ -12,16 +12,16 @@ onmessage = function(e) {
     var fuzz = e.data.fuzz;
     var margin = e.data.margin;
     var srcWidth = srcImageData.width, srcHeight = srcImageData.height;
-    var baseRGBA = getRGBA(srcImageData, 0, 0);
-    var minX = matchColorLineNum(srcImageData, baseRGBA, fuzz,
-				 false, 0, 1);
-    var maxX = srcWidth - matchColorLineNum(srcImageData, baseRGBA, fuzz,
+    var leftTop = getRGBA(srcImageData, 0, 0);
+    var rightTop = getRGBA(srcImageData, srcWidth - 1, 0);
+    var leftBottom = getRGBA(srcImageData, 0, srcHeight - 1);
+    var minX = matchColorLineNum(srcImageData, leftTop, fuzz, false, 0, 1);
+    var maxX = srcWidth - matchColorLineNum(srcImageData, rightTop, fuzz,
 					    false, srcWidth-1, -1);
-    var minY = matchColorLineNum(srcImageData, baseRGBA, fuzz,
-				 true, 0, 1);
-    var maxY = srcHeight - matchColorLineNum(srcImageData, baseRGBA, fuzz,
+    var minY = matchColorLineNum(srcImageData, leftTop, fuzz, true, 0, 1);
+    var maxY = srcHeight - matchColorLineNum(srcImageData, leftButtom, fuzz,
 					     true, srcHeight-1, -1);
-    // console.debug("minX, minY, maxX, maxY:", minX, minY, maxX, maxY);
+    console.debug("minX, minY, maxX, maxY:", minX, minY, maxX, maxY);
     // console.debug("margin:", margin);
     minX = (minX < margin)?0:(minX - margin);
     maxX = (srcWidth <= (maxX + margin)) ? (srcWidth-1) : (maxX + margin);
