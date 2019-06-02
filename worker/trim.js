@@ -16,11 +16,11 @@ onmessage = function(e) {
     var rightTop = getRGBA(srcImageData, srcWidth - 1, 0);
     var leftBottom = getRGBA(srcImageData, 0, srcHeight - 1);
     var minX = matchColorLineNum(srcImageData, leftTop, fuzz, false, 0, 1);
-    var maxX = srcWidth - matchColorLineNum(srcImageData, rightTop, fuzz,
-					    false, srcWidth-1, -1);
+    var maxX = matchColorLineNum(srcImageData, rightTop, fuzz,
+                                 false, srcWidth-1, -1);
     var minY = matchColorLineNum(srcImageData, leftTop, fuzz, true, 0, 1);
-    var maxY = srcHeight - matchColorLineNum(srcImageData, leftButtom, fuzz,
-					     true, srcHeight-1, -1);
+    var maxY = matchColorLineNum(srcImageData, leftBottom, fuzz,
+				 true, srcHeight-1, -1);
     console.debug("minX, minY, maxX, maxY:", minX, minY, maxX, maxY);
     // console.debug("margin:", margin);
     minX = (minX < margin)?0:(minX - margin);
@@ -28,8 +28,8 @@ onmessage = function(e) {
     minY = (minY < margin) ? 0 : (minY - margin);
     maxY = (srcHeight <= (maxY + margin)) ? (srcHeight-1) : (maxY + margin);
     //
-    var dstWidth  = (maxX > minX)?(maxX - minX):1;
-    var dstHeight = (maxY > minY)?(maxY - minY):1;
+    var dstWidth  = (maxX > minX)?(maxX - minX + 1):1;
+    var dstHeight = (maxY > minY)?(maxY - minY + 1):1;
     var dstImageData = new ImageData(dstWidth, dstHeight);
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
@@ -73,11 +73,11 @@ function matchColorLineNum(imageData, rgba, fuzz, isVert, start, d) {
 		for (var x = 0 ; x < width ; x++) {
 		    var rgba2 = getRGBA(imageData, x, y);
 		    if (matchColor(rgba, rgba2, fuzz) === false) {
-			return num;
+			return y;
 		    }
 		}
-		num ++;
 	    }
+            num = height;
 	} else if (d === 0) {
 	    console.error("ERROR: dy === 0");
 	} else { // d < 0
@@ -85,11 +85,11 @@ function matchColorLineNum(imageData, rgba, fuzz, isVert, start, d) {
 		for (var x = 0 ; x < width ; x++) {
 		    var rgba2 = getRGBA(imageData, x, y);
 		    if (matchColor(rgba, rgba2, fuzz) === false) {
-			return num;
+			return y;
 		    }
 		}
-		num ++;
 	    }
+             num = 0;
 	}
     } else { // ! isVert
 	if (d > 0) {
@@ -97,11 +97,11 @@ function matchColorLineNum(imageData, rgba, fuzz, isVert, start, d) {
 		for (var y = 0 ; y < height ; y++) {
 		    var rgba2 = getRGBA(imageData, x, y);
 		    if (matchColor(rgba, rgba2, fuzz) === false) {
-			return num;
+			return x;
 		    }
 		}
-		num ++;
 	    }
+            num = width;
 	} else if (d === 0) {
 	    console.error("ERROR: dx === 0");
 	} else { // d < 0
@@ -109,11 +109,11 @@ function matchColorLineNum(imageData, rgba, fuzz, isVert, start, d) {
 		for (var y = 0 ; y < height ; y++) {
 		    var rgba2 = getRGBA(imageData, x, y);
 		    if (matchColor(rgba, rgba2, fuzz) === false) {
-			return num;
+			return x;
 		    }
 		}
-		num ++;
 	    }
+            num = height;
 	}
     }
     // console.debug("perfect color match", isVert, start, d, num);
