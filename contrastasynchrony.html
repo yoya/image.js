@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2019/06/07- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Contrast Asynchrony </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel">
+        <div style="float:left">
+	  width:<input id="widthRange" type="range" min="16" max="1280" step="1" value="500">
+          :<input type="text" id="widthText" size="5">
+          <br />
+          height:<input id="heightRange" type="range" min="16" max="1080" step="1" value="300">
+          :<input type="text" id="heightText" size="5">
+          </div>
+        <div>
+          period:<input id="periodRange" type="range" min="0.5" max="10" step="0.5" value="0.5">
+          :<input type="text" id="periodText" size="5">
+        </div>
+      </div> <!-- controlPanel -->
+      <div style="clear:both">
+      <canvas id="canvas" width=200 height=200> srcCanvas </canvas>
+      <video id="video" width=200 height=200 src="" muted autoplay style="display:none"> </video>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="lib/testcard.js"> </script>
+    <script type="text/javascript" src="contrastasynchrony.js"> </script>
+  </body>
+</html>
