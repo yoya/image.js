@@ -82,7 +82,7 @@ function sepiaTone(rgba, colorMatrix, linear) {
     [r,g,b] = colorTransform([r,g,b], colorMatrix)
     if (linear) {
 	r /= 255; g /= 255; b /= 255;
-	[r, g, b] = linearRGB2sRGB([r2, g2, b2]);
+	[r, g, b] = linearRGB2sRGB([r, g, b]);
     }
     return [r, g, b, a];
 }
