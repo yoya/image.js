@@ -291,14 +291,17 @@ var transformAndUpdate = function() {
     var srcCText, srcMText, srcYText, srcKText;
     var srcXYZ_XText, srcXYZ_YText, srcXYZ_ZText;
     var srcxyY_xText, srcxyY_yText;
+    var dstVRange;
     var dstRRange, dstGRange, dstBRange;
     var dstCRange, dstMRange, dstYRange, dstKRange;
+    var dstVText;
     var dstRText, dstGText, dstBText;
     var dstCText, dstMText, dstYText, dstKText;
     var dstXYZ_XText, dstXYZ_YText, dstXYZ_ZText;
     var dstxyY_xText, dstxyY_yText;
     var srcTransformXYZ, dstTransformXYZ;
     if (! inverse) {
+        dstVRange = elems.dstVRange;
 	srcRRange = elems.srcRRange;
 	srcGRange = elems.srcGRange;
 	srcBRange = elems.srcBRange;
@@ -313,6 +316,7 @@ var transformAndUpdate = function() {
 	dstMRange = elems.dstMRange;
 	dstYRange = elems.dstYRange;
 	dstKRange = elems.dstKRange;
+        dstVText = elems.dstVText;
 	srcRText = elems.srcRText;
 	srcGText = elems.srcGText;
 	srcBText = elems.srcBText;
@@ -340,6 +344,7 @@ var transformAndUpdate = function() {
         srcTransformXYZ = transformInputXYZ;
         dstTransformXYZ = transformOutputXYZ;
     } else {
+        dstVRange = elems.srcVRange;
 	srcRRange = elems.dstRRange;
 	srcGRange = elems.dstGRange;
 	srcBRange = elems.dstBRange;
@@ -355,6 +360,7 @@ var transformAndUpdate = function() {
 	dstYRange = elems.srcYRange;
 	dstKRange = elems.srcKRange;
 	srcRText = elems.dstRText;
+        dstVText = elems.srcVText;
 	srcGText = elems.dstGText;
 	srcBText = elems.dstBText;
 	srcCText = elems.dstCText;
@@ -387,7 +393,7 @@ var transformAndUpdate = function() {
 	if (isFloat) {
 	    vv /= 255;
 	}
-	srcPixel = [v];
+	srcPixel = [vv];
     } else if (cs === cmsSigRgbData) {
 	var rr = srcRRange.value;
 	var gg = srcGRange.value;
@@ -535,7 +541,8 @@ function main() {
 	    updateSelectIndex(dstSelect, text);
 	}
     }, "ArrayBuffer");
-    bindFunction({"srcRRange":"srcRText",
+    bindFunction({"srcVRange":"srcVText",
+                  "srcRRange":"srcRText",
 		  "srcGRange":"srcGText",
 		  "srcBRange":"srcBText",
 		  "srcCRange":"srcCText",
@@ -548,7 +555,8 @@ function main() {
 		     inverse = false; // src => dst conversion
 		     updateDiagramSrcDstPoints();
 		 });
-    bindFunction({"dstRRange":"dstRText",
+    bindFunction({"dstVRange":"dstVText",
+                  "dstRRange":"dstRText",
 		  "dstGRange":"dstGText",
 		  "dstBRange":"dstBText",
 		  "dstCRange":"dstCText",
