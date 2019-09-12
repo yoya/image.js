@@ -184,7 +184,7 @@ function main() {
                     drawDiagramPoints(diagramBaseCanvas, params, true);
 		}
 	    }
-	    if (type === "curv") {
+	    if ((type === "curv") || (type === "para")) {
 		var curveCanvas = document.createElement("canvas");
 		curveCanvas.width  = 200;
 		curveCanvas.height = 200;
@@ -193,40 +193,20 @@ function main() {
 		var color = "black";
 		switch (signature.substr(0, 1)) {
 		case 'r':
-		    color = "#F55";
+		    color = "#F64";
 		    break;
 		case 'g':
-		    color = "#0E0";
+		    color = "#0F0";
 		    break;
 		case 'b':
-		    color = "#68F";
+		    color = "#8AF";
 		    break;
 		}
-		drawCurveGraph(curveCanvas, signature, tagDetail, color);
-		iccTableContainer.appendChild(curveCanvas);
-	    }
-	    if (type === "para") {
-		var curveCanvas = document.createElement("canvas");
-		curveCanvas.width  = 200;
-		curveCanvas.height = 200;
-		curveCanvas.style = "float:left;";
-		curveCanvas.setAttribute('class', "borderBlue");
-		var color = "black";
-		switch (signature) {
-		case 'rTRC':
-		case 'aarg':
-                    color = "#F55";
-		    break;
-		case 'gTRC':
-		case 'aagg':
-                    color = "#0E0";
-		    break;
-		case 'bTRC':
-		case 'aabg':
-                    color = "#68F";
-		    break;
-		}
-		drawParaCurveGraph(curveCanvas, signature, tagDetail, color);
+                if (type === "curv") {
+		    drawCurveGraph(curveCanvas, signature, tagDetail, color);
+                } else {
+		    drawParaCurveGraph(curveCanvas, signature, tagDetail, color);
+                }
 		iccTableContainer.appendChild(curveCanvas);
 	    }
 	}
@@ -234,9 +214,19 @@ function main() {
 }
 
 function drawCurveGraph(canvas, caption, data, color) {
+    drawCurveGraphBase(canvas, caption);
+    drawCurveGraphLine(canvas, data, color);
+}
+function drawParaCurveGraph(canvas, caption, data, color) {
+    drawParaCurveGraphBase(canvas, caption);
+    drawParaCurveGraphLine(canvas, data, color);
+}
+
+function drawCurveGraphBase(canvas, caption) {
     var ctx = canvas.getContext("2d");
     var width  = canvas.width
     var height = canvas.height;
+    canvas.style.backgroundColor = "#444";
     canvas.width  = width;
     // draw asix
     ctx.lineWidth = 1;
@@ -256,8 +246,23 @@ function drawCurveGraph(canvas, caption, data, color) {
 	ctx.lineTo(xy, height);
 	ctx.stroke();
     }
+    ctx.fillStyle= "white";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillText(caption, width/2, 0);
+    ctx.stroke();
+}
+
+function drawParaCurveGraphBase(canvas, caption) {
+    drawCurveGraphBase(canvas, caption);
+}
+
+function drawCurveGraphLine(canvas, data, color) {
+    var ctx = canvas.getContext("2d");
+    var width  = canvas.width
+    var height = canvas.height;
     // draw Curve
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.strokeStyle= color;
     ctx.moveTo(0, height-1);
@@ -279,35 +284,14 @@ function drawCurveGraph(canvas, caption, data, color) {
 	    ctx.lineTo(x, height - y - 1);
 	}
     }
-    ctx.textAlign = "center";
-    ctx.textBaseline = "top";
-    ctx.fillText(caption, width/2, 0);
     ctx.stroke();
 }
 
-function drawParaCurveGraph(canvas, caption, data, color) {
+function drawParaCurveGraphLine(canvas, data, color) {
     var ctx = canvas.getContext("2d");
     var width  = canvas.width
     var height = canvas.height;
-    canvas.width  = width;
-    // draw asix
-    ctx.lineWidth = 1;
-    for (var i = 0 ; i <= 10 ; i++) {
-	var xy = i * width / 10;
-	if (i%5 === 0){
-	    ctx.strokeStyle= "lightgray";
-	} else {
-	    ctx.strokeStyle= "gray";
-	}
-	ctx.beginPath();
-	ctx.moveTo(0, xy);
-	ctx.lineTo(width, xy);
-	ctx.stroke();
-	ctx.beginPath();
-	ctx.moveTo(xy, 0);
-	ctx.lineTo(xy, height);
-	ctx.stroke();
-    }
+
     // draw Curve
     ctx.lineWidth = 1.5;
     ctx.beginPath();
