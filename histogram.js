@@ -31,6 +31,7 @@ function main() {
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "equalizeCheckbox":null,
 		  "totalLineCheckbox":null,
+                  "histogramCheckbox":null,
 		  "equalizeRatioRange":"equalizeRatioText",
 		  "maxValueRange":"maxValueText",
 		  "minValueRange":"minValueText"},
@@ -74,8 +75,9 @@ function drawSrcImageAndHistogram(srcImage, srcCanvas, dstCancas, srcHistCanvas,
     var maxValue = parseFloat(document.getElementById("maxValueRange").value);
     var minValue = parseFloat(document.getElementById("minValueRange").value);
     var totalLine = document.getElementById("totalLineCheckbox").checked;
+    var histogram = document.getElementById("histogramCheckbox").checked;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equalizeRatio, minValue, maxValue, totalLine);
+    drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equalizeRatio, minValue, maxValue, totalLine, histogram);
 }
 
 function levelAdjustment(v, srcMinValue, srcMaxValue, dstMinValue, dstMaxValue) {
@@ -120,7 +122,7 @@ function equalizeMap(redHist, greenHist, blueHist, minValue, maxValue) {
     return map;
 }
 
-function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equalizeRatio, minValue, maxValue, totalLine) {
+function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equalizeRatio, minValue, maxValue, totalLine, histogram) {
     // console.debug("drawHistogram");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -135,7 +137,7 @@ function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equal
     var redHist   = getColorHistogramList(srcCanvas, "red");
     var greenHist = getColorHistogramList(srcCanvas, "green");
     var blueHist  = getColorHistogramList(srcCanvas, "blue");
-    drawHistgramGraph(srcHistCanvas, redHist, greenHist, blueHist, minValue, maxValue, totalLine);
+    drawHistgramGraph(srcHistCanvas, redHist, greenHist, blueHist, minValue, maxValue, totalLine, histogram);
     if (equalizeRatio) {
 	var colorMap = equalizeMap(redHist, greenHist, blueHist, minValue, maxValue);
     } else if (( 0 < minValue) || (maxValue< 255)) {
@@ -170,5 +172,5 @@ function drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equal
     var redHist   = getColorHistogramList(dstCanvas, "red");
     var greenHist = getColorHistogramList(dstCanvas, "green");
     var blueHist  = getColorHistogramList(dstCanvas, "blue");
-    drawHistgramGraph(dstHistCanvas, redHist, greenHist, blueHist, 0, 255, totalLine);
+    drawHistgramGraph(dstHistCanvas, redHist, greenHist, blueHist, 0, 255, totalLine, histogram);
 }
