@@ -609,7 +609,6 @@ function main() {
 		    updateSelectIndex(srcSelect, ctx.file);
 		    updateInputProfile(buf);
 		    updateDiagramSrcDstPoints();
-
 		}
 		if (ctx.file === options[5].value) { // 5:JapanColorCoated2011
 		    updateSelectIndex(dstSelect, ctx.file);
