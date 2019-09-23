@@ -8,8 +8,8 @@
 <body>
   <div class="container">
     <div id="controlPanel"  style="float:left">
-      Color Filter:  <br />
       <div style="float:left">
+        Color Filter:  <br />
         <select id="colorSelect" size="9">
           <option value="ident" selected> 元のまま </option>
 	  <option value="red-p"         > 赤+ </option>
@@ -24,18 +24,20 @@
 	  <option value="sepia2"        > セピア調2 </option>
         </select>
       </div>
+      <div style="float:left">
+        colorMatrix:<table id="colorMatrixTable" style="border:1 "> </table>
+        <br />
+        linear:<input id="linearCheckbox" type="checkbox" />
+        <div>
+          maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+        </div>
+      </div>
+    </div> <!-- controlPanel -->
+    <div style="clear:both">
+      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
     </div>
-    colorMatrix:<table id="colorMatrixTable" style="border:1 "> </table>
-    <br />
-    linear:<input id="linearCheckbox" type="checkbox" />
-    <div>
-      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
-    </div>
-  </div>
-  <div style="clear:both">
-    <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
-    <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
-  </div>
+  </div> <!-- container -->
   <script type="text/javascript" src="lib/drop.js"> </script>
   <script type="text/javascript" src="lib/bind.js"> </script>
   <script type="text/javascript" src="lib/canvas.js"> </script>
