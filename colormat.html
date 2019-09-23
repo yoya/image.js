@@ -12,8 +12,8 @@
         Filter Category:  <br />
         <select id="categorySelect" size="5">
           <option value="all" selected> 全て表示 </option>
-	  <option value="add"  > 加算 </option>
-          <option value="rot"  > 回転 </option>
+	  <option value="emp"  > 色強調 </option>
+          <option value="rep"  > 色入替え </option>
           <option value="gray"  > グレースケール </option>
           <option value="etc"  > その他 </option>
         </select>
@@ -22,11 +22,17 @@
         Color Filter:  <br />
         <select id="colorSelect" size="7">
           <option value="ident" selected> 元のまま </option>
-	  <option value="red-p"   data-category="add"> 赤+ </option>
-          <option value="green-p" data-category="add"> 緑+ </option>
-	  <option value="blue-p"  data-category="add"> 青+ </option>
-	  <option value="rgb2gbr" data-category="rot"> RGB2GBR </option>
-	  <option value="rgb2brg" data-category="rot"> RGB2BRG </option>
+	  <option value="red-add"   data-category="emp"> 赤+0.5 </option>
+          <option value="green-add" data-category="emp"> 緑+0.5 </option>
+	  <option value="blue-add"  data-category="emp"> 青+0.5 </option>
+	  <option value="red-mul"   data-category="emp"> 赤x1.5 </option>
+          <option value="green-mul" data-category="emp"> 緑x1.5 </option>
+	  <option value="blue-mul"  data-category="emp"> 青x1.5 </option>
+	  <option value="rgb2gbr" data-category="rep"> RGB2GBR </option>
+          <option value="rgb2brg" data-category="rep"> RGB2BRG </option>
+	  <option value="rgb2bgr" data-category="rep"> RGB2BGR </option>
+          <option value="rgb2grb" data-category="rep"> RGB2GRB </option>
+          <option value="rgb2rbg" data-category="rep"> RGB2RBG </option>
           <option value="grayBT601" data-category="gray"> グレースケール(BT.601) </option>
           <option value="grayBT709" data-category="gray"> グレースケール(BT.709) </option>
 	  <option value="negate"        > ネガポジ反転 </option>
