@@ -14,7 +14,10 @@ function main() {
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     //
     var colorMatrixTable = document.getElementById("colorMatrixTable");
-    var color = document.getElementById("colorSelect").value;
+    var categorySelect = document.getElementById("categorySelect");
+    var colorSelect    = document.getElementById("colorSelect");
+    var category = categorySelect.value;
+    var color    = colorSelect.value;
     var colorMatrix = color2Matrix[color];
     var colorWindow = 4;
     //
@@ -31,9 +34,38 @@ function main() {
 		 function() {
 		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix);
 		 } );
+    bindFunction({"categorySelect":null},
+		 function() {
+                     category = categorySelect.value;
+                     console.log("category:"+category);
+                     for (var i in colorSelect.options) {
+                         var option = colorSelect.options[i];
+                         if (! option.value) {
+                             continue;
+                         }
+                         option.style.display = "none";      // Chrome/Firefox
+                         option.style.visibility = "hidden"; // Safari
+                         if (category === "all") {
+                             option.style.display = null;
+                             option.style.visibility = "visible";
+                         } else {
+                             if (option.dataset && option.dataset.category) {
+                                 if (category === option.dataset.category) {
+                                     option.style.display = null;
+                                     option.style.visibility = "visible";
+                                 }
+                             } else {
+                                 if (category === "etc") {
+                                     option.style.display = null;
+                                     option.style.visibility = "visible";
+                                 }
+                             }
+                         }
+                     }
+		 } );
     bindFunction({"colorSelect":null},
 		 function() {
-		     color = document.getElementById("colorSelect").value;
+		     color = colorSelect.value;
 		     colorMatrix = color2Matrix[color];
 		     console.log(colorMatrix);
 		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix);

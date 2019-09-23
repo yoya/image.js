@@ -9,17 +9,27 @@
   <div class="container">
     <div id="controlPanel"  style="float:left">
       <div style="float:left">
+        Filter Category:  <br />
+        <select id="categorySelect" size="5">
+          <option value="all" selected> 全て表示 </option>
+	  <option value="add"  > 加算 </option>
+          <option value="rot"  > 回転 </option>
+          <option value="gray"  > グレースケール </option>
+          <option value="etc"  > その他 </option>
+        </select>
+      </div>
+      <div style="float:left">
         Color Filter:  <br />
-        <select id="colorSelect" size="9">
+        <select id="colorSelect" size="7">
           <option value="ident" selected> 元のまま </option>
-	  <option value="red-p"         > 赤+ </option>
-          <option value="green-p"       > 緑+ </option>
-	  <option value="blue-p"        > 青+ </option>
-	  <option value="rgb2gbr"       > RGB2GBR </option>
-	  <option value="rgb2brg"       > RGB2BRG </option>
+	  <option value="red-p"   data-category="add"> 赤+ </option>
+          <option value="green-p" data-category="add"> 緑+ </option>
+	  <option value="blue-p"  data-category="add"> 青+ </option>
+	  <option value="rgb2gbr" data-category="rot"> RGB2GBR </option>
+	  <option value="rgb2brg" data-category="rot"> RGB2BRG </option>
+          <option value="grayBT601" data-category="gray"> グレースケール(BT.601) </option>
+          <option value="grayBT709" data-category="gray"> グレースケール(BT.709) </option>
 	  <option value="negate"        > ネガポジ反転 </option>
-          <option value="grayBT601"     > グレースケール(BT.601) </option>
-          <option value="grayBT709"     > グレースケール(BT.709) </option>
 	  <option value="sepia"         > セピア調 </option>
 	  <option value="sepia2"        > セピア調2 </option>
         </select>
