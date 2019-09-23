@@ -20,6 +20,11 @@ function main() {
     var color    = colorSelect.value;
     var colorMatrix = color2Matrix[color];
     var colorWindow = 4;
+    var colorSelectOptions = [];
+    // saving all color select option elems
+    for (var i = 0, n = colorSelect.options.length ; i < n ; i++) {
+        colorSelectOptions.push(colorSelect.options[i]);
+    }
     //
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
@@ -38,26 +43,21 @@ function main() {
 		 function() {
                      category = categorySelect.value;
                      console.log("category:"+category);
-                     for (var i in colorSelect.options) {
-                         var option = colorSelect.options[i];
-                         if (! option.value) {
-                             continue;
-                         }
-                         option.style.display = "none";      // Chrome/Firefox
-                         option.style.visibility = "hidden"; // Safari
+                     while (colorSelect.options.length > 0) {
+                         colorSelect.remove(0);
+                     }
+                     for (var i = 0, n = colorSelectOptions.length ; i < n ; i++) {
+                         var option = colorSelectOptions[i];
                          if (category === "all") {
-                             option.style.display = null;
-                             option.style.visibility = "visible";
+                             colorSelect.add(option);
                          } else {
                              if (option.dataset && option.dataset.category) {
                                  if (category === option.dataset.category) {
-                                     option.style.display = null;
-                                     option.style.visibility = "visible";
+                                     colorSelect.add(option);
                                  }
                              } else {
                                  if (category === "etc") {
-                                     option.style.display = null;
-                                     option.style.visibility = "visible";
+                                     colorSelect.add(option);
                                  }
                              }
                          }
