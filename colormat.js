@@ -71,7 +71,7 @@ function main() {
 		 function(target, rel) {
 		     color = colorSelect.value;
 		     colorMatrix = color2Matrix[color];
-		     // console.log(colorMatrix);
+		     // console.log(color, colorMatrix);
 		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, rel);
 		     setTableValues("colorMatrixTable", colorMatrix);
 		 } );
@@ -134,16 +134,49 @@ var color2Matrix = {
 	1, 0, 0, 0,
 	0, 0, 1, 0,
 	0, 1, 0, 0],
+    // http://www.colorjack.com/labs/colormatrix/
+    "protanopia":[
+        0.56667, 0.43333, 0      , 0,
+        0.55833, 0.44167, 0      , 0,
+        0      , 0.24167, 0.75833, 0],
+    "protanomaly":[
+        0.81667, 0.18333, 0    , 0,
+        0.33333, 0.66667, 0    , 0,
+        0      , 0.125  , 0.875, 0],
+    "deuteranopia":[
+        0.625, 0.375, 0   , 0,
+        0.70 , 0.30 , 0   , 0,
+        0    , 0.30 , 0.70, 0],
+    "deuteranomaly":[
+        0.80   , 0.20   , 0      , 0,
+        0.25833, 0.74167, 0      , 0,
+        0      , 0.14167, 0.85833, 0],
+    "tritanopia":[
+        0.95, 0.05   , 0      , 0,
+        0   , 0.43333, 0.56667, 0,
+        0   , 0.475  , 0.525  , 0],
+    "tritanomaly":[
+        0.96667, 0.03333, 0      , 0,
+        0      , 0.73333, 0.26667, 0,
+        0      , 0.18333, 0.81667, 0],
+    "achromatopsia":[
+        0.299, 0.587, 0.114, 0,
+        0.299, 0.587, 0.114, 0,
+        0.299, 0.587, 0.114, 0],
+    "achromatomaly":[
+        0.618, 0.32 , 0.062, 0,
+        0.163, 0.775, 0.062, 0,
+        0.163, 0.320, 0.516, 0],
     // http://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html#Tutorial
-    "protanomary":[
+    "protanomaly2":[
         0.152286, 1.052583, -0.204868, 0,
         0.114503, 0.786281, 0.099216, 0,
         -0.003882, -0.048116, 1.051998,0 ],
-    "deuteranomary":[
+    "deuteranomaly2":[
         0.367322, 0.860646, -0.227968, 0,
         0.280085, 0.672501, 0.047413, 0,
         -0.011820, 0.042940, 0.968881, 0],
-    "tritanomary":[
+    "tritanomaly2":[
         1.255528, -0.076749, -0.178779, 0,
         -0.078411, 0.930809, 0.147602, 0,
         0.004733, 0.691367, 0.303900, 0],
