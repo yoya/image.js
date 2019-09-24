@@ -45,9 +45,13 @@
         </select>
       </div>
       <div style="float:left">
-        colorMatrix:<table id="colorMatrixTable" style="border:1 "> </table>
-        <br />
-        linear:<input id="linearCheckbox" type="checkbox" />
+        <div>
+          colorMatrix:<table id="colorMatrixTable" style="border:1 "> </table>
+        </div>
+        <div>
+          linear:<input id="linearCheckbox" type="checkbox" />
+	  amount:<input id="amountRange" type="range" min="0.0" max="1.0" step="0.01" value="1.0">:<input type="text" id="amountText" size="5">
+        </div>
         <div>
           maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
         </div>
@@ -62,6 +66,9 @@
   <script type="text/javascript" src="lib/bind.js"> </script>
   <script type="text/javascript" src="lib/canvas.js"> </script>
   <script type="text/javascript" src="lib/color.js"> </script>
+  <script type="text/javascript" src="lib/matrix.js"> </script>
+  <script type="text/javascript" src="lib/loading.js"> </script>
+  <script type="text/javascript" src="lib/worker.js"> </script>
   <script type="text/javascript" src="colormat.js"> </script>
 </body>
 </html>

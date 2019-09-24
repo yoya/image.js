@@ -35,9 +35,14 @@ function main() {
     }, "DataURL");
     //
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+                  "amountRange":"amountText",
 		  "linearCheckbox":null},
-		 function() {
-		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix);
+		 function(target, rel) {
+                     var identMatrix = color2Matrix["ident"];
+                     var amount = parseFloat(document.getElementById("amountRange").value);
+                     var matrix = interpMatrix(identMatrix, colorMatrix, amount);
+                     
+		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, matrix, rel);
 		 } );
     bindFunction({"categorySelect":null},
 		 function() {
@@ -64,17 +69,17 @@ function main() {
                      }
 		 } );
     bindFunction({"colorSelect":null},
-		 function() {
+		 function(target, rel) {
 		     color = colorSelect.value;
 		     colorMatrix = color2Matrix[color];
 		     console.log(colorMatrix);
-		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix);
+		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, rel);
 		     setTableValues("colorMatrixTable", colorMatrix);
 		 } );
     //
     bindTableFunction("colorMatrixTable", function(table, values, width) {
 	colorMatrix = values;
-	drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix);
+	drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, true);
     }, colorMatrix, colorWindow);
     console.log(colorMatrixTable);
 }
@@ -171,47 +176,16 @@ var color2Matrix = {
 	0.20, 0.20, 0.45, 0],
 };
 
-function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCancas, colorMatrix) {
+function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCancas, colorMatrix, rel) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var linear = document.getElementById("linearCheckbox").checked;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawColorTransform(srcCanvas, dstCanvas, colorMatrix, linear);
+    drawColorTransform(srcCanvas, dstCanvas, colorMatrix, linear, rel);
 }
 
-function colorTransform(imageData, x, y, mat, linear) {
-    var [r, g, b, a] = getRGBA(imageData, x, y);
-    if (linear) {
-	[r, g, b] = sRGB2linearRGB([r, g, b]);
-	r *= 255; g *= 255; b *= 255;
-    }
-    var r2 = r*mat[0] + g*mat[1] + b*mat[2]  + 255*mat[3];
-    var g2 = r*mat[4] + g*mat[5] + b*mat[6]  + 255*mat[7];
-    var b2 = r*mat[8] + g*mat[9] + b*mat[10] + 255*mat[11];
-    if (linear) {
-	r2 /= 255; g2 /= 255; b2 /= 255;
-	[r2, g2, b2] = linearRGB2sRGB([r2, g2, b2]);
-    }
-    return [r2, g2, b2, a];
-}
+var worker = new workerProcess("worker/colormat.js");
 
-function drawColorTransform(srcCanvas, dstCanvas, colorMatrix, linear) {
-    // console.debug("drawColorTransform");
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtx = dstCanvas.getContext("2d");
-    var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var dstWidth  = srcWidth;
-    var dstHeight = srcHeight;
-    dstCanvas.width  = dstWidth;
-    dstCanvas.height = dstHeight;
-    //
-    var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-    var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-    for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var srcX = dstX, srcY = dstY;
-	    var rgba = colorTransform(srcImageData, srcX, srcY, colorMatrix, linear);
-	    setRGBA(dstImageData, dstX, dstY, rgba);
-	}
-    }
-    dstCtx.putImageData(dstImageData, 0, 0);
+function drawColorTransform(srcCanvas, dstCanvas, colorMatrix, linear, sync) {
+    var params = {colorMatrix:colorMatrix, linear:linear};
+    worker.process(srcCanvas, dstCanvas, params, sync);
 }
