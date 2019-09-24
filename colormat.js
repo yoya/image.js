@@ -47,7 +47,6 @@ function main() {
     bindFunction({"categorySelect":null},
 		 function() {
                      category = categorySelect.value;
-                     console.log("category:"+category);
                      while (colorSelect.options.length > 0) {
                          colorSelect.remove(0);
                      }
@@ -72,7 +71,7 @@ function main() {
 		 function(target, rel) {
 		     color = colorSelect.value;
 		     colorMatrix = color2Matrix[color];
-		     console.log(colorMatrix);
+		     // console.log(colorMatrix);
 		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, rel);
 		     setTableValues("colorMatrixTable", colorMatrix);
 		 } );
@@ -81,7 +80,7 @@ function main() {
 	colorMatrix = values;
 	drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, true);
     }, colorMatrix, colorWindow);
-    console.log(colorMatrixTable);
+    // x2console.log(colorMatrixTable);
 }
 
 var color2Matrix = {
