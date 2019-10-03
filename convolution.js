@@ -51,7 +51,8 @@ function main() {
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
 		 } );
     bindFunction({"filterSelect":null,
-                  "filterWindowRange":"filterWindowText"},
+                  "filterWindowRange":"filterWindowText",
+                  "normalizeCheckbox":null},
 		 function(target) {
                      if (target.id === "filterSelect") {
 		         filter = document.getElementById("filterSelect").value;
@@ -63,7 +64,6 @@ function main() {
                          filterWindow = parseFloat(filterWindowRange.value);
                          console.log(filterMatrix);
                          filterMatrix = matResize(filterMatrix, oldFilterWindow, filterWindow);
-                         console.log(filterMatrix);
                      }
 		     bindTableFunction("filterMatrixTable", function(table, values, width) {
 			 filterMatrix = values;
@@ -187,10 +187,16 @@ var worker = null;
 
 function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, filterMatrix, filterWindow) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    var normalize = document.getElementById("normalizeCheckbox").checked;
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     //
+    if (normalize) {
+        var total = filterMatrix.reduce(function(a, b) { return a + b; });
+        filterMatrix = filterMatrix.map(function(a, b) { return a / total });
+    }
+    
     var srcImageData = srcCanvas.getContext("2d").getImageData(0, 0, srcCanvas.width, srcCanvas.height);
     if (worker) {
 	worker.terminate();
