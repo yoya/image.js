@@ -29,6 +29,8 @@ function main() {
     //
     var filterMatrixTable = document.getElementById("filterMatrixTable");
     var filterSelect = document.getElementById("filterSelect");
+    var normalizeCheckbox = document.getElementById("normalizeCheckbox");
+    var zerocenteringCheckbox = document.getElementById("zerocenteringCheckbox");
     var filter = filterSelect.value;
     var filterWindowRange = document.getElementById("filterWindowRange");
     var filterWindowText = document.getElementById("filterWindowText");
@@ -53,7 +55,8 @@ function main() {
 		 } );
     bindFunction({"filterSelect":null,
                   "filterWindowRange":"filterWindowText",
-                  "normalizeCheckbox":null},
+                  "normalizeCheckbox":null,
+                  "zerocenteringCheckbox":null},
 		 function(target) {
                      if (target.id === "filterSelect") {
 		         filter = filterSelect.value;
@@ -63,7 +66,6 @@ function main() {
                      } else {
                          var oldFilterWindow = filterWindow;
                          filterWindow = parseFloat(filterWindowRange.value);
-                         console.log(filterMatrix);
                          filterMatrix = matResize(filterMatrix, oldFilterWindow, filterWindow);
                      }
 		     bindTableFunction("filterMatrixTable", function(table, values, width) {
@@ -189,15 +191,19 @@ var worker = null;
 function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, filterMatrix, filterWindow) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var normalize = document.getElementById("normalizeCheckbox").checked;
+    var zerocentering = document.getElementById("zerocenteringCheckbox").checked;
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     //
     if (normalize) {
         var total = filterMatrix.reduce(function(a, b) { return a + b; });
-        filterMatrix = filterMatrix.map(function(a, b) { return a / total });
+        filterMatrix = filterMatrix.map(function(a) { return a / total });
     }
-    
+    if (zerocentering) {
+        var total = filterMatrix.reduce(function(a, b) { return a + b; });
+        filterMatrix = filterMatrix.map(function(a) { return a - (total / filterWindow / filterWindow) });
+    }
     var srcImageData = srcCanvas.getContext("2d").getImageData(0, 0, srcCanvas.width, srcCanvas.height);
     if (worker) {
 	worker.terminate();
