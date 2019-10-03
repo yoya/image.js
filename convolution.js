@@ -28,7 +28,8 @@ function main() {
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     //
     var filterMatrixTable = document.getElementById("filterMatrixTable");
-    var filter = document.getElementById("filterSelect").value;
+    var filterSelect = document.getElementById("filterSelect");
+    var filter = filterSelect.value;
     var filterWindowRange = document.getElementById("filterWindowRange");
     var filterWindowText = document.getElementById("filterWindowText");
     var [filterMatrix, filterWindow] = filter2Matrix[filter];
@@ -55,7 +56,7 @@ function main() {
                   "normalizeCheckbox":null},
 		 function(target) {
                      if (target.id === "filterSelect") {
-		         filter = document.getElementById("filterSelect").value;
+		         filter = filterSelect.value;
 		         [filterMatrix, filterWindow] = filter2Matrix[filter];
                          filterWindowRange.value = filterWindow;
                          filterWindowText.value = filterWindow;
