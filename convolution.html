@@ -31,13 +31,15 @@
 	    <option value="sobel"             > ゾーベル </option>
           </select>
 	</div>
-        </div> filterMatrix:<table id="filterMatrixTable"> </table>
-      </div>
-      <div>
-        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
-      </div>
+      </div> filterMatrix:<table id="filterMatrixTable"> </table>
     </div>
-    <div style="clear:both">
+    <div>
+      filterWindow:<input id="filterWindowRange" type="range" min="1" max="9" step="2" value="3">:<input type="text" id="filterWindowText">
+      <br />
+      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+    </div>
+  </div>
+  <div style="clear:both">
     <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
     <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
   </div>

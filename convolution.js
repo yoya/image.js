@@ -7,6 +7,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
+function matResize(filterMatrix, oldFilterWindow, filterWindow) {
+    var newMatrix = [];
+    for (var y = 0 ; y < filterWindow ; y++) {
+        for (var x = 0 ; x < filterWindow ; x++) {
+            if ((x < oldFilterWindow) && (y < oldFilterWindow)) {
+                newMatrix.push(filterMatrix[x + y * oldFilterWindow]);
+            } else {
+                newMatrix.push(0);
+            }
+        }
+    }
+    return newMatrix;
+}
+
 function main() {
     // console.debug("main");
     var srcCanvas = document.getElementById("srcCanvas");
@@ -15,7 +29,14 @@ function main() {
     //
     var filterMatrixTable = document.getElementById("filterMatrixTable");
     var filter = document.getElementById("filterSelect").value;
+    var filterWindowRange = document.getElementById("filterWindowRange");
+    var filterWindowText = document.getElementById("filterWindowText");
     var [filterMatrix, filterWindow] = filter2Matrix[filter];
+    console.log(filterWindow);
+    filterWindowRange.value = filterWindow;
+    filterWindowText.value = filterWindow;
+    console.log(filterWindowRange);
+    console.log(filterWindowText);
     //
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
@@ -29,10 +50,21 @@ function main() {
 		 function() {
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, filterMatrix, filterWindow);
 		 } );
-    bindFunction({"filterSelect":null},
-		 function() {
-		     filter = document.getElementById("filterSelect").value;
-		     [filterMatrix, filterWindow] = filter2Matrix[filter];
+    bindFunction({"filterSelect":null,
+                  "filterWindowRange":"filterWindowText"},
+		 function(target) {
+                     if (target.id === "filterSelect") {
+		         filter = document.getElementById("filterSelect").value;
+		         [filterMatrix, filterWindow] = filter2Matrix[filter];
+                         filterWindowRange.value = filterWindow;
+                         filterWindowText.value = filterWindow;
+                     } else {
+                         var oldFilterWindow = filterWindow;
+                         filterWindow = parseFloat(filterWindowRange.value);
+                         console.log(filterMatrix);
+                         filterMatrix = matResize(filterMatrix, oldFilterWindow, filterWindow);
+                         console.log(filterMatrix);
+                     }
 		     bindTableFunction("filterMatrixTable", function(table, values, width) {
 			 filterMatrix = values;
 			 filterWindow = width;
