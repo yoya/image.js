@@ -87,7 +87,7 @@ function revert(){
     if (kmc.status > 0) {
         clearTimeout(kmc.timerId);
     }
-    kmc.timerId = setTimeout(kMeansAnimation.bind(kmc), 100);
+    kmc.timerId = setTimeout(kMeansAnimation.bind(kmc), 100 * kmc.delay);
     kmc.status = 1;
 }
 
