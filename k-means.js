@@ -75,6 +75,7 @@ function reset() {
 }
 
 function revert(){
+    kmc.delay = parseFloat(document.getElementById("delayRange").value);
     for (var i = 0, n = kmc.nPoints ; i < n ; i++) {
 	kmc.points[i].centerIndex = null;
     }
@@ -342,4 +343,3 @@ function kMeans_4(kmc) { // clear centerindex
 	kmc.points[i].centerIndex = null;
     }
 }
-
