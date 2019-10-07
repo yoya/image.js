@@ -7,13 +7,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
-var kMeansContext = function(canvas, nPoints, nCenterPoints) {
+var kMeansContext = function(canvas, nPoints, nCenterPoints, delay) {
     this.nPoints = nPoints;
     this.nCenterPoints = nCenterPoints;
     this.points = null;
     this.centerPoints = null;
     this.centerPrevPoints = null;
     this.centerInitPoints = null;
+    this.delay = delay;
     //
     this.canvas = canvas;
     this.status = 0; // 0:init: -1:stop
@@ -38,12 +39,18 @@ function main() {
 		   "widthRange":"widthText",
 		   "heightRange":"heightText",
 		   "nPointsRange":"nPointsText",
-		   "nCenterPointsRange":"nCenterPointsText" },
+		   "nCenterPointsRange":"nCenterPointsText",
+                   "delayRange":"delayText"},
 		 function(target) {
-		     if (target.id !== "restartButton") {
-			 reset();
-		     } else {
+                     switch (target.id) {
+		     case "restartButton":
+                     case "delayRange":
+                     case "delayText":
 			 revert();
+                         break;
+                     default:
+			 reset();
+                         break;
 		     }
 		     restart();
 		 });
@@ -58,11 +65,12 @@ function reset() {
     canvas.height = height;
     var nPoints = parseFloat(document.getElementById("nPointsRange").value);
     var nCenterPoints = parseFloat(document.getElementById("nCenterPointsRange").value);
+    var delay = parseFloat(document.getElementById("delayRange").value);
     if (kmc) {
 	kmc.status = -1; // stop
 	kmc = null;
     }
-    kmc = new kMeansContext(canvas, nPoints, nCenterPoints);
+    kmc = new kMeansContext(canvas, nPoints, nCenterPoints, delay);
     kMeansSetup(kmc);
 }
 
@@ -76,16 +84,17 @@ function revert(){
 	kmc.centerPrevPoints[i].x = kmc.centerInitPoints[i].x;
 	kmc.centerPrevPoints[i].y = kmc.centerInitPoints[i].y;
     }
-    if (kmc.status <= 0) {
-	kmc.timerId = setTimeout(kMeansAnimation.bind(kmc), 100);
+    if (kmc.status > 0) {
+        clearTimeout(kmc.timerId);
     }
+    kmc.timerId = setTimeout(kMeansAnimation.bind(kmc), 100);
     kmc.status = 1;
 }
 
 function restart() {
     if (kmc.status <= 0) { // 0 or -1
 	kmc.status = 1;
-	kmc.timerId = setTimeout(kMeansAnimation.bind(kmc), 100);
+	kmc.timerId = setTimeout(kMeansAnimation.bind(kmc), 100 * kmc.delay);
     }
     kMeansDrawPoints(kmc);
 }
@@ -281,7 +290,7 @@ function kMeansAnimation() {
 	}
 	break;
     }
-    kmc.timerId = setTimeout(kMeansAnimation.bind(kmc), elapse);
+    kmc.timerId = setTimeout(kMeansAnimation.bind(kmc), elapse * kmc.delay);
 }
 
 function kMeans_1(kmc) { // neighbor point search
