@@ -11,27 +11,34 @@ function main() {
     // console.debug("main");
     var srcCanvas = document.getElementById("srcCanvas");
     var histCanvas = document.getElementById("histCanvas");
+    var maxWidthHeightRange = document.getElementById("maxWidthHeightRange");
+    var maxRatioRange = document.getElementById("maxRatioRange");
+    //
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var maxWidthHeight = parseFloat(maxWidthHeightRange.value);
+    var maxRatio = maxRatioRange.value;
+    var hist = [];
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndHueHistogram(srcImage, srcCanvas, histCanvas);
+            drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+            hist = getHueHistogram(srcCanvas);
+            drawHueHistogram(histCanvas, hist, maxRatio);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "maxRatioRange":"maxRatioText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
-		     drawSrcImageAndHueHistogram(srcImage, srcCanvas, histCanvas);
+                     maxWidthHeight = parseFloat(maxWidthHeightRange.value);
+                     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+                     hist = getHueHistogram(srcCanvas);
+                     drawHueHistogram(histCanvas, hist, maxRatio);
 		 } );
-}
-
-function drawSrcImageAndHueHistogram(srcImage, srcCanvas, histCancas) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var maxRatio = parseFloat(document.getElementById("maxRatioRange").value);
-    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    var hist = getHueHistogram(srcCanvas);
-    drawHueHistogram(histCanvas, hist, maxRatio);
+    bindFunction({"maxRatioRange":"maxRatioText"},
+		 function() {
+                     maxRatio = maxRatioRange.value;
+                     drawHueHistogram(histCanvas, hist, maxRatio);
+		 } );
 }
 
 function getHueHistogram(canvas) {
