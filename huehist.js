@@ -39,12 +39,12 @@ function getHueHistogram(canvas) {
     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     var data = imageData.data;
     var length = data.length;
-    var hist = new Uint32Array(360);
+    var hist = new Float32Array(360);
     for (var i = 0 ; i < length ; i+=4) {
         var rgba = data.slice(i, i+4);
         if (rgba[3] > 0) { // alpha check
             var [h, s, v] = RGB2HSV(rgba);
-            hist[h] ++;
+            hist[h] += s;
         }
     }
     return hist;
