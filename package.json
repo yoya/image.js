@@ -1,0 +1,45 @@
+{
+  "name": "imagejs",
+  "version": "0.0.0",
+  "description": "HTML5 Canvas Image Demo",
+  "main": "public/app.js",
+  "scripts": {
+    "clean": "rm -rf build",
+    "lint": "eslint src",
+    "fix": "eslint src --fix",
+    "build": "npm run clean && webpack --progress --mode production",
+    "build:watch": "npm run clean && webpack --progress --watch --mode development",
+    "prepublish": "npm run build",
+    "dev": "webpack-dev-server --progress"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yoya/image.js.git"
+  },
+  "keywords": [],
+  "author": "yoya",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yoya/image.js/issues"
+  },
+  "homepage": "https://app.awm.jp/image.js/",
+  "dependencies": {
+    "webpack-dev-server": "^3.8.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "babel-eslint": "^10.0.3",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "eslint": "^6.4.0",
+    "eslint-cli": "^1.1.1",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9"
+  }
+}

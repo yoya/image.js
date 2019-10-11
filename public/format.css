@@ -1,0 +1,24 @@
+/*
+  2017/01/05- yoya@awm.jp
+*/
+
+.imgFile {
+    border: double 10px #0000ff;
+    margin: 3px;
+}
+
+.imgChunk {
+    border: inset 4px #dfdf00;
+    background-color: #eeffff;
+    margin: 2px;
+}
+
+.imgInfo {
+    background-color: #fff8ff;
+    border: inset 1px #ffff00;
+    margin: 1px;
+}
+.imgDump {
+    background-color: white;
+    border: inset 1px #ffff00;
+}

@@ -1,0 +1,50 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2017/04/02- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> Convolution </title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="container">
+    <div>
+      <div id="controlPanel" style="float:left">
+        Convolution Filter:  <br />
+	<div style="float:left">
+          <select id="filterSelect" size="8">
+            <option value="smoothing" selected> 平滑化 </option>
+	    <option value="smoothing2"        > 平滑化2(横) </option>
+	    <option value="smoothing3"        > 平滑化3(斜め) </option>
+	    <option value="gaussian3x3"       > ガウシアン3x3 </option>
+	    <option value="gaussian5x5"       > ガウシアン5x5 </option>
+	    <option value="differential"      > 微分</option>
+            <option value="differentialHoli"  > 微分(横) </option>
+	    <option value="differentialVert"  > 微分(縦) </option>
+	    <option value="laplacian1"        > ラプラシアン1 </option>
+	    <option value="laplacian2"        > ラプラシアン2 </option>
+	    <option value="edge1"             > エッジ1 </option>
+	    <option value="edge2"             > エッジ2 </option>
+	    <option value="sharpening1"       > 先鋭化1 </option>
+	    <option value="sharpening2"       > 先鋭化2 </option>
+	    <option value="emboss"            > エンボス </option>
+	    <option value="prewitt"           > プレビット </option>
+	    <option value="sobel"             > ゾーベル </option>
+          </select>
+	</div>
+        </div> filterMatrix:<table id="filterMatrixTable"> </table>
+      </div>
+      <div>
+        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+      </div>
+    </div>
+    <div style="clear:both">
+    <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+    <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+  </div>
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/canvas.js"> </script>
+  <script type="text/javascript" src="lib/loading.js"> </script>
+  <script type="text/javascript" src="convolution.js"> </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2019/02/23- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Color Checker </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel">
+	width:<input id="widthRange" type="range" min="16" max="1920" step="1" value="800">
+        :<input type="text" id="widthText" size="5">
+        height:<input id="heightRange" type="range" min="16" max="1080" step="1" value="540">
+        :<input type="text" id="heightText" size="5">
+	border1:<input id="border1Range" type="range" min="0" max="100" step="1" value="30">
+        :<input type="text" id="border1Text" size="5">
+	border2:<input id="border2Range" type="range" min="0" max="100" step="1" value="20">
+        :<input type="text" id="border2Text" size="5">
+      </div> <!-- controlPanel -->
+      <canvas id="canvas" width=200 height=200> srcCanvas </canvas>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="colorchecker.js"> </script>
+  </body>
+</html>

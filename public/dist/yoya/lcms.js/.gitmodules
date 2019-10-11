@@ -1,0 +1,3 @@
+[submodule "mm2/Little-CMS"]
+	path = mm2/Little-CMS
+	url = git@github.com:mm2/Little-CMS.git

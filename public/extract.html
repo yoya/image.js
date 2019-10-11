@@ -1,0 +1,21 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2017/05/26- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> Image Extractor from Binary </title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="container">
+    <div>
+      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+    </div>
+    <div id="imageContainer">
+      Drop binary file(include image) here.
+    </div>
+  </div>
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="extract.js"> </script>
+</body>
+</html>

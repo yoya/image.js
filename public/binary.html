@@ -1,0 +1,33 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2018/04/14- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> Binary </title>
+  <link rel="stylesheet" href="index.css">
+  <style>
+       div.box { float:left ; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="controlPanel">
+      <div>
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+	threshold:<input id="thresholdRange" type="range" min="0" max="255" step="1" value="110">:<input type="text" id="thresholdText" size="4">
+	grayscale:<input id="grayscaleCheckbox" type="checkbox" checked/>
+	linearGamma:<input id="linearGammaCheckbox" type="checkbox" checked/>
+      </div>
+    </div> <!-- controlPanel -->
+    <div class="box">
+      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> srcCanvas </canvas>
+    </div>
+  </div> <!-- container -->
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/canvas.js"> </script>
+  <script type="text/javascript" src="lib/loading.js"> </script>
+  <script type="text/javascript" src="lib/worker.js"> </script>
+  <script type="text/javascript" src="binary.js"> </script>
+</body>
+</html>

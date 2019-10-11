@@ -1,0 +1,47 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2017/06/28- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> Smoothing </title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="container">
+    <div>
+      <div id="controlPanel" style="float:left">
+        Smoothing Filter:  <br />
+	<div style="float:left; ">
+          <select id="filterSelect" size="3">
+            <option value="average"        > 移動平均 </option>
+	    <option value="pascal" selected> パスカル三角形 </option>
+	    <option value="gaussian"       > ガウス分布 </option>
+          </select>
+	  <br />
+          maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="4096" step="1" value="640">:<input type="text" id="maxWidthHeightText">
+	  <br />
+          filterWindow:<input id="filterWindowRange" type="range" min="1" max="9" step="2" value="5">:<input type="text" id="filterWindowText">
+	  <br />
+	  sigma:<input id="sigmaRange" type="range" min="0.5" max="1.5" step="0.01" value="1.0"/>
+	  <input id="sigmaText" type="text" size="4"/>
+	  <br />
+	  bilateral :<input id="bilateralCheckbox" type="checkbox" />
+	  colorScale:<input id="colorScaleRange" type="range" min="1" max="100" step="1" value="10"/>
+	  <input id="colorScaleText" type="text" size="4"/>
+	</div>
+	<div style="float:left; ">
+	    filterMatrix:<table id="filterMatrixTable"> </table>
+	  </div>
+	</div>
+      </div>  
+    <div style="clear:both">
+    <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+    <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+  </div>
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/math.js"> </script>
+  <script type="text/javascript" src="lib/canvas.js"> </script>
+  <script type="text/javascript" src="lib/loading.js"> </script>
+  <script type="text/javascript" src="smoothing.js"> </script>
+</body>
+</html>

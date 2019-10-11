@@ -1,0 +1,41 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="copyright" content="Copyright &copy; 2017/03/17- yoya@awm.jp . All Rights Reserved.">
+  <title> Color Reduction </title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="container">
+    <div class="controlPanel">
+      <div style="float:left">
+	Quantize Method: <br />
+	<select id="quantizeMethod" size="6">
+          <option value="uniform" selected> 均等量子化 </option>
+          <option value="popularity"> 頻度法 </option>
+          <option value="linearCut"> 線形分割 </option>
+          <option value="medianCut">  中央値分割 </option>
+          <option value="populationEqualization"> 頻度均等化 </option>
+	  <option value="kMeans"> K-平均法 </option>
+	</select>
+	</div>
+      <div style="float:left">
+	nColor Src:<input id="nColorSrc" type="text" size="6" readonly> <br />
+	nColor Dst:<input id="nColorDst" type="text" size="6" readonly> <br />
+	maxWidthHeight:<br />
+	<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="640">:<br />
+	<input type="text" id="maxWidthHeightText">
+      </div>
+    </div> <!-- controlPanel -->
+    <canvas id="paletteCanvas" class="borderGreen" width=200 height=200> paletteCanvas </canvas>
+    </br>
+    <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+    <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+  </div>
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/canvas.js"> </script>
+  <script type="text/javascript" src="lib/loading.js"> </script>
+  <script type="text/javascript" src="colorreduction.js"> </script>
+</body>
+</html>

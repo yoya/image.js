@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2018/01/21- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Count Down </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel">
+	<div>
+          <select id="typeSelect" size="3"  style="float:left">
+            <option value="testcard" selected> テストカード </option>
+            <option value="oldmovie" selected> 古いムービー風 </option>
+          </select>
+        </div>
+        <input id="playButton" type="button" value="Play"/>
+        <input id="stopButton" type="button" value="Stop"/>
+        <input id="downloadButton" type="button" value="Download"/>
+	width:<input id="widthRange" type="range" min="16" max="1920" step="1" value="960">
+        :<input type="text" id="widthText" size="5">
+        height:<input id="heightRange" type="range" min="16" max="1080" step="1" value="540">
+        :<input type="text" id="heightText" size="5">
+      </div> <!-- controlPanel -->
+      <div style="clear:both">
+      <canvas id="canvas" width=200 height=200> srcCanvas </canvas>
+      <video id="video" width=200 height=200 src="" muted autoplay style="display:none"> </video>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="lib/testcard.js"> </script>
+    <script type="text/javascript" src="countdown.js"> </script>
+  </body>
+</html>

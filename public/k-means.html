@@ -1,0 +1,24 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2018/06/05- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> k-means demo </title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div id="controllerContainer">
+    <input type="button" id="restartButton" value="Restart" />
+    <input type="button" id="resetButton" value="Reset" />
+    width:<input id="widthRange" type="range" min="16" max="4096" step="1" value="512">:<input type="text" id="widthText" size="5">
+    height:<input id="heightRange" type="range" min="16" max="4096" step="1" value="512">:<input type="text" id="heightText" size="5">
+    <br />
+    nPoints:<input id="nPointsRange" type="range" min="10" max="100" step="1" value="25">:<input type="text" id="nPointsText" size="5">
+    nCenterPoints:<input id="nCenterPointsRange" type="range" min="2" max="10" step="1" value="5">:<input type="text" id="nCenterPointsText" size="5">
+  </div>
+  <div id="canvasContainer">
+    <canvas id="canvas" class="borderRed" width="512" height="512"> </canvas>
+  </div>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="k-means.js"> </script>  
+</body>
+</html>

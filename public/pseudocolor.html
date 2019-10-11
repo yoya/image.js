@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2017/06/12- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Pseudo Color </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="container">
+	<div id="controlPanel" style="display:flex">
+	Clut Type:  <br />
+	<select id="clutTypeSelect" size="7">
+          <option value="fire"          > Fire </option>
+          <option value="ice"           > Ice </option>
+          <option value="rainbow"       > Rainbow </option>
+          <option value="turbo" selected> Turbo (Google) </option>
+          <option value="red-green"     > Red-Green </option>
+          <option value="blue-yellow"   > Blue-Yellow </option>
+          <option value="red"           > Red </option>
+          <option value="green"         > Green </option>
+          <option value="blue"          > Blue </option>
+          <option value="cyan"          > Cyan </option>
+          <option value="magenta"       > Magenta </option>
+          <option value="yellow"        > Yellow </option>
+          <option value="random"        > Random </option>
+          <option value="contour"       > Contour </option>
+	</select>
+	<div>
+	  <canvas id="clutCanvas" class="borderGray" width=256 height=20> clutCanvas </canvas>
+	</div>
+	<div>
+	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+	</div>
+      </div> <!-- controlPanel -->
+      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      <canvas id="grayCanvas" class="borderGreen" width=200 height=200> grayCanvas </canvas>
+      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="lib/color.js"> </script>
+    <script type="text/javascript" src="pseudocolor.js"> </script>
+  </body>
+</html>

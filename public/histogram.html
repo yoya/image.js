@@ -1,0 +1,41 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2017/04/23- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> Histogram Equalization </title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="container">
+    <div id="controlPanel" style="display:flex">
+      <div>
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="4096" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+	<br />
+	equalize:<input id="equalizeCheckbox" type="checkbox" checked/>
+	equalizeRatio:<input id="equalizeRatioRange" type="range" min="0" max="255" step="1" value="255">:<input type="text" id="equalizeRatioText" size="4">
+      </div>
+      <div>
+	maxValue:<input id="maxValueRange" type="range" min="0" max="255" step="1" value="255">:<input type="text" id="maxValueText" size="4">
+	<br />
+	minValue:<input id="minValueRange" type="range" min="0" max="255" step="1" value="0">:<input type="text" id="minValueText" size="4">
+      </div>
+      <div>
+	totalLine:<input id="totalLineCheckbox" type="checkbox" checked/>
+        <br />
+        histogram:<input id="histogramCheckbox" type="checkbox" checked/>
+      </div>
+    </div> <!-- controlPanel -->
+  <div>
+      <canvas id="srcHistCanvas" class="borderGray" width=256 height=256> srcHistCanvas </canvas>
+      <canvas id="dstHistCanvas" class="borderGray" width=256 height=256> dstHistCanvas </canvas>
+    </div>
+    <br />
+    <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+    <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+  </div>
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/canvas.js"> </script>
+  <script type="text/javascript" src="histogram.js"> </script>
+</body>
+</html>

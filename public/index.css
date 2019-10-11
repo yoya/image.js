@@ -1,0 +1,51 @@
+/*
+  2017/02/26- yoya@awm.jp
+*/
+
+body {
+    background-color: #EEE;
+}
+div {
+    margin: 4px
+}
+input {
+    border-radius: 20%;
+}
+select {
+    border-radius: 7%;
+}
+table {
+    border: medium solid gray;
+    border-radius: 7%;
+}
+
+.noCR {
+  display: inline-block; /* IE */
+  display: inline;      /* Mozilla */
+}
+.CR {
+  display: block; /* IE */
+  display: block;      /* Mozilla */
+}
+
+/*
+.borderRed    { border: thick solid red; }
+.borderGreen  { border: thick solid green; }
+.borderBlue   { border: thick solid blue; }
+.borderYellow { border: thick solid yellow; }
+
+*/
+.borderRed    { border: thick solid #F66; }
+.borderGreen  { border: thick solid #0B0; }
+.borderBlue   { border: thick solid #66F; }
+.borderCyan   { border: thick solid #0EE; }
+.borderMagenta {border: thick solid #F4F; }
+.borderYellow { border: thick solid #FE0; }
+
+.borderBlack  { border: thick solid black; }
+.borderGray   { border: thick solid gray;  }
+
+.bgWhite { background-color: white;}
+
+p  {float:left; margin:0px;}
+li {float:left; display:block; padding:8px; border: medium solid #ABC; }

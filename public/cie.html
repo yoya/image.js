@@ -1,0 +1,75 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2017/06/10- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> CIE Color Diagram & Matching Function </title>
+  <link rel="stylesheet" href="index.css">
+  <style>
+    #dstCanvas { background-color:black; }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="controlPanel" style="float:left">
+      <div>
+        Color Matching Function: <br />
+        <select id="cieSelect" size="3">
+          <option value="ciexyz31" selected> CIEXYZ 31 (2-degree) </option>
+          <option value="ciexyz64"         > CIEXYZ 64 (10-degree)  </option>
+          <option value="ciexyzjv"         > CIEXYZ 31 Judd & Vos  </option>
+        </select>
+      </div>
+      <div>
+	Chromaticity: <br />
+        <select id="chromaticitySelect" size="3">
+          <option value="ciexy" selected> CIE xy   </option>
+	  <option value="ucsuava"       > UCS u'v' </option>
+        </select>
+      </div>
+      <div>
+        maxWidthHeight: <br />
+	<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+      </div>
+    </div> <!-- controlPanel -->
+
+    <div>
+      <canvas id="graphCanvas" class="borderGreen" width="371" height="150"> graph </canvas>
+    </div>
+    <div style="float:left">
+      <div style="float:left">
+	<input id="tristimulusCheckbox" type="checkbox" checked="checked" />:
+        <select id="colorspaceSelect" size="5">
+          <option value="srgb" selected> sRGB </option>
+	  <option value="dcip3"        > DCI-P3 </option>
+	  <option value="adobe"        > Adobe RGB </option>
+	  <option value="prophoto"     > ProPhoto RGB </option>
+          <option value="bt2020"       > BT.2020 </option>
+        </select>
+      </div>
+      <div style="float:left">
+	guide:<input id="guideCheckbox" type="checkbox" checked="checked" />
+      </div>
+      <div style="float:left">
+        pointSize:<input id="pointSizeRange" type="range" min="1" max="16" step="1" value="1">:<input type="text" id="pointSizeText" size="5">
+        <br />
+        pointDensity:<input id="pointDensityRange" type="range" min="0.05" max="1" step="0.05" value="1">:<input type="text" id="pointDensityText" size="5">
+      </div>
+    </div> <!-- controlPanel 2 -->
+
+    <div style="clear:both"> </div>
+    <div>
+      <canvas id="diagramBaseCanvas" class="borderBlue" width="512" height="512" style="display:none"> diagram base </canvas>
+      <canvas id="dstCanvas" class="borderBlue" width="512" height="512"> diagram </canvas>
+      <canvas id="srcCanvas" class="borderRed" width="320" height="240"> srcImage </canvas>
+    </div>
+  </div>  <!-- container -->
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/color.js"> </script>
+  <script type="text/javascript" src="lib/canvas.js"> </script>
+  <script type="text/javascript" src="lib/utils.js"> </script>
+  <script type="text/javascript" src="lib/cie.js"> </script>
+  <script type="text/javascript" src="lib/loading.js"> </script>
+  <script type="text/javascript" src="lib/worker.js"> </script>
+  <script type="text/javascript" src="cie.js"> </script>
+</body>
