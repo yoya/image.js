@@ -11,6 +11,7 @@ function main() {
     // console.debug("main");
     var srcCanvas = document.getElementById("srcCanvas");
     var histCanvas = document.getElementById("histCanvas");
+    var histRingCanvas = document.getElementById("histRingCanvas");
     var maxWidthHeightRange = document.getElementById("maxWidthHeightRange");
     var maxRatioRange = document.getElementById("maxRatioRange");
     //
@@ -23,7 +24,7 @@ function main() {
 	srcImage.onload = function() {
             drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
             hist = getHueHistogram(srcCanvas);
-            drawHueHistogram(histCanvas, hist, maxRatio);
+            drawHueHistogram(histCanvas, histRingCanvas, hist, maxRatio);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -32,12 +33,12 @@ function main() {
                      maxWidthHeight = parseFloat(maxWidthHeightRange.value);
                      drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
                      hist = getHueHistogram(srcCanvas);
-                     drawHueHistogram(histCanvas, hist, maxRatio);
+                     drawHueHistogram(histCanvas, histRingCanvas, hist, maxRatio);
 		 } );
     bindFunction({"maxRatioRange":"maxRatioText"},
 		 function() {
                      maxRatio = maxRatioRange.value;
-                     drawHueHistogram(histCanvas, hist, maxRatio);
+                     drawHueHistogram(histCanvas, histRingCanvas, hist, maxRatio);
 		 } );
 }
 
@@ -57,12 +58,17 @@ function getHueHistogram(canvas) {
     return hist;
 }
 
-function drawHueHistogram(canvas, hist, maxRatio) {
+function drawHueHistogram(canvas, canvasRing, hist, maxRatio) {
+    drawHistGraph(canvas, hist, maxRatio);
+     drawHistRing(canvasRing, hist, maxRatio);
+}
+
+function drawHistGraph(canvas, hist, maxRatio) {
     // console.debug("drawHueHistogram");
     canvas.style.backgroundColor = "black";
     var ctx = canvas.getContext("2d");
-    var width  = histCanvas.width, height = histCanvas.height;
-    histCanvas.width = width; // clear
+    var width  = canvas.width, height = canvas.height;
+    canvas.width = width; // clear
     var max = 0;
     for (var i = 0 ; i < 360 ; i++) {
         var h = hist[i];
@@ -72,7 +78,7 @@ function drawHueHistogram(canvas, hist, maxRatio) {
     }
     max *= maxRatio;
     ctx.lineWidth = 1;
-    for (var i = 0 ; i < width; i++) {
+    for (var i = 0 ; i < 360 ; i++) {
         var x = i + 0.5;
         var y = height * (1 - (hist[i] / max));
         var [r, g, b] = HSV2RGB([i, 1.0, 1.0]);
@@ -82,4 +88,41 @@ function drawHueHistogram(canvas, hist, maxRatio) {
         ctx.lineTo(x, y);
         ctx.stroke();
     }
+}
+
+function drawHistRing(canvas, hist, maxRatio) {
+    canvas.style.backgroundColor = "black";
+    var ctx = canvas.getContext("2d");
+    var width  = canvas.width, height = canvas.height;
+    var centerX = width / 2, centerY = height / 2;
+    var radius = 50;
+    canvas.width = width; // clear
+    var max = 0;
+    for (var i = 0 ; i < 360 ; i++) {
+        var h = hist[i];
+        if (max < h) {
+            max = h;
+        }
+    }
+    max *= maxRatio;
+    ctx.lineWidth = 1;
+    var rMax = Math.min(width, height) / 2;
+    var rMin = radius;
+    var tt = 2*Math.PI / 360;
+    for (var i = 0 ; i < 360; i++) {
+        var r = (rMax - rMin) * (hist[i] / max) + rMin;
+        var t = i * tt;
+        var x = centerX + r * Math.sin(t);
+        var y = centerY - r * Math.cos(t);
+        var [r, g, b] = HSV2RGB([i, 1.0, 1.0]);
+        ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+    }
+    ctx.fillStyle = "gray";
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, 2*Math.PI);
+    ctx.fill();
 }

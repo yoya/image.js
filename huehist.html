@@ -7,12 +7,17 @@
   </head>
   <body>
     <div class="container">
-      <div class="controlPanel">
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
-        maxRatio:<input id="maxRatioRange" type="range" min="0.01" max="1.0" step="0.01" value="1.0">:<input type="text" id="maxRatioText" size="5">
+      <div class="controlPanel" style="display:flex">
+        <div>
+          <div>
+	    maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+            <br />
+            maxRatio:<input id="maxRatioRange" type="range" min="0.01" max="1.0" step="0.01" value="1.0">:<input type="text" id="maxRatioText" size="5">
+          </div>
+          <canvas id="histCanvas" class="borderGray" width=360 height=200> histCanvas </canvas>
+        </div>
+        <canvas id="histRingCanvas" class="borderGray" width=300 height=300> histRingCanvas </canvas>
       </div> <!-- controlPanel -->
-      <canvas id="histCanvas" class="borderGray" width=360 height=200> dstCanvas </canvas>
-      <br/>
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
     </div>  <!-- container -->
     <script type="text/javascript" src="lib/color.js"> </script>
