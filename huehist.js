@@ -19,7 +19,8 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+                  "maxRatioRange":"maxRatioText"},
 		 function() {
 		     drawSrcImageAndHueHistogram(srcImage, srcCanvas, histCanvas);
 		 } );
@@ -27,9 +28,10 @@ function main() {
 
 function drawSrcImageAndHueHistogram(srcImage, srcCanvas, histCancas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    var maxRatio = parseFloat(document.getElementById("maxRatioRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     var hist = getHueHistogram(srcCanvas);
-    drawHueHistogram(histCanvas, hist);
+    drawHueHistogram(histCanvas, hist, maxRatio);
 }
 
 function getHueHistogram(canvas) {
@@ -48,7 +50,7 @@ function getHueHistogram(canvas) {
     return hist;
 }
 
-function drawHueHistogram(canvas, hist) {
+function drawHueHistogram(canvas, hist, maxRatio) {
     // console.debug("drawHueHistogram");
     canvas.style.backgroundColor = "black";
     var ctx = canvas.getContext("2d");
@@ -61,6 +63,7 @@ function drawHueHistogram(canvas, hist) {
             max = h;
         }
     }
+    max *= maxRatio;
     ctx.lineWidth = 1;
     for (var i = 0 ; i < width; i++) {
         var x = i + 0.5;
