@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2019/10/11- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Hue Hiistogram </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel">
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+      </div> <!-- controlPanel -->
+      <canvas id="histCanvas" class="borderGray" width=360 height=200> dstCanvas </canvas>
+      <br/>
+      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/color.js"> </script>
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="huehist.js"> </script>
+  </body>
+</html>
