@@ -75,7 +75,8 @@ function drawHueHistogram(canvas, hist, maxRatio) {
     for (var i = 0 ; i < width; i++) {
         var x = i + 0.5;
         var y = height * (1 - (hist[i] / max));
-        ctx.strokeStyle = "hsl("+i+", 100%, 50%)";
+        var [r, g, b] = HSV2RGB([i, 1.0, 1.0]);
+        ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
         ctx.beginPath();
         ctx.moveTo(x, height);
         ctx.lineTo(x, y);
