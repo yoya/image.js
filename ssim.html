@@ -1,0 +1,35 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2017/10/14- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> SSIM </title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="container">
+    <div id="controlPanel"  style="float:left">
+      <div style="float:left">
+        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="256">:<input type="text" id="maxWidthHeightText" size="5">
+      </div>
+    </div> <!-- controlPanel -->
+    <br />
+    <div style="clear:both">
+      <span id="srcCanvas1Container" >
+	<canvas id="srcCanvas1" class="borderRed" width="200" height="200"> src1Canvas </canvas>
+      </span>
+      <span id="srcCanvas2Container" >
+        <canvas id="srcCanvas2" class="borderGreen" width="200" height="200"> src2Canvas </canvas>
+      </span>
+      <canvas id="dstCanvasL" class="borderYellow" width="200" height="200"> dstCanvas </canvas>
+      <canvas id="dstCanvasC" class="borderCyan" width="200" height="200"> dstCanvas </canvas>
+      <canvas id="dstCanvasS" class="borderMagenta" width="200" height="200"> dstCanvas </canvas>
+      <canvas id="dstCanvas" class="borderBlue" width="200" height="200"> dstCanvas </canvas>
+    </div>
+    <p> Drop image files(png,jpg,gif) into red & green box </p>
+  </div>  <!-- container -->
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/canvas.js"> </script>
+  <script type="text/javascript" src="ssim.js"> </script>
+</body>
+</html>
