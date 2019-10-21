@@ -186,10 +186,10 @@ function drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, ds
             }
 	}
     }
-    var dstImageDataL = dstCtxL.createImageData(dstWidth, dstHeight);
-    var dstImageDataC = dstCtxC.createImageData(dstWidth, dstHeight);
-    var dstImageDataS = dstCtxS.createImageData(dstWidth, dstHeight);
-    var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
+    var dstImageDataL = new ImageData(dstWidth, dstHeight);
+    var dstImageDataC = new ImageData(dstWidth, dstHeight);
+    var dstImageDataS = new ImageData(dstWidth, dstHeight);
+    var dstImageData = new ImageData(dstWidth, dstHeight);
     Normalize(lArr, 255);
     Normalize(cArr, 255);
     Normalize(sArr, 255);
