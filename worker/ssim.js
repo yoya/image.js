@@ -11,8 +11,9 @@ onmessage = function(e) {
     var srcImageData = e.data.image;
     var windowSize = e.data.windowSize;
     var [srcImageData1, srcImageData2] = srcImageData;
-    var dstImageData = drawSSIM(srcImageData1, srcImageData2);
-    postMessage({image:dstImageData},
+    var [dstImageData, data] = drawSSIM(srcImageData1, srcImageData2);
+    console.error(dstImageData);
+    postMessage({image:dstImageData, data:data},
                 [dstImageData[0].data.buffer, dstImageData[1].data.buffer,
                  dstImageData[2].data.buffer, dstImageData[3].data.buffer]);
 }    
@@ -130,15 +131,16 @@ function drawSSIM(srcImageData1, srcImageData2) {
     var dstImageDataC = new ImageData(dstWidth, dstHeight);
     var dstImageDataS = new ImageData(dstWidth, dstHeight);
     var dstImageData = new ImageData(dstWidth, dstHeight);
-    Normalize(lArr, 255);
-    Normalize(cArr, 255);
-    Normalize(sArr, 255);
-    Normalize(ssimArr, 255);
-    CopyRGB2RGBA(lArr, dstImageDataL.data);
-    CopyRGB2RGBA(cArr, dstImageDataC.data);
-    CopyRGB2RGBA(sArr, dstImageDataS.data);
-    CopyRGB2RGBA(ssimArr, dstImageData.data);
-    return [dstImageDataL, dstImageDataC, dstImageDataS, dstImageData];
+    var lArr2 = Normalize(lArr, 255);
+    var cArr2 = Normalize(cArr, 255);
+    var sArr2 = Normalize(sArr, 255);
+    var ssimArr2 = Normalize(ssimArr, 255);
+    CopyRGB2RGBA(lArr2, dstImageDataL.data);
+    CopyRGB2RGBA(cArr2, dstImageDataC.data);
+    CopyRGB2RGBA(sArr2, dstImageDataS.data);
+    CopyRGB2RGBA(ssimArr2, dstImageData.data);
+    return [[dstImageDataL, dstImageDataC, dstImageDataS, dstImageData],
+            [lArr, cArr, sArr, ssimArr]];
 }
 
 function Normalize(arr, max) {
@@ -150,10 +152,11 @@ function Normalize(arr, max) {
         }
     }
     var a = max / real_max;
+    var arr2 = new Float32Array(n);
     for (var i = 0 ; i < n ; i++) {
-        arr[i] *= a;
+        arr2[i] = arr[i] * a;
     }
-    return arr;
+    return arr2;
 }
 
 function CopyRGB2RGBA(arr1, arr2) {

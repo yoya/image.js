@@ -7,6 +7,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
+function mean(arr) {
+    var n = arr.length;
+    var mu = 0;
+    for (var i = 0 ; i < n ; i++) {
+        mu += arr[i];
+    }
+    return Math.round(mu / n * 1000) / 1000;
+}
+
 
 function main() {
     // console.debug("main");
@@ -18,20 +27,36 @@ function main() {
     var dstCanvasC = document.getElementById("dstCanvasC");
     var dstCanvasS = document.getElementById("dstCanvasS");
     var dstCanvas = document.getElementById("dstCanvas");
+    var luminanceSpan = document.getElementById("luminanceSpan");
+    var contrastSpan = document.getElementById("contrastSpan");
+    var structureSpan = document.getElementById("structureSpan");
+    var ssimSpan = document.getElementById("ssimSpan");
+    //
     var windowSize = 8;
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var srcImage1 = null;
     var srcImage2 = null;
-    
+    var displayValues = function(luminance, contrast, structure, ssim) {
+        luminanceSpan.innerText = luminance;
+        contrastSpan.innerText = contrast;
+        structureSpan.innerText = structure;
+        ssimSpan.innerText = ssim;
+    }
+    var callback = function(imagedata, data) {
+        console.log("callback:", data.data);
+        var [lArr, cArr, sArr, ssimArr] = data.data;
+        displayValues(mean(lArr), mean(cArr), mean(sArr), mean(ssimArr));
+    }
     dropFunction(document.body, function(dataURL) {
 	// nothing to do
     }, "DataURL");
     dropFunction(srcCanvas1Container, function(dataURL) {
 	srcImage1 = new Image();
 	srcImage1.onload = function() {
+            displayValues("-", "-", "-", "-");
 	    drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
             if (srcImage1 && srcImage2) {
-	        drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, true);
+	        drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, callback, true);
             }
 	}
 	srcImage1.src = dataURL;
@@ -39,16 +64,17 @@ function main() {
     dropFunction(srcCanvas2Container, function(dataURL) {
 	srcImage2 = new Image();
 	srcImage2.onload = function() {
+            displayValues("-", "-", "-", "-");
 	    drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
             if (srcImage1 && srcImage2) {
-	        drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, true);
+	        drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, callback, true);
             }
 	}
 	srcImage2.src = dataURL;
     }, "DataURL");
-    
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
+                     displayValues("-", "-", "-", "-");
 		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
                      if (srcImage1) {
                          drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
@@ -57,16 +83,17 @@ function main() {
                          drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
                      }
                      if (srcImage1 && srcImage2) {
-		         drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, false);
+		         drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, callback, false);
                      }
 		 } );
 }
 
 var worker = new workerProcess("worker/ssim.js");
 
-function drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, sync) {
+function drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, callback, sync) {
     var params = {windowSize:8};
     var srcCanvas = [srcCanvas1, srcCanvas2];
     var dstCanvas = [dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas];
+    worker.addListener(callback);
     worker.process(srcCanvas, dstCanvas, params, sync);
 }
