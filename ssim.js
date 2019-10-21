@@ -30,7 +30,9 @@ function main() {
 	srcImage1 = new Image();
 	srcImage1.onload = function() {
 	    drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
-	    drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas);
+            if (srcImage1 && srcImage2) {
+	        drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas);
+            }
 	}
 	srcImage1.src = dataURL;
     }, "DataURL");
@@ -38,7 +40,9 @@ function main() {
 	srcImage2 = new Image();
 	srcImage2.onload = function() {
 	    drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
-	    drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas);
+            if (srcImage1 && srcImage2) {
+	        drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas);
+            }
 	}
 	srcImage2.src = dataURL;
     }, "DataURL");
@@ -46,7 +50,15 @@ function main() {
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
 		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-		     drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas);
+                     if (srcImage1) {
+                         drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
+                     }
+                     if (srcImage2) {
+                         drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
+                     }
+                     if (srcImage1 && srcImage2) {
+		         drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas);
+                     }
 		 } );
 }
 
