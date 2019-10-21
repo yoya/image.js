@@ -7,13 +7,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
-function ssimL(ux, uy, c1) {
-    return (2 * ux*uy + c1) / (ux*ux + uy*uy + c1);
-}
-
-function ssimC(rx, ry, c1) {
-    return (2 * ux*uy + c1) / (ux*ux + uy*uy + c1);
-}
 
 function main() {
     // console.debug("main");
@@ -54,7 +47,6 @@ function main() {
 		 function() {
 		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas);
-
 		 } );
 }
 
@@ -137,7 +129,7 @@ function drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, ds
     var windowSize = 8;
     var k1 = 0.01, k2 = 0.03;
     var alpha = 1, beta = 1, gamma = 1;
-    // console.debug("drawSSIM")
+    //
     var srcCtx1 = srcCanvas1.getContext("2d");
     var srcCtx2 = srcCanvas2.getContext("2d");
     var dstCtxL = dstCanvasL.getContext("2d");
@@ -151,7 +143,6 @@ function drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, ds
     //
     var dstWidth  =  srcWidth  - (windowSize - 1);
     var dstHeight =  srcHeight - (windowSize - 1);
-    console.log("dstWidth, dstHeight", dstWidth, dstHeight);
     var srcImageData1 = srcCtx1.getImageData(0, 0, srcWidth1, srcHeight1);
     var srcImageData2 = srcCtx2.getImageData(0, 0, srcWidth2, srcHeight2);
     dstCanvasL.width  = dstWidth;
@@ -205,7 +196,6 @@ function drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, ds
 }
 
 function Normalize(arr, max) {
-    console.log("Normalize", arr, max);
     var n = arr.length;
     var real_max = 0;
     for (var i = 0 ; i < n ; i++) {
@@ -221,7 +211,6 @@ function Normalize(arr, max) {
 }
 
 function CopyRGB2RGBA(arr1, arr2) {
-    console.log("CopyRGB2RGBA start arr1:", arr1);
     var n = arr1.length;
     var i = 0, i2 = 0;
     while (i < n) {
@@ -230,5 +219,4 @@ function CopyRGB2RGBA(arr1, arr2) {
         arr2[i2++] = arr1[i++];
         arr2[i2++] = 255;
     }
-    console.log("CopyRGB2RGBA end arr2:", arr2);
 }
