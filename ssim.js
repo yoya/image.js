@@ -13,7 +13,8 @@ function mean(arr) {
     for (var i = 0 ; i < n ; i++) {
         mu += arr[i];
     }
-    return Math.round(mu / n * 1000) / 1000;
+    var precision = 1000000;
+    return Math.round(mu / n * precision) / precision;
 }
 
 
