@@ -12,7 +12,6 @@ onmessage = function(e) {
     var params = e.data;
     var [srcImageData1, srcImageData2] = srcImageData;
     var [dstImageData, data] = drawSSIM(srcImageData1, srcImageData2, params);
-    console.error(dstImageData);
     postMessage({image:dstImageData, data:data},
                 [dstImageData[0].data.buffer, dstImageData[1].data.buffer,
                  dstImageData[2].data.buffer, dstImageData[3].data.buffer]);
