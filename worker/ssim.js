@@ -9,9 +9,9 @@ importScripts("../lib/canvas.js");
 
 onmessage = function(e) {
     var srcImageData = e.data.image;
-    var windowSize = e.data.windowSize;
+    var params = e.data;
     var [srcImageData1, srcImageData2] = srcImageData;
-    var [dstImageData, data] = drawSSIM(srcImageData1, srcImageData2);
+    var [dstImageData, data] = drawSSIM(srcImageData1, srcImageData2, params);
     console.error(dstImageData);
     postMessage({image:dstImageData, data:data},
                 [dstImageData[0].data.buffer, dstImageData[1].data.buffer,
@@ -91,10 +91,10 @@ function localSSIM_RGB(imageData1, imageData2, x1, y1, x2, y2,
     return [lArrRGB, cArrRGB, sArrRGB, ssimArrRGB];
 }
 
-function drawSSIM(srcImageData1, srcImageData2) {
-    var windowSize = 8;
-    var k1 = 0.01, k2 = 0.03;
-    var alpha = 1, beta = 1, gamma = 1;
+function drawSSIM(srcImageData1, srcImageData2, params) {
+    var windowSize = params.windowSize;
+    var k1 = params.k1, k2 = params.k2;
+    var alpha = params.alpha, beta = params.beta, gamma = params.gamma;
     //
     var srcWidth1 = srcImageData1.width, srcHeight1 = srcImageData1.height;
     var srcWidth2 = srcImageData2.width, srcHeight2 = srcImageData2.height;

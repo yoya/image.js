@@ -34,7 +34,9 @@ function main() {
     var ssimSpan = document.getElementById("ssimSpan");
     //
     var params = {
-        windowSize: 8
+        windowSize:8,
+        k1:0.01, k2: 0.03,
+        alpha:1, beta:1, gamma:1
     };
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var srcImage1 = null;
