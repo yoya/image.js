@@ -32,7 +32,9 @@ function main() {
     var structureSpan = document.getElementById("structureSpan");
     var ssimSpan = document.getElementById("ssimSpan");
     //
-    var windowSize = 8;
+    var params = {
+        windowSize: 8
+    };
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var srcImage1 = null;
     var srcImage2 = null;
@@ -56,7 +58,7 @@ function main() {
             displayValues("-", "-", "-", "-");
 	    drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
             if (srcImage1 && srcImage2) {
-	        drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, callback, true);
+	        drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, params, callback, true);
             }
 	}
 	srcImage1.src = dataURL;
@@ -67,7 +69,7 @@ function main() {
             displayValues("-", "-", "-", "-");
 	    drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
             if (srcImage1 && srcImage2) {
-	        drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, callback, true);
+	        drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, params, callback, true);
             }
 	}
 	srcImage2.src = dataURL;
@@ -83,15 +85,14 @@ function main() {
                          drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
                      }
                      if (srcImage1 && srcImage2) {
-		         drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, callback, false);
+		         drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, params, callback, false);
                      }
 		 } );
 }
 
 var worker = new workerProcess("worker/ssim.js");
 
-function drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, callback, sync) {
-    var params = {windowSize:8};
+function drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, params, callback, sync) {
     var srcCanvas = [srcCanvas1, srcCanvas2];
     var dstCanvas = [dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas];
     worker.addListener(callback);
