@@ -35,6 +35,7 @@ function main() {
     //
     var params = {
         windowSize:8,
+        slideSize:8,
         k1:0.01, k2: 0.03,
         alpha:1, beta:1, gamma:1
     };
