@@ -49,7 +49,7 @@ function localSSIM_Array(imageArr1, imageArr2, width, height,
     // s: structure
     var s = (sigma_xy + c3) / (sigma_x*sigma_y + c3)
     //
-    var ssim = l**alpha * c**beta ** s**gamma;
+    var ssim = (l**alpha) * (c**beta) * (s**gamma);
     return [l, c, s, ssim];
 }
 
