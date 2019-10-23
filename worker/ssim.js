@@ -87,6 +87,7 @@ function localSSIM_RGB(imageData1, imageData2, x1, y1, x2, y2,
 
 function drawSSIM(srcImageData1, srcImageData2, params) {
     console.debug("drawSSIM:", params);
+    var dstNormalize = params.dstNormalize;
     var windowSize = params.windowSize;
     var slideSize = params.slideSize;
     var k1 = params.k1, k2 = params.k2;
@@ -142,10 +143,18 @@ function drawSSIM(srcImageData1, srcImageData2, params) {
     var dstImageDataC = new ImageData(dstWidth, dstHeight);
     var dstImageDataS = new ImageData(dstWidth, dstHeight);
     var dstImageData = new ImageData(dstWidth, dstHeight);
-    var lArr2 = Normalize(lArr, 255);
-    var cArr2 = Normalize(cArr, 255);
-    var sArr2 = Normalize(sArr, 255);
-    var ssimArr2 = Normalize(ssimArr, 255);
+    var lArr2, cArr2, sArr2, ssimArr2;
+    if (dstNormalize) {
+        lArr2 = Normalize(lArr, 255);
+        cArr2 = Normalize(cArr, 255);
+        sArr2 = Normalize(sArr, 255);
+        ssimArr2 = Normalize(ssimArr, 255);
+    } else {
+        lArr2 = Multiply(lArr, 255);
+        cArr2 = Multiply(cArr, 255);
+        sArr2 = Multiply(sArr, 255);
+        ssimArr2 = Multiply(ssimArr, 255);
+    }
     CopyRGB2RGBA(lArr2, dstImageDataL.data);
     CopyRGB2RGBA(cArr2, dstImageDataC.data);
     CopyRGB2RGBA(sArr2, dstImageDataS.data);
@@ -154,18 +163,31 @@ function drawSSIM(srcImageData1, srcImageData2, params) {
             [lArr, cArr, sArr, ssimArr]];
 }
 
+function Multiply(arr, a) {
+    var n = arr.length;
+    var arr2 = new Float32Array(n);
+    for (var i = 0 ; i < n ; i++) {
+        arr2[i] = arr[i] * a;
+    }
+    return arr2;
+}
+
 function Normalize(arr, max) {
     var n = arr.length;
     var real_max = 0;
+    var real_min = Number.MAX_VALUE;
     for (var i = 0 ; i < n ; i++) {
         if (real_max < arr[i]) {
             real_max = arr[i];
         }
+        if (real_min > arr[i]) {
+            real_min = arr[i];
+        }
     }
-    var a = max / real_max;
+    var a = max / (real_max-real_min);
     var arr2 = new Float32Array(n);
     for (var i = 0 ; i < n ; i++) {
-        arr2[i] = arr[i] * a;
+        arr2[i] = (arr[i]-real_min) * a;
     }
     return arr2;
 }
