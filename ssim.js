@@ -59,6 +59,10 @@ function main() {
         console.log("callback:", data.data);
         var [lArr, cArr, sArr, ssimArr] = data.data;
         displayValues(mean(lArr), mean(cArr), mean(sArr), mean(ssimArr));
+        rescaleCanvas(dstCanvasL, params.slideSize);
+        rescaleCanvas(dstCanvasC, params.slideSize);
+        rescaleCanvas(dstCanvasS, params.slideSize);
+        rescaleCanvas(dstCanvas, params.slideSize);
     }
     dropFunction(document.body, function(dataURL) {
 	// nothing to do
