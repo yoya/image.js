@@ -57,12 +57,16 @@ function main() {
     }
     var callback = function(imagedata, data) {
         console.log("callback:", data.data);
+        var [imageDataL] = imagedata;
         var [lArr, cArr, sArr, ssimArr] = data.data;
         displayValues(mean(lArr), mean(cArr), mean(sArr), mean(ssimArr));
-        rescaleCanvas(dstCanvasL, params.slideSize);
-        rescaleCanvas(dstCanvasC, params.slideSize);
-        rescaleCanvas(dstCanvasS, params.slideSize);
-        rescaleCanvas(dstCanvas, params.slideSize);
+        var scale = params.slideSize;
+        var width = imageDataL.width*scale, height = imageDataL.height*scale;
+        console.log(width, height);
+        resizeCanvas(dstCanvasL, width, height);
+        resizeCanvas(dstCanvasC, width, height);
+        resizeCanvas(dstCanvasS, width, height);
+        resizeCanvas(dstCanvas, width, height);
     }
     dropFunction(document.body, function(dataURL) {
 	// nothing to do
