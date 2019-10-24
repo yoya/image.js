@@ -56,13 +56,12 @@ function main() {
         ssimSpan.innerText = ssim;
     }
     var callback = function(imagedata, data) {
-        console.log("callback:", data.data);
+        // console.debug("callback:", imagedata, data.data);
         var [imageDataL] = imagedata;
         var [lArr, cArr, sArr, ssimArr] = data.data;
         displayValues(mean(lArr), mean(cArr), mean(sArr), mean(ssimArr));
         var scale = params.slideSize;
         var width = imageDataL.width*scale, height = imageDataL.height*scale;
-        console.log(width, height);
         resizeCanvas(dstCanvasL, width, height);
         resizeCanvas(dstCanvasC, width, height);
         resizeCanvas(dstCanvasS, width, height);
