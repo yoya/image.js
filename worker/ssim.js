@@ -106,7 +106,6 @@ function drawSSIM(srcImageData1, srcImageData2, params) {
     var dstHeight =  Math.ceil((srcHeight - windowSize + 1) / slideSize);
     console.debug("dstWidth, dstHeight:", dstWidth, dstHeight);
     //
-    var windowSize = 8;
     var windowArea = windowSize * windowSize;
     //
     var lArr = new Float32Array(3 * dstWidth * dstHeight);
