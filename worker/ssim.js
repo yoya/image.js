@@ -5,6 +5,7 @@
  */
 
 importScripts("../lib/color.js");
+importScripts("../lib/statistics.js");
 importScripts("../lib/canvas.js");
 
 onmessage = function(e) {
@@ -21,27 +22,15 @@ onmessage = function(e) {
 function localSSIM_Array(imageArr1, imageArr2, width, height,
                          c1, c2, c3, alpha, beta, gamma) {
     var n = width * height;
+    console.assert(n === imageArr1.length);
+    console.assert(n === imageArr2.length);
     //
-    var mu_x = 0, mu_y = 0;
-    for (var i = 0 ; i < n ; i++) {
-        mu_x += imageArr1[i];
-        mu_y += imageArr2[i];
-    }
-    mu_x /= width * height;
-    mu_y /= width * height;
+    var mu_x = Statistics.average(imageArr1);
+    var mu_y = Statistics.average(imageArr2);
     //
-    var sigma_x = 0, sigma_y = 0; // standard deviation
-    var sigma_xy = 0;             // covariance
-    for (var i = 0 ; i < n ; i++) {
-        var v1 = imageArr1[i];
-        var v2 = imageArr2[i];
-        sigma_x += (v1 - mu_x)**2;
-        sigma_y += (v2 - mu_y)**2;
-        sigma_xy += (v1 - mu_x) * (v2 - mu_y);
-    }
-    sigma_x = Math.sqrt(sigma_x / (width * height))
-    sigma_y = Math.sqrt(sigma_y / (width * height))
-    sigma_xy = sigma_xy / (width * height);
+    var [sigma_x_2 = 0, sigma_y_2, sigma_xy = 0] = Statistics.variance_covariance(imageArr1, imageArr2, mu_x, mu_y);
+    var sigma_x = Math.sqrt(sigma_x_2);
+    var sigma_y = Math.sqrt(sigma_y_2);
     // l: luminance
     var l = (2 * mu_x * mu_y + c1) / (mu_x**2 + mu_y**2 + c1)
     // c: contrast
@@ -71,10 +60,11 @@ function localSSIM_RGB(imageData1, imageData2, x1, y1, x2, y2,
             for (var x = x1 ; x <= x2 ; x++) {
                 var rgba1 = getRGBA(imageData1, x, y);
                 var rgba2 = getRGBA(imageData2, x, y);
+                var a = rgba1[3]/255; // alpha value (0.0-1.0)
                 imageArr1[i] = rgba1[c];
-                imageArr1[i] *= rgba1[3]/255; // multiply alpha 
+                imageArr1[i] *= a;
                 imageArr2[i] = rgba2[c];
-                imageArr2[i] *= rgba2[3]/255;
+                imageArr2[i] *= a;
                 i++;
             }
         }
