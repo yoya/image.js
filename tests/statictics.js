@@ -11,10 +11,12 @@ var min =  Statistics.min(arr);
 var [max2, min2] =  Statistics.max_min(arr);
 var arrNorm =  Statistics.normalize(arr, 100);
 var arrNorm2 =  Statistics.normalize(arr2, 100);
+var arrMulti =  Statistics.multiply(arr, 100);
 
 console.log("arr:", arr);
 console.log("ave:", ave);
 console.log("vari:", vari);
 console.log("vari1, vari2, cov:", vari1, vari2, cov);
 console.log("max, min:", max, min, max2, min2);
-console.log("arrNorm", arr, arrNorm, arrNorm2);
+console.log("arrNorm", arrNorm, arrNorm2);
+console.log("arrMulti", arrMulti);
