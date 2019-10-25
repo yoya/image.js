@@ -128,21 +128,22 @@ function drawSSIM(srcImageData1, srcImageData2, params) {
             }
 	}
     }
+    console.assert(i === (3 * dstWidth * dstHeight));
     var dstImageDataL = new ImageData(dstWidth, dstHeight);
     var dstImageDataC = new ImageData(dstWidth, dstHeight);
     var dstImageDataS = new ImageData(dstWidth, dstHeight);
     var dstImageData = new ImageData(dstWidth, dstHeight);
     var lArr2, cArr2, sArr2, ssimArr2;
     if (dstNormalize) {
-        lArr2 = Normalize(lArr, 255);
-        cArr2 = Normalize(cArr, 255);
-        sArr2 = Normalize(sArr, 255);
-        ssimArr2 = Normalize(ssimArr, 255);
+        lArr2 = Statistics.normalize(lArr, 255);
+        cArr2 = Statistics.normalize(cArr, 255);
+        sArr2 = Statistics.normalize(sArr, 255);
+        ssimArr2 = Statistics.normalize(ssimArr, 255);
     } else {
-        lArr2 = Multiply(lArr, 255);
-        cArr2 = Multiply(cArr, 255);
-        sArr2 = Multiply(sArr, 255);
-        ssimArr2 = Multiply(ssimArr, 255);
+        lArr2 = Statistics.multiply(lArr, 255);
+        cArr2 = Statistics.multiply(cArr, 255);
+        sArr2 = Statistics.multiply(sArr, 255);
+        ssimArr2 = Statistics.multiply(ssimArr, 255);
     }
     CopyRGB2RGBA(lArr2, dstImageDataL.data);
     CopyRGB2RGBA(cArr2, dstImageDataC.data);
@@ -150,35 +151,6 @@ function drawSSIM(srcImageData1, srcImageData2, params) {
     CopyRGB2RGBA(ssimArr2, dstImageData.data);
     return [[dstImageDataL, dstImageDataC, dstImageDataS, dstImageData],
             [lArr, cArr, sArr, ssimArr]];
-}
-
-function Multiply(arr, a) {
-    var n = arr.length;
-    var arr2 = new Float32Array(n);
-    for (var i = 0 ; i < n ; i++) {
-        arr2[i] = arr[i] * a;
-    }
-    return arr2;
-}
-
-function Normalize(arr, max) {
-    var n = arr.length;
-    var real_max = 0;
-    var real_min = Number.MAX_VALUE;
-    for (var i = 0 ; i < n ; i++) {
-        if (real_max < arr[i]) {
-            real_max = arr[i];
-        }
-        if (real_min > arr[i]) {
-            real_min = arr[i];
-        }
-    }
-    var a = max / (real_max-real_min);
-    var arr2 = new Float32Array(n);
-    for (var i = 0 ; i < n ; i++) {
-        arr2[i] = (arr[i]-real_min) * a;
-    }
-    return arr2;
 }
 
 function CopyRGB2RGBA(arr1, arr2) {
