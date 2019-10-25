@@ -28,7 +28,7 @@ function localSSIM_Array(imageArr1, imageArr2, width, height,
     var mu_x = Statistics.average(imageArr1);
     var mu_y = Statistics.average(imageArr2);
     //
-    var [sigma_x_2 = 0, sigma_y_2, sigma_xy = 0] = Statistics.variance_covariance(imageArr1, imageArr2, mu_x, mu_y);
+    var [sigma_x_2, sigma_y_2, sigma_xy] = Statistics.variance_covariance(imageArr1, imageArr2, mu_x, mu_y);
     var sigma_x = Math.sqrt(sigma_x_2);
     var sigma_y = Math.sqrt(sigma_y_2);
     // l: luminance
