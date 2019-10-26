@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     var srcCanvas = document.getElementById("srcCanvas");
+    var histCanvas = document.getElementById("histCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     //
@@ -17,7 +18,7 @@ function main() {
 	srcImage = new Image();
 	srcImage.onload = function() {
 	    // console.debug(srcImage);
-	    drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, true);
+	    drawSrcImageAndBinary(srcImage, srcCanvas, histCanvas, dstCanvas, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -27,11 +28,11 @@ function main() {
 		  "grayscaleCheckbox":null,
 		  "linearGammaCheckbox":null},
 		 function(target, rel) {
-		     drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, rel);
+		     drawSrcImageAndBinary(srcImage, srcCanvas, histCanvas, dstCanvas, rel);
 		 } );
 }
 
-function drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, sync) {
+function drawSrcImageAndBinary(srcImage, srcCanvas, histCanvas, dstCanvas, sync) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var threshold = parseFloat(document.getElementById("thresholdRange").value);
     var grayscale = document.getElementById("grayscaleCheckbox").checked;
@@ -40,6 +41,11 @@ function drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, sync) {
 		  grayscale:grayscale,
 		  linearGamma:linearGamma};
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+    var redHist   = getColorHistogramList(srcCanvas, "red");
+    var greenHist = getColorHistogramList(srcCanvas, "green");
+    var blueHist  = getColorHistogramList(srcCanvas, "blue");
+    var totalLine = false, histogram = true;
+    drawHistgramGraph(histCanvas, redHist, greenHist, blueHist, 0, threshold, totalLine, histogram);
     drawBinary(srcCanvas, dstCanvas, params, sync);
 }
 
