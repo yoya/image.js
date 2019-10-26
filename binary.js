@@ -41,12 +41,22 @@ function drawSrcImageAndBinary(srcImage, srcCanvas, histCanvas, dstCanvas, sync)
 		  grayscale:grayscale,
 		  linearGamma:linearGamma};
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    var redHist   = getColorHistogramList(srcCanvas, "red");
-    var greenHist = getColorHistogramList(srcCanvas, "green");
-    var blueHist  = getColorHistogramList(srcCanvas, "blue");
-    var totalLine = false, histogram = true;
-    drawHistgramGraph(histCanvas, redHist, greenHist, blueHist, 0, threshold, totalLine, histogram);
-    drawBinary(srcCanvas, dstCanvas, params, sync);
+     var totalLine = false, histogram = true;
+    if (grayscale) {
+        var grayCanvas = document.createElement("canvas");
+        drawGrayImage(srcCanvas, grayCanvas)
+        var hist = getColorHistogramList(grayCanvas, "red");
+	drawHistgramGraph(histCanvas, hist, hist, hist, 0, threshold, totalLine
+, histogram);
+        drawBinary(grayCanvas, dstCanvas, params, sync);
+    } else {
+        var redHist   = getColorHistogramList(srcCanvas, "red");
+        var greenHist = getColorHistogramList(srcCanvas, "green");
+        var blueHist  = getColorHistogramList(srcCanvas, "blue");
+        var totalLine = false, histogram = true;
+        drawHistgramGraph(histCanvas, redHist, greenHist, blueHist, 0, threshold, totalLine, histogram);
+        drawBinary(srcCanvas, dstCanvas, params, sync);
+    }
 }
 
 var worker = new workerProcess("worker/binary.js");
