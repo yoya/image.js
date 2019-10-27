@@ -41,7 +41,7 @@ function drawSrcImageAndBinary(srcImage, srcCanvas, histCanvas, dstCanvas, sync)
 		  grayscale:grayscale,
 		  linearGamma:linearGamma};
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-     var totalLine = false, histogram = true;
+     var totalLine = true, histogram = true;
     if (grayscale) {
         var grayCanvas = document.createElement("canvas");
         drawGrayImage(srcCanvas, grayCanvas)
