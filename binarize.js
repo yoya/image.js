@@ -19,53 +19,73 @@ function main() {
 	srcImage = new Image();
 	srcImage.onload = function() {
 	    // console.debug(srcImage);
-	    drawSrcImageAndBinarize(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, true);
+		     drawSrcImageAndGetHistogram(srcImage, srcCanvas);
+                     drawHistogramAndBinarize(srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     //
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "thresholdRange":"thresholdText",
 		  "grayscaleCheckbox":null},
 		 function(target, rel) {
-		     drawSrcImageAndBinarize(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, rel);
+		     drawSrcImageAndGetHistogram(srcImage, srcCanvas);
+                     drawHistogramAndBinarize(srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, rel);
+		 } );
+    bindFunction({"thresholdRange":"thresholdText"},
+		 function(target, rel) {
+                     drawHistogramAndBinarize(srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, rel);
 		 } );
 }
 
-function drawSrcImageAndBinarize(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, sync) {
+var grayCanvas = document.createElement("canvas");
+var hist     = [null, null, null];
+var diffhist = [null, null, null];
+var laphist  = [null, null, null];
+
+function drawSrcImageAndGetHistogram(srcImage, srcCanvas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    var grayscale = document.getElementById("grayscaleCheckbox").checked;
+    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+    //
+    if (grayscale) {
+        drawGrayImage(srcCanvas, grayCanvas)
+        hist[0]     = getColorHistogramList(grayCanvas, "red");
+        diffhist[0] = getColorDifferentialHistogramList(grayCanvas, "red");
+        laphist[0]  = getColorLaplacianHistogramList(grayCanvas, "red");
+        hist[2] = hist[1] = hist[0];
+        diffhist[2] = diffhist[1] = null;
+        laphist[2] = laphist[1] = null;
+    } else {
+        hist[0] = getColorHistogramList(srcCanvas, "red");
+        hist[1] = getColorHistogramList(srcCanvas, "green");
+        hist[2] = getColorHistogramList(srcCanvas, "blue");
+        diffhist[0] = getColorDifferentialHistogramList(srcCanvas, "red");
+        diffhist[1] = getColorDifferentialHistogramList(srcCanvas, "green");
+        diffhist[2] = getColorDifferentialHistogramList(srcCanvas, "blue");
+        laphist[0] = getColorLaplacianHistogramList(srcCanvas, "red");
+        laphist[1] = getColorLaplacianHistogramList(srcCanvas, "green");
+        laphist[2] = getColorLaplacianHistogramList(srcCanvas, "blue");
+    }
+}
+
+function drawHistogramAndBinarize(srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, sync) {
     var threshold = parseFloat(document.getElementById("thresholdRange").value);
     var grayscale = document.getElementById("grayscaleCheckbox").checked;
     var params = {threshold:threshold,
 		  grayscale:grayscale};
-    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
      var totalLine = true, histogram = true;
     if (grayscale) {
-        var grayCanvas = document.createElement("canvas");
-        drawGrayImage(srcCanvas, grayCanvas)
-        var hist = getColorHistogramList(grayCanvas, "red");
-	drawHistgramGraph(histCanvas, hist, hist, hist, 0, threshold,
+	drawHistgramGraph(histCanvas, hist[0], hist[0], hist[0], 0, threshold,
                           totalLine, histogram);
-        var hist = getColorDifferentialHistogramList(grayCanvas, "red");
-	drawHistgramGraph(diffhistCanvas, hist, hist, hist, 0, threshold,
+	drawHistgramGraph(diffhistCanvas, diffhist[0], diffhist[0], diffhist[0], 0, threshold,
                           totalLine, histogram);
-        var hist = getColorLaplacianHistogramList(grayCanvas, "red");
-        drawHistgramGraph(laphistCanvas, hist, hist, hist, 0, threshold,
+        drawHistgramGraph(laphistCanvas, laphist[0], laphist[0], laphist[0], 0, threshold,
                           totalLine, histogram);
         drawBinarize(grayCanvas, dstCanvas, params, sync);
     } else {
-        var redHist   = getColorHistogramList(srcCanvas, "red");
-        var greenHist = getColorHistogramList(srcCanvas, "green");
-        var blueHist  = getColorHistogramList(srcCanvas, "blue");
-        drawHistgramGraph(histCanvas, redHist, greenHist, blueHist, 0, threshold, totalLine, histogram);
-        var redDiffHist   = getColorDifferentialHistogramList(srcCanvas, "red");
-        var greenDiffHist = getColorDifferentialHistogramList(srcCanvas, "green");
-        var blueDiffHist  = getColorDifferentialHistogramList(srcCanvas, "blue");
-        drawHistgramGraph(diffhistCanvas, redDiffHist, greenDiffHist, blueDiffHist, 0, threshold, totalLine, histogram);
-        var redLapHist   = getColorLaplacianHistogramList(srcCanvas, "red");
-        var greenLapHist = getColorLaplacianHistogramList(srcCanvas, "green");
-        var blueLapHist  = getColorLaplacianHistogramList(srcCanvas, "blue");
-        drawHistgramGraph(laphistCanvas, redLapHist, greenLapHist, blueLapHist, 0, threshold, totalLine, histogram);
+        drawHistgramGraph(histCanvas, hist[0], hist[1], hist[2], 0, threshold, totalLine, histogram);
+        drawHistgramGraph(diffhistCanvas, diffhist[0], diffhist[1], diffhist[2], 0, threshold, totalLine, histogram);
+        drawHistgramGraph(laphistCanvas, laphist[0], laphist[1], laphist[2], 0, threshold, totalLine, histogram);
         drawBinarize(srcCanvas, dstCanvas, params, sync);
     }
 }
