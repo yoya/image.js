@@ -18,10 +18,21 @@
 	linearGamma:<input id="linearGammaCheckbox" type="checkbox" checked/>
       </div>
     </div> <!-- controlPanel -->
-    <div class="box">
-      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
-      <canvas id="histCanvas" class="borderGray" width=256 height=256> histCanvas </canvas>
+    <div class="box" style="float:left">
+      <div style="float:left">
+        <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      </div>
+      <div style="float:left">
+        histogram <br />
+        <canvas id="histCanvas" class="borderGray" width=256 height=256> histCanvas </canvas>
+      </div>
+      <div style="float:left">
+        differential histogram <br />
+        <canvas id="diffhistCanvas" class="borderGray" width=256 height=256> histCanvas </canvas>
+      </div>
+      <div style="float:left">
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> srcCanvas </canvas>
+    </div>
     </div>
   </div> <!-- container -->
   <script type="text/javascript" src="lib/drop.js"> </script>
