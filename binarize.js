@@ -26,8 +26,7 @@ function main() {
     //
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "thresholdRange":"thresholdText",
-		  "grayscaleCheckbox":null,
-		  "linearGammaCheckbox":null},
+		  "grayscaleCheckbox":null},
 		 function(target, rel) {
 		     drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, rel);
 		 } );
@@ -37,10 +36,8 @@ function drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, histCanvas, diffh
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var threshold = parseFloat(document.getElementById("thresholdRange").value);
     var grayscale = document.getElementById("grayscaleCheckbox").checked;
-    var linearGamma = document.getElementById("linearGammaCheckbox").checked;
     var params = {threshold:threshold,
-		  grayscale:grayscale,
-		  linearGamma:linearGamma};
+		  grayscale:grayscale};
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
      var totalLine = true, histogram = true;
     if (grayscale) {
