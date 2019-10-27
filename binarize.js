@@ -59,7 +59,7 @@ function drawSrcImageAndBinary(srcImage, srcCanvas, histCanvas, dstCanvas, sync)
     }
 }
 
-var worker = new workerProcess("worker/binary.js");
+var worker = new workerProcess("worker/binarize.js");
 
 function drawBinary(srcCanvas, dstCanvas, params, sync) {
     worker.process(srcCanvas, dstCanvas, params, sync);
