@@ -19,7 +19,7 @@ function main() {
 	srcImage = new Image();
 	srcImage.onload = function() {
 	    // console.debug(srcImage);
-	    drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, true);
+	    drawSrcImageAndBinarize(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -28,11 +28,11 @@ function main() {
 		  "thresholdRange":"thresholdText",
 		  "grayscaleCheckbox":null},
 		 function(target, rel) {
-		     drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, rel);
+		     drawSrcImageAndBinarize(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, rel);
 		 } );
 }
 
-function drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, sync) {
+function drawSrcImageAndBinarize(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, sync) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var threshold = parseFloat(document.getElementById("thresholdRange").value);
     var grayscale = document.getElementById("grayscaleCheckbox").checked;
@@ -52,7 +52,7 @@ function drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, histCanvas, diffh
         var hist = getColorLaplacianHistogramList(grayCanvas, "red");
         drawHistgramGraph(laphistCanvas, hist, hist, hist, 0, threshold,
                           totalLine, histogram);
-        drawBinary(grayCanvas, dstCanvas, params, sync);
+        drawBinarize(grayCanvas, dstCanvas, params, sync);
     } else {
         var redHist   = getColorHistogramList(srcCanvas, "red");
         var greenHist = getColorHistogramList(srcCanvas, "green");
@@ -66,12 +66,12 @@ function drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, histCanvas, diffh
         var greenLapHist = getColorLaplacianHistogramList(srcCanvas, "green");
         var blueLapHist  = getColorLaplacianHistogramList(srcCanvas, "blue");
         drawHistgramGraph(laphistCanvas, redLapHist, greenLapHist, blueLapHist, 0, threshold, totalLine, histogram);
-        drawBinary(srcCanvas, dstCanvas, params, sync);
+        drawBinarize(srcCanvas, dstCanvas, params, sync);
     }
 }
 
 var worker = new workerProcess("worker/binarize.js");
 
-function drawBinary(srcCanvas, dstCanvas, params, sync) {
+function drawBinarize(srcCanvas, dstCanvas, params, sync) {
     worker.process(srcCanvas, dstCanvas, params, sync);
 }
