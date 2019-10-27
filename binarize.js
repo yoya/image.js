@@ -19,7 +19,7 @@ function main() {
 	srcImage = new Image();
 	srcImage.onload = function() {
 	    // console.debug(srcImage);
-	    drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, true);
+	    drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -28,11 +28,11 @@ function main() {
 		  "thresholdRange":"thresholdText",
 		  "grayscaleCheckbox":null},
 		 function(target, rel) {
-		     drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, rel);
+		     drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, rel);
 		 } );
 }
 
-function drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, sync) {
+function drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, sync) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var threshold = parseFloat(document.getElementById("thresholdRange").value);
     var grayscale = document.getElementById("grayscaleCheckbox").checked;
@@ -49,6 +49,9 @@ function drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, histCanvas, diffh
         var hist = getColorDifferentialHistogramList(grayCanvas, "red");
 	drawHistgramGraph(diffhistCanvas, hist, hist, hist, 0, threshold,
                           totalLine, histogram);
+        var hist = getColorLaplacianHistogramList(grayCanvas, "red");
+        drawHistgramGraph(laphistCanvas, hist, hist, hist, 0, threshold,
+                          totalLine, histogram);
         drawBinary(grayCanvas, dstCanvas, params, sync);
     } else {
         var redHist   = getColorHistogramList(srcCanvas, "red");
@@ -59,6 +62,10 @@ function drawSrcImageAndBinary(srcImage, srcCanvas, dstCanvas, histCanvas, diffh
         var greenDiffHist = getColorDifferentialHistogramList(srcCanvas, "green");
         var blueDiffHist  = getColorDifferentialHistogramList(srcCanvas, "blue");
         drawHistgramGraph(diffhistCanvas, redDiffHist, greenDiffHist, blueDiffHist, 0, threshold, totalLine, histogram);
+        var redLapHist   = getColorLaplacianHistogramList(srcCanvas, "red");
+        var greenLapHist = getColorLaplacianHistogramList(srcCanvas, "green");
+        var blueLapHist  = getColorLaplacianHistogramList(srcCanvas, "blue");
+        drawHistgramGraph(laphistCanvas, redLapHist, greenLapHist, blueLapHist, 0, threshold, totalLine, histogram);
         drawBinary(srcCanvas, dstCanvas, params, sync);
     }
 }
