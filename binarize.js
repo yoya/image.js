@@ -37,7 +37,6 @@ function main() {
 		 } );
 }
 
-var grayCanvas = document.createElement("canvas");
 var hist     = [null, null, null];
 var diffhist = [null, null, null];
 var laphist  = [null, null, null];
@@ -48,13 +47,13 @@ function drawSrcImageAndGetHistogram(srcImage, srcCanvas) {
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     //
     if (grayscale) {
-        drawGrayImage(srcCanvas, grayCanvas)
-        hist[0]     = getColorHistogramList(grayCanvas, "red");
-        diffhist[0] = getColorDifferentialHistogramList(grayCanvas, "red");
-        laphist[0]  = getColorLaplacianHistogramList(grayCanvas, "red");
+        drawGrayImage(srcCanvas, srcCanvas)
+        hist[0]     = getColorHistogramList(srcCanvas, "red");
+        diffhist[0] = getColorDifferentialHistogramList(srcCanvas, "red");
+        laphist[0]  = getColorLaplacianHistogramList(srcCanvas, "red");
         hist[2] = hist[1] = hist[0];
-        diffhist[2] = diffhist[1] = null;
-        laphist[2] = laphist[1] = null;
+        diffhist[2] = diffhist[1] = diffhist[0];
+        laphist[2] = laphist[1] = laphist[0];
     } else {
         hist[0] = getColorHistogramList(srcCanvas, "red");
         hist[1] = getColorHistogramList(srcCanvas, "green");
@@ -74,20 +73,10 @@ function drawHistogramAndBinarize(srcCanvas, dstCanvas, histCanvas, diffhistCanv
     var params = {threshold:threshold,
 		  grayscale:grayscale};
      var totalLine = true, histogram = true;
-    if (grayscale) {
-	drawHistgramGraph(histCanvas, hist[0], hist[0], hist[0], 0, threshold,
-                          totalLine, histogram);
-	drawHistgramGraph(diffhistCanvas, diffhist[0], diffhist[0], diffhist[0], 0, threshold,
-                          totalLine, histogram);
-        drawHistgramGraph(laphistCanvas, laphist[0], laphist[0], laphist[0], 0, threshold,
-                          totalLine, histogram);
-        drawBinarize(grayCanvas, dstCanvas, params, sync);
-    } else {
-        drawHistgramGraph(histCanvas, hist[0], hist[1], hist[2], 0, threshold, totalLine, histogram);
-        drawHistgramGraph(diffhistCanvas, diffhist[0], diffhist[1], diffhist[2], 0, threshold, totalLine, histogram);
-        drawHistgramGraph(laphistCanvas, laphist[0], laphist[1], laphist[2], 0, threshold, totalLine, histogram);
-        drawBinarize(srcCanvas, dstCanvas, params, sync);
-    }
+    drawHistgramGraph(histCanvas, hist[0], hist[1], hist[2], 0, threshold, totalLine, histogram);
+    drawHistgramGraph(diffhistCanvas, diffhist[0], diffhist[1], diffhist[2], 0, threshold, totalLine, histogram);
+    drawHistgramGraph(laphistCanvas, laphist[0], laphist[1], laphist[2], 0, threshold, totalLine, histogram);
+    drawBinarize(srcCanvas, dstCanvas, params, sync);
 }
 
 var worker = new workerProcess("worker/binarize.js");
