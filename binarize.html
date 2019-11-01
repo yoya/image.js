@@ -11,13 +11,25 @@
 <body>
   <div class="container">
     <div id="controlPanel">
-      <div>
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
-	threshold:<input id="thresholdRange" type="range" min="0" max="255" step="1" value="110">:<input type="text" id="thresholdText" size="4">
-	grayscale:<input id="grayscaleCheckbox" type="checkbox" checked/>
+      <div style="display:flex">
+        <div>
+	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+        </div>
+        <div>
+	  threshold:<input id="thresholdRange" type="range" min="0" max="255" step="1" value="110">:<input type="text" id="thresholdText" size="4">
+          <br />
+          p-tile:<input id="pTileRange" type="range" min="0" max="100" step="1" value="43">:<input type="text" id="pTileText" size="4">
+        </div>
+        <div>
+	  grayscale:<input id="grayscaleCheckbox" type="checkbox" checked/>            </div>
+        <div>
+          totalLine:<input id="totalLineCheckbox" type="checkbox" checked/>
+          <br />
+          histogram:<input id="histogramCheckbox" type="checkbox" checked/>
+        </div>
       </div>
     </div> <!-- controlPanel -->
-    <div class="box" style="float:left">
+    <div>
       <div style="float:left">
         <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       </div>
@@ -34,8 +46,8 @@
         <canvas id="laphistCanvas" class="borderGray" width=256 height=256> histCanvas </canvas>
       </div>
       <div style="float:left">
-      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> srcCanvas </canvas>
-    </div>
+        <canvas id="dstCanvas" class="borderBlue" width=200 height=200> srcCanvas </canvas>
+      </div>
     </div>
   </div> <!-- container -->
   <script type="text/javascript" src="lib/drop.js"> </script>
