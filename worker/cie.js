@@ -27,6 +27,16 @@ function drawDiagramPoint(imageData, hist, chromaticity, pointSize, pointDensity
     var width = imageData.width, height = imageData.height;
     var [dMin, dMax] = [-(pointSize/2-0.2),(pointSize/2-0.2)];
     var geoHist = new Float32Array(width * height);
+    var xyconv_to;
+    if (chromaticity === "ciexy") {
+        xyconv_to = function(xy) { return xy; }
+    } else if (chromaticity === "ucsuv") {
+        xyconv_to = xy2uv;
+    } else if (chromaticity === "ucsuv_judd") {
+        xyconv_to = xy2uv_judd;
+    } else {  // ucsuava
+        xyconv_to = xy2uava;
+    }
     for (var colorId in hist) {
         var count = hist[colorId]
 	var [r,g,b,a] = colorId2RGBA(colorId);
@@ -35,18 +45,8 @@ function drawDiagramPoint(imageData, hist, chromaticity, pointSize, pointDensity
 	}
 	var lxyz = sRGB2XYZ([r,g,b]);
 	var xy = XYZ2xy(lxyz);
-	if (chromaticity === "ciexy") {
-	    var [gx, gy] = graphTrans(xy, width, height);
-	} else if (chromaticity === "ucsuv") {
-            var uv = xy2uv(xy);
-	    var [gx, gy] = graphTrans(uv, width, height);
-	} else if (chromaticity === "ucsuv_judd") {
-            var uv = xy2uv_judd(xy);
-	    var [gx, gy] = graphTrans(uv, width, height);
-	} else {
-	    var uava = xy2uava(xy);
-	    var [gx, gy] = graphTrans(uava, width, height);
-	}
+	xy = xyconv_to(xy);
+	var [gx, gy] = graphTrans(xy, width, height);
 	for (var dy = dMin ; dy < dMax ; dy++) {
 	    for (var dx = dMin ; dx < dMax ; dx++) {
                 xy = Math.round(gx+dx) + width * Math.round(gy+dy);
