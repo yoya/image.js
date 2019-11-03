@@ -10,12 +10,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     var srcCanvas = document.getElementById("srcCanvas");
-    var dstCanvas1 = document.getElementById("dstCanvas1");
-    var dstCanvas2 = document.getElementById("dstCanvas2");
-    var dstCanvas3 = document.getElementById("dstCanvas3");
-    var dstCanvas = document.getElementById("dstCanvas");
-    var dstCanvas4 = document.getElementById("dstCanvas4");
-    var dstCanvasArr = [dstCanvas1, dstCanvas2, dstCanvas3, dstCanvas4, dstCanvas];
+    var dstCanvasArr = ["dstCanvas1", "dstCanvas2", "dstCanvas3", "dstCanvas4", "dstCanvas"].map(function(id) { return document.getElementById(id); });
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     //
     var component = document.getElementById("componentSelect").value;
@@ -32,27 +27,33 @@ function main() {
 		 function() {
 		     drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, component);
 		 } );
-    bindFunction({"componentSelect":null},
+    bindFunction({"componentSelect":null,
+                  "amp1Range":"amp1Text", "amp2Range":"amp2Text",
+                  "amp3Range":"amp3Text", "amp4Range":"amp4Text"},
 		 function() {
 		     component = document.getElementById("componentSelect").value;
 		     drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, component);
 		 } );
-    //
 }
 
 function drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, component) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    var ampIdArr = ["amp1Range", "amp2Range", "amp3Range", "amp4Range"];
+    var ampArr = ampIdArr.map(function(id) { return parseFloat(document.getElementById(id).value); });
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawColorComponent(srcCanvas, dstCanvasArr, component);
+    drawColorComponent(srcCanvas, dstCanvasArr, component, ampArr);
 }
-
-function colorComponent(imageData, x, y, component) {
+    
+function colorComponent(imageData, x, y, component, ampArr) {
     var rgba = getRGBA(imageData, x, y);
     var [r, g, b, a] = rgba;
     var rgbaArr;
     var rgb1, rgb2, rgb3, rgb4 = null, rgb5;
     switch (component) {
     case "rgb":
+        r *= ampArr[0];
+        g *= ampArr[1];
+        b *= ampArr[2];
 	rgb1 = [r, 0, 0];
 	rgb2 = [0, g, 0];
 	rgb3 = [0, 0, b];
@@ -60,6 +61,10 @@ function colorComponent(imageData, x, y, component) {
 	break;
     case "cmyk": // naive convert
 	var [c, m, y, k] = RGB2CMYK(rgba);
+        c *= ampArr[0];
+        m *= ampArr[1];
+        y *= ampArr[2];
+        k *= ampArr[3];
 	rgb1 = CMYK2RGB([c, 0, 0, 0]);
 	rgb2 = CMYK2RGB([0, m, 0, 0]);
 	rgb3 = CMYK2RGB([0, 0, y, 0]);
@@ -68,6 +73,9 @@ function colorComponent(imageData, x, y, component) {
 	break;
     case "cmy": // naive convert
 	var [c, m, y] = RGB2CMY(rgba);
+        c *= ampArr[0];
+        m *= ampArr[1];
+        y *= ampArr[2];
 	rgb1 = CMYK2RGB([c, 0, 0, 0]);
 	rgb2 = CMYK2RGB([0, m, 0, 0]);
 	rgb3 = CMYK2RGB([0, 0, y, 0]);
@@ -75,6 +83,9 @@ function colorComponent(imageData, x, y, component) {
 	break;
     case "ycbcr": // YCbCr (JPEG)
 	var [yy, cb, cr] = RGB2YCbCr(rgba);
+        yy *= ampArr[0];
+        cb *= ampArr[1];
+        cr *= ampArr[2];
 	rgb1 = YCbCr2RGB([yy, 128, 128]);
 	rgb2 = YCbCr2RGB([128, cb, 128]);
 	rgb3 = YCbCr2RGB([128, 128, cr]);
@@ -82,6 +93,9 @@ function colorComponent(imageData, x, y, component) {
 	break;
     case "yiq": // YIQ (NTSC)
 	var [yy, ii, qq] = RGB2YIQ(rgba);
+        yy *= ampArr[0];
+        ii*= ampArr[1];
+        qq *= ampArr[2];
 	rgb1 = YIQ2RGB([yy, 128, 128]);
 	rgb2 = YIQ2RGB([128, ii, 128]);
 	rgb3 = YIQ2RGB([128, 128, qq]);
@@ -89,6 +103,9 @@ function colorComponent(imageData, x, y, component) {
 	break;
     case "yuv_bt601": // YUV (BT.601))
 	var [yy, uu, vv] = RGB2YUV_BT601(rgba);
+        yy *= ampArr[0];
+        uu *= ampArr[1];
+        vv *= ampArr[2];
 	rgb1 = YUV2RGB_BT601([yy, 128, 128]);
 	rgb2 = YUV2RGB_BT601([128, uu, 128]);
 	rgb3 = YUV2RGB_BT601([128, 128, vv]);
@@ -96,6 +113,9 @@ function colorComponent(imageData, x, y, component) {
 	break;
     case "yuv_bt709": // YUV (BT.709)
 	var [yy, uu, vv] = RGB2YUV_BT709(rgba);
+        yy *= ampArr[0];
+        uu *= ampArr[1];
+        vv *= ampArr[2];
 	rgb1 = YUV2RGB_BT709([yy, 128, 128]);
 	rgb2 = YUV2RGB_BT709([128, uu, 128]);
 	rgb3 = YUV2RGB_BT709([128, 128, vv]);
@@ -103,6 +123,9 @@ function colorComponent(imageData, x, y, component) {
 	break;
     case "ydbdr": // YDbDr (SECOM)
 	var [yy, db, dr] = RGB2YDbDr(rgba);
+        yy *= ampArr[0];
+        db *= ampArr[1];
+        dr *= ampArr[2];
 	rgb1 = YDbDr2RGB([yy, 128, 128]);
 	rgb2 = YDbDr2RGB([128, db, 128]);
 	rgb3 = YDbDr2RGB([128, 128, dr]);
@@ -110,6 +133,9 @@ function colorComponent(imageData, x, y, component) {
 	break;
     case "hsv":
 	var [h, s, v] = RGB2HSV(rgba);
+        h *= ampArr[0];
+        s *= ampArr[1];
+        v *= ampArr[2];
 	if (s < Number.MIN_VALUE) {
 	    rgb1 = [127, 127, 127];
 	} else {
@@ -121,6 +147,9 @@ function colorComponent(imageData, x, y, component) {
 	break;
     case "hsl":
 	var [h, s, l] = RGB2HSL(rgba);
+        h *= ampArr[0];
+        s *= ampArr[1];
+        l *= ampArr[2];
 	if (s < Number.MIN_VALUE) {
 	    rgb1 = [127, 127, 127];
 	} else {
@@ -132,6 +161,9 @@ function colorComponent(imageData, x, y, component) {
 	break;
     case "xyb": // Xyb
 	var [x, y, b] = RGB2Xyb(rgba);
+        x *= ampArr[0];
+        y *= ampArr[1];
+        b *= ampArr[2];
 	rgb1 = Xyb2RGB([x, 0, 0]);
 	rgb2 = Xyb2RGB([0, y, 0]);
 	rgb3 = Xyb2RGB([0, 0, b]);
@@ -150,7 +182,7 @@ function colorComponent(imageData, x, y, component) {
     return rgbaArr;
 }
 
-function drawColorComponent(srcCanvas, dstCanvasArr, component) {
+function drawColorComponent(srcCanvas, dstCanvasArr, component, ampArr) {
     // console.debug("drawColorTransform");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtxArr = dstCanvasArr.map(function(c) {
@@ -171,7 +203,7 @@ function drawColorComponent(srcCanvas, dstCanvasArr, component) {
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
 	    var srcX = dstX, srcY = dstY;
-	    var rgbaArr = colorComponent(srcImageData, srcX, srcY, component);
+	    var rgbaArr = colorComponent(srcImageData, srcX, srcY, component, ampArr);
 	    for (var i = 0, n = rgbaArr.length ; i < n ; i++) {
                 if (rgbaArr[i] !== null) {
 		    setRGBA(dstImageDataArr[i], dstX, dstY, rgbaArr[i]);
