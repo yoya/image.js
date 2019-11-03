@@ -159,7 +159,7 @@ function colorComponent(imageData, x, y, component, ampArr) {
 	rgb3 = HSL2RGB([0, 0, l, 0]);
 	rgb5 = HSL2RGB([h, s, l]);
 	break;
-    case "xyb": // Xyb
+    case "xyb": // Xyb (naive convertion, not Butteraugli)
 	var [x, y, b] = RGB2Xyb(rgba);
         x *= ampArr[0];
         y *= ampArr[1];
