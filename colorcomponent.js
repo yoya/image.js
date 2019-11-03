@@ -164,9 +164,9 @@ function colorComponent(imageData, x, y, component, ampArr) {
         x *= ampArr[0];
         y *= ampArr[1];
         b *= ampArr[2];
-	rgb1 = Xyb2RGB([x, 0, 0]);
-	rgb2 = Xyb2RGB([0, y, 0]);
-	rgb3 = Xyb2RGB([0, 0, b]);
+	rgb1 = Xyb2RGB([x, 128, 0]);
+	rgb2 = Xyb2RGB([128, y, 0]);
+	rgb3 = Xyb2RGB([128, 0, b]);
 	rgb5 = Xyb2RGB([x, y, b]);
 	break;
     default:
