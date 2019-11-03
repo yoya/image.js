@@ -37,6 +37,12 @@ function drawDiagramPoint(imageData, hist, chromaticity, pointSize, pointDensity
 	var xy = XYZ2xy(lxyz);
 	if (chromaticity === "ciexy") {
 	    var [gx, gy] = graphTrans(xy, width, height);
+	} else if (chromaticity === "ucsuv") {
+            var uv = xy2uv(xy);
+	    var [gx, gy] = graphTrans(uv, width, height);
+	} else if (chromaticity === "ucsuv_judd") {
+            var uv = xy2uv_judd(xy);
+	    var [gx, gy] = graphTrans(uv, width, height);
 	} else {
 	    var uava = xy2uava(xy);
 	    var [gx, gy] = graphTrans(uava, width, height);
