@@ -8,7 +8,7 @@
 <body>
   <div class="container">
     <div id="controlPanel" style="display:flex">
-      <div  class="noCR">
+      <div>
 	Color Filter:  <br />
         <select id="componentSelect" size="8">
           <option value="rgb" selected> RGB </option>
@@ -24,12 +24,12 @@
 	  <option value="xyb"         > Xyb (Butteraugli) </option>
         </select>
       </div>
-      <div class="noCR">
+      <div>
 	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="320">:<input type="text" id="maxWidthHeightText">
       </div>
     </div>
   </div>
-  <div style="clear:both">
+  <div>
     <canvas id="srcCanvas" class="borderYellow" width=200 height=200> srcCanvas </canvas>
     <canvas id="dstCanvas1" class="borderRed" width=200 height=200> dstCanvas1 </canvas>
     <canvas id="dstCanvas2" class="borderGreen" width=200 height=200> dstCanvas2 </canvas>
