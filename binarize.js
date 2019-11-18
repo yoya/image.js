@@ -37,6 +37,7 @@ function main() {
 		 } );
     bindFunction({"thresholdRange":"thresholdText",
                   "pTileRange":"pTileText",
+		  "ditherSelect":null,
                   "totalLineCheckbox":null, "histogramCheckbox":null},
 		 function(target, rel) {
                      if ((target.id == "thresholdRange") ||
@@ -139,10 +140,12 @@ function getThresholdFromTile(ptile, hist) {
 function drawHistogramAndBinarize(srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, sync) {
     var threshold = parseFloat(document.getElementById("thresholdRange").value);
     var grayscale = document.getElementById("grayscaleCheckbox").checked;
+    var dither = document.getElementById("ditherSelect").value;
     var histogram = document.getElementById("histogramCheckbox").checked;
     var totalLine = document.getElementById("totalLineCheckbox").checked;
     var params = {threshold:threshold,
-		  grayscale:grayscale};
+		  grayscale:grayscale,
+                  dither:dither};
     drawHistgramGraph(histCanvas, hist[0], hist[1], hist[2], 0, threshold, totalLine, histogram);
     drawHistgramGraph(diffhistCanvas, diffhist[0], diffhist[1], diffhist[2], 0, threshold, totalLine, histogram);
     drawHistgramGraph(laphistCanvas, laphist[0], laphist[1], laphist[2], 0, threshold, totalLine, histogram);

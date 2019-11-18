@@ -14,14 +14,21 @@
       <div style="display:flex">
         <div>
 	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+          <br />
+          grayscale:<input id="grayscaleCheckbox" type="checkbox" checked/>
         </div>
         <div>
 	  threshold:<input id="thresholdRange" type="range" min="0" max="255" step="1" value="110">:<input type="text" id="thresholdText" size="4">
           <br />
           p-tile:<input id="pTileRange" type="range" min="0" max="100" step="1" value="43">:<input type="text" id="pTileText" size="4">
         </div>
-        <div>
-	  grayscale:<input id="grayscaleCheckbox" type="checkbox" checked/>            </div>
+	<div>
+          Dither:  <br />
+	  <select id="ditherSelect" size="3">
+	    <option value="none" selected> 無し </option>
+	    <option value="random"       > ランダム </option>
+          </select>
+	</div>
         <div>
           totalLine:<input id="totalLineCheckbox" type="checkbox" />
           <br />
