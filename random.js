@@ -120,7 +120,7 @@ function drawRandomAndHistogram(canvas, offCanvas, histCanvas) {
     var redHist   = getColorHistogramList(canvas, "red");
     var greenHist = getColorHistogramList(canvas, "green");
     var blueHist  = getColorHistogramList(canvas, "blue");
-    drawHistgramGraph(histCanvas, redHist, greenHist, blueHist, 0, 255, false);
+    drawHistgramGraph(histCanvas, redHist, greenHist, blueHist, 0, 255, false, true);
 }
 
 function randomValue(ratio) {
