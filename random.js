@@ -72,7 +72,7 @@ function main() {
 			 offCanvas = null;
 		     }
 		     if (target.id === "animationButton") {
-			 animetionRandomAndHistogram(canvas, offCanvas, histCanvas);
+			 animationRandomAndHistogram(canvas, offCanvas, histCanvas);
 		     }
 		     drawRandomAndHistogram(canvas, offCanvas, histCanvas);
 		     
@@ -81,7 +81,7 @@ function main() {
 }
 
 var anim_id = null;
-function animetionRandomAndHistogram(canvas, offCanvas, histCanvas) {
+function animationRandomAndHistogram(canvas, offCanvas, histCanvas) {
     var Context = function() {
 	this.canvas = canvas;
 	this.offCanvas = offCanvas;
@@ -89,14 +89,14 @@ function animetionRandomAndHistogram(canvas, offCanvas, histCanvas) {
     }
     var ctx = new Context();
     if (anim_id === null) {
-	anim_id = setInterval(animetionRandomAndHistogram_.bind(ctx), 10);
+	anim_id = setInterval(animationRandomAndHistogram_.bind(ctx), 10);
     } else {
 	clearInterval(anim_id);
 	anim_id = null;
     }
 }
 
-function animetionRandomAndHistogram_() {
+function animationRandomAndHistogram_() {
     var canvas = this.canvas;
     var offCanvas = this.offCanvas;
     var histCanvas = this.histCanvas
@@ -105,8 +105,8 @@ function animetionRandomAndHistogram_() {
 
 function drawRandomAndHistogram(canvas, offCanvas, histCanvas) {
     if (anim_id !== null) {
-	animetionRandomAndHistogram(canvas, offCanvas, histCanvas);
-	animetionRandomAndHistogram(canvas, offCanvas, histCanvas);
+	animationRandomAndHistogram(canvas, offCanvas, histCanvas);
+	animationRandomAndHistogram(canvas, offCanvas, histCanvas);
     }
     var width = parseInt(document.getElementById("widthRange").value, 10);
     var height = parseInt(document.getElementById("heightRange").value, 10);
