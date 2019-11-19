@@ -131,9 +131,11 @@ function randomValue(ratio) {
 	v = 1 - v;
     }
     if (ratio < -0.5) {
-	v = v * (ratio + 1.5) ;
+        var ratio2 = (ratio+0.5)*2;
+	v = v * (ratio2 + 1.0) ;
     } else if (0.5 < ratio) {
-	v = v * (1.5 - ratio) + (ratio - 0.5);
+        var ratio2 = (ratio-0.5)*2;
+	v = v * (1.0 - ratio2) + ratio2;
     }
     return v;
 }

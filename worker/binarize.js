@@ -21,9 +21,11 @@ function randomValue(ratio) {
         v = 1 - v;
     }
     if (ratio < -0.5) {
-        v = v * (ratio + 1.5) ;
+	var ratio2 = (ratio+0.5)*2;
+        v = v * (ratio2 + 1.0) ;
     } else if (0.5 < ratio) {
-        v = v * (1.5 - ratio) + (ratio - 0.5);
+        var ratio2 = (ratio-0.5)*2;
+        v = v * (1.0 - ratio2) + ratio2;
     }
     return v;
 }
@@ -49,7 +51,7 @@ function drawBinarize(srcImageData, params) {
     case "random":
         for (var y = 0 ; y < height; y++) {
             for (var x = 0 ; x < width; x++) {
-                var ratio = (threshold/255 - 0.5)*3; // 0...255 => -1.5...1.5
+                var ratio = (threshold/255 - 0.5)*2; // 0...255 => -1.0...1.0
                 var rnd = randomValue(ratio) * 255;
 	        var [r,g,b,a] = getRGBA(srcImageData, x, y);
                 r = (r <= rnd)?0:255;
