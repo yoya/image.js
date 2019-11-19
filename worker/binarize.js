@@ -14,8 +14,8 @@ onmessage = function(e) {
 }
 
 function randomValue(ratio) {
-    var v = Math.random();       // 0   <= v < 1
-    var r = Math.random() - 0.5; // 0.5 <= r < 0.5
+    var v = Math.random();       //  0.0 <= v < 1.0
+    var r = Math.random() - 0.5; // -0.5 <= r < 0.5
     v = Math.sqrt(v);
     if (ratio < r) {
         v = 1 - v;
