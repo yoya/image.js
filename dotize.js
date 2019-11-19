@@ -22,7 +22,8 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"scaleRange":"scaleText",
-		  "borderRange":"borderText"},
+		  "borderRange":"borderText",
+		  "borderColorText":null},
 		 function() { drawDotize(srcCanvas, dstCanvas) } );
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
@@ -36,6 +37,8 @@ function drawDotize(srcCanvas, dstCanvas) {
     // console.debug("drawDotize");
     var scale = parseFloat(document.getElementById("scaleRange").value);
     var border = parseFloat(document.getElementById("borderRange").value);
+    var borderColor = document.getElementById("borderColorText").value;
+    var borderRGBA = getRGBAfromHexColor(borderColor);
     //
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -57,10 +60,10 @@ function drawDotize(srcCanvas, dstCanvas) {
 	    var dstOffset = 4 * (dstX + dstY * dstWidth);
 	    if (((dstX % (scale+border)) < border) ||
 		((dstY % (scale+border)) < border)) {
-		dstData[dstOffset++] = 0
-		dstData[dstOffset++] = 0
-		dstData[dstOffset++] = 0
-		dstData[dstOffset++] = 255;
+		dstData[dstOffset++] = borderRGBA[0];
+		dstData[dstOffset++] = borderRGBA[1];
+		dstData[dstOffset++] = borderRGBA[2];
+		dstData[dstOffset++] = borderRGBA[3];
 	    } else {
 		dstData[dstOffset++] = srcData[srcOffset++];
 		dstData[dstOffset++] = srcData[srcOffset++];
