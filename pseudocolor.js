@@ -15,6 +15,8 @@ function main() {
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     var clutType = document.getElementById("clutTypeSelect").value;
+    var linearCheckbox = document.getElementById("linearCheckbox");
+    var linear = linearCheckbox.checked;
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
@@ -24,17 +26,22 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "clutTypeSelect":null},
-		 function() {
+		  "clutTypeSelect":null,
+                  "linearCheckbox":null},
+		 function(target, rel) {
+                     if (target.id === "linearCheckbox") {
+                         linear = linearCheckbox.checked;
+                         makeCLUT(linear);
+                     }
 		     clutType = document.getElementById("clutTypeSelect").value;
 		     drawClutTable(clutCanvas, clutType);
 		     drawSrcImageAndPseudoColor(srcImage, srcCanvas, grayCanvas, dstCanvas, clutType);
 		 } );
-    makeCLUT();
+    makeCLUT(linear);
     drawClutTable(clutCanvas, clutType);
 }
 
-function makeCLUTfromCRGB(points) {
+function makeCLUTfromCRGB(points, linear) {
     var table = [];
     for (var j = 0 ; j < 256 ; j++) {
 	var prevRatio = 0, nextRatio = 0
@@ -52,33 +59,39 @@ function makeCLUTfromCRGB(points) {
 		break;
 	    }
 	}
-	var prevRGB = points[prevIndex];
+	var prevPoint = points[prevIndex];
 	if ( prevRatio < nextRatio) {
-	    var nextRGB = points[nextIndex];
+	    var nextPoint = points[nextIndex];
 	    var r = (j - prevRatio) / (nextRatio - prevRatio);
-	    var lPrevRGB = sRGB2linearRGB(prevRGB.slice(1));
-	    var lNextRGB = sRGB2linearRGB(nextRGB.slice(1));
-	    var lrgb = [
-		(1-r)*lPrevRGB[0] + r*lNextRGB[0],
-		(1-r)*lPrevRGB[1] + r*lNextRGB[1],
-		(1-r)*lPrevRGB[2] + r*lNextRGB[2]
+	    var prevRGB = prevPoint.slice(1);
+	    var nextRGB = nextPoint.slice(1);
+            if (linear) { // sRGB => linear
+	        prevRGB = sRGB2linearRGB(prevRGB);
+	        nextRGB = sRGB2linearRGB(nextRGB);
+            }
+	    var rgb = [
+		(1-r)*prevRGB[0] + r*nextRGB[0],
+		(1-r)*prevRGB[1] + r*nextRGB[1],
+		(1-r)*prevRGB[2] + r*nextRGB[2]
 	    ];
-	    var rgb = linearRGB2sRGB(lrgb);
-	} else {
-	    var rgb = prevRGB.slice(1);
+            if (linear) { //  linear => sRGB
+	        rgb = linearRGB2sRGB(rgb);
+            }
+        } else {
+	    var rgb = prevPoint.slice(1);
 	}
 	table.push(rgb);
     }
     return table;
 }
 
-function makeCLUT() {
+function makeCLUT(linear) {
     for (var name in CLUTtemplate) {
 	var points = CLUTtemplate[name];
 	console.debug("name:"+name, points);
         var table = null;
         if (points[0].length === 4) {
-            table = makeCLUTfromCRGB(points);
+            table = makeCLUTfromCRGB(points, linear);
         } else if ((points.length == 256) && (points[0].length === 3)) {
             table = points;
         } else {
