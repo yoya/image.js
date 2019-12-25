@@ -164,8 +164,7 @@ var CLUTtemplate = {
     "magenta": [ [0, 0, 0, 0], [255, 255, 0, 255,] ],
     "yellow":  [ [0, 0, 0, 0], [255, 255, 255, 0,] ],
     "sepia":  [ [0, 0, 0, 0]    , [255, 255, 255, 237] ], // CSS
-    "sepia2": [ [0, 107, 74, 43], [255, 255, 255, 255] ], // sepia to white
-    "sepia3": [ [0, 107, 74, 43], [255, 255, 255, 237] ]  // sepia to CSS sepia-white
+    "sepia2": [ [0, 107, 74, 43], [255, 255, 255, 237] ]  // sepia to CSS sepia-white
 };
 
 var CLUT = { }; // from CUTtemplate;
