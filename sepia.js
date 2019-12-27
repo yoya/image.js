@@ -38,7 +38,8 @@ function main() {
     }, "DataURL");
     //
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "linearCheckbox":null},
+		  "linearCheckbox":null,
+                  "radiusRange":"radiusText"},
 		 function() {
 		     drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix);
 		 } );
@@ -61,8 +62,9 @@ function main() {
 function drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCancas, colorMatrix) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var linear = document.getElementById("linearCheckbox").checked;
+    var radius = parseFloat(document.getElementById("radiusRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawSepiaTone(srcCanvas, dstCanvas, colorMatrix, linear);
+    drawSepiaTone(srcCanvas, dstCanvas, colorMatrix, linear, radius);
 }
 
 function colorTransform(rgb, mat) {
@@ -73,21 +75,13 @@ function colorTransform(rgb, mat) {
     return [r2, g2, b2];
 }
 
-function sepiaTone(rgba, colorMatrix, linear) {
+function sepiaTone(rgba, colorMatrix) {
     var [r, g, b, a] = rgba;
-    if (linear) {
-	[r, g, b] = sRGB2linearRGB([r,g,b]);
-	r *= 255; g *= 255; b *= 255;
-    }
     [r,g,b] = colorTransform([r,g,b], colorMatrix)
-    if (linear) {
-	r /= 255; g /= 255; b /= 255;
-	[r, g, b] = linearRGB2sRGB([r, g, b]);
-    }
     return [r, g, b, a];
 }
 
-function drawSepiaTone(srcCanvas, dstCanvas, colorMatrix, linear) {
+function drawSepiaTone(srcCanvas, dstCanvas, colorMatrix, linear, radius) {
     // console.debug("drawSepiaTone");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -97,11 +91,29 @@ function drawSepiaTone(srcCanvas, dstCanvas, colorMatrix, linear) {
     //
     var srcImageData = srcCtx.getImageData(0, 0, width, height);
     var dstImageData = dstCtx.createImageData(width, height);
+    var slant = Math.sqrt(width*width + height*height);
+    slant *= radius;
     for (var y = 0 ; y < height; y++) {
         for (var x = 0 ; x < width; x++) {
+            if (linear) {
+	        [r, g, b] = sRGB2linearRGB([r,g,b]);
+	        r *= 255; g *= 255; b *= 255;
+            }
+            var dx = (x - (width  / 2)) / (slant/2);
+            var dy = (y - (height / 2)) / (slant/2);
+            var r = Math.sqrt(dx*dx + dy*dy);
+	    var factor = Math.pow(Math.cos(r/2), 4);
+            //
 	    var rgba = getRGBA(srcImageData, x, y);
-	    rgba = sepiaTone(rgba, colorMatrix, linear);
-	    setRGBA(dstImageData, x, y, rgba);
+	    var [r, g, b, a] = sepiaTone(rgba, colorMatrix);
+	    r *= factor;
+	    g *= factor;
+	    b *= factor;
+            if (linear) {
+	        r /= 255; g /= 255; b /= 255;
+	        [r, g, b] = linearRGB2sRGB([r, g, b]);
+            }
+	    setRGBA(dstImageData, x, y, [r, g, b, a]);
 	}
     }
     dstCtx.putImageData(dstImageData, 0, 0);
