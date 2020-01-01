@@ -14,6 +14,7 @@ function main() {
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     var cieSelect = document.getElementById("cieSelect").value;
+    var graphAlpha = parseFloat(document.getElementById("graphAlphaRange").value);
     var params = {
 	'chromaticity':document.getElementById("chromaticitySelect").value,
 	'pointSize':parseFloat(document.getElementById("pointSizeRange").value),
@@ -27,7 +28,7 @@ function main() {
 	params[name] = arr;
 	if (isDefault) {
 	    params['cieArr'] = arr;
-	    drawSpectrumGraph(graphCanvas, params);
+	    drawSpectrumGraph(graphCanvas, params, graphAlpha);
 	    drawDiagram(diagramBaseCanvas, dstCanvas, params, true);
 	}
     }
@@ -42,7 +43,7 @@ function main() {
 		     } else { // "ciexyzjv"
 			 params['cieArr'] = params['cieJVArr'];
 		     }
-		     drawSpectrumGraph(graphCanvas, params, rel);
+		     drawSpectrumGraph(graphCanvas, params, graphAlpha);
 		     drawDiagram(diagramBaseCanvas, dstCanvas, params, rel);
 		 } );
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
@@ -58,6 +59,7 @@ function main() {
 		  "colorspaceSelect":null,
 		  "tristimulusCheckbox":null,
 		  "guideCheckbox":null,
+                  "graphAlphaRange":"graphAlphaText",
 		  },
 		 function(target, rel) {
 		     params['chromaticity'] = document.getElementById("chromaticitySelect").value;
@@ -66,7 +68,8 @@ function main() {
 		     params['colorspace'] = document.getElementById("colorspaceSelect").value;
 		     params['tristimulus'] = document.getElementById("tristimulusCheckbox").checked;
 		     params['guide'] = document.getElementById("guideCheckbox").checked;
-		     drawSpectrumGraph(graphCanvas, params, rel);
+                     graphAlpha = parseFloat(document.getElementById("graphAlphaRange").value);
+		     drawSpectrumGraph(graphCanvas, params, graphAlpha);
 		     drawDiagram(diagramBaseCanvas, dstCanvas, params, rel);
 		 } );
     //
