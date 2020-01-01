@@ -206,6 +206,10 @@ var color2Matrix = {
 	0.75, 0.20, 0.20, 0,
 	0.20, 0.60, 0.20, 0,
 	0.20, 0.20, 0.45, 0],
+    "sepia3":[  // http://k-ichikawa.blog.enjoy.jp/etc/HP/htm/imageSepia.html
+	0.299*(107/107), 0.587*(107/107), 0.114*(107/107), 0,
+	0.299*(74/107) , 0.587*(74/107) , 0.114*(74/107) , 0,
+	0.299*(43/107) , 0.587*(43/107) , 0.114*(43/107) , 0],
 };
 
 function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCancas, colorMatrix, rel) {
