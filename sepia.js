@@ -7,13 +7,31 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
-// https://www.w3.org/TR/filter-effects/#sepiaEquivalent
-function sepiaToneMatrix(amount) {
+function sepiaToneMatrix(amount, matrix) {
     var a = 1 - amount;
-    var colorMatrix = [
-	(0.393 + 0.607 * a), (0.769 - 0.769 * a), (0.189 - 0.189 * a), 0,
-        (0.349 - 0.349 * a), (0.686 + 0.314 * a), (0.168 - 0.168 * a), 0,
-        (0.272 - 0.272 * a), (0.534 - 0.534 * a), (0.131 + 0.869 * a), 0 ];
+    var colorMatrix;
+    switch (matrix) {
+    case "GOOD":  // https://www.w3.org/TR/filter-effects/#sepiaEquivalent
+	colorMatrix = [
+	    (0.393 + 0.607 * a), (0.769 - 0.769 * a), (0.189 - 0.189 * a), 0,
+	    (0.349 - 0.349 * a), (0.686 + 0.314 * a), (0.168 - 0.168 * a), 0,
+	    (0.272 - 0.272 * a), (0.534 - 0.534 * a), (0.131 + 0.869 * a), 0 ];
+	break;
+    case "SOSO":  // (GOOD+BAD)/ 2
+	colorMatrix = [
+	    (0.692 + 0.308 * a), (0.678 - 0.678 * a), (0.151 - 0.151 * a), 0,
+	    (0.278 - 0.278 * a), (0.546 + 0.454 * a), (0.124 - 0.124 * a), 0, 
+	    (0.196 - 0.196 * a), (0.385 - 0.385 * a), (0.089 + 0.911 * a), 0 ];
+	break;
+    case "BAD":  // http://k-ichikawa.blog.enjoy.jp/etc/HP/htm/imageSepia.html
+	colorMatrix = [
+	    (0.299 + 0.701 * a), (0.587 - 0.587 * a), (0.114 - 0.114 * a), 0,
+	    (0.207 - 0.207 * a), (0.406 + 0.594 * a), (0.079 - 0.079 * a), 0, 
+	    (0.120 - 0.120 * a), (0.236 - 0.236 * a), (0.046 + 0.954 * a), 0 ];
+	break;
+    default:
+	console.error("wrong matrixSelect");
+    }
     return colorMatrix;
 }
 
@@ -23,10 +41,12 @@ function main() {
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     //
+    var matrixSelect = document.getElementById("matrixSelect");
+    var matrix = matrixSelect.value;
     var colorMatrixTable = document.getElementById("colorMatrixTable");
     var amountRange = document.getElementById("amountRange");
     var amount = parseFloat(amountRange.value);
-    var colorMatrix = sepiaToneMatrix(amount);
+    var colorMatrix = sepiaToneMatrix(amount, matrix);
     var colorWindow = 4;
     //
     dropFunction(document, function(dataURL) {
@@ -43,10 +63,12 @@ function main() {
 		 function() {
 		     drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix);
 		 } );
-    bindFunction({"amountRange":"amountText"},
+    bindFunction({"amountRange":"amountText",
+                  "matrixSelect":null},
 		 function() {
 		     amount = parseFloat(amountRange.value);
-		     colorMatrix = sepiaToneMatrix(amount);
+		     matrix = matrixSelect.value;
+		     colorMatrix = sepiaToneMatrix(amount, matrix);
 		     setTableValues("colorMatrixTable", colorMatrix);
 		     drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix);
 		 } );
