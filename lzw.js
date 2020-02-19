@@ -13,36 +13,35 @@ function main() {
     dropFunction(document, function(buf) {
         var arr = new Uint8Array(buf);
         let gif = new IO_GIF();
-	if (gif) {
-	    gif.parse(arr);
-	    let chunkList = gif.getChunkList();
-            for (let chunk of chunkList) {
-                if (chunk.name == "Image") {
-	            // console.debug(chunk);
-                    let bytes = chunk.bytes;
-                    let width  = bytes[6]*0x100 + bytes[5];
-                    let height = bytes[8]*0x100 + bytes[7];
-                    let flags =  bytes[9];
-                    let offset = 10;
-                    if (flags & 0x80) { // local color table flgas
-                        let tableSize = pow(2, (flags&0x3) + 1);
-                        offset += 3 * tableSize; 
-                    }
-                    let lzwCodeSize = bytes[offset++];
-                    let blockSize = bytes[offset++];
-                    console.debug(width, height);
-                    var indices = new Uint8Array(width * height);
-                    var blockArr = [];
-                    while (blockSize > 0) {
-                        let block = bytes.subarray(offset, offset + blockSize);
-                        blockArr.push(block);
-                        offset += blockSize;
-                        blockSize = bytes[offset++];
-                    }
-                    let lzw = new IO_LZW(blockArr);
-                    lzw.DGifDecompressLine(lzwCodeSize, indices);
-                    console.log(indices);
+	gif.parse(arr);
+	let chunkList = gif.getChunkList();
+        for (let chunk of chunkList) {
+            if (chunk.name == "Image") {
+	        // console.debug(chunk);
+                let bytes = chunk.bytes;
+                let width  = bytes[6]*0x100 + bytes[5];
+                let height = bytes[8]*0x100 + bytes[7];
+                let flags =  bytes[9];
+                let offset = 10;
+                if (flags & 0x80) { // local color table flgas
+                    let tableSize = pow(2, (flags&0x3) + 1);
+                    offset += 3 * tableSize;
                 }
+                let lzwCodeSize = bytes[offset++];
+                let blockSize = bytes[offset++];
+                // console.debug(width, height);
+                var indices = new Uint8Array(width * height);
+                var blockArr = [];
+                while (blockSize > 0) {
+                    let block = bytes.subarray(offset, offset + blockSize);
+                    blockArr.push(block);
+                    offset += blockSize;
+                    blockSize = bytes[offset++];
+                }
+                console.log(blockArr);
+                let lzw = new IO_LZW(blockArr);
+                lzw.DGifDecompressLine(lzwCodeSize, indices);
+                console.log(indices);
             }
         }
     }, "ArrayBuffer");
