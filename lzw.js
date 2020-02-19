@@ -13,8 +13,7 @@ function main() {
     dropFunction(document, function(buf) {
         var arr = new Uint8Array(buf);
         let gif = new IO_GIF();
-        let lzw = new IO_LZW();
-	if (gif && lzw) {
+	if (gif) {
 	    gif.parse(arr);
 	    let chunkList = gif.getChunkList();
             for (let chunk of chunkList) {
@@ -40,7 +39,8 @@ function main() {
                         offset += blockSize;
                         blockSize = bytes[offset++];
                     }
-                    lzw.DGifDecompressLine(blockArr, lzwCodeSize, indices);
+                    let lzw = new IO_LZW(blockArr);
+                    lzw.DGifDecompressLine(lzwCodeSize, indices);
                     console.log(indices);
                 }
             }
