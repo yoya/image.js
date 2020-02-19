@@ -33,16 +33,15 @@ function main() {
                     let blockSize = bytes[offset++];
                     console.debug(width, height);
                     var indices = new Uint8Array(width * height);
+                    var blockArr = [];
                     while (blockSize > 0) {
                         let block = bytes.subarray(offset, offset + blockSize);
-                        lzw.DGifDecompressLine(block, lzwCodeSize, indices);
-                        console.log(indices);
-                        //
+                        blockArr.push(block);
                         offset += blockSize;
                         blockSize = bytes[offset++];
                     }
-                    console.debug(lzwCodeSize);
-                    
+                    lzw.DGifDecompressLine(blockArr, lzwCodeSize, indices);
+                    console.log(indices);
                 }
             }
         }
