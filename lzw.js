@@ -87,7 +87,7 @@ class lzw_bitreader {
 
 function lzw_decode(LZWcode, codeBits, indices) {
     let reader = new lzw_bitreader(LZWcode);
-    let indicesSize = LZWcode.length;
+    let indicesSize = indices.length;
     let clearCode = 2 ** codeBits;
     let endCode   = clearCode + 1;
     let nextCode  = endCode   + 1;
@@ -98,7 +98,7 @@ function lzw_decode(LZWcode, codeBits, indices) {
     let indicesProgress = 0;
     let w = null;
     let dictionaryTable = null;
-    for (let i = 0; i < LZWcodeSize; i++) {
+    for (let i = 0; i < indicesSize; i++) {
         let code = reader.readBits(codeBits+1);
         let output;
         if (code === clearCode) {
