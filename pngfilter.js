@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 var g_srcArr = null;
 
 function main() {
+    var filterSelect = document.getElementById("filterSelect");
+    var filter = parseInt(filterSelect.value);
     dropFunction(document, function(buf) {
         let arr = new Uint8Array(buf);
         g_srcArr = arr;
@@ -18,8 +20,13 @@ function main() {
         const srcURL = window.URL.createObjectURL(srcBlob);
         const srcImage = document.getElementById('srcImage');
         srcImage.src = srcURL;
-        pngFilter(4);
+        pngFilter(filter);
     }, "ArrayBuffer");
+    bindFunction({"filterSelect":null},
+                 function() {
+                     var filter = parseInt(filterSelect.value);
+                     pngFilter(filter);
+                 });
 }
 
 function pngFilter(filter) {
