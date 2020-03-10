@@ -8,30 +8,27 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
-var g_srcArr = null;
-
 function main() {
     var filterSelect = document.getElementById("filterSelect");
     var filter = parseInt(filterSelect.value);
     dropFunction(document, function(buf) {
         let arr = new Uint8Array(buf);
-        g_srcArr = arr;
+        pngFilter(arr, filter);
+        //
         const blob = new Blob([arr], {type: 'image/png'});
         const url = window.URL.createObjectURL(blob);
         const img = document.getElementById('srcImage');
         img.src = url;
-        pngFilter(filter);
     }, "ArrayBuffer");
     bindFunction({"filterSelect":null},
                  function() {
                      var filter = parseInt(filterSelect.value);
-                     pngFilter(filter);
+                     pngFilter(arr, filter);
                  });
 }
 
-function pngFilter(filter) {
+function pngFilter(arr, filter) {
     //
-    let arr = g_srcArr;
     let png = new IO_PNG();
     png.parse(arr);
     let ihdrChunk = png.getIHDRchunk();
