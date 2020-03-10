@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 function main() {
-    var containerNode = document.getElementById("ibv_container");
     dropFunction(document, function(buf) {
         var arr = new Uint8Array(buf);
         let gif = new IO_GIF();
