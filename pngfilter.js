@@ -16,10 +16,10 @@ function main() {
     dropFunction(document, function(buf) {
         let arr = new Uint8Array(buf);
         g_srcArr = arr;
-        const srcBlob = new Blob([arr], {type: 'image/png'});
-        const srcURL = window.URL.createObjectURL(srcBlob);
-        const srcImage = document.getElementById('srcImage');
-        srcImage.src = srcURL;
+        const blob = new Blob([arr], {type: 'image/png'});
+        const url = window.URL.createObjectURL(blob);
+        const img = document.getElementById('srcImage');
+        img.src = url;
         pngFilter(filter);
     }, "ArrayBuffer");
     bindFunction({"filterSelect":null},
