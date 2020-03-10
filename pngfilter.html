@@ -6,21 +6,24 @@
 </head>
 <body>
   <div class="container">
-    <div id="controlPanel"  style="float:left">
+    <div id="controlPanel" style="float:left">
       <div style="float:left">
-        <select id="filterSelect" size="5">
-          <option value="0" selected> None </option>
-          <option value="1"         > Sub </option>
-          <option value="2"         > Up </option>
-          <option value="3"         > Averate </option>
-          <option value="4"         > Paeth </option>
-        </select>
+        <div style="float:left"> PNG filter type:</div>
+        <div style="float:left">
+          <select id="filterSelect" size="5">
+            <option value="0" selected> 0: None </option>
+            <option value="1"         > 1: Sub </option>
+            <option value="2"         > 2: Up </option>
+            <option value="3"         > 3: Averate </option>
+            <option value="4"         > 4: Paeth </option>
+          </select>
+        </div>
+        <p> Drop PNG Image files here </p>
       </div>
-      <div> Drop PNG Image files here </div>
           </div>  <!-- containerPanel -->
     <div style="clear:both">
-      <img src="" id="srcImage" width="40%" class="borderRed"  style="float:left;"/>
-      <img dst="" id="dstImage" width="40%" class="borderBlue"  style="float:left;"/>
+      <img src="" id="srcImage" width="45%" class="borderRed"  style="float:left;"/>
+      <img dst="" id="dstImage" width="45%" class="borderBlue"  style="float:left;"/>
     </div>
   </div>  <!-- container -->
   <script type="text/javascript" src="dist/imaya/zlib.js/bin/inflate.min.js"> </script>
