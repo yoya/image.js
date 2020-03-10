@@ -20,12 +20,11 @@ function main() {
         const inflate = new Zlib.Inflate(idatArr);
         inflatedArr = inflate.decompress();
         pngFilter(png, inflatedArr, filter);
-        //
+        // display srcImage
         const blob = new Blob([arr], {type: 'image/png'});
         const url = window.URL.createObjectURL(blob);
         const img = document.getElementById('srcImage');
         img.src = url;
-        //
     }, "ArrayBuffer");
     bindFunction({"filterSelect":null},
                  function() {
@@ -35,7 +34,6 @@ function main() {
 }
 
 function pngFilter(png, inflatedArr, filter) {
-    console.debug("pngFilte(", png, inflatedArr, filter, ")");
     const ihdrChunk = png.getIHDRchunk();
     const infos      = ihdrChunk.infos;
     const width      = infos[2].width;
@@ -43,9 +41,7 @@ function pngFilter(png, inflatedArr, filter) {
     const bitDepth   = infos[4].bitDepth;
     const colourType = infos[5].colourType;
     const interlace  = infos[8].interlaceMethod;
-    console.debug("IHDR", width, height, bitDepth, colourType, interlace);
-
-    // console.debug(idatArr);
+    // console.debug("IHDR", width, height, bitDepth, colourType, interlace);
     //
     const ncomp = png.getNCompByColourType(colourType);
     const stride = (1 + Math.ceil(width * ncomp * bitDepth / 8)) | 0;
@@ -57,14 +53,13 @@ function pngFilter(png, inflatedArr, filter) {
         inflatedArr[offset] = filter;  // overwrite
         offset += stride;
     }
-    //
+    // reconstruct PNG file
     png.deleteChunk("IDAT");
     const deflate = new Zlib.Deflate(inflatedArr, { compressionType: 0 });
     const deflatedArr = deflate.compress();
-    console.debug("deflatedArr", deflatedArr);
     png.addIDATdata(deflatedArr);
     let PNGarr = png.build();
-    //
+    // display dstImage
     const blob = new Blob([PNGarr], {type: 'image/png'});
     const url = window.URL.createObjectURL(blob);
     const img = document.getElementById('dstImage');
