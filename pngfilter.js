@@ -11,8 +11,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     var filterSelect = document.getElementById("filterSelect");
     var filter = parseInt(filterSelect.value);
+    var arr;
     dropFunction(document, function(buf) {
-        let arr = new Uint8Array(buf);
+        arr = new Uint8Array(buf);
         pngFilter(arr, filter);
         //
         const blob = new Blob([arr], {type: 'image/png'});
