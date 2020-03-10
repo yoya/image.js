@@ -53,9 +53,9 @@ function pngFilter(filter) {
     let filterTable = [0, 0, 0, 0, 0];  // 0-4 entry zero initialize
     for (let y = 0 ; y < height ; y++) {
         let f = inflatedArr[offset];
-        offset += stride;
         filterTable[f]++;
         inflatedArr[offset] = filter;  // overwrite
+        offset += stride;
     }
     //
     png.deleteChunk("IDAT");
