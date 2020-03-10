@@ -41,7 +41,7 @@ function pngFilter(filter) {
     const bitDepth   = infos[4].bitDepth;
     const colourType = infos[5].colourType;
     const interlace  = infos[8].interlaceMethod;
-    console.debug(width, height, bitDepth, colourType, interlace);
+    console.debug("IHDR", width, height, bitDepth, colourType, interlace);
     let idatArr =  png.getIDATdata();
     // console.debug(idatArr);
     var inflate = new Zlib.Inflate(idatArr);
@@ -61,7 +61,7 @@ function pngFilter(filter) {
     png.deleteChunk("IDAT");
     var deflate = new Zlib.Deflate(inflatedArr);
     var deflatedArr = deflate.compress();
-    console.debug(inflatedArr);
+    console.debug("deflatedArr", deflatedArr);
     png.addIDATdata(deflatedArr);
     let PNGarr = png.build();
     //
