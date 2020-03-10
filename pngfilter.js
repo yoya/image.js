@@ -56,7 +56,7 @@ function pngFilter(arr, filter) {
     }
     //
     png.deleteChunk("IDAT");
-    const deflate = new Zlib.Deflate(inflatedArr);
+    const deflate = new Zlib.Deflate(inflatedArr, { compressionType: 0 });
     const deflatedArr = deflate.compress();
     console.debug("deflatedArr", deflatedArr);
     png.addIDATdata(deflatedArr);
