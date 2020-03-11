@@ -9,6 +9,7 @@
     <div id="controlPanel" style="float:left">
       <div style="float:left">
         <div style="float:left"> PNG overwrite type: <br />
+          alpha on:<input id="alphaOnCheckbox" type="checkbox" />
         </div>
         <div style="float:left">
           <select id="filterSelect" size="5">
@@ -21,6 +22,8 @@
         </div>
         <img src="img/dropImageHere.png" id="srcImage" width="192" class="borderRed"  style="float:left;"/>
         <div style="float:left">
+          filter view:<input id="filterViewCheckbox" type="checkbox" /> <br />
+          <br />
           <span id="filterSummarize" style="background:black; color:white ; padding: 0.5em"> </span>
         </div>
       </div>
@@ -35,6 +38,7 @@
   <script type="text/javascript" src="lib/binary.js"> </script>
   <script type="text/javascript" src="lib/drop.js"> </script>
   <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/canvas.js"> </script>
   <script type="text/javascript" src="lib/png.js"> </script>
   <script type="text/javascript" src="pngfilter.js"> </script>
 </body>

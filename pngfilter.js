@@ -10,7 +10,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function main() {
     const filterSelect = document.getElementById("filterSelect");
-    var filter = parseInt(filterSelect.value);
+    const filterViewCheckbox = document.getElementById("filterViewCheckbox");
+    const alphaOnCheckbox = document.getElementById("alphaOnCheckbox");
+    var filter     = parseInt(filterSelect.value);
+    var filterView = filterViewCheckbox.checked;
+    var alphaOn    = alphaOnCheckbox.checked;
+    //
     var png, origArr, workArr;
     dropFunction(document, function(buf) {
         const arr = new Uint8Array(buf);
@@ -21,18 +26,33 @@ function main() {
         origArr = inflate.decompress();
         workArr = new Uint8Array(origArr);
         pngFilterSummarize(png, origArr);
-        pngFilter(png, workArr, filter);
+        if (filterView) {
+            pngFilterView(png, origArr);
+        } else {
+            pngFilterOverwrite(png, workArr, filter, alphaOn);
+        }
         // display srcImage
         const blob = new Blob([arr], {type: 'image/png'});
         const url = window.URL.createObjectURL(blob);
         const img = document.getElementById('srcImage');
+        img.onload = function() {
+            ;
+        }
         img.src = url;
     }, "ArrayBuffer");
-    bindFunction({"filterSelect":null},
+    bindFunction({"filterSelect":null,
+                  "filterViewCheckbox":null,
+                  "alphaOnCheckbox":null},
                  function() {
+                     filterView = filterViewCheckbox.checked;
+                     alphaOn       = alphaOnCheckbox.checked;
                      filter = parseInt(filterSelect.value);
                      pngFilterSummarize(png, origArr);
-                     pngFilter(png, workArr, filter);
+                     if (filterView) {
+                         pngFilterView(png, origArr);
+                     } else {
+                         pngFilterOverwrite(png, workArr, filter, alphaOn);
+                     }
                  });
 }
 
@@ -54,7 +74,25 @@ function pngFilterSummarize(png, origArr) {
         ', <font color="cyan">3</font>:'+filterTable[3] +
         ', <font color="violet">4</font>:'+filterTable[4];
 }
-function pngFilter(png, workArr, filter) {
+function pngFilterView(png, origArr) {
+    const width = png.getImageWidth()
+    const height = png.getImageHeight()
+    const stride = png.getImageStride();
+    let canvas = document.getElementById('dstCanvas');
+    let ctx = canvas.getContext("2d");
+    canvas.width = width;
+    canvas.height = height;
+    let offset = 0;
+    for (let y = 0 ; y < height ; y++) {
+        let f = origArr[offset];
+        let color = ["red", "yellow", "rgb(0,255,0)", "cyan", "violet"][f];
+        ctx.fillStyle = color;
+        ctx.fillRect(0, y, width, 1);
+        offset += stride;
+    }
+}
+
+function pngFilterOverwrite(png, workArr, filter, alphaOn) {
     const stride = png.getImageStride();
     const height = png.getImageHeight()
     let offset = 0;
@@ -76,10 +114,16 @@ function pngFilter(png, workArr, filter) {
     img.onload = function() {
         let canvas = document.getElementById('dstCanvas');
         let ctx = canvas.getContext("2d");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0, img.width, img.height,
-		      0, 0, img.width, img.height);
+        let width = img.width, height = img.height;
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height, 0, 0, width, height);
+        console.log({"alphaOn":alphaOn});
+        if (! alphaOn) {
+            let imageData = ctx.getImageData(0, 0, width, height);
+            alphaOff(imageData);
+            ctx.putImageData(imageData, 0, 0);
+        }
     }
     img.src = url;
 }
