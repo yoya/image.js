@@ -11,15 +11,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     const filterSelect = document.getElementById("filterSelect");
     var filter = parseInt(filterSelect.value);
-    var png, inflatedArr;
+    var png, origArr, workArr;
     dropFunction(document, function(buf) {
         const arr = new Uint8Array(buf);
         png = new IO_PNG();
         png.parse(arr);
         const idatArr =  png.getIDATdata();
         const inflate = new Zlib.Inflate(idatArr);
-        inflatedArr = inflate.decompress();
-        pngFilter(png, inflatedArr, filter);
+        origArr = inflate.decompress();
+        workArr = new Uint8Array(origArr);
+        pngFilter(png, origArr, workArr, filter);
         // display srcImage
         const blob = new Blob([arr], {type: 'image/png'});
         const url = window.URL.createObjectURL(blob);
@@ -29,11 +30,11 @@ function main() {
     bindFunction({"filterSelect":null},
                  function() {
                      filter = parseInt(filterSelect.value);
-                     pngFilter(png, inflatedArr, filter);
+                     pngFilter(png, origArr, workArr, filter);
                  });
 }
 
-function pngFilter(png, inflatedArr, filter) {
+function pngFilter(png, origArr, workArr, filter) {
     const ihdrChunk = png.getIHDRchunk();
     const infos      = ihdrChunk.infos;
     const width      = infos[2].width;
@@ -48,14 +49,14 @@ function pngFilter(png, inflatedArr, filter) {
     let offset = 0;
     let filterTable = [0, 0, 0, 0, 0];  // 0-4 entry zero initialize
     for (let y = 0 ; y < height ; y++) {
-        let f = inflatedArr[offset];
+        let f = origArr[offset];
         filterTable[f]++;
-        inflatedArr[offset] = filter;  // overwrite
+        workArr[offset] = filter;  // overwrite
         offset += stride;
     }
     // reconstruct PNG file
     png.deleteChunk("IDAT");
-    const deflate = new Zlib.Deflate(inflatedArr, { compressionType: 0 });
+    const deflate = new Zlib.Deflate(workArr, { compressionType: 0 });
     const deflatedArr = deflate.compress();
     png.addIDATdata(deflatedArr);
     let PNGarr = png.build();
