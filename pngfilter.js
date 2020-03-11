@@ -1,7 +1,7 @@
 "use strict";
 
 /*
-  2017/01/05- yoya@awm.jp
+  2020/03/10- yoya@awm.jp
 */
 
 document.addEventListener("DOMContentLoaded", function(event) {
