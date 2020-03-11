@@ -8,7 +8,8 @@
   <div class="container">
     <div id="controlPanel" style="float:left">
       <div style="float:left">
-        <div style="float:left"> PNG filter type:</div>
+        <div style="float:left"> PNG overwrite type: <br />
+        </div>
         <div style="float:left">
           <select id="filterSelect" size="5">
             <option value="0" selected> 0: None </option>
@@ -18,14 +19,14 @@
             <option value="4"         > 4: Paeth </option>
           </select>
         </div>
+        <img src="img/dropImageHere.png" id="srcImage" width="192" class="borderRed"  style="float:left;"/>
         <div style="float:left">
-          <p> <span id="filterSummarize"> </span></p>
+          <span id="filterSummarize" style="background:black; color:white ; padding: 0.5em"> </span>
         </div>
       </div>
     </div>  <!-- containerPanel -->
     <div style="clear:both">
-      <img src="img/dropImageHere.png" id="srcImage" width="45%" class="borderRed"  style="float:left;"/>
-      <img dst="" id="dstImage" width="45%" class="borderBlue"  style="float:left;"/>
+      <canvas id="dstCanvas" width="400" height="400" class="borderBlue" style="float:left;"/>
     </div>
   </div>  <!-- container -->
   <script type="text/javascript" src="dist/imaya/zlib.js/bin/inflate.min.js"> </script>

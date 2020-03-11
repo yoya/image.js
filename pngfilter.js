@@ -50,9 +50,9 @@ function pngFilterSummarize(png, origArr) {
     summarize.innerHTML = "filterSummary = " +
         '<font color="red">0</font>:'+filterTable[0] +
         ', <font color="yellow">1</font>:'+filterTable[1] +
-        ', <font color="green">2</font>:'+filterTable[2] +
-        ', <font color="blue">3</font>:'+filterTable[3] +
-        ', <font color="purple">4</font>:'+filterTable[4];
+        ', <font color="green1">2</font>:'+filterTable[2] +
+        ', <font color="cyan">3</font>:'+filterTable[3] +
+        ', <font color="violet">4</font>:'+filterTable[4];
 }
 function pngFilter(png, workArr, filter) {
     const stride = png.getImageStride();
@@ -72,7 +72,15 @@ function pngFilter(png, workArr, filter) {
     // display dstImage
     const blob = new Blob([PNGarr], {type: 'image/png'});
     const url = window.URL.createObjectURL(blob);
-    const img = document.getElementById('dstImage');
+    var img = new Image();
+    img.onload = function() {
+        let canvas = document.getElementById('dstCanvas');
+        let ctx = canvas.getContext("2d");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0, img.width, img.height,
+		      0, 0, img.width, img.height);
+    }
     img.src = url;
 }
 
