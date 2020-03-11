@@ -20,7 +20,8 @@ function main() {
         const inflate = new Zlib.Inflate(idatArr);
         origArr = inflate.decompress();
         workArr = new Uint8Array(origArr);
-        pngFilter(png, origArr, workArr, filter);
+        pngFilterSummarize(png, origArr);
+        pngFilter(png, workArr, filter);
         // display srcImage
         const blob = new Blob([arr], {type: 'image/png'});
         const url = window.URL.createObjectURL(blob);
@@ -30,27 +31,35 @@ function main() {
     bindFunction({"filterSelect":null},
                  function() {
                      filter = parseInt(filterSelect.value);
-                     pngFilter(png, origArr, workArr, filter);
+                     pngFilterSummarize(png, origArr);
+                     pngFilter(png, workArr, filter);
                  });
 }
 
-function pngFilter(png, origArr, workArr, filter) {
-    const ihdrChunk = png.getIHDRchunk();
-    const infos      = ihdrChunk.infos;
-    const width      = infos[2].width;
-    const height     = infos[3].height;
-    const bitDepth   = infos[4].bitDepth;
-    const colourType = infos[5].colourType;
-    const interlace  = infos[8].interlaceMethod;
-    // console.debug("IHDR", width, height, bitDepth, colourType, interlace);
-    //
-    const ncomp = png.getNCompByColourType(colourType);
-    const stride = (1 + Math.ceil(width * ncomp * bitDepth / 8)) | 0;
+function pngFilterSummarize(png, origArr) {
+    const stride = png.getImageStride();
+    const height = png.getImageHeight()
     let offset = 0;
     let filterTable = [0, 0, 0, 0, 0];  // 0-4 entry zero initialize
     for (let y = 0 ; y < height ; y++) {
         let f = origArr[offset];
         filterTable[f]++;
+        offset += stride;
+    }
+    let summarize = document.getElementById('filterSummarize');
+    summarize.innerHTML = "filterSummary = " +
+        '<font color="red">0</font>:'+filterTable[0] +
+        ', <font color="yellow">1</font>:'+filterTable[1] +
+        ', <font color="green">2</font>:'+filterTable[2] +
+        ', <font color="blue">3</font>:'+filterTable[3] +
+        ', <font color="purple">4</font>:'+filterTable[4];
+}
+function pngFilter(png, workArr, filter) {
+    const stride = png.getImageStride();
+    const height = png.getImageHeight()
+    let offset = 0;
+    let filterTable = [0, 0, 0, 0, 0];  // 0-4 entry zero initialize
+    for (let y = 0 ; y < height ; y++) {
         workArr[offset] = filter;  // overwrite
         offset += stride;
     }
