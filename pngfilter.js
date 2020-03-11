@@ -19,7 +19,18 @@ function main() {
     var png, origArr, workArr;
     dropFunction(document, function(buf) {
         const arr = new Uint8Array(buf);
+        // display srcImage
+        const blob = new Blob([arr], {type: 'image/png'});
+        const url = window.URL.createObjectURL(blob);
+        const img = document.getElementById('srcImage');
+        img.src = url;
+        //
         png = new IO_PNG();
+        if (! IO_PNG.verifySig(arr)) {
+            let console = document.getElementById('console');
+            console.innerHTML = "not PNG!";
+            return ;
+        }
         png.parse(arr);
         const idatArr =  png.getIDATdata();
         const inflate = new Zlib.Inflate(idatArr);
@@ -31,14 +42,6 @@ function main() {
         } else {
             pngFilterOverwrite(png, workArr, filter, alphaOn);
         }
-        // display srcImage
-        const blob = new Blob([arr], {type: 'image/png'});
-        const url = window.URL.createObjectURL(blob);
-        const img = document.getElementById('srcImage');
-        img.onload = function() {
-            ;
-        }
-        img.src = url;
     }, "ArrayBuffer");
     bindFunction({"filterSelect":null,
                   "filterViewCheckbox":null,
@@ -66,8 +69,8 @@ function pngFilterSummarize(png, origArr) {
         filterTable[f]++;
         offset += stride;
     }
-    let summarize = document.getElementById('filterSummarize');
-    summarize.innerHTML = "filterSummary = " +
+    let console = document.getElementById('console');
+    console.innerHTML = "filterSummary = " +
         '<font color="red">0</font>:'+filterTable[0] +
         ', <font color="yellow">1</font>:'+filterTable[1] +
         ', <font color="green1">2</font>:'+filterTable[2] +
