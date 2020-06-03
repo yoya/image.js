@@ -363,5 +363,5 @@ function drawParaCurveGraphLine(canvas, data, color) {
     ctx.stroke();
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
-    ctx.fillText(caption, width/2, 0);
+    // ctx.fillText(caption, width/2, 0);
 }
