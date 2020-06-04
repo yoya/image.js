@@ -73,7 +73,7 @@ function searchKey(arr, offset, keyArr) {
 }
 
 function searchSignature(arr, offset) {
-    var jpegOffset = searchKey(arr, offset, [0xFF, 0xD8]);
+    var jpegOffset = searchKey(arr, offset, [0xFF, 0xD8, 0xFF]);
     var pngOffset  = searchKey(arr, offset, [0x89, 0x50, 0x4E, 0x47]);
     var gifOffset  = searchKey(arr, offset, [0x47, 0x49, 0x46, 0x38]);
     if ((jpegOffset < 0) && (pngOffset < 0) && (gifOffset < 0)) {
