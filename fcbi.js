@@ -12,26 +12,28 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+	    let maxWidthHeight = params["maxWidthHeightRange"];
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-	    drawFCBI(srcCanvas, dstCanvas);
+	    drawFCBI(srcCanvas, dstCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"TMRange":"TMText",
 		  "phaseLimitRange":"phaseLimitText",
 		  "edgeModeCheckbox":null},
-		 function () { drawFCBI(srcCanvas, dstCanvas); }
-		);
+		 function () {
+                     drawFCBI(srcCanvas, dstCanvas, params);
+                 }, params);
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
-		     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+                     let maxWidthHeight = params["maxWidthHeightRange"];
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-		     drawFCBI(srcCanvas, dstCanvas); }
-		);
+		     drawFCBI(srcCanvas, dstCanvas, params);
+                 }, params);
 }
 
 function meanRGBA(rgba1, rgba2) {
@@ -42,7 +44,7 @@ function meanRGBA(rgba1, rgba2) {
 
 var g_timeoutList = [];
 
-function drawFCBI(srcCanvas, dstCanvas) {
+function drawFCBI(srcCanvas, dstCanvas, params) {
     console.debug("drawFCBI");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
@@ -55,9 +57,6 @@ function drawFCBI(srcCanvas, dstCanvas) {
     for (var i = 3 , n = 4 * dstWidth * dstHeight ; i < n ; i += 4) {
 	dstImageData[i] = 255;
     }
-    var TM = parseFloat(document.getElementById("TMRange").value);
-    var edgeMode = document.getElementById("edgeModeCheckbox").checked;
-    var phaseLimit = parseFloat(document.getElementById("phaseLimitRange").value);
     //
     var Context = function() {
 	// progress number
@@ -70,10 +69,10 @@ function drawFCBI(srcCanvas, dstCanvas) {
 	this.srcImageData = srcImageData;
 	this.dstImageData = dstImageData;;
 	// input params
-	this.TM = TM;
-	this.edgeMode = edgeMode;
-	this.phaseLimit = phaseLimit;
-    }
+	this.TM         = params["TMRange"];
+	this.edgeMode   = params["edgeModeCheckbox"];
+	this.phaseLimit = params["phaseLimitRange"];
+    };
     var ctx = new Context();
     var id = setTimeout(drawFCBI_.bind(ctx), 10); //フェイズ毎に描画させたい
     g_timeoutList.push(id); // for remove old process

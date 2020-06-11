@@ -12,32 +12,34 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+	    let maxWidthHeight = params["maxWidthHeightRange"];
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-	    drawDotize(srcCanvas, dstCanvas);
+	    drawDotize(srcCanvas, dstCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"scaleRange":"scaleText",
 		  "borderRange":"borderText",
 		  "borderColorText":null},
-		 function() { drawDotize(srcCanvas, dstCanvas) } );
+		 function() { drawDotize(srcCanvas, dstCanvas, params) },
+                 params);
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
-		     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+                     let maxWidthHeight = params["maxWidthHeightRange"];
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-		     drawDotize(srcCanvas, dstCanvas);
-		 } );
+		     drawDotize(srcCanvas, dstCanvas, params);
+		 }, params);
 }
 
-function drawDotize(srcCanvas, dstCanvas) {
-    // console.debug("drawDotize");
-    var scale = parseFloat(document.getElementById("scaleRange").value);
-    var border = parseFloat(document.getElementById("borderRange").value);
-    var borderColor = document.getElementById("borderColorText").value;
+function drawDotize(srcCanvas, dstCanvas, params) {
+    // console.debug("drawDotize", params);
+    var scale       = params["scaleRange"];
+    var border      = params["borderRange"];
+    var borderColor = params["borderColorText"];
     var borderRGBA = getRGBAfromHexColor(borderColor);
     //
     var srcCtx = srcCanvas.getContext("2d");

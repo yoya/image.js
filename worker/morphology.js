@@ -72,7 +72,7 @@ function morphologyFilter(srcImageData, srcX, srcY,
 	break;
     default:
 	rgba = [255, 0, 0, 255];
-	console.error("Illegal filter:"+filter);
+	throw "Illegal filter:"+filter;
     }
     return rgba;
 }

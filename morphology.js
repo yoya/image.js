@@ -12,54 +12,52 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var filter = document.getElementById("filterSelect").value;
+    var params = {};
     var structureType = document.getElementById("structureTypeSelect").value;
     var filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
+    //
     var structureTable = makeStructureTable(structureType, filterWindow);
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
+            let maxWidthHeight = params["maxWidthHeightRange"];
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    dstCanvas.width  = srcCanvas.width;
 	    dstCanvas.height = srcCanvas.height;
-	    drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow, true);
+	    drawMorphologyFilter(srcCanvas, dstCanvas, structureTable, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"filterSelect":null},
 		 function(target, rel) {
-		     filter = document.getElementById("filterSelect").value;
-		     drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow, rel);
-		 });
+		     drawMorphologyFilter(srcCanvas, dstCanvas, structureTable, params, rel);
+		 }, params);
     bindFunction({"structureTypeSelect":null,
 		  "filterWindowRange":"filterWindowText"},
 		 function(target, rel) {
-		     structureType = document.getElementById("structureTypeSelect").value;
-		     filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
+		     structureType = params["structureTypeSelect"];
+		     filterWindow  = params["filterWindowRange"];
 		     structureTable = makeStructureTable(structureType, filterWindow);
-		     drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow, rel);
+		     drawMorphologyFilter(srcCanvas, dstCanvas, structureTable, params, rel);
 		     bindTableFunction("structureTable", function(table, values, width) {
 			 // console.debug(values, width);
 			 structureTable = values;
-			 filterWindow = width;
-			 drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow, true);
+			 drawMorphologyFilter(srcCanvas, dstCanvas, structureTable, params, true);
 		     }, structureTable, filterWindow, "checkbox");
-		 } );
+		 }, params);
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function(target, rel) {
-		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+		     let maxWidthHeight = params["maxWidthHeightRange"];
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     dstCanvas.width  = srcCanvas.width;
 		     dstCanvas.height = srcCanvas.height;
-		     drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow, rel);
+		     drawMorphologyFilter(srcCanvas, dstCanvas, structureTable, params, rel);
 
-		 } );
+		 }, params);
     bindTableFunction("structureTable", function(table, values, width) {
 	// console.debug(values, width);
 	structureTable = values;
-	filterWindow = width;
-	drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow);
+	drawMorphologyFilter(srcCanvas, dstCanvas, structureTable, params);
     }, structureTable, filterWindow, "checkbox");
 }
 
@@ -118,7 +116,11 @@ function makeStructureTable(structureType, filterWindow) {
 
 var worker = new workerProcess("worker/morphology.js");
 
-function drawMorphologyFilter(srcCanvas, dstCanvas, filter, structureTable, filterWindow, sync) {
-    var params = {filter:filter, structureTable:structureTable, filterWindow:filterWindow};
-    worker.process(srcCanvas, dstCanvas, params, sync);
+function drawMorphologyFilter(srcCanvas, dstCanvas, structureTable, params, sync) {
+    var params_w = {
+        structureTable:structureTable,
+        filter      : params["filterSelect"],
+        filterWindow: params["filterWindowRange"],
+    };
+    worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

@@ -15,43 +15,41 @@ function main() {
     //
     var affinMatrixTable = document.getElementById("affinMatrixTable");
     var affin = document.getElementById("affinSelect").value;
-    var outfill = document.getElementById("outfillSelect").value;
-    outfill = outfillStyleNumber(outfill);
     var affinMatrix = affin2Matrix(affin, srcCanvas);
     var affinWindow = 3;
+    var params = {};
     //
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+	    let maxWidthHeight = params["maxWidthHeightRange"];
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-	    affinMatrix = affin2Matrix(affin, srcCanvas);
-	    drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill, true);
+	    drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     //
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function(target, rel) {
-		     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+                     let maxWidthHeight = params["maxWidthHeightRange"];
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-		     affinMatrix = affin2Matrix(affin, srcCanvas);
-		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill, rel);
-		 } );
+		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, rel);
+		 }, params);
     bindFunction({"affinSelect":null, "outfillSelect":null},
 		 function(target, rel) {
-		     affin = document.getElementById("affinSelect").value;
-		     outfill = document.getElementById("outfillSelect").value;
-		     outfill = outfillStyleNumber(outfill);
+		     let affin = params["affinSelect"];
 		     affinMatrix = affin2Matrix(affin, srcCanvas);
-		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill, rel);
+		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, rel);
 		     setTableValues("affinMatrixTable", affinMatrix);
-		 } );
+		 }, params);
     //
     bindTableFunction("affinMatrixTable", function(table, values, width) {
 	affinMatrix = values;
-	drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill, true);
+	drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, true);
     }, affinMatrix, affinWindow);
+    //
+    affin = params["affinSelect"];
+    affinMatrix = affin2Matrix(affin, srcCanvas);
 }
 
 function affin2Matrix(affin, canvas) {
@@ -127,7 +125,10 @@ function affin2Matrix(affin, canvas) {
 
 var worker = new workerProcess("worker/affintrans.js");
 
-function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, outfill, sync) {
-    var params = {affinMatrix:affinMatrix, outfill:outfill};
-    worker.process(srcCanvas, dstCanvas, params, sync);
+function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, sync) {
+    var params_w = {
+        affinMatrix: affinMatrix,
+        outfill    : outfillStyleNumber(params["outfillSelect"]),
+    };
+    worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

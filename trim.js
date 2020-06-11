@@ -12,35 +12,36 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var fuzz = parseFloat(document.getElementById("fuzzRange").value);
-    var margin = parseFloat(document.getElementById("marginRange").value);
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
+            let maxWidthHeight = params["maxWidthHeightRange"];
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-	    drawTrim(srcCanvas, dstCanvas, fuzz, margin, true);
+	    drawTrim(srcCanvas, dstCanvas, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
+    //
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function(target, rel) {
-		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+                     let maxWidthHeight = params["maxWidthHeightRange"];
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-		     drawTrim(srcCanvas, dstCanvas, fuzz, margin, rel);
-		 } );
+		     drawTrim(srcCanvas, dstCanvas, params, rel);
+		 }, params);
     bindFunction({"fuzzRange":"fuzzText",
 		  "marginRange":"marginText"},
 		 function(target, rel) {
-		     fuzz = parseFloat(document.getElementById("fuzzRange").value);
-		     margin = parseFloat(document.getElementById("marginRange").value);
-		     drawTrim(srcCanvas, dstCanvas, fuzz, margin, rel);
-		 } );
+		     drawTrim(srcCanvas, dstCanvas, params, rel);
+		 }, params);
 }
 
 var worker = new workerProcess("worker/trim.js");
 
-function drawTrim(srcCanvas, dstCanvas, fuzz, margin, sync) {
-    var params = {fuzz:fuzz, margin:margin};
-    worker.process(srcCanvas, dstCanvas, params, sync);
+function drawTrim(srcCanvas, dstCanvas, params, sync) {
+    var params_w = {
+        fuzz  : params["fuzzRange"],
+        margin: params["marginRange"],
+    };
+    worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

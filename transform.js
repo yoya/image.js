@@ -14,22 +14,20 @@ function main() {
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     //
     var affinMatrixTable = document.getElementById("affinMatrixTable");
-    var rotateRoundCenter = document.getElementById("rotateRoundCenterCheckbox").checked;
-    var outfill = document.getElementById("outfillSelect").value;
-    outfill = outfillStyleNumber(outfill);
     var affinMatrix = [1, 0, 0,
 		       0, 1, 0,
 		       0, 0, 1];
     var affinWindow = 3;
+    var params = {};
     //
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+            let maxWidthHeight = params["maxWidthHeightRange"];
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-	    affinMatrix = makeAffinMatrix(srcCanvas, rotateRoundCenter);
+	    affinMatrix = makeAffinMatrix(srcCanvas, params);
 	    setTableValues("affinMatrixTable", affinMatrix);
-	    drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, rotateRoundCenter, outfill, true);
+	    drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -42,28 +40,25 @@ function main() {
 		  "outfillSelect":null},
 		 function(target, rel) {
 		     // console.debug("bindFunction:", target.id, rel);
-		     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-		     
+                     let maxWidthHeight = params["maxWidthHeightRange"];
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-		     rotateRoundCenter = document.getElementById("rotateRoundCenterCheckbox").checked;
-		     outfill = document.getElementById("outfillSelect").value;
-		     outfill = outfillStyleNumber(outfill);
-		     affinMatrix = makeAffinMatrix(srcCanvas, rotateRoundCenter);
+		     affinMatrix = makeAffinMatrix(srcCanvas, params);
 		     setTableValues("affinMatrixTable", affinMatrix);
-		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, rotateRoundCenter, outfill, rel);
-		 } );
-    //
+		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, rel);
+		 }, params);
     bindTableFunction("affinMatrixTable", function(table, values, width) {
 	affinMatrix = values;
-	drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, rotateRoundCenter, outfill);
+	drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params);
     }, affinMatrix, affinWindow);
 }
 
-function makeAffinMatrix(canvas, rotateRoundCenter) {
+function makeAffinMatrix(canvas, params) {
+    // console.debug("makeAffinMatrix",params);
     var width = canvas.width, height = canvas.height;
-    var rotate = parseFloat(document.getElementById("rotateRange").value);
-    var transX = parseFloat(document.getElementById("transXRange").value);
-    var transY = parseFloat(document.getElementById("transYRange").value);
+    var rotateRoundCenter = params["rotateRoundCenterCheckbox"];
+    var rotate = params["rotateRange"];
+    var transX = params["transXRange"];
+    var transY = params["transYRange"];
     var theta = 2 * Math.PI * rotate / 360;
     var mat = [Math.cos(theta), -Math.sin(theta), 0,
 	       Math.sin(theta),  Math.cos(theta), 0,
@@ -81,8 +76,12 @@ function makeAffinMatrix(canvas, rotateRoundCenter) {
 
 var worker = new workerProcess("worker/transform.js");
 
-function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, rotateRoundCenter, outfill, sync) {
-    var params = {affinMatrix:affinMatrix,
-		  rotateRoundCenter:rotateRoundCenter, outfill:outfill}
-    worker.process(srcCanvas, dstCanvas, params, sync);
+function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, sync) {
+    // console.debug("drawAffinTransform", affinMatrix, params);
+    var params_w = {
+        affinMatrix      : affinMatrix,
+	rotateRoundCenter: params["rotateRoundCenterCheckbox"],
+        outfill          : outfillStyleNumber(params["outfillSelect"]),
+    }
+    worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

@@ -12,10 +12,11 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas);
+	    drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -26,25 +27,26 @@ function main() {
 		  "cubicCRange":"cubicCText",
 		  "lobeRange":"lobeText"},
 		 function(target, rel) {
-		     drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas, rel);
-		 } );
-    drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas, false);
+		     drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas, params, rel);
+		 }, params);
+    drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas, params, true);
 }
 
 var worker = new workerProcess("worker/rescale.js");
 
-function drawSrcImageAndRescale(srcImage, srcCanvas, dstCancas, sync) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);    
+function drawSrcImageAndRescale(srcImage, srcCanvas, dstCancas, params, sync) {
+    // console.debug("drawSrcImageAndRescale", params);
+    var maxWidthHeight = params["maxWidthHeightRange"];
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    var params = {
-	filterType: document.getElementById("filterType").value,
-	scale: parseFloat(document.getElementById("scaleRange").value),
-	cubicB:parseFloat(document.getElementById("cubicBRange").value),
-	cubicC:parseFloat(document.getElementById("cubicCRange").value),
-	lobe:  parseFloat(document.getElementById("lobeRange").value)
+    var params_w = {
+	filterType: params["filterType"],
+	scale: params["scaleRange"],
+        cubicB: params["cubicBRange"],
+        cubicC: params["cubicCRange"],
+        lobe  : params["lobeRange"],
     };
-    drawFilterGraph(params);
-    worker.process(srcCanvas, dstCanvas, params, sync);
+    drawFilterGraph(params_w);
+    worker.process(srcCanvas, dstCanvas, params_w, sync);
 }
 
 function drawFilterGraph(params) {

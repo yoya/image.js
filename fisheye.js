@@ -12,10 +12,11 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndFisheye(srcImage, srcCanvas, dstCanvas);
+	    drawSrcImageAndFisheye(srcImage, srcCanvas, dstCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -32,21 +33,21 @@ function main() {
 		 },
 		 function(target) {
 		     console.debug("target id:" + target.id);
-		     drawSrcImageAndFisheye(srcImage, srcCanvas, dstCanvas);
-		 } );
+		     drawSrcImageAndFisheye(srcImage, srcCanvas, dstCanvas, params);
+		 }, params);
 }
 
-function drawSrcImageAndFisheye(srcImage, srcCanvas, dstCancas) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var guide = document.getElementById("guideCheckbox").checked;
-    var srcProj = document.getElementById("srcProjSelect").value;
-    var srcProjX = parseFloat(document.getElementById("srcProjXRange").value);
-    var srcProjY = parseFloat(document.getElementById("srcProjYRange").value);
-    var srcProjR = parseFloat(document.getElementById("srcProjRRange").value);
-    var dstProj = document.getElementById("dstProjSelect").value;
-    var dstProjX = parseFloat(document.getElementById("dstProjXRange").value);
-    var dstProjY = parseFloat(document.getElementById("dstProjYRange").value);
-    var dstProjR = parseFloat(document.getElementById("dstProjRRange").value);
+function drawSrcImageAndFisheye(srcImage, srcCanvas, dstCanvas, params) {
+    var maxWidthHeight = params["maxWidthHeightRange"];
+    var guide = params["guideCheckbox"];
+    var srcProj  = params["srcProjSelect"];
+    var srcProjX = params["srcProjXRange"];
+    var srcProjY = params["srcProjYRange"];
+    var srcProjR = params["srcProjRRange"];
+    var dstProj  = params["dstProjSelect"];
+    var dstProjX = params["dstProjXRange"];
+    var dstProjY = params["dstProjYRange"];
+    var dstProjR = params["dstProjRRange"];
     // console.debug("drawSrcImageAndFisheye  guide:" + guide);
     // console.debug("srcProj:" + srcProj+","+srcProjX+","+srcProjY+","+ srcProjR);
     // console.debug("dstProj:" + dstProj+","+dstProjX+","+dstProjY+","+ dstProjR);

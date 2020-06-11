@@ -12,10 +12,11 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndVinette(srcImage, srcCanvas, dstCanvas, true);
+	    drawSrcImageAndVinette(srcImage, srcCanvas, dstCanvas, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -24,22 +25,23 @@ function main() {
 		  "linearGammaCheckbox":null,
 		  "inverseCheckbox":null},
 		 function(target, rel) {
-		     drawSrcImageAndVinette(srcImage, srcCanvas, dstCanvas, rel);
-		 } );
+		     drawSrcImageAndVinette(srcImage, srcCanvas, dstCanvas, params, rel);
+		 }, params);
 }
 
-function drawSrcImageAndVinette(srcImage, srcCanvas, dstCancas, sync) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var radius = parseFloat(document.getElementById("radiusRange").value);
-    var linearGamma = document.getElementById("linearGammaCheckbox").checked;
-    var inverse = document.getElementById("inverseCheckbox").checked;
+function drawSrcImageAndVinette(srcImage, srcCanvas, dstCancas, params, sync) {
+    var maxWidthHeight = params["maxWidthHeightRange"];
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawVinette(srcCanvas, dstCanvas, radius, linearGamma, inverse, sync);
+    drawVinette(srcCanvas, dstCanvas, params, sync);
 }
 
 var worker = new workerProcess("worker/vinette.js");
 
-function drawVinette(srcCanvas, dstCanvas, radius, linearGamma, inverse, sync) {
-    var params = {radius:radius, linearGamma:linearGamma, inverse:inverse};
-    worker.process(srcCanvas, dstCanvas, params, sync);
+function drawVinette(srcCanvas, dstCanvas, params, sync) {
+    var params_w = {
+        radius     : params["radiusRange"],
+        linearGamma: params["linearGammaCheckbox"],
+        inverse    : params["inverseCheckbox"],
+    };
+    worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

@@ -12,20 +12,23 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    var maxWidthHeight    = document.getElementById("maxWidthHeightRange");
-    var filterSelect      = document.getElementById("filterSelect");
-    var filterWindowRange = document.getElementById("filterWindowRange");
-    var rankOrderRange    = document.getElementById("rankOrderRange");
-    var maxWidthHeight = parseFloat(maxWidthHeightRange.value);
-    var filterWindow   = parseFloat(filterWindowRange.value);
-    var rankOrder      = parseFloat(rankOrderRange.value)
+    var params = {};
+    //
+    // var filterSelect      = document.getElementById("filterSelect");
+    // var filterWindowRange = document.getElementById("filterWindowRange");
+    var rankOrderRange = document.getElementById("rankOrderRange");
+    var rankOrderText  = document.getElementById("rankOrderText");
+    // var maxWidthHeight = parseFloat(maxWidthHeightRange.value);
+    // var filterWindow   = parseFloat(filterWindowRange.value);
+    // var rankOrder      = parseFloat(rankOrderRange.value)
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
+            let maxWidthHeight = params["maxWidthHeightRange"];
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    dstCanvas.width = srcCanvas.width;
 	    dstCanvas.height = srcCanvas.height;
-	    drawRankOrderFilter(srcCanvas, dstCanvas, rankOrder, filterWindow, true);
+	    drawRankOrderFilter(srcCanvas, dstCanvas, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -33,12 +36,11 @@ function main() {
                   "filterWindowRange":"filterWindowText",
                   "rankOrderRange":"rankOrderText"},
 		 function(target, rel) {
-                     filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
-                     rankOrderRange.max = filterWindow*filterWindow;
-                     rankOrder = parseFloat(rankOrderRange.value);
+                     let filterWindow = params["filterWindowRange"];
+                     let rankOrder    = params["rankOrderRange"];
                      if ((target.id == "filterSelect") || (target.id == "filterWindowRange") ||
                          (target.id == "filterWindowText")) {
-                         var filter = filterSelect.value;
+                         var filter = params["filterSelect"];
                          switch (filter) {
                          case "min":
                              rankOrder = 1;
@@ -49,9 +51,15 @@ function main() {
                          case "median":
                              rankOrder = (filterWindow*filterWindow/2+1) | 0;
                              break;
+                         default:
+                             if (rankOrder > filterWindow*filterWindow) {
+                                 rankOrder = filterWindow*filterWindow;
+                             }
+                             break;
                          }
                          rankOrderRange.value = rankOrder;
                          rankOrderText.value  = rankOrder;
+                         params["rankOrderRange"] = rankOrder;
                      }
                      console.log(rankOrder, filterWindow, ((filterWindow*filterWindow/2) | 0));
                      if (rankOrder == 1) {
@@ -63,21 +71,24 @@ function main() {
                      } else {
                          filterSelect.value = "etc";
                      }
-		     drawRankOrderFilter(srcCanvas, dstCanvas, rankOrder, filterWindow, rel);
-		 } );
+		     drawRankOrderFilter(srcCanvas, dstCanvas, params, rel);
+		 }, params);
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function(target, rel) {
-		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+		     let maxWidthHeight = params["maxWidthHeightRange"];
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     dstCanvas.width = srcCanvas.width;
 		     dstCanvas.height = srcCanvas.height;
-		     drawRankOrderFilter(srcCanvas, dstCanvas, rankOrder, filterWindow, rel);
-		 } );
+		     drawRankOrderFilter(srcCanvas, dstCanvas, params, rel);
+		 }, params);
 }
 
 var worker = new workerProcess("worker/rankorder.js");
 
-function drawRankOrderFilter(srcCanvas, dstCanvas, rankOrder, filterWindow, sync) {
-    var params = {rankOrder:rankOrder, filterWindow:filterWindow};
-    worker.process(srcCanvas, dstCanvas, params, sync);
+function drawRankOrderFilter(srcCanvas, dstCanvas, params, sync) {
+    var params_w = {
+        rankOrder   : params["rankOrderRange"],
+        filterWindow: params["filterWindowRange"],
+    };
+    worker.process(srcCanvas, dstCanvas, params_w, sync);
 }
