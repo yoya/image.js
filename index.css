@@ -9,14 +9,15 @@ div {
     margin: 4px
 }
 input {
-    border-radius: 20%;
+    border-radius:0.5ex;
+    border-width: thin;
 }
 select {
-    border-radius: 7%;
+    border-radius:0.5ex;
 }
 table {
     border: medium solid gray;
-    border-radius: 7%;
+    border-radius:1ex;
 }
 
 .noCR {
