@@ -7,17 +7,23 @@
 </head>
 <body>
   <div class="container">
-    <div>
-      scale:<input id="scaleRange" type="range" min="1" max="64" step="1" value="8">:<input type="text" id="scaleText">
-      border:<input id="borderRange" type="range" min="0" max="4" step="1" value="1">:<input type="text" id="borderText">
+    <div id="controlPanel" style="display:flex">
+      <div>
+        scale:<input id="scaleRange" type="range" min="1" max="64" step="1" value="8">:<input type="text" id="scaleText" size="3">
+        <br />
+        border:<input id="borderRange" type="range" min="0" max="4" step="1" value="1">:<input type="text" id="borderText" size="2">
+      </div>
+      <div>
+        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="800" step="1" value="256">:<input type="text" id="maxWidthHeightText" size="4">
+        <br />
+        borderColor:<input id="borderColorText" class="jscolor" value="000000" size="9">
+      </div>
     </div>
-    <div>
-      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="800" step="1" value="256">:<input type="text" id="maxWidthHeightText">
-      borderColor:<input id="borderColorText" class="jscolor" value="000000" size="9">
+    <div style="display:flex">
+      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      <br />
+      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
     </div>
-    <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
-    <br />
-    <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
   </div>
   <script type="text/javascript" src="dist/jscolor-2.0.4/jscolor.js"> </script>
   <script type="text/javascript" src="lib/drop.js"> </script>
