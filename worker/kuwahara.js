@@ -66,17 +66,17 @@ function makeVarianceTable(srcImageData, variWindow) {
 }
 
 function drawVarianceTable(variImageData, variableTable) {
-    var min = variableTable.reduce((a,b) => (a<b)?a:b);
-    var max = variableTable.reduce((a,b) => (a>b)?a:b);
-    var scale = 255 * (max - min);
+    let min = variableTable.reduce((a,b) => (a<b)?a:b);
+    let max = variableTable.reduce((a,b) => (a>b)?a:b);
+    let scale = 255 / (max - min);
+    let data = variImageData.data;
     let n = variableTable.length;
-    for (var i = 0; i < n; i++) {
-        var v = variableTable[i];
-        v = ((v - min) * scale) | 0;
-        variImageData.data.set([v, v, v, 255], i*4);
+    let j = 0;
+    for (let i = 0; i < n; i++) {
+        let v = (variableTable[i] - min) * scale;
+        data[j++] = data[j++] = data[j++] = v;  data[j++] = 255;
     }
 }
-    
 
 function kuwaharaFilter(srcImageData, variTable,
                         x, y, slideWindow, filterWindow) {
