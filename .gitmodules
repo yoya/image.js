@@ -7,9 +7,9 @@
 [submodule "dist/yoya/lcms.js"]
 	path = dist/yoya/lcms.js
 	url = git@github.com:yoya/lcms.js.git
+	ignore = dirty
 [submodule "dist/nokiatech/heif.gh-pages"]
 	path = dist/nokiatech/heif.gh-pages
 	url = git@github.com:nokiatech/heif.git
 	branch = gh-pages
-[submodule "submod-repo"]
 	ignore = dirty
