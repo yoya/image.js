@@ -78,10 +78,25 @@ function drawVarianceTable(variImageData, variableTable) {
     }
 }
 
-function kuwaharaFilter(srcImageData, variTable,
+function kuwaharaFilter(srcImageData, variableTable,
                         x, y, vslideWindow, filterWindow) {
-    let rgba = getRGBA(srcImageData, x, y);
-    return rgba;
+    if (vslideWindow <= 0) {
+        throw "vslideWindow <= 0";
+    }
+    let width = srcImageData.width, height = srcImageData.height;
+    let candidate_xx,  candidate_yy;
+    let candidate_vari = Number.MAX_VALUE;
+    for (let yy = 0; yy < filterWindow; yy += vslideWindow) {
+        for (let xx = 0; xx < filterWindow; xx+= vslideWindow) {
+            let vari = variableTable[(x+xx) + (y+yy) * width];
+            if (vari < candidate_vari) {
+                candidate_xx = xx;
+                candidate_yy = yy;
+                candidate_vari = vari;
+            }
+        }
+    }
+    return getRGBA(srcImageData, x + candidate_xx, y + candidate_yy);
 }
 
 
