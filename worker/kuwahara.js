@@ -8,8 +8,8 @@ importScripts("../lib/canvas.js");
 onmessage = function(e) {
     var srcImageData = e.data.image;
     // var [variWindow, slideWindow, filterWindow] = e.data;
-    var [variWindow, slideWindow, filterWindow] =
-        [e.data.variWindow, e.data.slideWindow, e.data.filterWindow];
+    var [variWindow, vslideWindow, filterWindow] =
+        [e.data.variWindow, e.data.vslideWindow, e.data.filterWindow];
     var width = srcImageData.width, height = srcImageData.height;
     var variImageData = new ImageData(width, height); // variance
     var dstImageData  = new ImageData(width, height);
@@ -20,7 +20,7 @@ onmessage = function(e) {
     for (var y = 0 ; y < (height - filterWindow + 1); y++) {
         for (var x = 0 ; x < (width - filterWindow + 1); x++) {
 	    var rgba = kuwaharaFilter(srcImageData, variTable,
-                                      x, y, slideWindow, filterWindow);
+                                      x, y, vslideWindow, filterWindow);
 	    setRGBA(dstImageData, x, y, rgba);
 	}
     }
@@ -79,7 +79,7 @@ function drawVarianceTable(variImageData, variableTable) {
 }
 
 function kuwaharaFilter(srcImageData, variTable,
-                        x, y, slideWindow, filterWindow) {
+                        x, y, vslideWindow, filterWindow) {
     let rgba = getRGBA(srcImageData, x, y);
     return rgba;
 }

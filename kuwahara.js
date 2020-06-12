@@ -45,8 +45,8 @@ var worker = new workerProcess("worker/kuwahara.js");
 function drawKuwaharaFilter(srcCanvas, dstCanvases, params, sync) {
     var params_w = {
         rankOrder   : 1,
-        variWindow: params["variWindowRange"],
-        slideWindow: params["slideWindowRange"],
+        variWindow  : params["variWindowRange"],
+        vslideWindow: params["vslideWindowRange"],
         filterWindow: params["filterWindowRange"],
     };
     // console.debug("worker.process", srcCanvas, dstCanvases, params_w, sync);
