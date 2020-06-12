@@ -12,7 +12,8 @@ onmessage = function(e) {
         [e.data.variWindow, e.data.vslideWindow, e.data.filterWindow];
     var width = srcImageData.width, height = srcImageData.height;
     var variImageData = new ImageData(width, height); // variance
-    var dstImageData  = new ImageData(width, height);
+    var dstImageData  = new ImageData(width  - filterWindow + 1,
+                                      height - filterWindow + 1);
     //
     var variTable = makeVarianceTable(srcImageData, variWindow);
     drawVarianceTable(variImageData, variTable);
