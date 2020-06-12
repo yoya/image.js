@@ -66,20 +66,20 @@ function makeVarianceTable(srcImageData, variWindow) {
     return varianceTable;
 }
 
-function drawVarianceTable(variImageData, variableTable) {
-    let min = variableTable.reduce((a,b) => (a<b)?a:b);
-    let max = variableTable.reduce((a,b) => (a>b)?a:b);
+function drawVarianceTable(variImageData, varianceTable) {
+    let min = varianceTable.reduce((a,b) => (a<b)?a:b);
+    let max = varianceTable.reduce((a,b) => (a>b)?a:b);
     let scale = 255 / (max - min);
     let data = variImageData.data;
-    let n = variableTable.length;
+    let n = varianceTable.length;
     let j = 0;
     for (let i = 0; i < n; i++) {
-        let v = (variableTable[i] - min) * scale;
+        let v = (varianceTable[i] - min) * scale;
         data[j++] = data[j++] = data[j++] = v;  data[j++] = 255;
     }
 }
 
-function kuwaharaFilter(srcImageData, variableTable,
+function kuwaharaFilter(srcImageData, varianceTable,
                         x, y, vslideWindow, filterWindow) {
     if (vslideWindow <= 0) {
         throw "vslideWindow <= 0";
@@ -89,7 +89,7 @@ function kuwaharaFilter(srcImageData, variableTable,
     let candidate_vari = Number.MAX_VALUE;
     for (let yy = 0; yy < filterWindow; yy += vslideWindow) {
         for (let xx = 0; xx < filterWindow; xx+= vslideWindow) {
-            let vari = variableTable[(x+xx) + (y+yy) * width];
+            let vari = varianceTable[(x+xx) + (y+yy) * width];
             if (vari < candidate_vari) {
                 candidate_xx = xx;
                 candidate_yy = yy;
