@@ -11,3 +11,5 @@
 	path = dist/nokiatech/heif.gh-pages
 	url = git@github.com:nokiatech/heif.git
 	branch = gh-pages
+[submodule "submod-repo"]
+	ignore = dirty
