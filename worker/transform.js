@@ -13,6 +13,7 @@ onmessage = function(e) {
     var affinMatrix = e.data.affinMatrix;
     var affinMatrix = e.data.affinMatrix;
     var rotateRoundCenter = e.data.rotateRoundCenter;
+    var axisGuide = e.data.axisGuide;
     var outfill = e.data.outfill;
     var srcWidth = srcImageData.width, srcHeight = srcImageData.height;
     if (rotateRoundCenter) {
@@ -28,20 +29,19 @@ onmessage = function(e) {
     for (var dstY = 0 ; dstY < dstHeight; dstY++) {
         for (var dstX = 0 ; dstX < dstWidth; dstX++) {
 	    var srcX, srcY;
-	    if (rotateRoundCenter) {
-		[srcX, srcY] = affinTransform(dstX, dstY, invMat);
-	    } else {
-		[srcX, srcY] = affinTransform(dstX - dstWidth / 2,
-					      dstY - dstHeight / 2,
-					      invMat);
-	    }
+            var dstX2 = (rotateRoundCenter)? dstX: (dstX - dstWidth  / 2);
+            var dstY2 = (rotateRoundCenter)? dstY: (dstY - dstHeight / 2);
+	    [srcX, srcY] = affinTransform(dstX2, dstY2, invMat);
 	    srcX = Math.round(srcX);
 	    srcY = Math.round(srcY);
 	    var rgba = getRGBA(srcImageData, srcX, srcY, outfill);
-	    if (rotateRoundCenter) {
-		if ((dstX == (dstWidth / 2)) || (dstY === (dstHeight / 2))) {
-		    var [r, g, b, a] = rgba;
-		    rgba = [r * a, g * a,  b * a, 255];
+	    if (axisGuide && (!rotateRoundCenter)) {
+		if ((Math.abs(dstX2) <= 0.500001) ||  // axis
+                    (Math.abs(dstY2) <= 0.500001)) {
+                    if (((dstX + dstY) % 6) < 3) {  // dotted line
+		        var [r, g, b, a] = rgba;
+		        rgba = [(r<128)?255:0 , (g<128)?255:0, (b<128)?255:0, 255];
+                    }
 		}
 	    }
 	    setRGBA(dstImageData, dstX, dstY, rgba);

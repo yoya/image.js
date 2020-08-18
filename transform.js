@@ -34,6 +34,7 @@ function main() {
     //
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "rotateRoundCenterCheckbox":null,
+                  "axisGuideCheckbox":null,
 		  "rotateRange":"rotateText",
 		  "transXRange":"transXText",
 		  "transYRange":"transYText",
@@ -81,6 +82,7 @@ function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, sync) {
     var params_w = {
         affinMatrix      : affinMatrix,
 	rotateRoundCenter: params["rotateRoundCenterCheckbox"],
+        axisGuide        : params["axisGuideCheckbox"],
         outfill          : outfillStyleNumber(params["outfillSelect"]),
     }
     worker.process(srcCanvas, dstCanvas, params_w, sync);
