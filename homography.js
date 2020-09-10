@@ -83,9 +83,9 @@ function markers2coeff(markerArray) {
     let h = (-dy0100 * dx1110 + dx0100 * dy1110) / xi;
     //
     let a = (dx1000*(x11*y01 - x01*y11) + dx1101*(x00*y10 - x10*y00)) / xi;
-    let d = (dx1101*(x00*y10 - y00*x10) + dy1000*(y01*x11 - y11*x01)) / xi;
+    let d = (dy1101*(x00*y10 - y00*x10) + dy1000*(y01*x11 - y11*x01)) / xi;
     let b = (dx1110*(y00*x01 - x00*y01) + dx0100*(y11*x10 - x11*y10)) / xi;
-    let e = (dx0100*(y11*x10 - y10*x11) + dy1110*(y00*x01 - y01*x00)) / xi;
+    let e = (dy0100*(y11*x10 - y10*x11) + dy1110*(y00*x01 - y01*x00)) / xi;
     return [a, b, c, d, e, f, g, h];
 }
 
