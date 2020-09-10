@@ -7,10 +7,15 @@
   </head>
   <body>
     <div class="container">
-      <div class="controlPanel">
+      <div class="controlPanel" style="display:flex">
         <div>
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
-        <br>
+	  maxWidthHeight: <br />
+          <input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+          <br />
+          marker:<input id="markerCheckbox" type="checkbox" checked="checked" />
+        </div>
+        <div>
+          Reverse Projection parameter: <br />
     	a:<input id="aRange" type="range" min="-2.0" max="2.0" step="0.1" value="1.0">:<input type="text" id="aText" size="4">
         b:<input id="bRange" type="range" min="-2.0" max="2.0" step="0.1" value="0.0">:<input type="text" id="bText" size="4">
         c:<input id="cRange" type="range" min="-2.0" max="2.0" step="0.1" value="0.0">:<input type="text" id="cText" size="4">
