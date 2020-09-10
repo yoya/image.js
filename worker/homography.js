@@ -4,6 +4,7 @@
  * ref) https://speakerdeck.com/imagire/dan-wei-zheng-fang-xing-falseshe-ying-bian-huan-falsebian-huan-xi-shu
  */
 importScripts("../lib/canvas.js");
+importScripts("../lib/math.js");
 
 onmessage = function(e) {
     console.debug("drawHomography onmessage");
@@ -24,11 +25,4 @@ onmessage = function(e) {
 	}
     }
     postMessage({image:dstImageData}, [dstImageData.data.buffer]);
-}
-
-function homography(x, y, coeff) {
-    let [a, b, c, d, e, f, g, h] = coeff;
-    let xx = (a*x + b*y + c) / (g*x + h*y + 1);
-    let yy = (d*x + e*y + f) / (g*x + h*y + 1);
-    return [xx, yy];
 }
