@@ -39,7 +39,9 @@ function main() {
         maxWidthHeight: parseFloat(maxWidthHeightRange.value),
         coeff: [1, 0, 0,
                 0, 1, 0,
-                0, 0, 1]
+                0, 0, 1],
+        marker: markerCheckbox.checked,
+        grabbedMarker: null,
     };
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
@@ -63,13 +65,69 @@ function main() {
                      }
                      drawHomograpy(srcImage, srcCanvas, dstCanvas, params, rel);
 		 } );
+    bindCursolFunction("srcCanvas", params, function(target, eventType) {
+        if ((!params.marker) || (!params.markerArray)) {
+            return ;  // skip
+        }
+        var [x, y] = params[target.id]
+        // console.debug(eventType, x, y, params.markerArray);
+        //
+        let hittestRadius = 7;
+        let markerArray = params.markerArray;
+        switch (eventType) {
+        case "mousedown":
+            let grabbedDist = 0;
+            let grabbedMarker = null;
+            for (let i = 0, n = markerArray.length; i < n; i++) {
+                let [xx, yy] = markerArray[i];
+                let dist = Math.sqrt((x-xx)**2 + (y-yy)**2);
+                if (dist < hittestRadius) {
+                    if (grabbedMarker === null) {
+                        grabbedMarker = i;
+                        grabbedDist = dist;
+                    } else {
+                        if (grabbedDist < dist) {
+                            grabbedMarker = i;
+                            grabbedDist = dist;
+                        }
+                    }
+                }
+            }
+            params.grabbedMarker = grabbedMarker;
+            // console.debug(eventType, params.grabbedMarker, x, y);
+            break;
+        case "mousemove":
+        case "mouseup":
+            let width = srcCanvas.width, height = srcCanvas.height;
+            if (params.grabbedMarker === null) {
+                break;
+            }
+            let rel = (eventType === "mouseup");
+            // console.debug(eventType, x, y, rel);
+            markerArray[params.grabbedMarker] = [x, y];
+            var markersNorm = [
+                [markerArray[0][0] / width, markerArray[0][1] / height],
+                [markerArray[1][0] / width, markerArray[1][1] / height],
+                [markerArray[2][0] / width, markerArray[2][1] / height],
+                [markerArray[3][0] / width, markerArray[3][1] / height]
+            ];
+            params.coeff = markers2coeff(markersNorm);
+            coeffValueSet(params.coeff);
+            drawHomograpy(srcImage, srcCanvas, dstCanvas, params, rel);
+            if (eventType === "mouseup") {
+                params.grabbedMarker = null;
+            }
+            break;
+        }
+    });
+}
 
 /*
   https://speakerdeck.com/imagire/dan-wei-zheng-fang-xing-falseshe-ying-bian-huan-falsebian-huan-xi-shu?slide=16
   marker index:0,1,2,3 => 00, 10, 11, 01
 */
 function markers2coeff(markerArray) {
-    console.debug("markers2coeff:", markerArray);
+    // console.debug("markers2coeff:", markerArray);
     var [[x00,y00], [x10,y10], [x11,y11], [x01,y01]] = markerArray;
     let c = x00;
     let f = y00;
@@ -92,17 +150,17 @@ function markers2coeff(markerArray) {
 var worker = new workerProcess("worker/homography.js");
 
 function drawHomograpy(srcImage, srcCanvas, dstCanvas, params, sync) {
-    drawSrcImage(srcImage, srcCanvas, params["maxWidthHeight"]);
+    // drawSrcImage(srcImage, srcCanvas, params["maxWidthHeight"]);
     //
     worker.process(srcCanvas, dstCanvas, params, sync);
     worker.addListener(function() {
         if (params.marker) {
-            drawMarker(srcCanvas, params.coeff);
+            drawMarker(srcCanvas, params.coeff, params);
         }
     });
 }
 
-function drawMarker(canvas, coeff) {
+function drawMarker(canvas, coeff, params) {
     let ctx = canvas.getContext("2d");
     let width = canvas.width, height = canvas.height;
     let xyArr = [
@@ -113,6 +171,7 @@ function drawMarker(canvas, coeff) {
         let [x, y] = xyArr[i];
         xyArr[i] = [x * width, y * height];
     }
+    params.markerArray = xyArr;
     ctx.beginPath();
     ctx.moveTo(xyArr[3][0],xyArr[3][1]);
     let colors = [["red"], "yellow", "green", "blue"];
