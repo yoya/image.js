@@ -15,7 +15,7 @@ function coeffNameIndex(name) {
         let cName = coeffNameList[i];
         if ((name === cName+"Range") || (name === cName+"Text")) {
             return i;
-        }
+       }
     }
     return -1;
 }
@@ -72,23 +72,23 @@ function main() {
         var [x, y] = params[target.id]
         // console.debug(eventType, x, y, params.markerArray);
         //
-        let hittestRadius = 7;
+        let hittestRadius2 = 7 ** 2;
         let markerArray = params.markerArray;
         switch (eventType) {
         case "mousedown":
-            let grabbedDist = 0;
+            let grabbedDist2 = 0;
             let grabbedMarker = null;
             for (let i = 0, n = markerArray.length; i < n; i++) {
                 let [xx, yy] = markerArray[i];
-                let dist = Math.sqrt((x-xx)**2 + (y-yy)**2);
-                if (dist < hittestRadius) {
+                let dist2 = (x-xx)**2 + (y-yy)**2;
+                if (dist2 < hittestRadius2) {
                     if (grabbedMarker === null) {
                         grabbedMarker = i;
-                        grabbedDist = dist;
+                        grabbedDist2 = dist2;
                     } else {
-                        if (grabbedDist < dist) {
+                        if (grabbedDist < dist2) {
                             grabbedMarker = i;
-                            grabbedDist = dist;
+                            grabbedDist2 = dist2;
                         }
                     }
                 }
