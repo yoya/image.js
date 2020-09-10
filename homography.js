@@ -124,7 +124,7 @@ function drawMarker(canvas, coeff) {
         ctx.beginPath();
         ctx.strokeStyle = colors[i];
         ctx.fillStyle = "white";
-        ctx.arc(x, y, 6, 0, 2*Math.PI, false);
+        ctx.arc(x, y, 9, 0, 2*Math.PI, false);
         ctx.stroke();
         ctx.fill();
         ctx.moveTo(x, y);
