@@ -150,7 +150,7 @@ function markers2coeff(markerArray) {
 var worker = new workerProcess("worker/homography.js");
 
 function drawHomograpy(srcImage, srcCanvas, dstCanvas, params, sync) {
-    // drawSrcImage(srcImage, srcCanvas, params["maxWidthHeight"]);
+    drawSrcImage(srcImage, srcCanvas, params["maxWidthHeight"]);
     //
     worker.process(srcCanvas, dstCanvas, params, sync);
     worker.addListener(function() {
