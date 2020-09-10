@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 var coeffNameList = ["a", "b", "c", "d", "e", "f", "g", "h"];
-function coeffNameNumber(name) {
+
+function coeffNameIndex(name) {
     for (let i = 0, n = coeffNameList.length; i < n ; i++) {
         let cName = coeffNameList[i];
         if ((name === cName+"Range") || (name === cName+"Text")) {
@@ -48,7 +49,7 @@ function main() {
                      params["maxWidthHeight"] = parseFloat(maxWidthHeightRange.value);
                      params["marker"] = markerCheckbox.checked;
 
-                     let num = coeffNameNumber(target.id);
+                     let num = coeffNameIndex(target.id);
                      if (num >= 0) {
                          params.coeff[num] = parseFloat(target.value);
                      }
