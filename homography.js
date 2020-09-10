@@ -20,6 +20,14 @@ function coeffNameIndex(name) {
     return -1;
 }
 
+function coeffValueSet(coeff) {
+    for (let i = 0, n = coeffNameList.length; i < n ; i++) {
+        let cName = coeffNameList[i];
+        document.getElementById(cName+"Range").value = coeff[i];
+        document.getElementById(cName+"Text").value = coeff[i];
+    }
+}
+
 function main() {
     // console.debug("main");
     let srcCanvas = document.getElementById("srcCanvas");
