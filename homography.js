@@ -149,21 +149,29 @@ function drawMarker(canvas, coeff, params) {
         xyArr[i] = [x * width, y * height];
     }
     params.markerArray = xyArr;
-    ctx.beginPath();
-    ctx.moveTo(xyArr[3][0],xyArr[3][1]);
-    let colors = [["red"], "yellow", "green", "blue"];
+    ctx.lineWidth = 2;
+    let colors = ["red", "yellow", "green", "blue"];
     for (let i = 0, n = xyArr.length; i < n; i++) {
         let [x, y] = xyArr[i];
-        ctx.strokeStyle = colors[(i+3)%4];
-        ctx.lineTo(x, y)
-        ctx.stroke();
+        //
         ctx.beginPath();
         ctx.strokeStyle = colors[i];
-        ctx.fillStyle = "white";
-        ctx.arc(x, y, 9, 0, 2*Math.PI, false);
-        ctx.stroke();
+        ctx.fillStyle = "rgba(255,255,255,0.5)";
+        ctx.arc(x, y, 8, 0, 2*Math.PI, false);
         ctx.fill();
+        ctx.stroke();
+        //
+        ctx.beginPath();
+        ctx.fillStyle = "black";
+        ctx.arc(x, y, 2, 0, 2*Math.PI, false);
+        ctx.fill();
+        //
+        ctx.beginPath();
         ctx.moveTo(x, y);
+        ctx.strokeStyle = colors[i];
+        var xyArrNext = xyArr[(i+1)%4];
+        ctx.lineTo(xyArrNext[0], xyArrNext[1]);
+        ctx.stroke();
     }
 }
 
