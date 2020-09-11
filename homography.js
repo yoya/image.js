@@ -72,7 +72,7 @@ function main() {
         var [x, y] = params[target.id]
         // console.debug(eventType, x, y, params.markerArray);
         //
-        let hittestRadius2 = 7 ** 2;
+        let hittestRadius2 = 10 ** 2;
         let markerArray = params.markerArray;
         switch (eventType) {
         case "mousedown":
