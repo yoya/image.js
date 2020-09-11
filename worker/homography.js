@@ -8,13 +8,12 @@ importScripts("../lib/canvas_interpolation.js");
 importScripts("../lib/math.js");
 
 onmessage = function(e) {
-    console.debug("drawHomography onmessage", e.data);
+    // console.debug("drawHomography onmessage", e.data);
     var srcImageData = e.data.image;
     var coeff = e.data.coeff;
     var interpolation = e.data.interpolation;
     var width = srcImageData.width, height = srcImageData.height;
     var dstImageData = new ImageData(width, height);
-    console.debug("coeff:", coeff);
     //
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
