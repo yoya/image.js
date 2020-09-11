@@ -23,8 +23,9 @@ function coeffNameIndex(name) {
 function coeffValueSet(coeff) {
     for (let i = 0, n = coeffNameList.length; i < n ; i++) {
         let cName = coeffNameList[i];
-        document.getElementById(cName+"Range").value = coeff[i];
-        document.getElementById(cName+"Text").value = coeff[i];
+        var range = document.getElementById(cName+"Range");
+        range.value = coeff[i];
+        document.getElementById(cName+"Text").value = range.value;
     }
 }
 
