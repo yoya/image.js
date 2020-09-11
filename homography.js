@@ -149,6 +149,11 @@ function drawHomograpy(srcImage, srcCanvas, dstCanvas, params, sync) {
     drawSrcImage(srcImage, srcCanvas, params["maxWidthHeightRange"]);
     //
     params.marker = params.markerCheckbox;
+    if (params.interpolationSelect === "NNBL") {
+        params.interpolation = sync? "BL": "NN";
+    } else {
+        params.interpolation = params.interpolationSelect;
+    }
     worker.process(srcCanvas, dstCanvas, params, sync);
     worker.addListener(function() {
         if (params.marker) {

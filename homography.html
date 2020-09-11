@@ -7,12 +7,18 @@
   </head>
   <body>
     <div class="container">
-      <div class="controlPanel" style="display:flex">
+      <div class="controlPanel" style="display:flex;">
         <div>
-	  maxWidthHeight: <br />
+	  maxWidthHeight:
           <input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
           <br />
-          marker:<input id="markerCheckbox" type="checkbox" checked="checked" />
+          marker:<input id="markerCheckbox" type="checkbox" checked="checked" />  <br />
+          <span style="position:relative; top:-1ex;"> Interpolation: </span>
+          <select id="interpolationSelect" size="3">
+            <option value="NN"           > Nearest neighbor </option>
+            <option value="NNBL" selected> NN & BL </option>
+            <option value="BL"           > Bi-linear </option>
+          </select>
         </div>
         <div>
           Reverse Projection parameter: <br />
