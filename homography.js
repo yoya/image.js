@@ -34,14 +34,10 @@ function main() {
     let srcCanvas = document.getElementById("srcCanvas");
     let dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    let maxWidthHeightRange = document.getElementById("maxWidthHeightRange");
-    let markerCheckbox = document.getElementById("markerCheckbox");
     var params = {
-        maxWidthHeight: parseFloat(maxWidthHeightRange.value),
         coeff: [1, 0, 0,
                 0, 1, 0,
                 0, 0, 1],
-        marker: markerCheckbox.checked,
         grabbedMarker: null,
     };
     dropFunction(document, function(dataURL) {
@@ -53,21 +49,20 @@ function main() {
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
                   "markerCheckbox":null,
+                  "interpolationSelect":null,
                   "aRange":"aText", "bRange":"bText", "cRange":"cText",
                   "dRange":"dText", "eRange":"eText", "fRange":"fText",
                   "gRange":"gText", "hRange":"hText"},
 		 function(target, rel) {
-                     params["maxWidthHeight"] = parseFloat(maxWidthHeightRange.value);
-                     params["marker"] = markerCheckbox.checked;
-
+                     // params["maxWidthHeight"] = parseFloat(maxWidthHeightRange.value);
                      let num = coeffNameIndex(target.id);
                      if (num >= 0) {
                          params.coeff[num] = parseFloat(target.value);
                      }
                      drawHomograpy(srcImage, srcCanvas, dstCanvas, params, rel);
-		 } );
+		 }, params);
     bindCursolFunction("srcCanvas", params, function(target, eventType) {
-        if ((!params.marker) || (!params.markerArray)) {
+        if ((!params.markerCheckbox) || (!params.markerArray)) {
             return ;  // skip
         }
         var [x, y] = params[target.id]
@@ -151,8 +146,9 @@ function markers2coeff(markerArray) {
 var worker = new workerProcess("worker/homography.js");
 
 function drawHomograpy(srcImage, srcCanvas, dstCanvas, params, sync) {
-    drawSrcImage(srcImage, srcCanvas, params["maxWidthHeight"]);
+    drawSrcImage(srcImage, srcCanvas, params["maxWidthHeightRange"]);
     //
+    params.marker = params.markerCheckbox;
     worker.process(srcCanvas, dstCanvas, params, sync);
     worker.addListener(function() {
         if (params.marker) {
