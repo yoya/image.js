@@ -51,7 +51,7 @@ function drawSrcImageAndGamma(srcImage, srcCanvas, dstCancas, gammaCanvas, sync)
     var G = document.getElementById("GCheckbox").checked;
     var B = document.getElementById("BCheckbox").checked;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawGammaGraph(gammaCanvas, gamma);
+    drawGammaGraph(gammaCanvas, gamma, [R, G, B]);
     var params = {
         RGamma: R?gamma:1.0,
         GGamma: G?gamma:1.0,
@@ -60,23 +60,17 @@ function drawSrcImageAndGamma(srcImage, srcCanvas, dstCancas, gammaCanvas, sync)
     drawGammaImage(srcCanvas, dstCanvas, params, sync);
 }
 
-function drawGammaGraph(gammaCanvas, gamma) {
-    var ctx = gammaCanvas.getContext("2d");
-    ctx.fillStyle="black";
-    ctx.fillRect(0, 0, 256, 256);
-    ctx.fillStyle="white";
-    ctx.beginPath();
-    ctx.moveTo(256, 0)
-    ctx.lineTo(256, 256);
-    ctx.lineTo(0, 256);
-    for (var x = 0 ; x < 256 ; x++) {
-	var v1 = x / 255;
-    	var v2 = Math.pow(v1, gamma);
-	var y = (1 - v2) * 255;
-	ctx.lineTo(x, y);
+function drawGammaGraph(canvas, gamma, RGBchecked) {
+    let ctx = canvas.getContext("2d");
+    let caption = "";
+    drawCurveGraphBase(canvas, caption);
+    ctx.globalCompositeOperation = "lighter";
+    for (let i in RGBchecked) {
+        let checked = RGBchecked[i];
+        let data = {Count: 1, Gamma: (checked? gamma: 1.0)};
+        let color = ["#F00", "#0F0", "#00F"][i];
+        drawCurveGraphLine(canvas, data, color)
     }
-    ctx.closePath();
-    ctx.fill();
 }
 
 var worker = new workerProcess("worker/gamma.js");
