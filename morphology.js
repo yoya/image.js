@@ -73,17 +73,6 @@ function makeStructureTable(structureType, filterWindow) {
 	    }
 	}
 	break;
-    case "cross":
-	var center = Math.floor(filterWindow/2);
-	for (var y = 0 ; y < filterWindow; y++) {
-	    for (var x = 0 ; x < filterWindow; x++) {
-		if ((x === center) || (y === center)) {
-		    structureTable[i] = 1;
-		}
-		i++;
-	    }
-	}
-	break;
     case "circle":
 	var center = Math.floor(filterWindow/2);
 	var radius = center + 0.25;
@@ -104,6 +93,39 @@ function makeStructureTable(structureType, filterWindow) {
 		var adx = Math.abs(x - center);
 		var ady = Math.abs(y - center);
 		if ((adx + ady) <=  center) {
+		    structureTable[i] = 1;
+		}
+		i++;
+	    }
+	}
+	break;
+    case "cross":
+	var center = Math.floor(filterWindow/2);
+	for (var y = 0 ; y < filterWindow; y++) {
+	    for (var x = 0 ; x < filterWindow; x++) {
+		if ((x === center) || (y === center)) {
+		    structureTable[i] = 1;
+		}
+		i++;
+	    }
+	}
+	break;
+    case "horizontal":
+	var center = Math.floor(filterWindow/2);
+	for (var y = 0 ; y < filterWindow; y++) {
+	    for (var x = 0 ; x < filterWindow; x++) {
+		if (y === center) {
+		    structureTable[i] = 1;
+		}
+		i++;
+	    }
+	}
+	break;
+    case "vertical":
+	var center = Math.floor(filterWindow/2);
+	for (var y = 0 ; y < filterWindow; y++) {
+	    for (var x = 0 ; x < filterWindow; x++) {
+		if (x === center) {
 		    structureTable[i] = 1;
 		}
 		i++;
