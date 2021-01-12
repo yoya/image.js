@@ -49,7 +49,7 @@ function main() {
 			 filterWindow = Math.floor(sigma * 5 - 3) * 2 + 1;
 			 filterWindow = (filterWindow < 1)?1:filterWindow;
 			 document.getElementById("filterWindowRange").value = filterWindow;
-                         filterWindow = document.getElementById("filterWindowRange");
+                         filterWindow = document.getElementById("filterWindowRange").value;
 			 document.getElementById("filterWindowText").value = filterWindow;
                          params["filterWindowRange"] = parseFloat(filterWindow);
 		     }
