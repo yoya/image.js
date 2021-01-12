@@ -34,7 +34,7 @@ function main() {
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function(target, rel) {
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params, rel);
-		 } );
+		 }, params);
     bindFunction({"filterSelect":null,
 		  "filterWindowRange":"filterWindowText",
 		  "sigmaRange":"sigmaText",
