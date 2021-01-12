@@ -34,7 +34,7 @@ function drawPascalTriangle(canvas) {
     var unitY = height / nPascal;
     for (var i = 0 ; i < nPascal ; i++) {
         var y = i * unitY;
-        var triangleArr = pascalTriangle(i);
+        var triangleArr = pascalTriangle(i+1);
         for (var j = 0 ; j < (i+1) ; j++) {
             var x = (j+(nPascal-i-1)/2)*unitX; // centering
             var value = triangleArr[j];

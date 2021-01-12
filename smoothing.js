@@ -100,7 +100,7 @@ function makeFilterMatrix(filter, filterWindow, sigma) {
 	filterMatrix = filterMatrix.map(function(v) { return 1; });
 	break;
     case "pascal":
-	var pt = pascalTriangle(filterWindow - 1);
+	var pt = pascalTriangle(filterWindow);
 	for (var y = 0 ; y < filterWindow; y++) {
 	    for (var x = 0 ; x < filterWindow; x++) {
 		filterMatrix[i++] = pt[x] * pt[y];
