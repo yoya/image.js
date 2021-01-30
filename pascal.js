@@ -66,7 +66,7 @@ function drawPascalTriangle(canvas) {
         }
     }
     if (bottomBar) {
-        var triangleArr = pascalTriangle(nPascal - 1);
+        var triangleArr = pascalTriangle(nPascal);
         var maxValue = Math.max.apply(null, triangleArr)
         for (var i = 0 ; i < nPascal ; i++) {
             var value = triangleArr[i];
