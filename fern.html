@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2017/04/02- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Fern </title>
+    <link rel="stylesheet" href="index.css">
+    <style>
+      canvas { background-color:black; }
+      </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel">
+	Width:<input id="widthRange" type="range" min="64" max="2048" step="1" value="420">:<input type="text" id="widthText" size="5">
+        Height:<input id="heightRange" type="range" min="64" max="2048" step="1" value="640">:<input type="text" id="heightText" size="5">
+        Count:<input id="countRange" type="range" min="10" max="10000" step="1" value="1000">:<input type="text" id="countText" size="5">
+      </div> <!-- controlPanel -->
+      <canvas id="canvas" class="borderRed" width=320 height=320> canvas </canvas>
+    </div>  <!-- container -->
+    <small> (c) <a href="https://twitter.com/awotere7/status/1363471771836567559"> https://twitter.com/awotere7/status/1363471771836567559 </a> </small>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="fern.js"> </script>
+  </body>
+</html>
