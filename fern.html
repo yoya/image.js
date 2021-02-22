@@ -10,10 +10,14 @@
   </head>
   <body>
     <div class="container">
-      <div class="controlPanel">
-	Width:<input id="widthRange" type="range" min="64" max="2048" step="1" value="420">:<input type="text" id="widthText" size="5">
+      <div class="controlPanel" style="display:flex">
+      <div>
+	Width:<input id="widthRange" type="range" min="64" max="2048" step="1" value="420">:<input type="text" id="widthText" size="5"> <br />
         Height:<input id="heightRange" type="range" min="64" max="2048" step="1" value="640">:<input type="text" id="heightText" size="5">
-        Count:<input id="countRange" type="range" min="10" max="10000" step="1" value="1000">:<input type="text" id="countText" size="5">
+      </div>
+      <div>
+        Count:<input id="countRange" type="range" min="10" max="100000" step="1" value="1000">:<input type="text" id="countText" size="7">
+      </div>
       </div> <!-- controlPanel -->
       <canvas id="canvas" class="borderRed" width=320 height=320> canvas </canvas>
     </div>  <!-- container -->

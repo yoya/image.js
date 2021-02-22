@@ -48,15 +48,15 @@ function drawFern(canvas) {
     const count =  parseFloat(countRange.value);
     canvas.width = width;
     canvas.height = height;
+    var imageData = ctx.createImageData(width, height);
     var x = 0, y = 0;
-    ctx.globalCompositeOperation = "lighter";
-    ctx.fillStyle = "#0c0";
     for (let i = 0; i < count; i++) {
-        ctx.beginPath();
-        const xx = (x + 2.4) * width  / 5.3;
-        const yy = (y + 0.5) * height / 11;
-        ctx.arc(xx, yy, 1, 0, 2*Math.PI);
-        ctx.fill();
+        const xx = (x + 2.5) * width  / 5.3;
+        const yy = (10.5 - y) * height / 11;
+        const offset = ((xx|0) + (yy|0) * width) * 4;
+        imageData.data[offset+ 1] += 0xc0;  // green
+        imageData.data[offset+ 3] = 255;    // alpha
         [x, y] = fern(x, y);
     }
+    ctx.putImageData(imageData, 0, 0);
 }
