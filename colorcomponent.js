@@ -59,6 +59,17 @@ function colorComponent(imageData, x, y, component, ampArr) {
 	rgb3 = [0, 0, b];
 	rgb5 = [r, g, b];
 	break;
+    case "rgba":
+        r *= ampArr[0];
+        g *= ampArr[1];
+        b *= ampArr[2];
+        a *= ampArr[3];
+	rgb1 = [r, 0, 0];
+	rgb2 = [0, g, 0];
+	rgb3 = [0, 0, b];
+	rgb4 = [a, a, a];
+	rgb5 = [r, g, b, a];
+	break;
     case "cmyk": // naive convert
 	var [c, m, y, k] = RGB2CMYK(rgba);
         c *= ampArr[0];
@@ -174,10 +185,10 @@ function colorComponent(imageData, x, y, component, ampArr) {
     }
     rgbaArr = [rgb1, rgb2, rgb3, rgb4, rgb5].map(function(arr) {
 	if (arr === null) { return null; }
-	if (arr.length === 3) {
+	if ((arr.length === 3) || (arr.length === 4)) {
 	    arr.push(a) ; return arr;
 	}
-        console.error("arr.length:"+arr.length+" !== 3")
+        console.error("arr.length:"+arr.length+" !== 3, 4")
     });
     return rgbaArr;
 }
