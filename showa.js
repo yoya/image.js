@@ -29,15 +29,20 @@ function drawSrcImageAndShowa(srcImage, srcCanvas, dstCancas) {
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawShowa(srcCanvas, dstCanvas);
 }
+
 function colortrans_showa(r, g, b) {
     return [
-        0.7 * r + 0.1 * g + 0.2 * b,
+        0.65 * r + 0.25 * g + 0.1 * b,
         0.0 * r + 0.8 * g + 0.2 * b,
-        0.1 * r + 0.2 * g + 0.6 * b
+        //0.7 * r + 0.1 * g + 0.2 * b,
+        //0.0 * r + 0.8 * g + 0.2 * b,
+        //0.6 * r + 0.2 * g + 0.2 * b,
+        //0.1 * r + 0.8 * g + 0.2 * b,
+        0.1 * r + 0.2 * g + 0.7 * b
     ];
 }
     
-function contrast_showa(x) {
+function contrast_showa(x) {  // no use.
     if (Array.isArray(x)) {
         let arr = []
         for (let i = 0, n = x.length ; i < n; i++) {
@@ -46,6 +51,37 @@ function contrast_showa(x) {
         return arr;
     }
     return (2*x +1)/4 - Math.tan(1.1 - 2*x)/8;
+}
+
+function noize_showa() {
+    const r0 = Math.random(), r1 = 64 * Math.random()
+    let rr = 0, rg = 0, rb = 0;
+    if (r0 < 0.25) {
+        rr = r1 * Math.random();
+    } else if (r0 < 0.75) {
+        rg = r1 * Math.random();
+    } else {
+        rb = r1 * Math.random();
+    }
+    return [rr, rg, rb];
+}
+
+function mozaic(imageData) {
+    let width = imageData.width, height = imageData.height;
+    let count = width * height / 5;
+    for (let i = 0; i < count; i++) {
+        var x1 = (Math.random() * width) | 0;
+        var y1 = (Math.random() * height) | 0;
+        var x2 = (Math.random() * width) | 0;
+        var y2 = (Math.random() * height) | 0;
+        let rgba1 = getRGBA(imageData, x1, y1);
+        let rgba2 = getRGBA(imageData, x2, y2);
+        let [dr, dg, db] = noize_showa();
+        rgba1[0] -= dr;  rgba1[1] -= dg; rgba1[2] -= db;
+        rgba2[0] += dr;  rgba2[1] += dg; rgba2[2] += db;
+        setRGBA(imageData, x1, y1, rgba1);
+        setRGBA(imageData, x2, y2, rgba2);
+    }
 }
 
 function smoothing(srcImageData, srcX, srcY, filterMatrix, convWindow) {
@@ -66,19 +102,6 @@ function smoothing(srcImageData, srcX, srcY, filterMatrix, convWindow) {
     return [r2, g2, b2, a];
 }
 
-function noize_showa(r, g, b) {
-    const r0 = Math.random(), r1 = 0.2 * Math.random()
-    let rr = 0, rg = 0, rb = 0;
-    if (r0 < 0.25) {
-        rr = r1 * Math.random();
-    } else if (r0 < 0.75) {
-        rg = r1 * Math.random();
-    } else {
-        rb = r1 * Math.random();
-    }
-    return [ r - rr, g - rg, b - rb ];
-}
-
 function drawShowa(srcCanvas, dstCanvas) {
     console.debug("drawShowa");
     const srcCtx = srcCanvas.getContext("2d");
@@ -91,7 +114,7 @@ function drawShowa(srcCanvas, dstCanvas) {
     const tmpImageData = srcCtx.getImageData(0, 0, width, height);
     const dstImageData = dstCtx.createImageData(width, height);
 
-    const radius = 1.0;
+    const radius = 1.1;
     const slant = Math.sqrt(width*width + height*height) * radius;
 
     for (let y = 0 ; y < height; y++) {
@@ -99,9 +122,8 @@ function drawShowa(srcCanvas, dstCanvas) {
 	    let [r,g,b,a] = getRGBA(srcImageData, x, y);
             r /= 255 ;  g /= 255 ; b /= 255;
             // show filter
-            [r, g, b] = contrast_showa([r, g, b])
+            // [r, g, b] = contrast_showa([r, g, b])
             [r, g, b] = colortrans_showa(r, g, b)
-            [r, g, b] = noize_showa(r, g, b)
             // vinette
             const dx = (x - (width  / 2)) / (slant/2);
             const dy = (y - (height / 2)) / (slant/2);
@@ -113,6 +135,7 @@ function drawShowa(srcCanvas, dstCanvas) {
 	    setRGBA(tmpImageData, x, y, [r,g,b,a]);
 	}
     }
+    mozaic(tmpImageData);
     const filterWindow = 3;
     let filterMatrix = new Float32Array(filterWindow * filterWindow);
     const triangle = pascalTriangle(filterWindow);
