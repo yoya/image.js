@@ -54,7 +54,7 @@ function contrast_showa(x) {  // no use.
 }
 
 function noize_showa() {
-    const r0 = Math.random(), r1 = 64 * Math.random()
+    const r0 = Math.random(), r1 = 48 * Math.random()
     let rr = 0, rg = 0, rb = 0;
     if (r0 < 0.25) {
         rr = r1 * Math.random();
