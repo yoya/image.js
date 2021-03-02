@@ -54,7 +54,7 @@ function contrast_showa(x) {  // no use.
 }
 
 function noize_showa() {
-    const r0 = Math.random(), r1 = 48 * Math.random()
+    const r0 = Math.random(), r1 = 32 * Math.random()
     let rr = 0, rg = 0, rb = 0;
     if (r0 < 0.25) {
         rr = r1 * Math.random();
@@ -68,19 +68,18 @@ function noize_showa() {
 
 function mozaic(imageData) {
     let width = imageData.width, height = imageData.height;
-    let count = width * height / 5;
-    for (let i = 0; i < count; i++) {
-        var x1 = (Math.random() * width) | 0;
-        var y1 = (Math.random() * height) | 0;
-        var x2 = (Math.random() * width) | 0;
-        var y2 = (Math.random() * height) | 0;
-        let rgba1 = getRGBA(imageData, x1, y1);
-        let rgba2 = getRGBA(imageData, x2, y2);
-        let [dr, dg, db] = noize_showa();
-        rgba1[0] -= dr;  rgba1[1] -= dg; rgba1[2] -= db;
-        rgba2[0] += dr;  rgba2[1] += dg; rgba2[2] += db;
-        setRGBA(imageData, x1, y1, rgba1);
-        setRGBA(imageData, x2, y2, rgba2);
+    for (let y1 = 0; y1 < width; y1++) {
+        for (let x1 = 0; x1 < width; x1++) {
+            var x2 = x1 + (3*(Math.random()-0.5)) | 0;
+            var y2 = y2 + (3*(Math.random()-0.5)) | 0;
+            let rgba1 = getRGBA(imageData, x1, y1);
+            let rgba2 = getRGBA(imageData, x2, y2);
+            let [dr, dg, db] = noize_showa();
+            rgba1[0] -= dr;  rgba1[1] -= dg; rgba1[2] -= db;
+            rgba2[0] += dr;  rgba2[1] += dg; rgba2[2] += db;
+            setRGBA(imageData, x1, y1, rgba1);
+            setRGBA(imageData, x2, y2, rgba2);
+        }
     }
 }
 
