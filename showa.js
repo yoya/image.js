@@ -68,12 +68,12 @@ function noize_showa() {
 
 function mozaic(imageData) {
     let width = imageData.width, height = imageData.height;
-    for (let y1 = 0; y1 < width; y1++) {
-        for (let x1 = 0; x1 < width; x1++) {
+    for (let y1 = 3; y1 < height; y1++) {
+        for (let x1 = 3; x1 < width; x1++) {
             var x2 = x1 + (3*(Math.random()-0.5)) | 0;
-            var y2 = y2 + (3*(Math.random()-0.5)) | 0;
-            let rgba1 = getRGBA(imageData, x1, y1);
-            let rgba2 = getRGBA(imageData, x2, y2);
+            var y2 = y1 + (3*(Math.random()-0.5)) | 0;
+            let rgba1 = getRGBA(imageData, x1, y1, OUTFILL_EDGE);
+            let rgba2 = getRGBA(imageData, x2, y2, OUTFILL_EDGE);
             let [dr, dg, db] = noize_showa();
             rgba1[0] -= dr;  rgba1[1] -= dg; rgba1[2] -= db;
             rgba2[0] += dr;  rgba2[1] += dg; rgba2[2] += db;
