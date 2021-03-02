@@ -105,7 +105,7 @@ function makeFilterMatrix(filter, filterWindow, sigma) {
 	    for (var x = 0 ; x < filterWindow; x++) {
 		filterMatrix[i++] = pt[x] * pt[y];
 	    }
-	}1
+	}
 	break;
     case "gaussian":
 	var center = Math.floor(filterWindow/2);
