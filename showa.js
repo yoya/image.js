@@ -84,27 +84,23 @@ function drawShowa(srcCanvas, dstCanvas) {
     console.debug("drawShowa");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
-    var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var dstWidth  = srcWidth;
-    var dstHeight = srcHeight;
-    dstCanvas.width  = dstWidth;
-    dstCanvas.height = dstHeight;
+    var width = srcCanvas.width, height = srcCanvas.height;
+    dstCanvas.width  = width;
+    dstCanvas.height = height;
     //
-    var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-    var tmpImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-    var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
+    var srcImageData = srcCtx.getImageData(0, 0, width, height);
+    var tmpImageData = srcCtx.getImageData(0, 0, width, height);
+    var dstImageData = dstCtx.createImageData(width, height);
 
-    for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var srcX = dstX;
-	    var srcY = dstY;
-	    var [r,g,b,a] = getRGBA(srcImageData, srcX, srcY);
+    for (var y = 0 ; y < height; y++) {
+        for (var x = 0 ; x < width; x++) {
+	    var [r,g,b,a] = getRGBA(srcImageData, x, y);
             r /= 255 ;  g /= 255 ; b /= 255;
             [r, g, b] = contrast_showa([r, g, b])
             [r, g, b] = colortrans_showa(r, g, b)
             [r, g, b] = noize_showa(r, g, b)
             r *= 255 ; g *= 255 ; b *= 255;
-	    setRGBA(tmpImageData, dstX, dstY, [r,g,b,a]);
+	    setRGBA(tmpImageData, x, y, [r,g,b,a]);
 	}
     }
     var filterWindow = 3;
@@ -118,13 +114,11 @@ function drawShowa(srcCanvas, dstCanvas) {
     }
     var total = filterMatrix.reduce(function(p, v) {return p+v; });;
     filterMatrix = filterMatrix.map(function(v) { return v / total; })
-    for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var srcX = dstX;
-	    var srcY = dstY;
-            // var rgba = getRGBA(tmpImageData, srcX, srcY);
-            var rgba = smoothing(tmpImageData, srcX, srcY, filterMatrix, filterWindow);
-            setRGBA(dstImageData, dstX, dstY, rgba);
+    for (var y = 0 ; y < height; y++) {
+        for (var x = 0 ; x < width; x++) {
+            // var rgba = getRGBA(tmpImageData, x, y);
+            var rgba = smoothing(tmpImageData, x, y, filterMatrix, filterWindow);
+            setRGBA(dstImageData, x, y, rgba);
         }
     }    
     
