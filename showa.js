@@ -9,9 +9,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function main() {
     // console.debug("main");
-    var srcCanvas = document.getElementById("srcCanvas");
-    var dstCanvas = document.getElementById("dstCanvas");
-    var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    const srcCanvas = document.getElementById("srcCanvas");
+    const dstCanvas = document.getElementById("dstCanvas");
+    let srcImage = new Image(srcCanvas.width, srcCanvas.height);
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
@@ -25,7 +25,7 @@ function main() {
 		 } );
 }
 function drawSrcImageAndShowa(srcImage, srcCanvas, dstCancas) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    const maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawShowa(srcCanvas, dstCanvas);
 }
@@ -49,27 +49,26 @@ function contrast_showa(x) {
 }
 
 function smoothing(srcImageData, srcX, srcY, filterMatrix, convWindow) {
-    var startX = srcX - (convWindow-1)/2, endX = startX + convWindow;
-    var startY = srcY - (convWindow-1)/2, endY = startY + convWindow;
-    var i = 0;
-    var [r2, g2, b2, a2] = [0,0,0,0];
-    for (var y = startY ; y < endY ; y++) {
-        for (var x = startX ; x < endX ; x++) {
-            var [r, g, b, a] = getRGBA(srcImageData, x, y, OUTFILL_EDGE);
+    const startX = srcX - (convWindow-1)/2, endX = startX + convWindow;
+    const startY = srcY - (convWindow-1)/2, endY = startY + convWindow;
+    let i = 0;
+    let [r2, g2, b2, a2] = [0,0,0,0];
+    for (let y = startY ; y < endY ; y++) {
+        for (let x = startX ; x < endX ; x++) {
+            const [r, g, b, a] = getRGBA(srcImageData, x, y, OUTFILL_EDGE);
             r2 += r * filterMatrix[i];
             g2 += g * filterMatrix[i];
             b2 += b * filterMatrix[i];
             i++;
         }
     }
-    var [r, g, b, a] = getRGBA(srcImageData, srcX, srcY);
+    const [r, g, b, a] = getRGBA(srcImageData, srcX, srcY);
     return [r2, g2, b2, a];
 }
 
 function noize_showa(r, g, b) {
-    var r0 = Math.random()
-    var r1 = 0.2 * Math.random()
-    var rr = 0, rg = 0, rb = 0;
+    const r0 = Math.random(), r1 = 0.2 * Math.random()
+    let rr = 0, rg = 0, rb = 0;
     if (r0 < 0.25) {
         rr = r1 * Math.random();
     } else if (r0 < 0.75) {
@@ -82,19 +81,19 @@ function noize_showa(r, g, b) {
 
 function drawShowa(srcCanvas, dstCanvas) {
     console.debug("drawShowa");
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtx = dstCanvas.getContext("2d");
-    var width = srcCanvas.width, height = srcCanvas.height;
+    const srcCtx = srcCanvas.getContext("2d");
+    const dstCtx = dstCanvas.getContext("2d");
+    const width = srcCanvas.width, height = srcCanvas.height;
     dstCanvas.width  = width;
     dstCanvas.height = height;
     //
-    var srcImageData = srcCtx.getImageData(0, 0, width, height);
-    var tmpImageData = srcCtx.getImageData(0, 0, width, height);
-    var dstImageData = dstCtx.createImageData(width, height);
+    const srcImageData = srcCtx.getImageData(0, 0, width, height);
+    const tmpImageData = srcCtx.getImageData(0, 0, width, height);
+    const dstImageData = dstCtx.createImageData(width, height);
 
-    for (var y = 0 ; y < height; y++) {
-        for (var x = 0 ; x < width; x++) {
-	    var [r,g,b,a] = getRGBA(srcImageData, x, y);
+    for (let y = 0 ; y < height; y++) {
+        for (let x = 0 ; x < width; x++) {
+	    let [r,g,b,a] = getRGBA(srcImageData, x, y);
             r /= 255 ;  g /= 255 ; b /= 255;
             [r, g, b] = contrast_showa([r, g, b])
             [r, g, b] = colortrans_showa(r, g, b)
@@ -103,21 +102,21 @@ function drawShowa(srcCanvas, dstCanvas) {
 	    setRGBA(tmpImageData, x, y, [r,g,b,a]);
 	}
     }
-    var filterWindow = 3;
-    var filterMatrix = new Float32Array(filterWindow * filterWindow);
-    var triangle = pascalTriangle(filterWindow);
-    var i = 0;
-    for (var y = 0; y < filterWindow; y++) {
-        for (var x = 0 ; x < filterWindow; x++) {
+    const filterWindow = 3;
+    let filterMatrix = new Float32Array(filterWindow * filterWindow);
+    const triangle = pascalTriangle(filterWindow);
+    let i = 0;
+    for (let y = 0; y < filterWindow; y++) {
+        for (let x = 0 ; x < filterWindow; x++) {
             filterMatrix[i++] = triangle[x] * triangle[y];
         }
     }
-    var total = filterMatrix.reduce(function(p, v) {return p+v; });;
+    const total = filterMatrix.reduce(function(p, v) {return p+v; });;
     filterMatrix = filterMatrix.map(function(v) { return v / total; })
-    for (var y = 0 ; y < height; y++) {
-        for (var x = 0 ; x < width; x++) {
-            // var rgba = getRGBA(tmpImageData, x, y);
-            var rgba = smoothing(tmpImageData, x, y, filterMatrix, filterWindow);
+    for (let y = 0 ; y < height; y++) {
+        for (let x = 0 ; x < width; x++) {
+            // const rgba = getRGBA(tmpImageData, x, y);
+            const rgba = smoothing(tmpImageData, x, y, filterMatrix, filterWindow);
             setRGBA(dstImageData, x, y, rgba);
         }
     }    
