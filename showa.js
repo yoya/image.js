@@ -113,27 +113,17 @@ function drawShowa(srcCanvas, dstCanvas) {
     const tmpImageData = srcCtx.getImageData(0, 0, width, height);
     const dstImageData = dstCtx.createImageData(width, height);
 
-    const radius = 1.1;
-    const slant = Math.sqrt(width*width + height*height) * radius;
-
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
 	    let [r,g,b,a] = getRGBA(srcImageData, x, y);
-            r /= 255 ;  g /= 255 ; b /= 255;
-            // show filter
+            // showa filter
             // [r, g, b] = contrast_showa([r, g, b])
             [r, g, b] = colortrans_showa(r, g, b)
-            // vinette
-            const dx = (x - (width  / 2)) / (slant/2);
-            const dy = (y - (height / 2)) / (slant/2);
-            const rad = Math.sqrt(dx*dx + dy*dy);
-            const factor = Math.pow(Math.cos(rad/2), 4);
-            r *= factor; g *= factor ; b *= factor;
-            //
-            r *= 255 ; g *= 255 ; b *= 255;
 	    setRGBA(tmpImageData, x, y, [r,g,b,a]);
 	}
     }
+    const params = { radius:1.0, linearGamma:false, inverse:false };
+    mogrifyVinette(tmpImageData, params);
     mozaic(tmpImageData);
     const filterWindow = 3;
     let filterMatrix = new Float32Array(filterWindow * filterWindow);
