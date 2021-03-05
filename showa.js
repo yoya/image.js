@@ -30,29 +30,15 @@ function drawSrcImageAndShowa(srcImage, srcCanvas, dstCancas) {
     drawShowa(srcCanvas, dstCanvas);
 }
 
-function colortrans_showa(r, g, b) {
+function colortrans_showa(r, g, b, a) {
     return [
-        0.65 * r + 0.25 * g + 0.1 * b,
-        0.0 * r + 0.8 * g + 0.2 * b,
-        //0.7 * r + 0.1 * g + 0.2 * b,
-        //0.0 * r + 0.8 * g + 0.2 * b,
-        //0.6 * r + 0.2 * g + 0.2 * b,
-        //0.1 * r + 0.8 * g + 0.2 * b,
-        0.1 * r + 0.2 * g + 0.7 * b
+        0.65 * r + 0.25 * g + 0.10 * b,
+        0.00 * r + 0.80 * g + 0.20 * b,
+        0.10 * r + 0.20 * g + 0.70 * b,
+        a
     ];
 }
     
-function contrast_showa(x) {  // no use.
-    if (Array.isArray(x)) {
-        let arr = []
-        for (let i = 0, n = x.length ; i < n; i++) {
-            arr.push(contrast_showa(x[i]))
-        }
-        return arr;
-    }
-    return (2*x +1)/4 - Math.tan(1.1 - 2*x)/8;
-}
-
 function noize_showa() {
     const r0 = Math.random(), r1 = 32 * Math.random()
     let rr = 0, rg = 0, rb = 0;
@@ -66,7 +52,7 @@ function noize_showa() {
     return [rr, rg, rb];
 }
 
-function mozaic(imageData) {
+function mozaic_showa(imageData) {
     let width = imageData.width, height = imageData.height;
     for (let y1 = 3; y1 < height; y1++) {
         for (let x1 = 3; x1 < width; x1++) {
@@ -112,19 +98,16 @@ function drawShowa(srcCanvas, dstCanvas) {
     const srcImageData = srcCtx.getImageData(0, 0, width, height);
     const tmpImageData = srcCtx.getImageData(0, 0, width, height);
     const dstImageData = dstCtx.createImageData(width, height);
-
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
-	    let [r,g,b,a] = getRGBA(srcImageData, x, y);
-            // showa filter
-            // [r, g, b] = contrast_showa([r, g, b])
-            [r, g, b] = colortrans_showa(r, g, b)
-	    setRGBA(tmpImageData, x, y, [r,g,b,a]);
+	    const [r, g, b, a] = getRGBA(srcImageData, x, y);
+            const rgba = colortrans_showa(r, g, b, a)
+	    setRGBA(tmpImageData, x, y, rgba);
 	}
     }
     const params = { radius:1.0, linearGamma:false, inverse:false };
     mogrifyVinette(tmpImageData, params);
-    mozaic(tmpImageData);
+    mozaic_showa(tmpImageData);
     const filterWindow = 3;
     let filterMatrix = new Float32Array(filterWindow * filterWindow);
     const triangle = pascalTriangle(filterWindow);
@@ -138,7 +121,6 @@ function drawShowa(srcCanvas, dstCanvas) {
     filterMatrix = filterMatrix.map(function(v) { return v / total; })
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
-            // const rgba = getRGBA(tmpImageData, x, y);
             const rgba = smoothing(tmpImageData, x, y, filterMatrix, filterWindow);
             setRGBA(dstImageData, x, y, rgba);
         }
