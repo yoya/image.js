@@ -69,24 +69,6 @@ function mozaic_showa(imageData) {
     }
 }
 
-function smoothing(srcImageData, srcX, srcY, filterMatrix, convWindow) {
-    const startX = srcX - (convWindow-1)/2, endX = startX + convWindow;
-    const startY = srcY - (convWindow-1)/2, endY = startY + convWindow;
-    let i = 0;
-    let [r2, g2, b2, a2] = [0,0,0,0];
-    for (let y = startY ; y < endY ; y++) {
-        for (let x = startX ; x < endX ; x++) {
-            const [r, g, b, a] = getRGBA(srcImageData, x, y, OUTFILL_EDGE);
-            r2 += r * filterMatrix[i];
-            g2 += g * filterMatrix[i];
-            b2 += b * filterMatrix[i];
-            i++;
-        }
-    }
-    const [r, g, b, a] = getRGBA(srcImageData, srcX, srcY);
-    return [r2, g2, b2, a];
-}
-
 function drawShowa(srcCanvas, dstCanvas) {
     console.debug("drawShowa");
     const srcCtx = srcCanvas.getContext("2d");
@@ -97,7 +79,6 @@ function drawShowa(srcCanvas, dstCanvas) {
     //
     const srcImageData = srcCtx.getImageData(0, 0, width, height);
     const tmpImageData = srcCtx.getImageData(0, 0, width, height);
-    const dstImageData = dstCtx.createImageData(width, height);
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
 	    const [r, g, b, a] = getRGBA(srcImageData, x, y);
@@ -105,26 +86,18 @@ function drawShowa(srcCanvas, dstCanvas) {
 	    setRGBA(tmpImageData, x, y, rgba);
 	}
     }
-    const params = { radius:1.0, linearGamma:false, inverse:false };
-    mogrifyVinette(tmpImageData, params);
+    const params_vinette = { radius:1.0, linearGamma:false, inverse:false };
+    mogrifyVinette(tmpImageData, params_vinette);
     mozaic_showa(tmpImageData);
     const filterWindow = 3;
-    let filterMatrix = new Float32Array(filterWindow * filterWindow);
-    const triangle = pascalTriangle(filterWindow);
-    let i = 0;
-    for (let y = 0; y < filterWindow; y++) {
-        for (let x = 0 ; x < filterWindow; x++) {
-            filterMatrix[i++] = triangle[x] * triangle[y];
-        }
-    }
-    const total = filterMatrix.reduce(function(p, v) {return p+v; });;
-    filterMatrix = filterMatrix.map(function(v) { return v / total; })
-    for (let y = 0 ; y < height; y++) {
-        for (let x = 0 ; x < width; x++) {
-            const rgba = smoothing(tmpImageData, x, y, filterMatrix, filterWindow);
-            setRGBA(dstImageData, x, y, rgba);
-        }
-    }    
-    
+    const filterMatrix = makeKernel_PascalTriangle(filterWindow);
+    const params_smoothing = {
+        filterMatrix: filterMatrix,
+        filterWindow: filterWindow,
+        sigma: null,
+        bilateral: false,
+        colorScale: null
+    };
+    const dstImageData = convertSmoothing(tmpImageData, params_smoothing)
     dstCtx.putImageData(dstImageData, 0, 0);
 }

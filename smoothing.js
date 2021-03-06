@@ -92,38 +92,21 @@ function main() {
 
 
 function makeFilterMatrix(filter, filterWindow, sigma) {
+    console.debug("makeFilterMatrix:", filter, filterWindow, sigma);
     var filterArea = filterWindow * filterWindow;
     var filterMatrix = new Float32Array(filterArea);
     var i = 0;
     switch(filter) {
     case "average":
-	filterMatrix = filterMatrix.map(function(v) { return 1; });
+        var n = filterWindow * filterWindow;
+	filterMatrix = filterMatrix.map(function(v) { return 1 / n; });
 	break;
     case "pascal":
-	var pt = pascalTriangle(filterWindow);
-	for (var y = 0 ; y < filterWindow; y++) {
-	    for (var x = 0 ; x < filterWindow; x++) {
-		filterMatrix[i++] = pt[x] * pt[y];
-	    }
-	}
+        filterMatrix = makeKernel_PascalTriangle(filterWindow);
 	break;
     case "gaussian":
-	var center = Math.floor(filterWindow/2);
-	for (var y = 0 ; y < filterWindow; y++) {
-	    for (var x = 0 ; x < filterWindow; x++) {
-		var dx = Math.abs(x - center);
-		var dy = Math.abs(y - center);
-		filterMatrix[i++] = gaussian(dx, dy, sigma);
-	    }
-	}
+        filterMatrix = makeKernel_Gaussian(filterWindow, sigma);
 	break;
-    }
-    // division by sum
-    var total = filterMatrix.reduce(function(p, v) {return p+v; });;
-    if (total !== 0) {
-	filterMatrix = filterMatrix.map(function(v) {
-	    return v / total;
-	});
     }
     return filterMatrix;
 }
