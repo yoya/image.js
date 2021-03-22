@@ -31,7 +31,7 @@ function main() {
     var params = {};
     //
     var filterSelect = document.getElementById("filterSelect");
-    var normalizeCheckbox = document.getElementById("normalizeCheckbox");
+    var matrixNormalizeCheckbox = document.getElementById("matrixNormalizeCheckbox");
     var zerocenteringCheckbox = document.getElementById("zerocenteringCheckbox");
     //
     var filter = filterSelect.value;
@@ -56,7 +56,7 @@ function main() {
 		 }, params);
     bindFunction({"filterSelect":null,
                   "filterWindowRange":"filterWindowText",
-                  "normalizeCheckbox":null,
+                  "matrixNormalizeCheckbox":null,
                   "zerocenteringCheckbox":null},
 		 function(target) {
                      if (target.id === "filterSelect") {
@@ -195,10 +195,10 @@ function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, params) {
     //
     var filterMatrix = params["filterMatrix"];
     var filterWindow   = params["filterWindow"];
-    var normalize      = params["normalizeCheckbox"];
+    var matrixNormalize      = params["matrixNormalizeCheckbox"];
     var zerocentering  = params["zerocenteringCheckbox"];
     //
-    if (normalize) {
+    if (matrixNormalize) {
         var total = filterMatrix.reduce(function(a, b) { return a + b; });
         filterMatrix = filterMatrix.map(function(a) { return a / total });
     }
