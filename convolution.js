@@ -39,7 +39,6 @@ function main() {
     var filterWindowText  = document.getElementById("filterWindowText");
     var [filterMatrix, filterWindow] = filter2Matrix[filter];
     params["filterMatrix"] = filterMatrix;
-    console.log(filterWindow);
     filterWindowRange.value = filterWindow;
     filterWindowText.value = filterWindow;
     //
@@ -71,6 +70,7 @@ function main() {
                          filterMatrix = matResize(filterMatrix, oldFilterWindow, filterWindow);
                      }
                      params["filterMatrix"] = filterMatrix;
+                     params["filterWindow"] = filterWindow;
 		     bindTableFunction("filterMatrixTable", function(table, values, width) {
 			 params["filterMatrix"] = filterMatrix = values;
 			 drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params);
@@ -194,7 +194,7 @@ function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, params) {
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     //
     var filterMatrix = params["filterMatrix"];
-    var filterWindow   = params["filterWindowRange"];
+    var filterWindow   = params["filterWindow"];
     var normalize      = params["normalizeCheckbox"];
     var zerocentering  = params["zerocenteringCheckbox"];
     //
