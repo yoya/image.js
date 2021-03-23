@@ -30,8 +30,26 @@ function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
     drawCopy(srcCanvas, dstCanvas);
 }
 
-
 function drawCopy(srcCanvas, dstCanvas) {
+    // console.debug("drawCopy");
+    var srcCtx = srcCanvas.getContext("2d");
+    var dstCtx = dstCanvas.getContext("2d");
+    var width = srcCanvas.width, height = srcCanvas.height;
+    dstCanvas.width  = width;
+    dstCanvas.height = height;
+    //
+    var srcImageData = srcCtx.getImageData(0, 0, width, height);
+    var dstImageData = dstCtx.createImageData(width, height);
+    for (var y = 0 ; y < height; y++) {
+        for (var x = 0 ; x < width; x++) {
+	    var rgba = getRGBA(srcImageData, x, y);
+	    setRGBA(dstImageData, x, y, rgba);
+	}
+    }
+    dstCtx.putImageData(dstImageData, 0, 0);
+}
+
+function drawCopy2(srcCanvas, dstCanvas) {
     // console.debug("drawCopy");
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
