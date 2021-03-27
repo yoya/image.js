@@ -57,13 +57,16 @@ function main() {
                   "filterWindowRange":"filterWindowText",
                   "matrixNormalizeCheckbox":null,
                   "matrixZerocenteringCheckbox":null,
+                  "linearRGBCheckbox":null,
                   "imageNormalizeCheckbox":null},
 		 function(target) {
                      if (target.id === "filterSelect") {
 		         filter = params["filterSelect"];
 		         [filterMatrix, filterWindow] = filter2Matrix[filter];
                          filterWindowRange.value = filterWindow;
-                         filterWindowText.value = filterWindow;
+                         filterWindowText.value  = filterWindow;
+                         params["filterWindowRange"] = filterWindow;
+                         params["filterWindowText"]  = filterWindow;
                      } else {
                          var oldFilterWindow = filterWindow;
                          filterWindow = params["filterWindowRange"];
@@ -207,6 +210,7 @@ function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, params) {
     var filterWindow = params["filterWindow"];
     var matrixNormalize = params["matrixNormalizeCheckbox"];
     var zerocentering   = params["matrixZerocenteringCheckbox"];
+    var linearRGB       = params["linearRGBCheckbox"];
     var imageNormalize  = params["imageNormalizeCheckbox"];
     //
     if (matrixNormalize) {
@@ -220,6 +224,7 @@ function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, params) {
     var params_w = {
         filterMatrix:filterMatrix,
         filterWindow:filterWindow,
+        linearRGB:linearRGB,
         imageNormalize:imageNormalize,
     };
     worker.process(srcCanvas, dstCanvas, params_w, true);
