@@ -25,16 +25,16 @@ function convolution(srcImageData, srcX, srcY, filterMatrix, convWindow) {
     var startX = srcX - (convWindow-1)/2, endX = startX + convWindow;
     var startY = srcY - (convWindow-1)/2, endY = startY + convWindow;
     var i = 0;
-    var [r2, g2, b2, a2] = [0,0,0,0];
+    var [r, g, b, a] = getRGBA(srcImageData, srcX, srcY);  // original alpha
+    var [r2, g2, b2, a2] = [0, 0, 0, a];
     for (var y = startY ; y < endY ; y++) {
 	for (var x = startX ; x < endX ; x++) {
-	    var [r, g, b, a] = getRGBA(srcImageData, x, y, OUTFILL_EDGE);
+	    [r, g, b] = getRGBA(srcImageData, x, y, OUTFILL_EDGE);
 	    r2 += r * filterMatrix[i];
 	    g2 += g * filterMatrix[i];
 	    b2 += b * filterMatrix[i];
 	    i++;
 	}
     }
-    var [r, g, b, a] = getRGBA(srcImageData, srcX, srcY);
-    return [r2, g2, b2, a];
+    return [r2, g2, b2, a2];
 }
