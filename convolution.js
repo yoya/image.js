@@ -9,10 +9,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function matResize(filterMatrix, oldFilterWindow, filterWindow) {
     var newMatrix = [];
+    var offset = (oldFilterWindow - filterWindow) / 2;
     for (var y = 0 ; y < filterWindow ; y++) {
         for (var x = 0 ; x < filterWindow ; x++) {
-            if ((x < oldFilterWindow) && (y < oldFilterWindow)) {
-                newMatrix.push(filterMatrix[x + y * oldFilterWindow]);
+            var xx = x + offset, yy = y + offset;
+            if ((0 <= xx) && (xx < oldFilterWindow) &&
+                (0 <= yy) && (yy < oldFilterWindow)) {
+                newMatrix.push(filterMatrix[xx + yy * oldFilterWindow]);
             } else {
                 newMatrix.push(0);
             }
