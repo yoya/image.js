@@ -56,7 +56,7 @@ function main() {
     bindFunction({"filterSelect":null,
                   "filterWindowRange":"filterWindowText",
                   "matrixNormalizeCheckbox":null,
-                  "zerocenteringCheckbox":null,
+                  "matrixZerocenteringCheckbox":null,
                   "imageNormalizeCheckbox":null},
 		 function(target) {
                      if (target.id === "filterSelect") {
@@ -197,7 +197,7 @@ function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, params) {
     var filterMatrix = params["filterMatrix"];
     var filterWindow = params["filterWindow"];
     var matrixNormalize = params["matrixNormalizeCheckbox"];
-    var zerocentering   = params["zerocenteringCheckbox"];
+    var zerocentering   = params["matrixZerocenteringCheckbox"];
     var imageNormalize  = params["imageNormalizeCheckbox"];
     //
     if (matrixNormalize) {
