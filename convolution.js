@@ -31,12 +31,10 @@ function main() {
     var params = {};
     //
     var filterSelect = document.getElementById("filterSelect");
-    var matrixNormalizeCheckbox = document.getElementById("matrixNormalizeCheckbox");
-    var zerocenteringCheckbox = document.getElementById("zerocenteringCheckbox");
-    //
-    var filter = filterSelect.value;
     var filterWindowRange = document.getElementById("filterWindowRange");
     var filterWindowText  = document.getElementById("filterWindowText");
+    //
+    var filter = filterSelect.value;
     var [filterMatrix, filterWindow] = filter2Matrix[filter];
     params["filterMatrix"] = filterMatrix;
     params["filterWindow"] = filterWindow;
@@ -58,7 +56,8 @@ function main() {
     bindFunction({"filterSelect":null,
                   "filterWindowRange":"filterWindowText",
                   "matrixNormalizeCheckbox":null,
-                  "zerocenteringCheckbox":null},
+                  "zerocenteringCheckbox":null,
+                  "imageNormalizeCheckbox":null},
 		 function(target) {
                      if (target.id === "filterSelect") {
 		         filter = params["filterSelect"];
@@ -84,6 +83,7 @@ function main() {
 	params["filterMatrix"] = filterMatrix = values;
 	drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params);
     }, filterMatrix, filterWindow);
+    //
     console.log(filterMatrixTable);
 }
 
@@ -195,9 +195,10 @@ function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, params) {
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     //
     var filterMatrix = params["filterMatrix"];
-    var filterWindow   = params["filterWindow"];
-    var matrixNormalize      = params["matrixNormalizeCheckbox"];
-    var zerocentering  = params["zerocenteringCheckbox"];
+    var filterWindow = params["filterWindow"];
+    var matrixNormalize = params["matrixNormalizeCheckbox"];
+    var zerocentering   = params["zerocenteringCheckbox"];
+    var imageNormalize  = params["imageNormalizeCheckbox"];
     //
     if (matrixNormalize) {
         var total = filterMatrix.reduce(function(a, b) { return a + b; });
@@ -210,6 +211,7 @@ function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, params) {
     var params_w = {
         filterMatrix:filterMatrix,
         filterWindow:filterWindow,
+        imageNormalize:imageNormalize,
     };
     worker.process(srcCanvas, dstCanvas, params_w, true);
 }

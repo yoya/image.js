@@ -5,9 +5,11 @@
  */
 
 importScripts("../lib/canvas.js");
+importScripts("../lib/statistics.js");
 
 onmessage = function(e) {
-    var [srcImageData, filterMatrix, filterWindow] = [e.data.image, e.data.filterMatrix, e.data.filterWindow];
+    var [srcImageData, params] = [e.data.image, e.data];
+    var [filterMatrix, filterWindow, imageNormalize] = [params.filterMatrix, params.filterWindow, params.imageNormalize];
     var width = srcImageData.width, height = srcImageData.height;
     var dstImageData = new ImageData(width, height);
     //
@@ -17,6 +19,9 @@ onmessage = function(e) {
 				   filterMatrix, filterWindow);
 	    setRGBA(dstImageData, x, y, rgba);
 	}
+    }
+    if (imageNormalize) {
+        Statistics.mogrifyNormalize(dstImageData.data, 255);
     }
     postMessage({image:dstImageData}, [dstImageData.data.buffer]);
 }
