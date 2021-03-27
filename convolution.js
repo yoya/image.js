@@ -39,6 +39,7 @@ function main() {
     var filterWindowText  = document.getElementById("filterWindowText");
     var [filterMatrix, filterWindow] = filter2Matrix[filter];
     params["filterMatrix"] = filterMatrix;
+    params["filterWindow"] = filterWindow;
     filterWindowRange.value = filterWindow;
     filterWindowText.value = filterWindow;
     //
