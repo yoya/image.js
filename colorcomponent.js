@@ -64,10 +64,10 @@ function colorComponent(imageData, x, y, component, ampArr) {
         g *= ampArr[1];
         b *= ampArr[2];
         a *= ampArr[3];
-	rgb1 = [r, 0, 0];
-	rgb2 = [0, g, 0];
-	rgb3 = [0, 0, b];
-	rgb4 = [a, a, a];
+	rgb1 = [r, 0, 0, 255];
+	rgb2 = [0, g, 0, 255];
+	rgb3 = [0, 0, b, 255];
+	rgb4 = [a, a, a, 255];
 	rgb5 = [r, g, b, a];
 	break;
     case "cmyk": // naive convert
