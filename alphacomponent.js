@@ -43,57 +43,52 @@ function drawSrcImageDataAndAlphacomponent(srcImageData, srcCanvas, dstCanvasArr
     var ampIdArr = ["amp1Range", "amp2Range", "amp3Range", "amp4Range"];
     var ampArr = ampIdArr.map(function(id) { return parseFloat(document.getElementById(id).value); });
     drawSrcImageData(srcImageData, srcCanvas, maxWidthHeight);
-    drawAlphacomponent(srcImageData, srcCanvas, dstCanvasArr, ampArr);
+    drawAlphacomponent(srcImageData, srcCanvas, dstCanvasArr, ampArr, maxWidthHeight);
 }
     
-function alphacomponent(imageData, x, y, ampArr) {
-    var rgba = getRGBA(imageData, x, y);
-    var [r, g, b, a] = rgba;
-    var rgbaArr;
-    var rgb1, rgb2, rgb3, rgb4 = null, rgb5;
-    r *= ampArr[0];
-    g *= ampArr[1];
-    b *= ampArr[2];
-    a *= ampArr[3];
-    rgb1 = [r, 0, 0, 255];
-    rgb2 = [0, g, 0, 255];
-    rgb3 = [0, 0, b, 255];
-    rgb4 = [a, a, a, 255];
-    rgb5 = [r, g, b, a];
-    rgbaArr = [rgb1, rgb2, rgb3, rgb4, rgb5].map(function(arr) {
-	arr.push(a) ; return arr;
+function alphacomponent(imageData, dstImageDataArr, ampArr) {
+    var data = imageData.data;
+    var [rData, gData, bData, aData, dstData] = dstImageDataArr.map(function(idata) {
+        return idata.data;
     });
-    return rgbaArr;
+    var [rAmp, gAmp, bAmp, aAmp] = ampArr;
+    var count = imageData.width * imageData.height * 4;
+    var i;
+    for (i = 0; i < count; ) {
+        rData[i] = data[i++];  rData[i++] = rData[i++] = 0;
+        rData[i++] = 255;
+    }
+    for (i = 0; i < count; ) {
+        gData[i++] = 0;  gData[i] = data[i++];  gData[i++] = 0;
+        gData[i++] = 255;
+    }
+    for (i = 0; i < count; ) {
+        bData[i++] = bData[i++] = 0;  bData[i] = data[i++];
+        bData[i++] = 255;
+    }
+    for (i = 0; i < count; ) {
+        aData[i++] = aData[i++] = aData[i++] = data[i];
+        aData[i++] = 255;
+    }
+    for (i = 0; i < count; ) {
+        dstData[i] = data[i++] * rAmp;
+        dstData[i] = data[i++] * gAmp;
+        dstData[i] = data[i++] * bAmp;
+        dstData[i] = data[i++] * aAmp;
+    }
 }
 
-function drawAlphacomponent(srcImageData, srcCanvas, dstCanvasArr, ampArr) {
-    // console.debug("drawColorTransform");
+function drawAlphacomponent(srcImageData, srcCanvas, dstCanvasArr, ampArr,
+                            maxWidthHeight) {
     var dstCtxArr = dstCanvasArr.map(function(c) {
 	return c.getContext("2d");
     });
-    var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var dstWidth  = srcWidth;
-    var dstHeight = srcHeight;
-    dstCanvasArr.forEach(function(c) {
-	c.width  = dstWidth; c.height = dstHeight;
-    });
-
-    //
+    var srcWidth = srcImageData.width, srcHeight = srcImageData.height;
     var dstImageDataArr = dstCtxArr.map(function(c) {
-	return c.createImageData(dstWidth, dstHeight);
+	return c.createImageData(srcWidth, srcHeight);
     });
-    for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var srcX = dstX, srcY = dstY;
-	    var rgbaArr = alphacomponent(srcImageData, srcX, srcY, ampArr);
-	    for (var i = 0, n = rgbaArr.length ; i < n ; i++) {
-                if (rgbaArr[i] !== null) {
-		    setRGBA(dstImageDataArr[i], dstX, dstY, rgbaArr[i]);
-                }
-	    }
-	}
-    }
-    for (var i = 0, n = dstImageDataArr.length ; i < n ; i++) {
-	dstCtxArr[i].putImageData(dstImageDataArr[i], 0, 0);
-    }
+    alphacomponent(srcImageData, dstImageDataArr, ampArr);
+    dstImageDataArr.forEach(function(imageData, i) {
+        drawSrcImageData(imageData, dstCanvasArr[i], maxWidthHeight);
+    });
 }
