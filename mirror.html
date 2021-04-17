@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2021/04/18- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> mirror </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel">
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+        border:<input id="borderRange" type="range" min="0.0" max="100.0" step="0.1" value="75.0">:<input type="text" id="borderText" size="5">
+        blur:<input id="blurRange" type="range" min="1" max="5" step="3" value="3">:<input type="text" id="blurText" size="5">
+        amp:<input id="ampRange" type="range" min="0.0" max="100.0" step="0.1" value="85">:<input type="text" id="ampText" size="5">
+      </div> <!-- controlPanel -->
+      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="lib/math.js"> </script>
+    <script type="text/javascript" src="lib/kernel.js"> </script>
+    <script type="text/javascript" src="lib/loading.js"> </script>
+    <script type="text/javascript" src="lib/worker.js"> </script>
+    <script type="text/javascript" src="mirror.js"> </script>
+  </body>
+</html>
