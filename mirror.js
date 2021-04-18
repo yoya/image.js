@@ -30,7 +30,8 @@ function main() {
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
                   "borderRange":"borderText",
                   "blurRange":"blurText",
-                  "ampRange":"ampText"},
+                  "ampRange":"ampText",
+                  "linearRGBCheckbox":null},
 		 function(target, rel) {
                      const blur = params.blurRange;
                      params.blurKernelSize = blur,
@@ -48,5 +49,6 @@ var worker = new workerProcess("worker/mirror.js");
 function drawMirror(srcCanvas, dstCanvas, params, sync) {
     params.border = params.borderRange;
     params.amp = params.ampRange;
+    params.linearRGB = params.linearRGBCheckbox;
     worker.process(srcCanvas, dstCanvas, params, sync);
 }
