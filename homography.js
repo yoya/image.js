@@ -65,7 +65,7 @@ function main() {
         if ((!params.markerCheckbox) || (!params.markerArray)) {
             return ;  // skip
         }
-        var [x, y] = params[target.id]
+        var {x, y} = params[target.id];
         // console.debug(eventType, x, y, params.markerArray);
         //
         let hittestRadius2 = 10 ** 2;
