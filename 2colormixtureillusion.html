@@ -1,0 +1,32 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2017/11/26- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> 2 color mixtures illusion </title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="container">
+    <div id="controlPanel">
+      <div>
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText">
+	mosaic:<input id="mosaicCheckbox" type="checkbox" />
+      </div>
+    </div>
+  </div>
+  <div style="clear:both">
+    <canvas id="srcCanvas" class="borderYellow" width=200 height=200> srcCanvas </canvas>
+    <canvas id="dstCanvas1" class="borderRed" width=200 height=200> dstCanvas1 </canvas>
+    <canvas id="dstCanvas2" class="borderGreen" width=200 height=200> dstCanvas2 </canvas>
+    <canvas id="dstCanvas3" class="borderBlue" width=200 height=200> dstCanvas3 </canvas>
+  </div>
+  <div>
+    copyright) https://twitter.com/AkiyoshiKitaoka/status/934628523133636608
+    http://www.psy.ritsumei.ac.jp/~akitaoka/illusionparade2015.html
+  </div>
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/canvas.js"> </script>
+  <script type="text/javascript" src="2colormixtureillusion.js"> </script>
+</body>
+</html>
