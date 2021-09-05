@@ -12,20 +12,23 @@ function main() {
     const srcCanvas = document.getElementById("srcCanvas");
     const dstCanvas = document.getElementById("dstCanvas");
     let srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    const params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas);
+	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
-		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas);
-		 } );
+		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
+                                         params);
+		 }, params);
 }
-function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
-    const maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+
+function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas, params) {
+    const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawCopy(srcCanvas, dstCanvas);
 }
