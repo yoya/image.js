@@ -9,9 +9,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function main() {
     // console.debug("main");
-    var srcCanvas = document.getElementById("srcCanvas");
-    var dstCanvas = document.getElementById("dstCanvas");
-    var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    const srcCanvas = document.getElementById("srcCanvas");
+    const dstCanvas = document.getElementById("dstCanvas");
+    let srcImage = new Image(srcCanvas.width, srcCanvas.height);
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
@@ -25,24 +25,24 @@ function main() {
 		 } );
 }
 function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    const maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawCopy(srcCanvas, dstCanvas);
 }
 
 function drawCopy(srcCanvas, dstCanvas) {
     // console.debug("drawCopy");
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtx = dstCanvas.getContext("2d");
-    var width = srcCanvas.width, height = srcCanvas.height;
+    const srcCtx = srcCanvas.getContext("2d");
+    const dstCtx = dstCanvas.getContext("2d");
+    const width = srcCanvas.width, height = srcCanvas.height;
     dstCanvas.width  = width;
     dstCanvas.height = height;
     //
-    var srcImageData = srcCtx.getImageData(0, 0, width, height);
-    var dstImageData = dstCtx.createImageData(width, height);
-    for (var y = 0 ; y < height; y++) {
-        for (var x = 0 ; x < width; x++) {
-	    var rgba = getRGBA(srcImageData, x, y);
+    const srcImageData = srcCtx.getImageData(0, 0, width, height);
+    const dstImageData = dstCtx.createImageData(width, height);
+    for (let y = 0 ; y < height; y++) {
+        for (let x = 0 ; x < width; x++) {
+	    const rgba = getRGBA(srcImageData, x, y);
 	    setRGBA(dstImageData, x, y, rgba);
 	}
     }
@@ -51,21 +51,21 @@ function drawCopy(srcCanvas, dstCanvas) {
 
 function drawCopy2(srcCanvas, dstCanvas) {
     // console.debug("drawCopy");
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtx = dstCanvas.getContext("2d");
-    var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
-    var dstWidth  = srcWidth;
-    var dstHeight = srcHeight;
+    const srcCtx = srcCanvas.getContext("2d");
+    const dstCtx = dstCanvas.getContext("2d");
+    const srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;
+    const dstWidth  = srcWidth;
+    const dstHeight = srcHeight;
     dstCanvas.width  = dstWidth;
     dstCanvas.height = dstHeight;
     //
-    var srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
-    var dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
-    for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var srcX = dstX;
-	    var srcY = dstY;
-	    var rgba = getRGBA(srcImageData, srcX, srcY);
+    const srcImageData = srcCtx.getImageData(0, 0, srcWidth, srcHeight);
+    const dstImageData = dstCtx.createImageData(dstWidth, dstHeight);
+    for (let dstY = 0 ; dstY < dstHeight; dstY++) {
+        for (let dstX = 0 ; dstX < dstWidth; dstX++) {
+	    const srcX = dstX;
+	    const srcY = dstY;
+	    const rgba = getRGBA(srcImageData, srcX, srcY);
 	    setRGBA(dstImageData, dstX, dstY, rgba);
 	}
     }
