@@ -34,25 +34,30 @@ function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas, params) {
     drawRGYB(srcCanvas, dstCanvas, params);
 }
 
-function convertRGYB(rgba, rg, yb) {
-    let [r, g, b, a] = rgba;
-    if (rg < 0) { // red boost
-        const ratio = - rg / 100;
-        r = 255 * ratio + r * (1 - ratio);        
-    } else { // green boost
-        const ratio = rg / 100;
-        g = 255 * ratio + g * (1 - ratio);
+function boostRGYB(imageData, rgyb, ratio) {
+    let offset;
+    switch (rgyb) {
+    case 1:  // Red
+        offset = 0;
+        break;
+    case 2:  // Green
+        offset = 1;
+        break;
+    case 3:  // Yellow
+        boostRGYB(imageData, 1, ratio);  // Red
+        boostRGYB(imageData, 2, ratio);  // Green
+        return ;
+    case 4:  // Blue
+        offset = 2;
+        break;
     }
-    if (yb < 0) { // yellow boost
-        const ratio = - yb / 100;
-        r = 255 * ratio + r * (1 - ratio);
-        g = 255 * ratio + g * (1 - ratio);
-    } else { // blue boost
-        const ratio = yb / 100;
-        b = 255 * ratio + b * (1 - ratio);
+    const ratio2 = 1 - ratio;
+    const data = imageData.data;
+    const length = data.length;
+    console.debug({rgyb, offset, length, ratio});
+    for (let i = offset ; i < length ; i += 4) {
+        data[i] = 255*ratio + data[i]*ratio2;
     }
-    
-    return [r, g, b, a];
 }
 
 function drawRGYB(srcCanvas, dstCanvas, params) {
@@ -67,13 +72,26 @@ function drawRGYB(srcCanvas, dstCanvas, params) {
     dstCanvas.height = height;
     //
     const srcImageData = srcCtx.getImageData(0, 0, width, height);
-    const dstImageData = dstCtx.createImageData(width, height);
-    for (let y = 0 ; y < height; y++) {
-        for (let x = 0 ; x < width; x++) {
-	    const rgba = getRGBA(srcImageData, x, y);
-            const rgba2 = convertRGYB(rgba, rg, yb);
-	    setRGBA(dstImageData, x, y, rgba2);
-	}
+    let rgyb = 0, ratio;
+    if (rg != 0) {
+        if (rg < 0) { // red boost
+            rgyb = 1;
+            ratio = - rg / 100;
+        } else { // green boost
+            rgyb = 2;
+            ratio = rg / 100;
+        }
+        boostRGYB(srcImageData, rgyb, ratio);
     }
-    dstCtx.putImageData(dstImageData, 0, 0);
+    if (yb != 0) {
+        if (yb < 0) { // yellow boost
+            rgyb = 3;
+            ratio = - yb / 100;
+        } else { // blue boost
+            rgyb = 4;
+            ratio = yb / 100;
+        }
+        boostRGYB(srcImageData, rgyb, ratio);
+    }
+    dstCtx.putImageData(srcImageData, 0, 0);
 }
