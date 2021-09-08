@@ -7,13 +7,28 @@
   </head>
   <body>
     <div class="container">
-      <div class="controlPanel">
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+      <div class="controlPanel"  style="display:flex">
+        <div style="float:left;">
+          Filter:  <br />
+          <div style="float:left; ">
+            <select id="boostSelect" size="3">
+              <option value="mul" selected> 乗算 </option>
+              <option value="add"         > 加算 </option>
+              <option value="mid"         > 中点 </option>
+            </select>
+          </div>
+        </div>
         <div>
-	  R-G:<input id="rgRange" type="range" min="-50" max="50" step="1" value="0">:<input type="text" id="rgText" size="5"> <br />
-          Y-B:<input id="ybRange" type="range" min="-50" max="50" step="1" value="0">:<input type="text" id="ybText" size="5">
+          <div>
+	    maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+          </div>
+          <div>
+	    R-G:<input id="rgRange" type="range" min="-50" max="50" step="1" value="0">:<input type="text" id="rgText" size="5"> <br />
+            Y-B:<input id="ybRange" type="range" min="-50" max="50" step="1" value="0">:<input type="text" id="ybText" size="5">
+          </div>
         </div>
       </div> <!-- controlPanel -->
+      <br />
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
     </div>  <!-- container -->
