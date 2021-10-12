@@ -185,8 +185,17 @@ function colorComponent(imageData, x, y, component, ampArr) {
     }
     rgbaArr = [rgb1, rgb2, rgb3, rgb4, rgb5].map(function(arr) {
 	if (arr === null) { return null; }
-	if ((arr.length === 3) || (arr.length === 4)) {
-	    arr.push(a) ; return arr;
+        if ((arr.length === 3) || (arr.length === 4)) {
+            if (arr.length === 3) {
+                if (arr.push) {  // array
+                    arr.push(a);
+                } else {         // typed array
+                    let tmp = new (arr.constructor)(4);
+                    tmp.set(arr);  tmp[3] = a;
+                    arr = tmp;
+                }
+            }
+            return arr;
 	}
         console.error("arr.length:"+arr.length+" !== 3, 4")
     });
