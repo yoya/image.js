@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2021/10/12- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Sharpen / Blur </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel">
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+        amount:<input id="amountRange" type="range" min="-15" max="15" step="1" value="0">:<input type="text" id="amountText" size="4">
+      </div> <!-- controlPanel -->
+      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/math.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="shapenblur.js"> </script>
+  </body>
+</html>
