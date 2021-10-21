@@ -44,33 +44,24 @@ function drawFlipflop(srcCanvas, dstCanvas, params) {
     dstCanvas.width  = width;
     dstCanvas.height = height;
     //
-    const srcImageData = srcCtx.getImageData(0, 0, width, height);
-    const dstImageData = dstCtx.createImageData(width, height);
-    const srcData = new Uint32Array(srcImageData.data.buffer);
-    const dstData = new Uint32Array(dstImageData.data.buffer);
+    const imageData = srcCtx.getImageData(0, 0, width, height);
+    const data = new Uint32Array(imageData.data.buffer);
+    const n = data.length;
     //
     if (vertical && horizontal) {
-        dstData.set(srcData);
-        dstData.reverse();
+        data.reverse();
     } else if (vertical) {
-        let srcOffset = 0, dstOffset = (height - 1) * width;
-        for (let y = 0; y < height; y++) {
-            const srcLine = srcData.subarray(srcOffset, srcOffset + width);
-            dstData.set(srcLine, dstOffset);
-            srcOffset += width;
-            dstOffset -= width;
+        const lineData = new (data.constructor)(width);
+        for (let i = 0, j = n - width; i < j; i += width, j -= width) {
+            lineData.set(data.subarray(i, i + width));
+            data.set(data.subarray(j, j + width), i);
+            data.set(lineData, j);
         }
     } else if (horizontal) {
-        dstData.set(srcData);
-        let srcOffset = 0;
-        for (let y = 0; y < height; y++) {
-            const dstLine = dstData.subarray(srcOffset, srcOffset + width);
-            dstLine.reverse();
-            srcOffset += width;
+        for (let i = 0; i < n; i += width) {
+            data.subarray(i, i + width).reverse();
         }
-    } else {
-        dstData.set(srcData);
     }
-    dstCtx.putImageData(dstImageData, 0, 0);
+    dstCtx.putImageData(imageData, 0, 0);
 }
 
