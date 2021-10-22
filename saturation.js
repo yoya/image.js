@@ -47,6 +47,15 @@ function mogrifySaturation(imageData, s) {
     }
 }
 
+function mogrifyCompose(imageData, imageData2, ratio, ratio2) {
+    const data = imageData.data;
+    const data2 = imageData2.data;
+    const n = data.length;
+    for (let i = 0; i < n; i++) {
+        data[i] = data[i] * ratio + data2[i] * ratio2;
+    }
+}
+
 function mogrifyGrayscale(imageData, amount) {
     const data = imageData.data;
     const n = data.length;
@@ -81,6 +90,13 @@ function drawSaturation(srcCanvas, dstCanvas, params) {
         break;
     case "grayscale":
         mogrifyGrayscale(imageData, 1 - saturation);
+        break;
+    case "satugray":
+        const imageData2 = new ImageData(imageData.data.slice(0),
+                                         imageData.width, imageData.height);
+        mogrifySaturation(imageData, saturation);
+        mogrifyGrayscale(imageData2, 1 - saturation);
+        mogrifyCompose(imageData, imageData2, 0.5, 0.5);
         break;
     }
     dstCtx.putImageData(imageData, 0, 0);
