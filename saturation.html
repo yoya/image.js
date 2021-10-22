@@ -9,6 +9,10 @@
     <div class="container">
       <div class="controlPanel">
 	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+        <select id="filterSelect" size="2">
+          <option value="saturation"        > CSS Saturation </option>
+          <option value="grayscale" selected> Grascale Extrapolation </option>
+        </select>
         saturation:<input id="saturationRange" type="range" min="0.0" max="3.0" step="0.1" value="1.0">:<input type="text" id="saturationText" size="4">
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>

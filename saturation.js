@@ -21,23 +21,48 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+                  "filterSelect":null,
                   "saturationRange":"saturationText"},
 		 function() {
 		     drawSrcImageAndSaturation(srcImage, srcCanvas, dstCanvas, params);
 		 }, params);
 }
+
 function drawSrcImageAndSaturation(srcImage, srcCanvas, dstCancas, params) {
-    let maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawSaturation(srcCanvas, dstCanvas, params);
 }
 
-function saturation(rgba, s) {
-    let a = rgba[3];
-    let m = Math.max(rgba[0], rgba[1], rgba[2]);
-    rgba = rgba.map(v => m + (v - m) * s);
-    rgba[3] = a;
-    return rgba;
+function mogrifySaturation(imageData, s) {
+    const data = imageData.data;
+    const n = data.length;
+    for (let i = 0; i < n; i++) {
+        const [r, g, b, a] = data.subarray(i, i + 4);
+        const m = Math.max(r, g, b);
+        data[i] = m + (r - m) * s; i += 1;
+        data[i] = m + (g - m) * s; i += 1;
+        data[i] = m + (b - m) * s; i += 1;
+        data[i] = a;
+    }
+}
+
+function mogrifyGrayscale(imageData, amount) {
+    const data = imageData.data;
+    const n = data.length;
+    for (let i = 0; i < n; i++) {
+        const [r, g, b, a] = data.subarray(i, i + 4);
+        data[i] = r*(0.2126 + 0.7874 * (1-amount)) +
+            g*(0.7152 - 0.7152  * (1-amount)) +
+            b*(0.0722 - 0.0722 * (1-amount));  i += 1;
+        data[i] = r*(0.2126 - 0.2126 * (1-amount)) +
+            g*(0.7152 + 0.2848  * (1-amount)) +
+            b*(0.0722 - 0.0722 * (1-amount));  i += 1;
+        data[i] = r*(0.2126 - 0.2126 * (1-amount)) +
+            g*(0.7152 - 0.7152  * (1-amount)) +
+            b*(0.0722 + 0.9278 * (1-amount));  i += 1;
+        data[i] = a;
+    }
 }
 
 function drawSaturation(srcCanvas, dstCanvas, params) {
@@ -45,18 +70,18 @@ function drawSaturation(srcCanvas, dstCanvas, params) {
     let srcCtx = srcCanvas.getContext("2d");
     let dstCtx = dstCanvas.getContext("2d");
     let width = srcCanvas.width, height = srcCanvas.height;
-    let s = params["saturationRange"];
     dstCanvas.width  = width;
     dstCanvas.height = height;
-    //
-    let srcImageData = srcCtx.getImageData(0, 0, width, height);
-    let dstImageData = dstCtx.createImageData(width, height);
-    for (let y = 0 ; y < height; y++) {
-        for (let x = 0 ; x < width; x++) {
-	    let rgba = getRGBA(srcImageData, x, y);
-            rgba = saturation(rgba, s);
-	    setRGBA(dstImageData, x, y, rgba);
-	}
+    let imageData = srcCtx.getImageData(0, 0, width, height);
+    const filter = params.filterSelect;
+    const saturation = params.saturationRange;
+    switch (filter) {
+    case "saturation":
+        mogrifySaturation(imageData, saturation);
+        break;
+    case "grayscale":
+        mogrifyGrayscale(imageData, 1 - saturation);
+        break;
     }
-    dstCtx.putImageData(dstImageData, 0, 0);
+    dstCtx.putImageData(imageData, 0, 0);
 }
