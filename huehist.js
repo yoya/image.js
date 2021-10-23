@@ -50,10 +50,9 @@ function getHueHistogram(canvas) {
     var hist = new Float32Array(360);
     for (var i = 0 ; i < length ; i+=4) {
         var rgba = data.slice(i, i+4);
-        if (rgba[3] > 0) { // alpha check
-            var [h, s, v] = RGB2HSV(rgba);
-            hist[h] += s;
-        }
+        var alpha = rgba[3];
+        var [h, s, v] = RGB2HSV(rgba);
+        hist[h] += s * v * alpha;
     }
     return hist;
 }
