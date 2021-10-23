@@ -19,30 +19,33 @@ function main() {
     var maxWidthHeight = parseFloat(maxWidthHeightRange.value);
     var maxRatio = maxRatioRange.value;
     var hist = [];
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
             drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-            hist = getHueHistogram(srcCanvas);
+            hist = getHueHistogram(srcCanvas, params.logHistCheckbox);
             drawHueHistogram(histCanvas, histRingCanvas, hist, maxRatio);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+                  "logHistCheckbox":null},
 		 function() {
                      maxWidthHeight = parseFloat(maxWidthHeightRange.value);
                      drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-                     hist = getHueHistogram(srcCanvas);
+                     hist = getHueHistogram(srcCanvas, params.logHistCheckbox);
                      drawHueHistogram(histCanvas, histRingCanvas, hist, maxRatio);
-		 } );
+		 }, params);
     bindFunction({"maxRatioRange":"maxRatioText"},
 		 function() {
                      maxRatio = maxRatioRange.value;
                      drawHueHistogram(histCanvas, histRingCanvas, hist, maxRatio);
-		 } );
+		 }, params);
 }
 
-function getHueHistogram(canvas) {
+function getHueHistogram(canvas, logHist) {
+    console.log("logHist", logHist);
     var ctx = canvas.getContext("2d");
     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     var data = imageData.data;
@@ -53,6 +56,9 @@ function getHueHistogram(canvas) {
         var alpha = rgba[3];
         var [h, s, v] = RGB2HSV(rgba);
         hist[h] += s * v * alpha;
+    }
+    if (logHist) {
+        hist = hist.map(v =>  Math.log(v));
     }
     return hist;
 }
