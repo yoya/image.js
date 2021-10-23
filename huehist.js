@@ -9,22 +9,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function main() {
     // console.debug("main");
-    var srcCanvas = document.getElementById("srcCanvas");
-    var histCanvas = document.getElementById("histCanvas");
-    var histRingCanvas = document.getElementById("histRingCanvas");
-    var maxWidthHeightRange = document.getElementById("maxWidthHeightRange");
-    var maxRatioRange = document.getElementById("maxRatioRange");
-    //
-    var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    var maxWidthHeight = parseFloat(maxWidthHeightRange.value);
-    var maxRatio = maxRatioRange.value;
-    var hist = [];
-    var params = {};
+    const srcCanvas = document.getElementById("srcCanvas");
+    const histCanvas = document.getElementById("histCanvas");
+    const histRingCanvas = document.getElementById("histRingCanvas");
+    let srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    let hist = [];
+    const params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
+            const maxWidthHeight = params.maxWidthHeightRange;
+            const logHist = params.logHistCheckbox;
+            const maxRatio = params.maxRatioRange;
             drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-            hist = getHueHistogram(srcCanvas, params.logHistCheckbox);
+            hist = getHueHistogram(srcCanvas, logHist);
             drawHueHistogram(histCanvas, histRingCanvas, hist, maxRatio);
 	}
 	srcImage.src = dataURL;
@@ -32,29 +30,30 @@ function main() {
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
                   "logHistCheckbox":null},
 		 function() {
-                     maxWidthHeight = parseFloat(maxWidthHeightRange.value);
+                     const maxWidthHeight = params.maxWidthHeightRange;
+                     const logHist = params.logHistCheckbox;
+                     const maxRatio = params.maxRatioRange;
                      drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-                     hist = getHueHistogram(srcCanvas, params.logHistCheckbox);
+                     hist = getHueHistogram(srcCanvas, logHist);
                      drawHueHistogram(histCanvas, histRingCanvas, hist, maxRatio);
 		 }, params);
     bindFunction({"maxRatioRange":"maxRatioText"},
 		 function() {
-                     maxRatio = maxRatioRange.value;
+                     const maxRatio = params.maxRatioRange;
                      drawHueHistogram(histCanvas, histRingCanvas, hist, maxRatio);
 		 }, params);
 }
 
 function getHueHistogram(canvas, logHist) {
-    console.log("logHist", logHist);
-    var ctx = canvas.getContext("2d");
-    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    var data = imageData.data;
-    var length = data.length;
-    var hist = new Float32Array(360);
-    for (var i = 0 ; i < length ; i+=4) {
-        var rgba = data.slice(i, i+4);
-        var alpha = rgba[3];
-        var [h, s, v] = RGB2HSV(rgba);
+    const ctx = canvas.getContext("2d");
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    const length = data.length;
+    let hist = new Float32Array(360);
+    for (let i = 0 ; i < length ; i+=4) {
+        const rgba = data.slice(i, i+4);
+        const alpha = rgba[3];
+        const [h, s, v] = RGB2HSV(rgba);
         hist[h] += s * v * alpha;
     }
     if (logHist) {
@@ -71,22 +70,15 @@ function drawHueHistogram(canvas, canvasRing, hist, maxRatio) {
 function drawHistGraph(canvas, hist, maxRatio) {
     // console.debug("drawHueHistogram");
     canvas.style.backgroundColor = "black";
-    var ctx = canvas.getContext("2d");
-    var width  = canvas.width, height = canvas.height;
+    const ctx = canvas.getContext("2d");
+    const width  = canvas.width, height = canvas.height;
     canvas.width = width; // clear
-    var max = 0;
-    for (var i = 0 ; i < 360 ; i++) {
-        var h = hist[i];
-        if (max < h) {
-            max = h;
-        }
-    }
-    max *= maxRatio;
+    const max = hist.reduce((a, b) => (a > b)? a: b ) * maxRatio;
     ctx.lineWidth = 1;
-    for (var i = 0 ; i < 360 ; i++) {
-        var x = i + 0.5;
-        var y = height * (1 - (hist[i] / max));
-        var [r, g, b] = HSV2RGB([i, 1.0, 1.0]);
+    for (let i = 0 ; i < 360 ; i++) {
+        const x = i + 0.5;
+        const y = height * (1 - (hist[i] / max));
+        const [r, g, b] = HSV2RGB([i, 1.0, 1.0]);
         ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
         ctx.beginPath();
         ctx.moveTo(x, height);
@@ -97,29 +89,22 @@ function drawHistGraph(canvas, hist, maxRatio) {
 
 function drawHistRing(canvas, hist, maxRatio) {
     canvas.style.backgroundColor = "black";
-    var ctx = canvas.getContext("2d");
-    var width  = canvas.width, height = canvas.height;
-    var centerX = width / 2, centerY = height / 2;
-    var radius = 50;
+    const ctx = canvas.getContext("2d");
+    const width  = canvas.width, height = canvas.height;
+    const centerX = width / 2, centerY = height / 2;
+    const radius = 50;
     canvas.width = width; // clear
-    var max = 0;
-    for (var i = 0 ; i < 360 ; i++) {
-        var h = hist[i];
-        if (max < h) {
-            max = h;
-        }
-    }
-    max *= maxRatio;
+    const max = hist.reduce((a, b) => (a > b)? a: b ) * maxRatio;
     ctx.lineWidth = 1;
-    var rMax = Math.min(width, height) / 2;
-    var rMin = radius;
-    var tt = 2*Math.PI / 360;
-    for (var i = 0 ; i < 360; i++) {
-        var r = (rMax - rMin) * (hist[i] / max) + rMin;
-        var t = i * tt;
-        var x = centerX + r * Math.sin(t);
-        var y = centerY - r * Math.cos(t);
-        var [r, g, b] = HSV2RGB([i, 1.0, 1.0]);
+    const rMax = Math.min(width, height) / 2;
+    const rMin = radius;
+    const delta = 2*Math.PI / 360;
+    for (let i = 0 ; i < 360; i++) {
+        const radius = (rMax - rMin) * (hist[i] / max) + rMin;
+        const t = i * delta;
+        const x = centerX + radius * Math.sin(t);
+        const y = centerY - radius * Math.cos(t);
+        const [r, g, b] = HSV2RGB([i, 1.0, 1.0]);
         ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
