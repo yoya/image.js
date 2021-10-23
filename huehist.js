@@ -55,9 +55,6 @@ function getHueHistogram(canvas, params) {
         const [h, s, v] = RGB2HSV(rgba);
         hist[h] += s * v * alpha;
     }
-    if (logHist) {
-        hist = hist.map(v =>  Math.log(v));
-    }
     if (binHist > 1) {
         for (let i = 0; i < 360; i+= binHist) {
             const sum = hist.subarray(i, i + binHist).reduce((a,b) => a+b);
@@ -65,6 +62,9 @@ function getHueHistogram(canvas, params) {
                 hist[j] = sum / binHist;
             }
         }
+    }
+    if (logHist) {
+        hist = hist.map(v =>  Math.log(v));
     }
     return hist;
 }
