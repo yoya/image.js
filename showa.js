@@ -22,7 +22,7 @@ function main() {
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
                   "colorRange":"colorText",
-                  "vinetteRange":"vinetteText",
+                  "vignetteRange":"vignetteText",
                   "mosaicRange":"mosaicText",
                   "smoothingRange":"smoothingText"},
 		 function(target, rel) {
@@ -41,7 +41,7 @@ function drawShowa(srcCanvas, dstCanvas, params, sync) {
     //console.debug("drawShowa:", params);
     var params_w = {
         color    : params["colorRange"],
-        vinette  : params["vinetteRange"],
+        vignette : params["vignetteRange"],
         mosaic   : params["mosaicRange"],
         smoothing: params["smoothingRange"]
     };

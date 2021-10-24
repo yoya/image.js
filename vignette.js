@@ -16,7 +16,7 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndVinette(srcImage, srcCanvas, dstCanvas, params, true);
+	    drawSrcImageAndVignette(srcImage, srcCanvas, dstCanvas, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -25,19 +25,19 @@ function main() {
 		  "linearGammaCheckbox":null,
 		  "inverseCheckbox":null},
 		 function(target, rel) {
-		     drawSrcImageAndVinette(srcImage, srcCanvas, dstCanvas, params, rel);
+		     drawSrcImageAndVignette(srcImage, srcCanvas, dstCanvas, params, rel);
 		 }, params);
 }
 
-function drawSrcImageAndVinette(srcImage, srcCanvas, dstCancas, params, sync) {
+function drawSrcImageAndVignette(srcImage, srcCanvas, dstCancas, params, sync) {
     var maxWidthHeight = params["maxWidthHeightRange"];
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawVinette(srcCanvas, dstCanvas, params, sync);
+    drawVignette(srcCanvas, dstCanvas, params, sync);
 }
 
-var worker = new workerProcess("worker/vinette.js");
+var worker = new workerProcess("worker/vignette.js");
 
-function drawVinette(srcCanvas, dstCanvas, params, sync) {
+function drawVignette(srcCanvas, dstCanvas, params, sync) {
     var params_w = {
         radius     : params["radiusRange"],
         linearGamma: params["linearGammaCheckbox"],

@@ -6,10 +6,10 @@
 
 importScripts("../lib/color.js");
 importScripts("../lib/canvas.js");
-importScripts("../lib/vinette.js");
+importScripts("../lib/vignette.js");
 
 onmessage = function(e) {
     var imageData = e.data.image;
-    mogrifyVinette(imageData, e.data);
+    mogrifyVignette(imageData, e.data);
     postMessage({image:imageData}, [imageData.data.buffer]);
 }

@@ -7,16 +7,16 @@
 importScripts("../lib/canvas.js");
 importScripts("../lib/math.js");
 importScripts("../lib/kernel.js");
-importScripts("../lib/vinette.js");
+importScripts("../lib/vignette.js");
 importScripts("../lib/smoothing.js");
 
 onmessage = function(e) {
     const srcImageData = e.data.image;
     const color = e.data.color;
-    const vinette = e.data.vinette;
+    const vignette = e.data.vignette;
     const mosaic = e.data.mosaic;
     const smoothing = e.data.smoothing;
-    //console.debug("color, vinette, mosaic, smoothing:", color, vinette, mosaic, smoothing);
+    //console.debug("color, vignette, mosaic, smoothing:", color, vignette, mosaic, smoothing);
     //
     const width = srcImageData.width, height = srcImageData.height;
     //
@@ -33,9 +33,9 @@ onmessage = function(e) {
             ]);
 	}
     }
-    const radius = 4.0 - 3*vinette;
-    const params_vinette = { radius:radius, linearGamma:false, inverse:false };
-    mogrifyVinette(tmpImageData, params_vinette);
+    const radius = 4.0 - 3*vignette;
+    const params_vignette = { radius:radius, linearGamma:false, inverse:false };
+    mogrifyVignette(tmpImageData, params_vignette);
     mosaic_showa(tmpImageData, mosaic);
     const filterWindow = smoothing;
     const filterMatrix = makeKernel_PascalTriangle(filterWindow);
