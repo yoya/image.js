@@ -7,7 +7,7 @@
   </head>
   <body>
     <div class="container">
-      <div class="controlPanel" style="display:flex">
+      <div class="controlPanel" style="display:flex;  flex-wrap:wrap;">
         <div>
           <div>
 	    maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
@@ -16,9 +16,14 @@
             maxRatio:<input id="maxRatioRange" type="range" min="0.01" max="1.0" step="0.01" value="1.0">:<input type="text" id="maxRatioText" size="5">
             logHist: <input id="logHistCheckbox" type="checkbox">
           </div>
-          <canvas id="histCanvas" class="borderGray" width=360 height=200> histCanvas </canvas>
+          <div>
+            <canvas id="histRingCanvas" class="borderGray" width=300 height=300> histRingCanvas </canvas>
+          </div>
         </div>
-        <canvas id="histRingCanvas" class="borderGray" width=300 height=300> histRingCanvas </canvas>
+        <div>
+          <canvas id="histCanvas" class="borderGray" width=360 height=200> histCanvas </canvas> <br /> 
+          <canvas id="mapCanvas" class="borderGray" width=360 height=202> mapCanvas </canvas>
+        </div>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
     </div>  <!-- container -->

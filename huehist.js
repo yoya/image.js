@@ -12,8 +12,10 @@ function main() {
     const srcCanvas = document.getElementById("srcCanvas");
     const histCanvas = document.getElementById("histCanvas");
     const histRingCanvas = document.getElementById("histRingCanvas");
+    const mapCanvas = document.getElementById("mapCanvas");
     let srcImage = new Image(srcCanvas.width, srcCanvas.height);
     let hist = [];
+    let map = [];
     const params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
@@ -22,6 +24,8 @@ function main() {
             drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
             hist = getHueHistogram(srcCanvas, params);
             drawHueHistogram(histCanvas, histRingCanvas, hist, params);
+            map = getHueSaturationMap(srcCanvas, params);
+            drawHueSaturationMap(mapCanvas, map, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
@@ -33,10 +37,13 @@ function main() {
                      drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
                      hist = getHueHistogram(srcCanvas, params);
                      drawHueHistogram(histCanvas, histRingCanvas, hist, params);
+                     map = getHueSaturationMap(srcCanvas, params);
+                     drawHueSaturationMap(mapCanvas, map, params);
 		 }, params);
     bindFunction({"maxRatioRange":"maxRatioText"},
 		 function() {
                      drawHueHistogram(histCanvas, histRingCanvas, hist, params);
+                     drawHueSaturationMap(mapCanvas, map, params);
 		 }, params);
 }
 
@@ -52,8 +59,8 @@ function getHueHistogram(canvas, params) {
     for (let i = 0 ; i < length ; i+=4) {
         const rgba = data.slice(i, i+4);
         const alpha = rgba[3];
-        const [h, s, v] = RGB2HSV(rgba);
-        hist[h] += s * v * alpha;
+        const [h, s, l] = RGB2HSL(rgba);
+        hist[h] += s * l * alpha;
     }
     if (binHist > 1) {
         for (let i = 0; i < 360; i+= binHist) {
@@ -68,6 +75,40 @@ function getHueHistogram(canvas, params) {
     }
     return hist;
 }
+
+function getHueSaturationMap(canvas, params) {
+    const binHist = params.binHistRange;
+    const logHist = params.logHistCheckbox;
+    //
+    const ctx = canvas.getContext("2d");
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    const length = data.length;
+    let map = new Float32Array(360*101);  // hue-sarutation map
+    for (let i = 0 ; i < length ; i+=4) {
+        const rgba = data.slice(i, i+4);
+        const alpha = rgba[3];
+        const [h, s, l] = RGB2HSL(rgba);
+        const ss = Math.round(s * 100);
+        map[h + (ss * 360)] += l * alpha;
+    }
+    /*
+    if (binHist > 1) {
+        for (let i = 0; i < 360; i+= binHist) {
+            const sum = hist.subarray(i, i + binHist).reduce((a,b) => a+b);
+            for (let j = i; j < i+binHist; j++) {
+                hist[j] = sum / binHist;
+            }
+        }
+    }
+    */
+    if (logHist) {
+        map = map.map(v =>  Math.log(v));
+    }
+    return map;
+}
+
+
 
 function drawHueHistogram(canvas, canvasRing, hist, params) {
     drawHistGraph(canvas, hist, params);
@@ -86,7 +127,7 @@ function drawHistGraph(canvas, hist, params) {
     for (let i = 0 ; i < 360 ; i++) {
         const x = i + 0.5;
         const y = height * (1 - (hist[i] / max));
-        const [r, g, b] = HSV2RGB([i, 1.0, 1.0]);
+        const [r, g, b] = HSL2RGB([i, 1.0, 1.0]);
         ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
         ctx.beginPath();
         ctx.moveTo(x, height);
@@ -113,7 +154,7 @@ function drawHistRing(canvas, hist, params) {
         const t = i * delta;
         const x = centerX + radius * Math.sin(t);
         const y = centerY - radius * Math.cos(t);
-        const [r, g, b] = HSV2RGB([i, 1.0, 1.0]);
+        const [r, g, b] = HSL2RGB([i, 1.0, 1.0]);
         ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
@@ -124,4 +165,28 @@ function drawHistRing(canvas, hist, params) {
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, 2*Math.PI);
     ctx.fill();
+}
+
+function drawHueSaturationMap(canvas, map, params) {
+    const maxRatio = params.maxRatioRange;
+    canvas.style.backgroundColor = "black";
+    const ctx = canvas.getContext("2d");
+    const width  = canvas.width, height = canvas.height;
+    canvas.width = width; // clear
+    const max = map.reduce((a, b) => (a > b)? a: b ) * maxRatio;
+    ctx.lineWidth = 1;
+    for (let x = 0 ; x < 360 ; x++) {
+        for (let y = 0 ; y < 101 ; y++) {
+            const i = x  + y * 360;
+            const h = x;
+            const s = (100 - y) / 100;
+            const l = map[i] / max;
+            const [r, g, b] = HSL2RGB([h, s, (l<1.0)?l:1.0]);
+            // console.log(x, y, [h, s, v], [r, g, b]);
+            ctx.fillStyle = "rgb("+r+","+g+","+b+")";
+            ctx.beginPath();
+            ctx.rect(x, 2*y, x+1, 2*y+2);
+            ctx.fill();
+        }
+    }
 }
