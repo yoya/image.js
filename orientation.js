@@ -37,9 +37,9 @@ function fromOrientation(orientation) {
     return [!!vertical, !!horizontal, !!diagonal];
 }
 
-function rotateOrientation(orientation) {
+function rotateOrientation(orientation, degree) {
     let [vertical, horizontal, diagonal] = fromOrientation(orientation);
-    if (diagonal) { // {hori,vert} grey code decrement
+    if (diagonal ^ (degree !== 90)) { // {hori,vert} grey code decrement
         [vertical, horizontal] = [!horizontal, vertical];
     } else {  // {hori,vert} grey code increment
         [vertical, horizontal] = [horizontal, !vertical];
@@ -70,13 +70,18 @@ function main() {
                   "verticalCheckbox":null,
                   "horizontalCheckbox":null,
                   "diagonalCheckbox":null,
-                  "rotateButton":null
+                  "rotate90Button":null,
+                  "rotate270Button":null
                  }, function(target) {
                      if ((target.id === "orientationSelect") ||
-                         (target.id === "rotateButton")) {
+                         (target.id === "rotate90Button") ||
+                         (target.id === "rotate270Button")) {
                          let orientation = params.orientationSelect;
-                         if (target.id === "rotateButton") {
-                             orientation = rotateOrientation(orientation)
+                         if (target.id === "rotate90Button") {
+                             orientation = rotateOrientation(orientation, 90);
+                             params.orientationSelect = orientation;
+                         } else if (target.id === "rotate270Button") {
+                             orientation = rotateOrientation(orientation, 270);
                              params.orientationSelect = orientation;
                          }
                          const [vertical, horizontal, diagonal] = fromOrientation(orientation);
