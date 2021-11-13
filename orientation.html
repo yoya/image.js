@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2021/11/13- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Orientation </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="container" style="display:flex;">
+      <div class="controlPanel">
+        <div>
+	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+        </div>
+        <div>
+          <select id="orientationSelect" size="8">
+            <option value="1" selected> 1 </option>
+            <option value="2"> 2 - vert </option>
+            <option value="3"> 3 - hori </option>
+            <option value="4"> 4 - vert & hori</option>
+            <option value="5"> 5 - diag </option>
+            <option value="6"> 6 - vert & diag</option>
+            <option value="7"> 7 - hori & diag</option>
+            <option value="8"> 8 - vert & hori & diag</option>
+          </select>
+        </div>
+        <div>
+          Vertical:<input id="verticalCheckbox" type="checkbox" />
+          <br />
+          Horizontal:<input id="horizontalCheckbox" type="checkbox" />
+          <br />
+          Diagonal:<input id="diagonalCheckbox" type="checkbox" />
+        </div>
+        <div>
+          <button id="rotateButton" type="button"> rotate 90 </button>
+        </div>
+      </div> <!-- controlPanel -->
+      <div>
+        <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+        <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+      </div>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="orientation.js"> </script>
+  </body>
+</html>
