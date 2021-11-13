@@ -145,7 +145,7 @@ function drawOrientation(srcCanvas, dstCanvas, params) {
         }
         yy += dy
     }
-    const changeColor = function(arr, offset) {
+    const guideColor = function(arr, offset) {
         const data = new Uint8Array(arr.buffer, offset * 4);
         data[0] = (data[0] < 128)? 255: 0;
         data[1] = (data[1] < 128)? 255: 0;
@@ -156,19 +156,19 @@ function drawOrientation(srcCanvas, dstCanvas, params) {
         for (let y = 0; y < dstHeight; y += 1) {
             const o = Math.round(dstWidth /2) + y * dstWidth;
             if ((y % 8) < 4) {
-                changeColor(dstData, o);
+                guideColor(dstData, o);
             }
         }
         for (let x = 0; x < dstWidth; x += 1) {
             const o = x + Math.round(dstHeight / 2) * dstWidth;
             if ((x % 8) < 4) {
-                changeColor(dstData, o);
+                guideColor(dstData, o);
             }
         }
         for (let x = 0; x < Math.min(dstWidth, dstHeight); x += 1) {
             const o = x + x * dstWidth;
             if ((x % 8) < 4) {
-                changeColor(dstData, o);
+                guideColor(dstData, o);
             }
         }
     }
