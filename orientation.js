@@ -24,7 +24,7 @@ function params2element(params) {
     }
 }
 
-function toOrientation(vertical, horizontal, diagonal) {
+function toOrientation(horizontal, vertical, diagonal) {
     const orientation = 1 +
           horizontal + (vertical << 1) + (diagonal << 2);
     return orientation;
