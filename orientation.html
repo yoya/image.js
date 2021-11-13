@@ -9,24 +9,27 @@
     <div class="container" style="display:flex;">
       <div class="controlPanel">
         <div>
-	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+	  maxWidthHeight:           <br />
+          <input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+          <br />
+          Guide:<input id="guideCheckbox" type="checkbox" />
         </div>
         <div>
           <select id="orientationSelect" size="8">
             <option value="1" selected> 1 </option>
-            <option value="2"> 2 - vert </option>
-            <option value="3"> 3 - hori </option>
-            <option value="4"> 4 - vert & hori</option>
+            <option value="2"> 2 - hori </option>
+            <option value="3"> 3 - vert </option>
+            <option value="4"> 4 - hori & vert</option>
             <option value="5"> 5 - diag </option>
-            <option value="6"> 6 - vert & diag</option>
-            <option value="7"> 7 - hori & diag</option>
-            <option value="8"> 8 - vert & hori & diag</option>
+            <option value="6"> 6 - hori & diag</option>
+            <option value="7"> 7 - vert & diag</option>
+            <option value="8"> 8 - hori & vert & diag</option>
           </select>
         </div>
         <div>
-          Vertical:<input id="verticalCheckbox" type="checkbox" />
-          <br />
           Horizontal:<input id="horizontalCheckbox" type="checkbox" />
+          <br />
+          Vertical:<input id="verticalCheckbox" type="checkbox" />
           <br />
           Diagonal:<input id="diagonalCheckbox" type="checkbox" />
         </div>

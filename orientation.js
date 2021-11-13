@@ -31,8 +31,8 @@ function toOrientation(vertical, horizontal, diagonal) {
 }
 
 function fromOrientation(orientation) {
-    const vertical = (orientation - 1) & 1;
-    const horizontal =  (orientation - 1) & 2;
+    const horizontal =  (orientation - 1) & 1;
+    const vertical = (orientation - 1) & 2;
     const diagonal = (orientation - 1) & 4;
     return [!!vertical, !!horizontal, !!diagonal];
 }
@@ -61,7 +61,8 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+                  "guideCheckbox":null
                  }, function(target) {
 		     drawSrcImageAndOrientation(srcImage, srcCanvas, dstCanvas,
                                          params);
@@ -110,10 +111,9 @@ function drawSrcImageAndOrientation(srcImage, srcCanvas, dstCancas, params) {
 function drawOrientation(srcCanvas, dstCanvas, params) {
     // console.debug("drawOrientation");
     const orientation = params.orientationSelect;
-    const vertical = (orientation - 1) & 1;
-    const horizontal =  (orientation - 1) & 2;
+    const [vertical, horizontal, diagonal] = fromOrientation(orientation);
+    const guide = params.guideCheckbox;
     //
-    const diagonal  = (orientation - 1) & 4
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const width = srcCanvas.width, height = srcCanvas.height;
@@ -144,6 +144,33 @@ function drawOrientation(srcCanvas, dstCanvas, params) {
             xx += dx;
         }
         yy += dy
+    }
+    const changeColor = function(arr, offset) {
+        const data = new Uint8Array(arr.buffer, offset * 4);
+        data[0] = (data[0] < 128)? 255: 0;
+        data[1] = (data[1] < 128)? 255: 0;
+        data[2] = (data[2] < 128)? 255: 0;
+        // alpha, no modify
+    }
+    if (guide) {
+        for (let y = 0; y < dstHeight; y += 1) {
+            const o = Math.round(dstWidth /2) + y * dstWidth;
+            if ((y % 8) < 4) {
+                changeColor(dstData, o);
+            }
+        }
+        for (let x = 0; x < dstWidth; x += 1) {
+            const o = x + Math.round(dstHeight / 2) * dstWidth;
+            if ((x % 8) < 4) {
+                changeColor(dstData, o);
+            }
+        }
+        for (let x = 0; x < Math.min(dstWidth, dstHeight); x += 1) {
+            const o = x + x * dstWidth;
+            if ((x % 8) < 4) {
+                changeColor(dstData, o);
+            }
+        }
     }
     dstCtx.putImageData(dstImageData, 0, 0);
 }
