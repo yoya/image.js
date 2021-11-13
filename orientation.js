@@ -34,18 +34,18 @@ function fromOrientation(orientation) {
     const horizontal =  (orientation - 1) & 1;
     const vertical = (orientation - 1) & 2;
     const diagonal = (orientation - 1) & 4;
-    return [!!vertical, !!horizontal, !!diagonal];
+    return [!!horizontal, !!vertical, !!diagonal];
 }
 
 function rotateOrientation(orientation, degree) {
-    let [vertical, horizontal, diagonal] = fromOrientation(orientation);
+    let [horizontal, vertical, diagonal] = fromOrientation(orientation);
     if (diagonal ^ (degree !== 90)) { // {hori,vert} grey code decrement
         [vertical, horizontal] = [!horizontal, vertical];
     } else {  // {hori,vert} grey code increment
         [vertical, horizontal] = [horizontal, !vertical];
     }
     diagonal = ! diagonal;
-    return toOrientation(vertical, horizontal, diagonal);
+    return toOrientation(horizontal, vertical, diagonal);
 }
 
 function main() {
@@ -68,8 +68,8 @@ function main() {
                                          params);
 		 }, params);
     bindFunction({"orientationSelect":null,
-                  "verticalCheckbox":null,
                   "horizontalCheckbox":null,
+                  "verticalCheckbox":null,
                   "diagonalCheckbox":null,
                   "rotate90Button":null,
                   "rotate270Button":null
@@ -85,15 +85,15 @@ function main() {
                              orientation = rotateOrientation(orientation, 270);
                              params.orientationSelect = orientation;
                          }
-                         const [vertical, horizontal, diagonal] = fromOrientation(orientation);
-                         params.verticalCheckbox = vertical;
+                         const [horizontal, vertical, diagonal] = fromOrientation(orientation);
                          params.horizontalCheckbox = horizontal;
+                         params.verticalCheckbox = vertical;
                          params.diagonalCheckbox = diagonal;
                      } else {
-                         const vertical = params.verticalCheckbox;
                          const horizontal = params.horizontalCheckbox;
+                         const vertical = params.verticalCheckbox;
                          const diagonal = params.diagonalCheckbox;
-                         const orientation = toOrientation(vertical, horizontal, diagonal);
+                         const orientation = toOrientation(horizontal, vertical, diagonal);
                          params.orientationSelect = orientation;
                      }
                      params2element(params);
@@ -111,7 +111,7 @@ function drawSrcImageAndOrientation(srcImage, srcCanvas, dstCancas, params) {
 function drawOrientation(srcCanvas, dstCanvas, params) {
     // console.debug("drawOrientation");
     const orientation = params.orientationSelect;
-    const [vertical, horizontal, diagonal] = fromOrientation(orientation);
+    const [horizontal, vertical, diagonal] = fromOrientation(orientation);
     const guide = params.guideCheckbox;
     //
     const srcCtx = srcCanvas.getContext("2d");
