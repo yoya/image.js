@@ -119,7 +119,6 @@ function drawOrientation(srcCanvas, dstCanvas, params) {
     // console.debug("drawOrientation");
     const orientation = params.orientationSelect;
     const [horizontal, vertical, diagonal] = fromOrientation(orientation);
-    console.log("drawOrientation", orientation, horizontal, vertical, diagonal);
     const guide = params.guideCheckbox;
     //
     const srcCtx = srcCanvas.getContext("2d");
@@ -162,9 +161,8 @@ function drawOrientation(srcCanvas, dstCanvas, params) {
             data[0] = (data[0] < 128)? 255: 0;  // red
             data[1] = (data[1] < 128)? 255: 0;  // green
             data[2] = (data[2] < 128)? 255: 0;  // blue
-        } else {
-            data[3] = 255;  // alpha
         }
+        data[3] = 255;  // alpha
     }
     if (guide) {
         for (let y = 0; y < dstHeight; y += 1) {
