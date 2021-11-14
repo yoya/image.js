@@ -25,15 +25,16 @@ function params2element(params) {
 }
 
 function toOrientation(horizontal, vertical, diagonal) {
-    const reverse = horizontal !== vertical;
+    const reverse = horizontal !== vertical;  // xor
     const o = (reverse? 1: 0) + (vertical? 2: 0) + (diagonal? 4: 0);
     return o + 1;  // orientation;
 }
 
 function fromOrientation(orientation) {
     const o = orientation - 1;
+    const reverse = (o & 1)? true: false;
     const vertical = (o & 2)? true: false;
-    const horizontal = ((o & 1)?true: false) !== vertical;
+    const horizontal = reverse !== vertical;  // xor
     const diagonal = (o & 4)? true: false;
     return [horizontal, vertical, diagonal];
 }
