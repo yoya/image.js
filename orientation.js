@@ -40,11 +40,14 @@ function fromOrientation(orientation) {
 function rotateOrientation(orientation, degree) {
     let [vertical, horizontal, diagonal] = fromOrientation(orientation);
     const mirror = vertical ^ horizontal ^ diagonal;
+    /*
+      * rotate 90
+     * {diag,hori,vert}: 1:{000} => 6:{101} => 4:{011} => 7:{110}
+     * {diag,hori,vert}: 5:{100} => 3:{010} => 8:{111} => 2:{001}
+     */
     if ((degree === 90) ^ mirror) {
-        // {diag,hori,vert}: 5:{100} => 3:{010} => 8:{111} => 2:{001}
         [vertical, horizontal] = [!horizontal, vertical];
     } else {
-        // {diag,hori,vert}: 1:{000} => 6:{101} => 4:{011} => 7:{110}
         [vertical, horizontal] = [horizontal, !vertical];
     }
     diagonal = ! diagonal;
