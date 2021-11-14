@@ -40,12 +40,13 @@ function fromOrientation(orientation) {
 function rotateOrientation(orientation, degree) {
     let [vertical, horizontal, diagonal] = fromOrientation(orientation);
     const mirror = vertical ^ horizontal ^ diagonal;
+    const rotate90 = (degree === 90);
     /*
       * rotate 90
      * {diag,hori,vert}: 1:{000} => 6:{101} => 4:{011} => 7:{110}
      * {diag,hori,vert}: 5:{100} => 3:{010} => 8:{111} => 2:{001}
      */
-    if ((degree === 90) ^ mirror) {
+    if (mirror ^ rotate90) {
         [vertical, horizontal] = [!horizontal, vertical];
     } else {
         [vertical, horizontal] = [horizontal, !vertical];
@@ -74,11 +75,9 @@ function main() {
                                          params);
 		 }, params);
     bindFunction({"orientationSelect":null,
-                  "verticalCheckbox":null,
-                  "horizontalCheckbox":null,
+                  "verticalCheckbox":null, "horizontalCheckbox":null,
                   "diagonalCheckbox":null,
-                  "rotate90Button":null,
-                  "rotate270Button":null
+                  "rotate90Button":null, "rotate270Button":null
                  }, function(target) {
                      if ((target.id === "orientationSelect") ||
                          (target.id === "rotate90Button") ||
@@ -123,8 +122,8 @@ function drawOrientation(srcCanvas, dstCanvas, params) {
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const width = srcCanvas.width, height = srcCanvas.height;
-    const dstWidth = diagonal? height: width;
-    const dstHeight = diagonal? width:height;
+    const dstWidth = Math.max(width, height)
+    const dstHeight = dstWidth;
     dstCanvas.width  = dstWidth;
     dstCanvas.height = dstHeight;
     //
@@ -138,14 +137,12 @@ function drawOrientation(srcCanvas, dstCanvas, params) {
     let dx = horizontal? -1: 1;
     let starty = vertical? (height - 1): 0;
     let dy = vertical? -1: 1;
-
     let yy = starty;
     for (let y = 0; y < height ; y += 1) {
         let xx = startx;
         for (let x = 0; x < width; x += 1) {
             const o = x + y * width;
-            const oo = diagonal? (xx * dstWidth + yy):
-                  (xx + yy * width);
+            const oo = diagonal? (xx * dstWidth + yy): (xx + yy * width);
             dstData[oo] = srcData[o];
             xx += dx;
         }
@@ -153,27 +150,31 @@ function drawOrientation(srcCanvas, dstCanvas, params) {
     }
     const guideColor = function(arr, offset) {
         const data = new Uint8Array(arr.buffer, offset * 4);
-        data[0] = (data[0] < 128)? 255: 0;
-        data[1] = (data[1] < 128)? 255: 0;
-        data[2] = (data[2] < 128)? 255: 0;
-        // alpha, no modify
+        const [r, g, b, a] = data.subarray(0, 4);
+        if (a) {
+            data[0] = (data[0] < 128)? 255: 0;  // red
+            data[1] = (data[1] < 128)? 255: 0;  // green
+            data[2] = (data[2] < 128)? 255: 0;  // blue
+        } else {
+            data[3] = 255;  // alpha
+        }
     }
     if (guide) {
         for (let y = 0; y < dstHeight; y += 1) {
             const o = Math.round(dstWidth /2) + y * dstWidth;
-            if ((y % 8) < 4) {
+            if ((y % 8) < 4) {  // dashed line
                 guideColor(dstData, o);
             }
         }
         for (let x = 0; x < dstWidth; x += 1) {
             const o = x + Math.round(dstHeight / 2) * dstWidth;
-            if ((x % 8) < 4) {
+            if ((x % 8) < 4) {  // dashed line
                 guideColor(dstData, o);
             }
         }
-        for (let x = 0; x < Math.min(dstWidth, dstHeight); x += 1) {
+        for (let x = 0; x < dstWidth; x += 1) {
             const o = x + x * dstWidth;
-            if ((x % 8) < 4) {
+            if ((x % 8) < 4) {  // dashed line
                 guideColor(dstData, o);
             }
         }
