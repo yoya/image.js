@@ -132,7 +132,8 @@ function drawOrientation(srcCanvas, dstCanvas, params) {
     const srcData = new Uint32Array(srcImageData.data.buffer);
     const dstData = new Uint32Array(dstImageData.data.buffer);
     const n = srcData.length;
-    //
+
+    // draw image with orientation
     let startx = horizontal? (width - 1): 0;
     let dx = horizontal? -1: 1;
     let starty = vertical? (height - 1): 0;
@@ -148,6 +149,9 @@ function drawOrientation(srcCanvas, dstCanvas, params) {
         }
         yy += dy
     }
+    // draw guide lines
+    const width_2 = Math.round((diagonal? height: width) / 2);
+    const height_2 = Math.round((diagonal? width: height) / 2);
     const guideColor = function(arr, offset) {
         const data = new Uint8Array(arr.buffer, offset * 4);
         const [r, g, b, a] = data.subarray(0, 4);
@@ -161,13 +165,13 @@ function drawOrientation(srcCanvas, dstCanvas, params) {
     }
     if (guide) {
         for (let y = 0; y < dstHeight; y += 1) {
-            const o = Math.round(dstWidth /2) + y * dstWidth;
+            const o = width_2 + y * dstWidth;
             if ((y % 8) < 4) {  // dashed line
                 guideColor(dstData, o);
             }
         }
         for (let x = 0; x < dstWidth; x += 1) {
-            const o = x + Math.round(dstHeight / 2) * dstWidth;
+            const o = x + height_2 * dstWidth;
             if ((x % 8) < 4) {  // dashed line
                 guideColor(dstData, o);
             }
