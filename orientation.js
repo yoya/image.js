@@ -25,34 +25,37 @@ function params2element(params) {
 }
 
 function toOrientation(horizontal, vertical, diagonal) {
-    const orientation = 1 +
-          horizontal + (vertical << 1) + (diagonal << 2);
+    const hori_vert = horizontal? (vertical? 2: 1): (vertical? 3: 0);
+    const orientation = 1 + hori_vert + (diagonal? 4: 0);
+    console.log("toOrientation", orientation, horizontal, vertical, diagonal);
     return orientation;
 }
 
 function fromOrientation(orientation) {
-    const vertical = (orientation - 1) & 1;
-    const horizontal =  (orientation - 1) & 2;
+    const hori_vert = (orientation - 1) & 3;
+    const horizontal = (hori_vert === 1) || (hori_vert === 2);
+    const vertical = (hori_vert === 2) || (hori_vert === 3);
     const diagonal = (orientation - 1) & 4;
-    return [!!vertical, !!horizontal, !!diagonal];
+    console.log("fromOrientation", orientation, horizontal, vertical, diagonal);
+    return [!!horizontal, !!vertical, !!diagonal];
 }
 
 function rotateOrientation(orientation, degree) {
-    let [vertical, horizontal, diagonal] = fromOrientation(orientation);
-    const mirror = vertical ^ horizontal ^ diagonal;
+    let [horizontal, vertical, diagonal] = fromOrientation(orientation);
+    const mirror = horizontal ^ vertical ^ diagonal;
     const rotate90 = (degree === 90);
     /*
       * rotate 90
-     * {diag,hori,vert}: 1:{000} => 6:{101} => 4:{011} => 7:{110}
-     * {diag,hori,vert}: 5:{100} => 3:{010} => 8:{111} => 2:{001}
-     */
+      * {diag,vert,hori}: 1:{000} => 6:{101} => 4:{011} => 7:{110}
+      * {diag,vert,hori}: 5:{100} => 3:{010} => 8:{111} => 2:{001}
+      */
     if (mirror ^ rotate90) {
-        [vertical, horizontal] = [!horizontal, vertical];
+        [horizontal, vertical] = [vertical, !horizontal];
     } else {
-        [vertical, horizontal] = [horizontal, !vertical];
+        [horizontal, vertical] = [!vertical, horizontal];
     }
     diagonal = ! diagonal;
-    return toOrientation(vertical, horizontal, diagonal);
+    return toOrientation(horizontal, vertical, diagonal);
 }
 
 function main() {
@@ -75,7 +78,8 @@ function main() {
                                          params);
 		 }, params);
     bindFunction({"orientationSelect":null,
-                  "verticalCheckbox":null, "horizontalCheckbox":null,
+                  "horizontalCheckbox":null,
+                  "verticalCheckbox":null,
                   "diagonalCheckbox":null,
                   "rotate90Button":null, "rotate270Button":null
                  }, function(target) {
@@ -90,15 +94,15 @@ function main() {
                              orientation = rotateOrientation(orientation, 270);
                              params.orientationSelect = orientation;
                          }
-                         const [vertical, horizontal, diagonal] = fromOrientation(orientation);
-                         params.verticalCheckbox = vertical;
+                         const [horizontal, vertical, diagonal] = fromOrientation(orientation);
                          params.horizontalCheckbox = horizontal;
+                         params.verticalCheckbox = vertical;
                          params.diagonalCheckbox = diagonal;
                      } else {
-                         const vertical = params.verticalCheckbox;
                          const horizontal = params.horizontalCheckbox;
+                         const vertical = params.verticalCheckbox;
                          const diagonal = params.diagonalCheckbox;
-                         const orientation = toOrientation(vertical, horizontal, diagonal);
+                         const orientation = toOrientation(horizontal, vertical, diagonal);
                          params.orientationSelect = orientation;
                      }
                      params2element(params);
@@ -116,7 +120,8 @@ function drawSrcImageAndOrientation(srcImage, srcCanvas, dstCancas, params) {
 function drawOrientation(srcCanvas, dstCanvas, params) {
     // console.debug("drawOrientation");
     const orientation = params.orientationSelect;
-    const [vertical, horizontal, diagonal] = fromOrientation(orientation);
+    const [horizontal, vertical, diagonal] = fromOrientation(orientation);
+    console.log("drawOrientation", orientation, horizontal, vertical, diagonal);
     const guide = params.guideCheckbox;
     //
     const srcCtx = srcCanvas.getContext("2d");
