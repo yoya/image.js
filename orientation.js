@@ -25,19 +25,17 @@ function params2element(params) {
 }
 
 function toOrientation(horizontal, vertical, diagonal) {
-    const hori_vert = horizontal? (vertical? 2: 1): (vertical? 3: 0);
-    const orientation = 1 + hori_vert + (diagonal? 4: 0);
-    console.log("toOrientation", orientation, horizontal, vertical, diagonal);
-    return orientation;
+    const reverse = horizontal !== vertical;
+    const o = (reverse? 1: 0) + (vertical? 2: 0) + (diagonal? 4: 0);
+    return o + 1;  // orientation;
 }
 
 function fromOrientation(orientation) {
-    const hori_vert = (orientation - 1) & 3;
-    const horizontal = (hori_vert === 1) || (hori_vert === 2);
-    const vertical = (hori_vert === 2) || (hori_vert === 3);
-    const diagonal = (orientation - 1) & 4;
-    console.log("fromOrientation", orientation, horizontal, vertical, diagonal);
-    return [!!horizontal, !!vertical, !!diagonal];
+    const o = orientation - 1;
+    const vertical = (o & 2)? true: false;
+    const horizontal = ((o & 1)?true: false) !== vertical;
+    const diagonal = (o & 4)? true: false;
+    return [horizontal, vertical, diagonal];
 }
 
 function rotateOrientation(orientation, degree) {
