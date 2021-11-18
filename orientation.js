@@ -146,7 +146,7 @@ function drawOrientation(srcCanvas, dstCanvas, params) {
         let xx = startx;
         for (let x = 0; x < width; x += 1) {
             const o = x + y * width;
-            const oo = diagonal? (xx * dstWidth + yy): (xx + yy * width);
+            const oo = diagonal? (xx * dstHeight + yy): (xx + yy * width);
             dstData[oo] = srcData[o];
             xx += dx;
         }
