@@ -61,20 +61,22 @@ function main() {
     // console.debug("main");
     const srcCanvas = document.getElementById("srcCanvas");
     const dstCanvas = document.getElementById("dstCanvas");
+    const dstCanvas2 = document.getElementById("dstCanvas2");
     let srcImage = new Image(srcCanvas.width, srcCanvas.height);
     const params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndOrientation(srcImage, srcCanvas, dstCanvas, params);
+	    drawSrcImageAndOrientation(srcImage, srcCanvas,
+                                       dstCanvas, dstCanvas2, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
                   "guideCheckbox":null
                  }, function(target) {
-		     drawSrcImageAndOrientation(srcImage, srcCanvas, dstCanvas,
-                                         params);
+		     drawSrcImageAndOrientation(srcImage, srcCanvas,
+                                                dstCanvas, dstCanvas2, params);
 		 }, params);
     bindFunction({"orientationSelect":null,
                   "horizontalCheckbox":null,
@@ -105,15 +107,24 @@ function main() {
                          params.orientationSelect = orientation;
                      }
                      params2element(params);
-		     drawSrcImageAndOrientation(srcImage, srcCanvas, dstCanvas,
-                                                params);
+		     drawSrcImageAndOrientation(srcImage, srcCanvas,
+                                                dstCanvas, dstCanvas2, params);
 		 }, params);
 }
 
-function drawSrcImageAndOrientation(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndOrientation(srcImage, srcCanvas,
+                                    dstCancas, dstCancas2, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawOrientation(srcCanvas, dstCanvas, params);
+    const params2 = Object.assign({}, params);
+    const orientation = params2.orientationSelect;
+    if (orientation == 6) {
+        params2.orientationSelect = "8";
+    } else if (orientation == 8) {
+        params2.orientationSelect = "6";
+    }
+    drawOrientation(srcCanvas, dstCanvas2, params2);
 }
 
 function drawOrientation(srcCanvas, dstCanvas, params) {
