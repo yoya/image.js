@@ -14,31 +14,29 @@ function main() {
     var grayCanvas = document.getElementById("grayCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    var clutType = document.getElementById("clutTypeSelect").value;
-    var linearCheckbox = document.getElementById("linearCheckbox");
-    var linear = linearCheckbox.checked;
+    var params = { };
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawClutTable(clutCanvas, clutType);
-	    drawSrcImageAndPseudoColor(srcImage, srcCanvas, grayCanvas, dstCanvas, clutType);
+	    drawClutTable(clutCanvas, params.clutTypeSelect);
+	    drawSrcImageAndPseudoColor(srcImage, srcCanvas, grayCanvas, dstCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "clutTypeSelect":null,
+                  "clutScaleRange":"clutScaleText",
+                  "clutOffsetRange":"clutOffsetText",
                   "linearCheckbox":null},
 		 function(target, rel) {
                      if (target.id === "linearCheckbox") {
-                         linear = linearCheckbox.checked;
-                         makeCLUT(linear);
+                         makeCLUT(params.linearCheckbox);
                      }
-		     clutType = document.getElementById("clutTypeSelect").value;
-		     drawClutTable(clutCanvas, clutType);
-		     drawSrcImageAndPseudoColor(srcImage, srcCanvas, grayCanvas, dstCanvas, clutType);
-		 } );
-    makeCLUT(linear);
-    drawClutTable(clutCanvas, clutType);
+		     drawClutTable(clutCanvas, params.clutTypeSelect);
+		     drawSrcImageAndPseudoColor(srcImage, srcCanvas, grayCanvas, dstCanvas, params);
+		 }, params );
+    makeCLUT(params.linearCheckbox);
+    drawClutTable(clutCanvas, params.clutTypeSelect);
 }
 
 function makeCLUTfromCRGB(points, linear) {
@@ -188,19 +186,24 @@ function drawClutTable(canvas, clutType) {
     ctx.fill();
 }
 
-function drawSrcImageAndPseudoColor(srcImage, srcCanvas, grayCanvas, dstCancas, clutType) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+function drawSrcImageAndPseudoColor(srcImage, srcCanvas, grayCanvas, dstCancas, params) {
+    drawSrcImage(srcImage, srcCanvas, params.maxWidthHeightRange);
     drawGrayImage(srcCanvas, grayCanvas);
-    drawPseudoColor(grayCanvas, dstCanvas, clutType);
+    drawPseudoColor(grayCanvas, dstCanvas, params);
 }
 
-function pseudoColor(v, clutType) {
-    return CLUT[clutType][v];
+function pseudoColor(v, clutType, clutScale, clutOffset) {
+    const offset = 255 * clutOffset / 100;
+    const i = Math.round(offset + v * clutScale) % 256;
+    return CLUT[clutType][i];
 }
 
-function drawPseudoColor(grayCanvas, dstCanvas, clutType) {
+function drawPseudoColor(grayCanvas, dstCanvas, params) {
     // console.debug("drawPseudoColor");
+    const clutType = params.clutTypeSelect;
+    const clutScale = params.clutScaleRange;
+    const clutOffset = params.clutOffsetRange;
+    
     var grayCtx = grayCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     var width = grayCanvas.width, height = grayCanvas.height;
@@ -212,7 +215,7 @@ function drawPseudoColor(grayCanvas, dstCanvas, clutType) {
     for (var y = 0 ; y < height; y++) {
         for (var x = 0 ; x < width; x++) {
 	    var [r, g, b, a] = getRGBA(grayImageData, x, y);
-	    [r, g, b] = pseudoColor(g, clutType);
+	    [r, g, b] = pseudoColor(g, clutType, clutScale, clutOffset);
 	    setRGBA(dstImageData, x, y, [r,g,b,a]);
 	}
     }

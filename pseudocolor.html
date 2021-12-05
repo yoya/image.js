@@ -30,7 +30,13 @@
           <option value="contour"       > Contour </option>
 	</select>
 	<div>
-	  <canvas id="clutCanvas" class="borderGray" width=256 height=32> clutCanvas </canvas>
+          <div>
+	    <canvas id="clutCanvas" class="borderGray" width=256 height=32> clutCanvas </canvas>
+          </div> <div>
+      	    clutScale:<input id="clutScaleRange" type="range" min="1" max="10" step="1" value="1">:<input type="text" id="clutScaleText" size="5">
+          </div> <div>
+            clutOffset:<input id="clutOffsetRange" type="range" min="0" max="100" step="1" value="0">:<input type="text" id="clutOffsetText" size="5">
+          </div>
 	</div>
 	<div>
 	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
