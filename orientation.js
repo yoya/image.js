@@ -119,10 +119,10 @@ function drawSrcImageAndOrientation(srcImage, srcCanvas,
     drawOrientation(srcCanvas, dstCanvas, params);
     const params2 = Object.assign({}, params);
     const orientation = params2.orientationSelect;
-    if (orientation == 6) {
-        params2.orientationSelect = "8";
-    } else if (orientation == 8) {
-        params2.orientationSelect = "6";
+    if (orientation == 2) {
+        params2.orientationSelect = "4";
+    } else if (orientation == 4) {
+        params2.orientationSelect = "2";
     }
     drawOrientation(srcCanvas, dstCanvas2, params2);
 }
