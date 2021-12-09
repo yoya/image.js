@@ -62,14 +62,14 @@ function main() {
     const srcCanvas = document.getElementById("srcCanvas");
     const dstCanvas = document.getElementById("dstCanvas");
     const dstCanvas2 = document.getElementById("dstCanvas2");
-    let srcImage = new Image(srcCanvas.width, srcCanvas.height);
     const params = {};
+    let srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    srcImage.src = "./RGBY.png";
+    srcImage.onload = function() {
+	drawSrcImageAndOrientation(srcImage, srcCanvas,
+                                   dstCanvas, dstCanvas2, params);
+    }
     dropFunction(document, function(dataURL) {
-	srcImage = new Image();
-	srcImage.onload = function() {
-	    drawSrcImageAndOrientation(srcImage, srcCanvas,
-                                       dstCanvas, dstCanvas2, params);
-	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
