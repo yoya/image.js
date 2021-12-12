@@ -57,13 +57,24 @@ function rotateOrientation(orientation, degree) {
     return toOrientation(horizontal, vertical, diagonal);
 }
 
+// direction: 0:horizontal, 1:vertical
+function mirrorOrientation(orientation, direction) {
+    let [horizontal, vertical, diagonal] = fromOrientation(orientation);
+    if (diagonal ^ direction) {
+        vertical = ! vertical;
+    } else {
+        horizontal = ! horizontal;
+    }
+    return toOrientation(horizontal, vertical, diagonal);
+}
+
 function main() {
     // console.debug("main");
     const srcCanvas = document.getElementById("srcCanvas");
     const dstCanvas = document.getElementById("dstCanvas");
     const dstCanvas2 = document.getElementById("dstCanvas2");
     const params = {};
-    let srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    let srcImage = new Image();
     srcImage.src = "./RGBY.png";
     srcImage.onload = function() {
 	drawSrcImageAndOrientation(srcImage, srcCanvas,
@@ -82,18 +93,32 @@ function main() {
                   "horizontalCheckbox":null,
                   "verticalCheckbox":null,
                   "diagonalCheckbox":null,
-                  "rotate90Button":null, "rotate270Button":null
+                  "rotate90Button":null, "rotate270Button":null,
+                  "horizontalButton":null, "verticalButton":null,
                  }, function(target) {
                      if ((target.id === "orientationSelect") ||
                          (target.id === "rotate90Button") ||
-                         (target.id === "rotate270Button")) {
+                         (target.id === "rotate270Button") ||
+                         (target.id === "horizontalButton") ||
+                         (target.id === "verticalButton")) {
                          let orientation = params.orientationSelect;
-                         if (target.id === "rotate90Button") {
+                         switch (target.id) {
+                         case "rotate90Button":
                              orientation = rotateOrientation(orientation, 90);
                              params.orientationSelect = orientation;
-                         } else if (target.id === "rotate270Button") {
+                             break;
+                         case "rotate270Button":
                              orientation = rotateOrientation(orientation, 270);
                              params.orientationSelect = orientation;
+                             break;
+                         case "horizontalButton":
+                             orientation = mirrorOrientation(orientation, 0);
+                             params.orientationSelect = orientation;
+                             break;
+                         case "verticalButton":
+                             orientation = mirrorOrientation(orientation, 1);
+                             params.orientationSelect = orientation;
+                             break;
                          }
                          const [horizontal, vertical, diagonal] = fromOrientation(orientation);
                          params.horizontalCheckbox = horizontal;
@@ -119,11 +144,7 @@ function drawSrcImageAndOrientation(srcImage, srcCanvas,
     drawOrientation(srcCanvas, dstCanvas, params);
     const params2 = Object.assign({}, params);
     const orientation = params2.orientationSelect;
-    if (orientation == 2) {
-        params2.orientationSelect = "4";
-    } else if (orientation == 4) {
-        params2.orientationSelect = "2";
-    }
+    params2.orientationSelect = [0, 1, 2, 3, 4, 5, 8, 7, 6][orientation];
     drawOrientation(srcCanvas, dstCanvas2, params2);
 }
 
