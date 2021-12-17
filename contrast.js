@@ -37,9 +37,9 @@ function drawSrcImageAndContrast(srcImage, srcCanvas, dstCancas, params) {
 
 function contrast(rgba, slope, intercept) {
     return [
-        rgba[0] * slope + intercept,
-        rgba[1] * slope + intercept,
-        rgba[2] * slope + intercept,
+        rgba[0] * slope + intercept * 255,
+        rgba[1] * slope + intercept * 255,
+        rgba[2] * slope + intercept * 255,
         rgba[3]
     ];
 }
@@ -58,7 +58,7 @@ function drawContrast(srcCanvas, dstCanvas, params) {
     //
     // https://drafts.fxtf.org/filter-effects/#contrastEquivalent
     const slope = amount;
-    const intercept = -(127.5 * amount) + 127.5;
+    const intercept = - (0.5 * amount) + 0.5;
     //
     console.log("slope:"+slope, " intercept:"+intercept);
     for (let y = 0 ; y < height; y++) {
