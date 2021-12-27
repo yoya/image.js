@@ -5,6 +5,7 @@
  */
 
 importScripts("../lib/canvas.js");
+importScripts("../lib/color.js");
 
 onmessage = function(e) {
     // console.debug("worker/onmessage:", e);
@@ -42,26 +43,6 @@ onmessage = function(e) {
     postMessage({image:dstImageData}, [dstImageData.data.buffer]);
 }
 
-function matchColorV(v1, v2, fuzz) {
-    var diff;
-    if (v2 > v1) {
-        diff = v2 - v1;
-    } else {
-        diff = v1 - v2;
-    }
-    return (diff/255 <= fuzz);
-}
-
-function matchColor(rgba, rgba2, fuzz) {
-    var [r, g, b, a] = rgba;
-    var [r2, g2, b2, a2] = rgba2;
-    if ( matchColorV(r, r2, fuzz) && matchColorV(g, g2, fuzz) &&
-	 matchColorV(b, b2, fuzz) && matchColorV(a, a2, fuzz) ) {
-	return true
-    }
-    return false;
-}
-
 function matchColorLineNum(imageData, rgba, fuzz, isVert, start, d) {
     var width = imageData.width, height = imageData.height;
     var num = 0;
@@ -70,7 +51,7 @@ function matchColorLineNum(imageData, rgba, fuzz, isVert, start, d) {
 	    for (var y = start ; y < height ; y+= d) {
 		for (var x = 0 ; x < width ; x++) {
 		    var rgba2 = getRGBA(imageData, x, y);
-		    if (matchColor(rgba, rgba2, fuzz) === false) {
+		    if (similarRGBA(rgba, rgba2, fuzz) === false) {
 			return y;
 		    }
 		}
@@ -82,7 +63,7 @@ function matchColorLineNum(imageData, rgba, fuzz, isVert, start, d) {
 	    for (var y = start ; y >= 0 ; y+= d) {
 		for (var x = 0 ; x < width ; x++) {
 		    var rgba2 = getRGBA(imageData, x, y);
-		    if (matchColor(rgba, rgba2, fuzz) === false) {
+		    if (similarRGBA(rgba, rgba2, fuzz) === false) {
 			return y;
 		    }
 		}
@@ -94,7 +75,7 @@ function matchColorLineNum(imageData, rgba, fuzz, isVert, start, d) {
 	    for (var x = start ; x < width ; x+= d) {
 		for (var y = 0 ; y < height ; y++) {
 		    var rgba2 = getRGBA(imageData, x, y);
-		    if (matchColor(rgba, rgba2, fuzz) === false) {
+		    if (similarRGBA(rgba, rgba2, fuzz) === false) {
 			return x;
 		    }
 		}
@@ -106,7 +87,7 @@ function matchColorLineNum(imageData, rgba, fuzz, isVert, start, d) {
 	    for (var x = start ; x >= 0 ; x+= d) {
 		for (var y = 0 ; y < height ; y++) {
 		    var rgba2 = getRGBA(imageData, x, y);
-		    if (matchColor(rgba, rgba2, fuzz) === false) {
+		    if (similarRGBA(rgba, rgba2, fuzz) === false) {
 			return x;
 		    }
 		}
