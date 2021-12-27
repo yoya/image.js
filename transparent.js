@@ -11,6 +11,9 @@ function main() {
     // console.debug("main");
     const srcCanvas = document.getElementById("srcCanvas");
     const dstCanvas = document.getElementById("dstCanvas");
+    const srcCtx = srcCanvas.getContext("2d");
+    const transparentColorRect = document.getElementById("transparentColorRect");
+    const transparentColorText = document.getElementById("transparentColorText");
     let srcImage = new Image(srcCanvas.width, srcCanvas.height);
     const params = {};
     dropFunction(document, function(dataURL) {
@@ -30,8 +33,15 @@ function main() {
     bindCursolFunction("srcCanvas", params, function(target, eventType) {
         if (eventType !== "mousedown") { return false ; }
         const {x, y} = params[target.id];
-        params.x = x;
-        params.y = y;
+        const {width, height} = srcCanvas;
+        const srcImageData = srcCtx.getImageData(0, 0, width, height);
+        const rgba = getRGBA(srcImageData, x, y);
+        const [r,g,b,a] = rgba;
+        const colorText = "RGBA("+r+","+g+","+b+","+a+")";
+        const fgColor = "rgba("+r+","+g+","+b+")";
+        transparentColorRect.style.backgroundColor = fgColor;
+        transparentColorText.innerText = colorText;
+        params.transparentColor = rgba;
         drawSrcImageAndTransparent(srcImage, srcCanvas, dstCanvas, params);
     });
 }
@@ -46,6 +56,7 @@ function drawTransparent(srcCanvas, dstCanvas, params) {
     // console.debug("drawTransparent");
     const alpha = params.alphaRange;
     const fuzz = params.fuzzRange;
+    const transparentColor = params.transparentColor;
     //
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
@@ -55,11 +66,8 @@ function drawTransparent(srcCanvas, dstCanvas, params) {
     //
     const srcImageData = srcCtx.getImageData(0, 0, width, height);
     const dstImageData = dstCtx.createImageData(width, height);
-    const transparentColor = getRGBA(srcImageData, params.x, params.y);
     //
-    if ((params.x === undefined) || (params.y === undefined)) {
-        dstImageData.data.set(srcImageData.data);
-    } else {
+    if (transparentColor) {
         for (let y = 0 ; y < height; y++) {
             for (let x = 0 ; x < width; x++) {
 	        const rgba = getRGBA(srcImageData, x, y);
@@ -69,6 +77,8 @@ function drawTransparent(srcCanvas, dstCanvas, params) {
 	        setRGBA(dstImageData, x, y, rgba);
 	    }
         }
+    } else {
+        dstImageData.data.set(srcImageData.data);
     }
     dstCtx.putImageData(dstImageData, 0, 0);
 }
