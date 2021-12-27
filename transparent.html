@@ -9,6 +9,8 @@
     <div class="container">
       <div class="controlPanel">
 	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+        alpha:<input id="alphaRange" type="range" min="0" max="255" step="1" value="0">:<input type="text" id="alphaText" size="5">
+        fuzz:<input id="fuzzRange" type="range" min="0.0" max="1.0" step="0.01" value="0">:<input type="text" id="fuzzText" size="5">
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
@@ -16,6 +18,7 @@
     <script type="text/javascript" src="lib/drop.js"> </script>
     <script type="text/javascript" src="lib/bind.js"> </script>
     <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="lib/color.js"> </script>
     <script type="text/javascript" src="transparent.js"> </script>
   </body>
 </html>

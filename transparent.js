@@ -20,10 +20,12 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+                  "alphaRange":"alphaText",
+                  "fuzzRange":"fuzzText"},
 		 function() {
 		     drawSrcImageAndTransparent(srcImage, srcCanvas, dstCanvas,
-                                         params);
+                                                params);
 		 }, params);
     bindCursolFunction("srcCanvas", params, function(target, eventType) {
         if (eventType !== "mousedown") { return false ; }
@@ -42,18 +44,18 @@ function drawSrcImageAndTransparent(srcImage, srcCanvas, dstCancas, params) {
 
 function drawTransparent(srcCanvas, dstCanvas, params) {
     // console.debug("drawTransparent");
+    const alpha = params.alphaRange;
+    const fuzz = params.fuzzRange;
+    //
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const width = srcCanvas.width, height = srcCanvas.height;
-    const x = 
     dstCanvas.width  = width;
     dstCanvas.height = height;
     //
     const srcImageData = srcCtx.getImageData(0, 0, width, height);
     const dstImageData = dstCtx.createImageData(width, height);
-    console.log(params.x, params.y);
-    const [red, green, blue] = getRGBA(srcImageData, params.x, params.y);
-    console.log(red, green, blue);
+    const transparentColor = getRGBA(srcImageData, params.x, params.y);
     //
     if ((params.x === undefined) || (params.y === undefined)) {
         dstImageData.data.set(srcImageData.data);
@@ -61,8 +63,8 @@ function drawTransparent(srcCanvas, dstCanvas, params) {
         for (let y = 0 ; y < height; y++) {
             for (let x = 0 ; x < width; x++) {
 	        const rgba = getRGBA(srcImageData, x, y);
-                if ((rgba[0] === red) && (rgba[1] === green) && (rgba[2] === blue)) {
-                    rgba[3] = 0;
+                if (similarRGBA(transparentColor, rgba, fuzz)) {
+                    rgba[3] = alpha;
                 }
 	        setRGBA(dstImageData, x, y, rgba);
 	    }
