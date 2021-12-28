@@ -120,7 +120,7 @@ function drawSSIM(srcImageData1, srcImageData2, params) {
                               srcX1, srcY1, srcX2, srcY2,
                               c1, c2, c3, alpha, beta, gamma);
             for (var c = 0 ; c < 3 ; c++) {
-                lArr[i]  = lArrRGB[c];
+                lArr[i] = lArrRGB[c];
                 cArr[i] = cArrRGB[c];
                 sArr[i] = sArrRGB[c];
                 ssimArr[i] = ssimRGB[c];
