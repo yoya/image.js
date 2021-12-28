@@ -56,7 +56,7 @@ function main() {
                               viewSizeX, viewSizeY, 0, 0,
                               viewCanvas.width, viewCanvas.height);
         } else if (eventType === "mouseleave") {
-            viewCanvas.width = width;  // canvas clear
+            viewCanvas.width = viewCanvas.width;  // canvas clear
         }
     });
 }
