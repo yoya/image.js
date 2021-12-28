@@ -11,7 +11,9 @@ function main() {
     // console.debug("main");
     const srcCanvas = document.getElementById("srcCanvas");
     const dstCanvas = document.getElementById("dstCanvas");
+    const viewCanvas = document.getElementById("viewCanvas");
     const srcCtx = srcCanvas.getContext("2d");
+    const viewCtx = viewCanvas.getContext("2d");
     const transparentColorRect = document.getElementById("transparentColorRect");
     const transparentColorText = document.getElementById("transparentColorText");
     let srcImage = new Image(srcCanvas.width, srcCanvas.height);
@@ -31,18 +33,31 @@ function main() {
                                                 params);
 		 }, params);
     bindCursolFunction("srcCanvas", params, function(target, eventType) {
-        if (eventType !== "mousedown") { return false ; }
         const {x, y} = params[target.id];
         const {width, height} = srcCanvas;
         const srcImageData = srcCtx.getImageData(0, 0, width, height);
-        const rgba = getRGBA(srcImageData, x, y);
-        const [r,g,b,a] = rgba;
-        const colorText = "RGBA("+r+","+g+","+b+","+a+")";
-        const fgColor = "rgba("+r+","+g+","+b+")";
-        transparentColorRect.style.backgroundColor = fgColor;
-        transparentColorText.innerText = colorText;
-        params.transparentColor = rgba;
-        drawSrcImageAndTransparent(srcImage, srcCanvas, dstCanvas, params);
+        if (eventType === "mousedown") {
+            const rgba = getRGBA(srcImageData, x, y);
+            const [r,g,b,a] = rgba;
+            const colorText = "RGBA("+r+","+g+","+b+","+a+")";
+            const fgColor = "rgba("+r+","+g+","+b+")";
+            transparentColorRect.style.backgroundColor = fgColor;
+            transparentColorText.innerText = colorText;
+            params.transparentColor = rgba;
+            drawSrcImageAndTransparent(srcImage, srcCanvas, dstCanvas, params);
+        } else if (eventType === "mousemove") {
+            if ((x < 0) || (width <= x) || (y < 0) || (height < y)) {
+                return ;  // out of canvas area
+            }
+            const viewSizeX = 12, viewSizeY = 10;
+            const viewCenterX = Math.round(viewSizeX - 1) / 2;
+            const viewCenterY = Math.round(viewSizeY - 1) / 2;
+            viewCtx.drawImage(srcCanvas, x - viewCenterX, y - viewCenterY,
+                              viewSizeX, viewSizeY, 0, 0,
+                              viewCanvas.width, viewCanvas.height);
+        } else if (eventType === "mouseleave") {
+            viewCanvas.width = width;  // canvas clear
+        }
     });
 }
 
