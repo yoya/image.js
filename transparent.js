@@ -12,8 +12,9 @@ function main() {
     const srcCanvas = document.getElementById("srcCanvas");
     const dstCanvas = document.getElementById("dstCanvas");
     const viewCanvas = document.getElementById("viewCanvas");
+    const viewOfflineCanvas = document.createElement("canvas");
     const srcCtx = srcCanvas.getContext("2d");
-    const viewCtx = viewCanvas.getContext("2d");
+    const viewOfflineCtx = viewOfflineCanvas.getContext("2d");
     const transparentColorRect = document.getElementById("transparentColorRect");
     const transparentColorText = document.getElementById("transparentColorText");
     let srcImage = new Image(srcCanvas.width, srcCanvas.height);
@@ -46,15 +47,21 @@ function main() {
             params.transparentColor = rgba;
             drawSrcImageAndTransparent(srcImage, srcCanvas, dstCanvas, params);
         } else if (eventType === "mousemove") {
-            if ((x < 0) || (width <= x) || (y < 0) || (height < y)) {
+            if ((x < 0) || (width <= x) || (y < 0) || (height <= y)) {
                 return ;  // out of canvas area
             }
-            const viewSizeX = 12, viewSizeY = 10;
-            const viewCenterX = Math.round(viewSizeX - 1) / 2;
-            const viewCenterY = Math.round(viewSizeY - 1) / 2;
-            viewCtx.drawImage(srcCanvas, x - viewCenterX, y - viewCenterY,
-                              viewSizeX, viewSizeY, 0, 0,
-                              viewCanvas.width, viewCanvas.height);
+            const viewSizeX = 7;
+            const viewSizeY = Math.round(viewSizeX * viewCanvas.height / viewCanvas.width);
+            const viewCenterX = (viewSizeX - 1) / 2;
+            const viewCenterY = (viewSizeY - 1) / 2;
+            console.debug(viewSizeX, viewSizeY, viewCenterX, viewCenterY);
+            viewOfflineCanvas.width = viewSizeX;
+            viewOfflineCanvas.height = viewSizeY;
+            viewOfflineCtx.drawImage(srcCanvas,
+                                     x - viewCenterX, y - viewCenterY,
+                                     viewSizeX, viewSizeY,
+                                     0, 0, viewSizeX, viewSizeY);
+            copyCanvasScaled(viewOfflineCanvas, viewCanvas);
         } else if (eventType === "mouseleave") {
             viewCanvas.width = viewCanvas.width;  // canvas clear
         }
