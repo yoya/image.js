@@ -32,14 +32,7 @@ onmessage = function(e) {
     var dstWidth  = (maxX > minX)?(maxX - minX + 1):1;
     var dstHeight = (maxY > minY)?(maxY - minY + 1):1;
     var dstImageData = new ImageData(dstWidth, dstHeight);
-    for (var dstY = 0 ; dstY < dstHeight; dstY++) {
-        for (var dstX = 0 ; dstX < dstWidth; dstX++) {
-	    var srcX = dstX + minX;
-	    var srcY = dstY + minY;
-	    var rgba = getRGBA(srcImageData, srcX, srcY);
-	    setRGBA(dstImageData, dstX, dstY, rgba);
-	}
-    }
+    cropImageData(srcImageData, dstImageData, minX, minY);
     postMessage({image:dstImageData}, [dstImageData.data.buffer]);
 }
 
