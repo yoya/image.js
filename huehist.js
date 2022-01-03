@@ -59,9 +59,10 @@ function getHueHistogram(canvas, params) {
         const rgba = data.slice(i, i+4);
         const alpha = rgba[3];
         const [h, s, l] = RGB2HSL(rgba);
-        hist[h] += s * l * alpha;
+        const hh = Math.round(h);
+        hist[hh] += s * l * alpha;
         const ss = Math.round(s * 100);
-        map[h + (ss * 360)] += l * alpha;
+        map[hh + (ss * 360)] += l * alpha;
     }
     if (binHist > 1) {
         for (let i = 0; i < 360; i+= binHist) {
