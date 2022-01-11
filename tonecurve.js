@@ -7,16 +7,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
+const COLOR_RED   = "#F10";
+const COLOR_GREEN = "#0C0";
+const COLOR_BLUE  = "#35F";
+
 function main() {
     // console.debug("main");
     const srcCanvas = document.getElementById("srcCanvas");
     const dstCanvas = document.getElementById("dstCanvas");
     const toneCanvas = document.getElementById("toneCanvas");
     const srcImage = new Image();
-    const markers = [{x:0, y:255, r:7, lw:2, c:"red"},
-                     {x:255, y:0, r:7, lw:2, c:"blue"}]
+    const markers = [{x:0, y:255, r:8, lw:2, c:COLOR_RED},
+                     {x:255, y:0, r:8, lw:2, c:COLOR_BLUE}];
+    const toneTable = new Uint8ClampedArray(256);
     const params = {
         markers: markers,
+        toneTable: toneTable,
         grabStatus: false,
         grabIndex: null,
     };
@@ -37,16 +43,34 @@ function main() {
         // console.debug(eventType, x, y);
         switch (eventType) {
         case "mousedown":
-            
+            const idx = grabMarker(markers, x, y);
+            if (idx === null) {
+                addMarker(params, {x:x, y:y, r:7, lw:2, c:COLOR_GREEN});
+            } else {
+                params.grabStatus = true;
+                params.grabIndex = idx;
+            }
             break;
         case "mouseup":
-            addMarker(params, {x:x, y:y, r:7, lw:2, c:"green"});
-            console.log(params.markers);;
+        case "mouseleave":
+            params.grabStatus = false;
+            params.grabIndex = null;
         case "mousemove":
+            if (params.grabStatus) {
+                const idx = params.grabIndex;
+                const m = markers[idx];
+                constraintMarker(markers, idx, x, y);
+            }
             break;
         }
+        makeToneTable(params)
         drawToneCanvas(toneCanvas, params);
+	drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCanvas,
+                                 params);
+        
     });
+    makeToneTable(params)
+    drawToneCanvas(toneCanvas, params);
 }
 
 function addMarker(params, m) {
@@ -54,43 +78,63 @@ function addMarker(params, m) {
     let i;
     const n = markers.length;
     for (i = 0 ; i < n ; i++) {
-        if (markers[i].x < m.x) {
+        if (m.x < markers[i].x) {
             break;
         }
     }
     markers.splice(i, 0, m);
 }
 
-function grabMarker(markers, m) {
+function grabMarker(markers, x, y) {
     let i;
     const n = markers.length;
-    let distance = Number.MAX_VALUE;
+    let mindist = Number.MAX_VALUE;
+    let idx = null;
     for (i = 0 ; i < n ; i++) {
-        if (markers[i].x < m.x) {
-            break;
+        const m = markers[i]
+        const dd = (m.x - x)**2 + (m.y - y)**2;
+        const rr = (m.r*1.8) ** 2;  // hittest boost rate:1.8
+        if ((dd < rr) && (dd < mindist)) {
+            mindist = dd;
+            idx = i;
         }
     }
+    return idx;
 }
 
+function constraintMarker(markers, i, x, y) {
+    const n = markers.length;
+    const m = markers[i];
+    if (i === 0) {
+        m.x = 0;
+        m.y = y;
+    }
+    if (i === (n - 1)) {
+        m.x = 255;
+        m.y = y;
+    }
+}
 function drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCancas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawToneCurve(srcCanvas, dstCanvas);
+    drawToneCurve(srcCanvas, dstCanvas, params);
 }
 
 function drawToneCanvas(canvas, params) {
+    canvas.style.backgroundColor = "white";
     canvas.width = canvas.width;
     drawMarkers(canvas, params);
+    drawToneTable(canvas, params);
 }
 
 function drawMarkers(canvas, params) {
     const markers = params.markers;
     const ctx = canvas.getContext("2d");
-    console.log("drawMarkers:", markers);
+    //console.log("drawMarkers:", markers);
     for (let i in markers) {
         const {x, y, r, lw, c} = markers[i];
-        console.log(markers);
-        console.log(x, y, r, lw, c);
+        //console.log(markers);
+        //console.log(x, y, r, lw, c);
         // cross
         ctx.fillStyle = c;
         ctx.globalAlpha = 1.0;
@@ -108,9 +152,44 @@ function drawMarkers(canvas, params) {
     }
 }
 
+function makeToneTable(params) {
+    const markers = params.markers;
+    const toneTable = params.toneTable;
+    const n = markers.length;
+    for (let i = 1; i < n; i++) {
+        const m1 = markers[i-1];
+        const m2 = markers[i];
+        const x1 = m1.x, y1 = 255 - m1.y;
+        const x2 = m2.x, y2 = 255 - m2.y;
+        for (let x = x1 ; x <= x2; x++) {
+            const y = y1 * (x2-x) / (x2-x1) + y2 * (x-x1) / (x2-x1);
+            toneTable[x] = y;
+        }
+    }
+}
 
-function drawToneCurve(srcCanvas, dstCanvas) {
+function drawToneTable(canvas, params) {
+    const markers = params.markers;
+    const toneTable =  params.toneTable;
+    const ctx = canvas.getContext("2d");
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = 0.5;
+    ctx.beginPath();
+    for (let x = 0; x < 256; x++) {
+        const y = 255 - toneTable[x];
+        if (x === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
+    }
+    ctx.stroke();
+}
+
+function drawToneCurve(srcCanvas, dstCanvas, params) {
     // console.debug("drawToneCurve");
+    const toneTable =  params.toneTable;
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const width = srcCanvas.width, height = srcCanvas.height;
@@ -120,7 +199,8 @@ function drawToneCurve(srcCanvas, dstCanvas) {
     const dstImageData = dstCtx.createImageData(width, height);
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
-	    const rgba = getRGBA(srcImageData, x, y);
+	    const [r,g,b,a] = getRGBA(srcImageData, x, y);
+            const rgba = [toneTable[r],  toneTable[g],  toneTable[b], a];
 	    setRGBA(dstImageData, x, y, rgba);
 	}
     }
