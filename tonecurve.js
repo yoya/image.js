@@ -107,12 +107,20 @@ function constraintMarker(markers, i, x, y) {
     const m = markers[i];
     if (i === 0) {
         m.x = 0;
-        m.y = y;
-    }
-    if (i === (n - 1)) {
+    } else if (i === (n - 1)) {
         m.x = 255;
-        m.y = y;
+    } else {
+        const m1 = markers[i-1];
+        const m2 = markers[i+1];
+        if (m.x <= m1.x) {
+            m.x = m1.x + 1;
+        } else if (m2.x <= m.x) {
+            m.x = m2.x - 1;
+        } else {
+            m.x = x;
+        }
     }
+    m.y = y;
 }
 function drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCancas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
