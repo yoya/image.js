@@ -250,13 +250,12 @@ function makeToneTable_Linear(params) {  // only sample code
     const toneTable = params.toneTable;
     for (let x = 0; x < 256; x++) {
         const [m1, m2] = neighborMarkers(markers, x, 2);
-        console.log(x, m1.x, m2.x);
         const x1 = m1.x, y1 = 255 - m1.y;
         const x2 = m2.x, y2 = 255 - m2.y;
         // Bi-Linear
-        const y1_dist = (x - x1) / (x2 - x1);
-        const y2_dist = (x2 - x) / (x2 - x1);
-        const y = y1 * (1 - y1_dist) + y2 * (1 - y2_dist);
+        const x1_dist = (x - x1) / (x2 - x1);
+        const x2_dist = (x2 - x) / (x2 - x1);
+        const y = y1 * (1 - x1_dist) + y2 * (1 - x2_dist);
         toneTable[x] = y;
     }
 }
