@@ -220,11 +220,13 @@ function neighborMarkers(markers, x, num) {
     const neighbors = [];
     while (neighbors.length < num) {
         if (ab) {  // a
+            a = (a < 0)? 0: a;
             neighbors.splice(0, 0, markers[a]); // append to head
-            a = (a < 0)? 0: (a - 1);
+            a -= 1;
         } else {  // b
+            b = (b < (n - 1))? b: (n - 1);
             neighbors.push(markers[b]);  // append to tail
-            b = (b < (n - 1))? (b + 1): (n - 1);
+            b += 1;
         }
         ab = ! ab;
     }
