@@ -69,7 +69,6 @@ function main() {
         case "mousemove":
             if (params.grabStatus) {  // move action
                 const idx = params.grabIndex;
-                const m = markers[idx];
                 constraintMarker(markers, idx, x, y);
             }
             break;
@@ -84,8 +83,7 @@ function main() {
         }
         makeToneTable(params)
         drawToneCanvas(toneCanvas, params);
-	drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCanvas,
-                                 params);
+	drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCanvas, params);
         
     });
     makeToneTable(params)
@@ -147,6 +145,7 @@ function constraintMarker(markers, i, x, y) {
     }
     m.y = y;
 }
+
 function drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCancas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
@@ -217,6 +216,7 @@ function makeToneTable_Nearest(params) {
         }
     }
 }
+
 function makeToneTable_Linear(params) {
     const markers = params.markers;
     const toneTable = params.toneTable;
