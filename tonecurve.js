@@ -33,7 +33,8 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+                  "interpSelect": null},
 		 function() {
 		     drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCanvas,
                                          params);
@@ -53,6 +54,10 @@ function main() {
             break;
         case "mouseup":
         case "mouseleave":
+            if (params.grabStatus) {  // move action
+                const idx = params.grabIndex;
+                constraintMarker(markers, idx, x, y);
+            }
             params.grabStatus = false;
             // params.grabIndex = null;
         case "mousemove":
@@ -175,6 +180,38 @@ function drawMarkers(canvas, params) {
 }
 
 function makeToneTable(params) {
+    const markers = params.markers;
+    const toneTable = params.toneTable;
+    const interp = params.interpSelect;
+    switch (interp) {
+    case "Nearest":
+        makeToneTable_Nearest(params);
+        break;
+    case "Linear":
+        makeToneTable_Linear(params);
+        break;
+    default:
+        console.error("unknown interp:"+interp)
+    }
+}
+
+function makeToneTable_Nearest(params) {
+    const markers = params.markers;
+    const toneTable = params.toneTable;
+    const n = markers.length;
+    for (let i = 1; i < n; i++) {
+        const m1 = markers[i-1];
+        const m2 = markers[i];
+        const x1 = m1.x, y1 = 255 - m1.y;
+        const x2 = m2.x, y2 = 255 - m2.y;
+        for (let x = x1 ; x <= x2; x++) {
+            const ratio = (x - x1) / (x2-x1);
+            const y = (ratio < 0.5)? y1: y2;
+            toneTable[x] = y;
+        }
+    }
+}
+function makeToneTable_Linear(params) {
     const markers = params.markers;
     const toneTable = params.toneTable;
     const n = markers.length;

@@ -9,7 +9,14 @@
     <div class="container">
       <div class="controlPanel" style="display:flex">
         <div>
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+          <div>
+	    maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+          </div>
+          <span style="vertical-align: top"> interpSelect: </span>
+           <select id="interpSelect" size="2">
+            <option value="Nearest"        > Nearest </option>
+            <option value="Linear" selected> Linear </option>
+          </select>
         </div>
         <div>
           <canvas id="toneCanvas" class="borderBlack" width=256 height=256> toneCanvas </canvas>
