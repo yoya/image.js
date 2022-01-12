@@ -200,36 +200,62 @@ function makeToneTable(params) {
     }
 }
 
+function neighborMarkers(markers, x, num) {
+    const n = markers.length;
+    let a = 0, b = 1;
+    for (let i = 1 ; i < n ; i++) {
+        if (x < markers[i].x) {
+            break;
+        }
+        a += 1;
+        b += 1;
+    }
+    if (b === n) {
+        a = n - 2;
+        b = n - 1;
+    }
+    const ma = markers[a];
+    const mb = markers[b];
+    let ab = ((x - ma.x) < (mb.x - x))? true: false;  // a: true, b: false
+    const neighbors = [];
+    while (neighbors.length < num) {
+        if (ab) {  // a
+            neighbors.splice(0, 0, markers[a]); // append to head
+            a = (a < 0)? 0: (a - 1);
+        } else {  // b
+            neighbors.push(markers[b]);  // append to tail
+            b = (b < (n - 1))? (b + 1): (n - 1);
+        }
+        ab = ! ab;
+    }
+    return neighbors;
+}
+
 function makeToneTable_Nearest(params) {
     const markers = params.markers;
     const toneTable = params.toneTable;
-    const n = markers.length;
-    for (let i = 1; i < n; i++) {
-        const m1 = markers[i-1];
-        const m2 = markers[i];
-        const x1 = m1.x, y1 = 255 - m1.y;
-        const x2 = m2.x, y2 = 255 - m2.y;
-        for (let x = x1 ; x <= x2; x++) {
-            const ratio = (x - x1) / (x2-x1);
-            const y = (ratio < 0.5)? y1: y2;
-            toneTable[x] = y;
-        }
+    for (let x = 0; x < 256; x++) {
+        const [m1] = neighborMarkers(markers, x, 1);
+        const y1 = 255 - m1.y;
+        // Nearest Neighbor
+        const y = y1;
+        toneTable[x] = y1;
     }
 }
 
-function makeToneTable_Linear(params) {
+function makeToneTable_Linear(params) {  // only sample code
     const markers = params.markers;
     const toneTable = params.toneTable;
-    const n = markers.length;
-    for (let i = 1; i < n; i++) {
-        const m1 = markers[i-1];
-        const m2 = markers[i];
+    for (let x = 0; x < 256; x++) {
+        const [m1, m2] = neighborMarkers(markers, x, 2);
+        console.log(x, m1.x, m2.x);
         const x1 = m1.x, y1 = 255 - m1.y;
         const x2 = m2.x, y2 = 255 - m2.y;
-        for (let x = x1 ; x <= x2; x++) {
-            const y = y1 * (x2-x) / (x2-x1) + y2 * (x-x1) / (x2-x1);
-            toneTable[x] = y;
-        }
+        // Bi-Linear
+        const y1_dist = (x - x1) / (x2 - x1);
+        const y2_dist = (x2 - x) / (x2 - x1);
+        const y = y1 * (1 - y1_dist) + y2 * (1 - y2_dist);
+        toneTable[x] = y;
     }
 }
 
