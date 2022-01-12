@@ -43,24 +43,32 @@ function main() {
         // console.debug(eventType, x, y);
         switch (eventType) {
         case "mousedown":
-            const idx = grabMarker(markers, x, y);
-            if (idx === null) {
-                addMarker(params, {x:x, y:y, r:7, lw:2, c:COLOR_GREEN});
-            } else {
-                params.grabStatus = true;
-                params.grabIndex = idx;
+            let idx = grabMarker(markers, x, y);
+            if (idx === null) {  // add action
+                idx = addMarker(params, {x:x, y:y, r:7, lw:2, c:COLOR_GREEN});
             }
+            // grab action
+            params.grabStatus = true;
+            params.grabIndex = idx;
             break;
         case "mouseup":
         case "mouseleave":
             params.grabStatus = false;
-            params.grabIndex = null;
+            // params.grabIndex = null;
         case "mousemove":
-            if (params.grabStatus) {
+            if (params.grabStatus) {  // move action
                 const idx = params.grabIndex;
                 const m = markers[idx];
                 constraintMarker(markers, idx, x, y);
             }
+            break;
+        case "dblclick":  // delete action
+            if (params.grabIndex && (params.grabIndex < (markers.length - 1))) {
+                const idx = params.grabIndex;
+                delMarker(params, idx)
+            }
+            params.grabStatus = false;
+            params.grabIndex = null;
             break;
         }
         makeToneTable(params)
@@ -83,6 +91,12 @@ function addMarker(params, m) {
         }
     }
     markers.splice(i, 0, m);
+    return i;
+}
+
+function delMarker(params, i) {
+    const markers = params.markers;
+    markers.splice(i, 1);
 }
 
 function grabMarker(markers, x, y) {
