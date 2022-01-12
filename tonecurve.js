@@ -33,11 +33,17 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "interpSelect": null},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
 		 function() {
 		     drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCanvas,
-                                         params);
+                                              params);
+		 }, params);
+    bindFunction({"interpSelect": null},
+		 function() {
+                     makeToneTable(params)
+                     drawToneCanvas(toneCanvas, params);
+		     drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCanvas,
+                                              params);
 		 }, params);
     bindCursolFunction("toneCanvas", params, function(target, eventType) {
         var {x, y} = params[target.id];
@@ -131,9 +137,9 @@ function constraintMarker(markers, i, x, y) {
     } else {
         const m1 = markers[i-1];
         const m2 = markers[i+1];
-        if (m.x <= m1.x) {
+        if (x <= m1.x) {
             m.x = m1.x + 1;
-        } else if (m2.x <= m.x) {
+        } else if (m2.x <= x) {
             m.x = m2.x - 1;
         } else {
             m.x = x;
