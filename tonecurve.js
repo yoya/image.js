@@ -11,6 +11,8 @@ const COLOR_RED   = "#F10";
 const COLOR_GREEN = "#0C0";
 const COLOR_BLUE  = "#35F";
 
+const MITCHELL_COEFF = cubicBCcoefficient(1/3, 1/3);
+
 function main() {
     // console.debug("main");
     const srcCanvas = document.getElementById("srcCanvas");
@@ -195,6 +197,12 @@ function makeToneTable(params) {
     case "Linear":
         makeToneTable_Linear(params);
         break;
+    case "Cubic":
+        makeToneTable_Cubic(params);
+        break;
+    case "Buggy":
+        makeToneTable_Cubic(params);
+        break;
     default:
         console.error("unknown interp:"+interp)
     }
@@ -210,22 +218,42 @@ function neighborMarkers(markers, x, num) {
         a += 1;
         b += 1;
     }
+    if (a === n) {
+        a = n - 2;
+        b = n - 1;
+    }
     if (b === n) {
         a = n - 2;
         b = n - 1;
     }
     const ma = markers[a];
     const mb = markers[b];
-    let ab = ((x - ma.x) < (mb.x - x))? true: false;  // a: true, b: false
+    let ab = ((x - ma.x) < (mb.x - x))? true: false;
     const neighbors = [];
     while (neighbors.length < num) {
+        // a: true, b: false
         if (ab) {  // a
-            a = (a < 0)? 0: a;
-            neighbors.splice(0, 0, markers[a]); // append to head
+            let m;
+            if (a >= 0) {
+                m = markers[a];
+            } else {
+                const m0 = markers[0], m1 = markers[1];
+                m = Object.assign({}, m0);
+                m.x = m0.x - (m1.x - m0.x);
+            }
+            neighbors.splice(0, 0, m); // append to head
             a -= 1;
         } else {  // b
-            b = (b < (n - 1))? b: (n - 1);
-            neighbors.push(markers[b]);  // append to tail
+            let m;
+            if (b < n) {
+                m = markers[b];  // append to tail
+            } else {
+                const m0 = markers[n - 2], m1 = markers[n - 1];
+                m = Object.assign({}, m1);
+                m.x = m1.x + (m1.x - m0.x);
+                console.log(m0.x, m1.x, m.x);
+            }
+            neighbors.push(m);  // append to tail
             b += 1;
         }
         ab = ! ab;
@@ -240,7 +268,6 @@ function makeToneTable_Nearest(params) {
         const [m1] = neighborMarkers(markers, x, 1);
         const y1 = 255 - m1.y;
         // Nearest Neighbor
-        const y = y1;
         toneTable[x] = y1;
     }
 }
@@ -256,6 +283,52 @@ function makeToneTable_Linear(params) {  // only sample code
         const x1_dist = (x - x1) / (x2 - x1);
         const x2_dist = (x2 - x) / (x2 - x1);
         const y = y1 * (1 - x1_dist) + y2 * (1 - x2_dist);
+        toneTable[x] = y;
+    }
+}
+
+function makeToneTable_Cubic(params) {  // cubic(1/3,1/3): mitchell filter
+    const markers = params.markers;
+    const toneTable = params.toneTable;
+    for (let x = 0; x < 256; x++) {
+        const [m1, m2, m3, m4] = neighborMarkers(markers, x, 4);
+        console.debug(x, [m1, m2, m3, m4]);
+        const x1 = m1.x, y1 = 255 - m1.y;
+        const x2 = m2.x, y2 = 255 - m2.y;
+        const x3 = m3.x, y3 = 255 - m3.y;
+        const x4 = m4.x, y4 = 255 - m4.y;
+        // Bi-Cubic: Mitchell
+        // x1  x2   x3   x4
+        // |    | .  |    |
+        //        x
+        const scale = 1 / (x2 - x1);
+        const x1_dist = (x - x1) * scale;
+        const x2_dist = (x - x2) * scale;
+        const x3_dist = (x3 - x) * scale;
+        const x4_dist = (x4 - x) * scale;
+        const c = MITCHELL_COEFF;
+        const y = y1 * cubicBC(x1_dist, c) + y2 * cubicBC(x2_dist, c) +
+              y3 * cubicBC(x3_dist, c) + y4 * cubicBC(x4_dist, c);
+        toneTable[x] = y;
+    }
+}
+
+function makeToneTable_Buggy(params) {  // Cubic ???
+    const markers = params.markers;
+    const toneTable = params.toneTable;
+    for (let x = 0; x < 256; x++) {
+        const [m1, m2, m3, m4] = neighborMarkers(markers, x, 4);
+        const x1 = m1.x, y1 = 255 - m1.y;
+        const x2 = m2.x, y2 = 255 - m2.y;
+        const x3 = m3.x, y3 = 255 - m3.y;
+        const x4 = m4.x, y4 = 255 - m4.y;
+        const x1_dist = (x - x1);
+        const x2_dist = (x - x2);
+        const x3_dist = (x3 - x);
+        const x4_dist = (x4 - x);
+        const c = MITCHELL_COEFF;
+        const y = y1 * cubicBC(x1_dist, c) + y2 * cubicBC(x2_dist, c) +
+              y3 * cubicBC(x3_dist, c) + y4 * cubicBC(x4_dist, c);
         toneTable[x] = y;
     }
 }
