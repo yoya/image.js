@@ -40,7 +40,8 @@ function main() {
     dropFunction(document, function(dataURL) {
         srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+                  "typeSelect":null},
 		 function() {
                      drawSrcImageAndCTM(srcImage, params);
 		 }, params);
@@ -95,16 +96,45 @@ function drawCTM(params) {
     //
     const srcImageData = srcCtx.getImageData(0, 0, width, height);
     const srcData = srcImageData.data;
-    const redImageData   = redCtx.getImageData(0, 0, width, height);
-    const greenImageData = greenCtx.getImageData(0, 0, width, height);
-    const blueImageData  = blueCtx.getImageData(0, 0, width, height);
-    const redData = redImageData.data;
-    const greenData = greenImageData.data;
-    const blueData = blueImageData.data;
-    for (let i = 0, n = srcData.length; i < n; i+= 4) {
-        redData[i] = srcData[i];  redData[i+3] = srcData[i+3];
-        greenData[i+1] = srcData[i+1];  greenData[i+3] = srcData[i+3];
-        blueData[i+2] = srcData[i+2];  blueData[i+3] = srcData[i+3];
+    const redImageData   = redCtx.createImageData(width, height);
+    const greenImageData = greenCtx.createImageData(width, height);
+    const blueImageData  = blueCtx.createImageData(width, height);
+    const rData = redImageData.data;
+    const gData = greenImageData.data;
+    const bData = blueImageData.data;
+    switch (params.typeSelect) {
+    case "RGB":
+        for (let i = 0, n = srcData.length; i < n; i+= 4) {
+            const [r, g, b, a] = srcData.subarray(i, i + 4);
+            rData[i] = r;   rData[i+3] = a;
+            gData[i+1] = g; gData[i+3] = a;
+            bData[i+2] = b; bData[i+3] = a;
+        }
+        break;
+    case "RGB2":
+        for (let i = 0, n = srcData.length; i < n; i+= 4) {
+            const [r, g, b, a] = srcData.subarray(i, i + 4);
+            rData[i] = r; rData[i+1] = (255-r)/2; rData[i+2] = (255-r)/2;  rData[i+3] = a;
+            gData[i] = (255-g)/2; gData[i+1] = g; gData[i+2] = (255-g)/2;  gData[i+3] = a;
+            bData[i] = (255-b)/2; bData[i+1] = (255-b)/2; bData[i+2] = b;  bData[i+3] = a;
+        }
+        break;
+    case "CMY":
+        for (let i = 0, n = srcData.length; i < n; i+= 4) {
+            const [r, g, b, a] = srcData.subarray(i, i + 4);
+            rData[i+1] = g; rData[i+2] = b; rData[i+3] = a;
+            gData[i] = r;   gData[i+2] = b; gData[i+3] = a;
+            bData[i] = r;   bData[i+1] = g; bData[i+3] = a;
+        }
+        break;
+    case "CMY2":
+        for (let i = 0, n = srcData.length; i < n; i+= 4) {
+            const [r, g, b, a] = srcData.subarray(i, i + 4);
+            rData[i] = (510-g-b)/2; rData[i+1] = g; rData[i+2] = b; rData[i+3] = a;
+            gData[i] = r; gData[i+1] = (51-r-b)/2; gData[i+2] = b; gData[i+3] = a;
+            bData[i] = r; bData[i+1] = g; bData[i+2] = (510-r-g)/2; bData[i+3] = a;
+        }
+        break;
     }
     redCtx.putImageData(redImageData, 0, 0);
     greenCtx.putImageData(greenImageData, 0, 0);

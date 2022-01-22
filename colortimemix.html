@@ -13,22 +13,31 @@
   <body>
     <div class="container">
       <div class="controlPanel" style="display:flex">
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
         <div>
+	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640"  style="width:200px;">:<input type="text" id="maxWidthHeightText" size="5"> <br />
           <input type="button" id="buttonStart" value="Start"> </input>
           <input type="button" id="buttonStop" value="Stop"> </input>
+          delay:<input id="delayRange" type="range" min="0" max="500" step="1" value="0" style="width:200px;">:<input type="text" id="delayText" size="4">
         </div>
-        delay:<input id="delayRange" type="range" min="1" max="500" step="10" value="10"  style="width: 300px">:<input type="text" id="delayText" size="4">
+        <div>
+          <span style="vertical-align: top;"> type: </span>
+          <select id="typeSelect" size="4">
+            <option value="RGB" selected> RGB </option>
+            <option value="RGB2"        > RGB2 </option>
+            <option value="CMY"         > CMY </option>
+            <option value="CMY2"        > CMY2 </option>
+          </select>
+        </div>
       </div> <!-- controlPanel -->
+      <div>
+        <canvas id="srcCanvas" class="borderBlack preview" width=200 height=200> srcCanvas </canvas>
+        <canvas id="redCanvas" class="borderRed preview" width=200 height=200> redCanvas </canvas>
+        <canvas id="greenCanvas" class="borderGreen preview" width=200 height=200> greenCanvas </canvas>
+        <canvas id="blueCanvas" class="borderBlue preview" width=200 height=200> blueCanvas </canvas>
       </div>
-    <div>
-      <canvas id="srcCanvas" class="borderBlack preview" width=200 height=200> srcCanvas </canvas>
-      <canvas id="redCanvas" class="borderRed preview" width=200 height=200> redCanvas </canvas>
-      <canvas id="greenCanvas" class="borderGreen preview" width=200 height=200> greenCanvas </canvas>
-      <canvas id="blueCanvas" class="borderBlue preview" width=200 height=200> blueCanvas </canvas>
-    </div>
-    <div>
-      <canvas id="dstCanvas" class="borderBlack" width=200 height=200> dstCanvas </canvas>
+      <div>
+        <canvas id="dstCanvas" class="borderBlack" width=200 height=200> dstCanvas </canvas>
+      </div>
     </div>  <!-- container -->
     <script type="text/javascript" src="lib/drop.js"> </script>
     <script type="text/javascript" src="lib/bind.js"> </script>
