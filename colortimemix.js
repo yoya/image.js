@@ -27,6 +27,7 @@ function main() {
         canvasTable: canvasTable,
         ctxTable: ctxTable,
         tick: null,
+        timeoutID: null,
         delay: 100,
     };
     // console.debug(canvasTable, ctxTable);
@@ -134,16 +135,19 @@ function frame() {
     const imageData = [imageDataTable.red, imageDataTable.green, imageDataTable.blue][tick % 3];
     params.tick = tick + 1;
     dstCtx.putImageData(imageData, 0, 0);
-    setTimeout(frame.bind(params), delay);
+    params.timeoutID = setTimeout(frame.bind(params), delay);
 }
 
 function start(params) {
     const delay = params.delayRange;
     params.tick = 0;
-    setTimeout(frame.bind(params), delay);
+    params.timeoutID = setTimeout(frame.bind(params), delay);
 }
 
 function stop(params) {
+    if (params.timeoutID) {
+        clearTimeout(params.timeoutID);
+    }
     params.tick = null;
 }
 
