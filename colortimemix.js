@@ -107,13 +107,11 @@ function drawCTM(params) {
         blueData[i+2] = srcData[i+2];  blueData[i+3] = srcData[i+3];
     }
     redCtx.putImageData(redImageData, 0, 0);
+    greenCtx.putImageData(greenImageData, 0, 0);
+    blueCtx.putImageData(blueImageData, 0, 0);
     params.imageDataTable = {
         red:redImageData, green:greenImageData, blue:blueImageData,
     }
-    
-    greenCtx.putImageData(greenImageData, 0, 0);
-    blueCtx.putImageData(blueImageData, 0, 0);
-    
     const dstImageData = dstCtx.createImageData(width, height);
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
