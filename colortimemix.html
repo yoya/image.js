@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2022/01/22- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Color Time Mix </title>
+    <link rel="stylesheet" href="index.css">
+    <style>
+      .preview {
+          max-width: 320px;  max-height: 240px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel" style="display:flex">
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+        <div>
+          <input type="button" id="buttonStart" value="Start"> </input>
+          <input type="button" id="buttonStop" value="Stop"> </input>
+        </div>
+        delay:<input id="delayRange" type="range" min="1" max="500" step="10" value="10"  style="width: 300px">:<input type="text" id="delayText" size="4">
+      </div> <!-- controlPanel -->
+      </div>
+    <div>
+      <canvas id="srcCanvas" class="borderBlack preview" width=200 height=200> srcCanvas </canvas>
+      <canvas id="redCanvas" class="borderRed preview" width=200 height=200> redCanvas </canvas>
+      <canvas id="greenCanvas" class="borderGreen preview" width=200 height=200> greenCanvas </canvas>
+      <canvas id="blueCanvas" class="borderBlue preview" width=200 height=200> blueCanvas </canvas>
+    </div>
+    <div>
+      <canvas id="dstCanvas" class="borderBlack" width=200 height=200> dstCanvas </canvas>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="colortimemix.js"> </script>
+  </body>
+</html>
