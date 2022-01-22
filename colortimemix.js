@@ -36,7 +36,7 @@ function main() {
     srcImage.onload = function() {
 	drawSrcImageAndCTM(srcImage, params);
     }
-    srcImage.src = "./img/RGBCube.png"
+    srcImage.src = "./img/4x4primary-400x400.png";
     dropFunction(document, function(dataURL) {
         srcImage.src = dataURL;
     }, "DataURL");
