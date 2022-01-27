@@ -11,15 +11,16 @@ function main() {
     // console.debug("main");
     const srcCanvas = document.getElementById("srcCanvas");
     const dstCanvas = document.getElementById("dstCanvas");
-    let srcImage = new Image(srcCanvas.width, srcCanvas.height);
     const annotate = [];
     const params = {annotate: annotate};
     let mousePointer = null;
+    //
+    const srcImage = new Image();
+    srcImage.onload = function() {
+	drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params);
+    }
+    srcImage.src = "./img/RGBCube.png"
     dropFunction(document, function(dataURL) {
-	srcImage = new Image();
-	srcImage.onload = function() {
-	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params);
-	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
