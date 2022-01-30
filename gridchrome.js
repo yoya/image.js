@@ -33,25 +33,32 @@ function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas, params) {
     drawCopy(srcCanvas, dstCanvas);
 }
 
+function grayscale(r, g, b) {
+    return (2*r + 4*g + b) / 7;
+}
 function grayColor(rgba) {
     const [r, g, b, a] = rgba;
-    const v = (2*r + 4*g + b) / 7;
+    const v = grayscale(r, g, b);
     return [v, v, v, a];
 }
-function vividColor(rgba) {
-    const [r, g, b, a] = rgba;
-    const m = Math.max(r, g, b);
-    const f = 255 / m;
-    return [r*f, g*f, b*f, a];
+
+function isGrid(x, y, period, width) {
+    if (((x + y) % period) < width) {
+        return true;
+    }
+    if ((Math.abs(x - y) % period) < width) {
+        return true;
+    }
+    return false;
 }
 
 function gridChrome(x, y, rgba) {
     const [r, g, b, a] = rgba;
-    const period = 32;
-    if (((x + y) % period) && ((x - y) % period)) {
-        return grayColor(rgba);
+    const period = 32, width = 2;
+    if (isGrid(x, y, period, width)) {
+        return rgba;
     }
-    return vividColor(rgba);
+    return grayColor(rgba);
 }
 
 function drawCopy(srcCanvas, dstCanvas) {
