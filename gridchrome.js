@@ -46,10 +46,12 @@ function grayColor(rgba) {
 }
 
 function isGrid(x, y, period, width) {
-    if (((x + y) % period) < width) {
+    const xy1 = (x + y) % period;
+    if ((xy1 < width) || (xy1 > (period-width))) {
         return true;
     }
-    if ((Math.abs(x - y) % period) < width) {
+    const xy2 = Math.abs(x - y) % period;
+    if ((xy2 < width) || (xy2 > (period-width))) {
         return true;
     }
     return false;
@@ -59,8 +61,13 @@ function gridChrome(x, y, rgba, params) {
     const [r, g, b, a] = rgba;
     const period = params.periodRange;
     const width = params.widthRange;
-    if (isGrid(x, y, period, width)) {
+    if (isGrid(x, y, period, width / 2)) {
         return rgba;
+    }
+    if (isGrid(x, y, period, width)) {
+        return grayColor(rgba).map(function(v, i) {
+            return (rgba[i] + v) / 2;
+        });
     }
     return grayColor(rgba);
 }
