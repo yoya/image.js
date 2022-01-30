@@ -49,7 +49,7 @@ function main() {
                  function() {
                      filterView = filterViewCheckbox.checked;
                      alphaOn       = alphaOnCheckbox.checked;
-                     filter = parseInt(filterSelect.value);
+                     filter = filterSelect.value;
                      pngFilterSummarize(png, origArr);
                      if (filterView) {
                          pngFilterView(png, origArr);
@@ -100,9 +100,11 @@ function pngFilterOverwrite(png, workArr, filter, alphaOn) {
     const height = png.getImageHeight()
     let offset = 0;
     let filterTable = [0, 0, 0, 0, 0];  // 0-4 entry zero initialize
-    for (let y = 0 ; y < height ; y++) {
-        workArr[offset] = filter;  // overwrite
-        offset += stride;
+    if (filter !== "") {
+        for (let y = 0 ; y < height ; y++) {
+            workArr[offset] = filter;  // overwrite
+            offset += stride;
+        }
     }
     // reconstruct PNG file
     png.deleteChunk("IDAT");
