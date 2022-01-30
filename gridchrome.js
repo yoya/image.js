@@ -35,16 +35,13 @@ function drawSrcImageAndGridChrome(srcImage, srcCanvas, dstCancas, params) {
     drawGridChrome(srcCanvas, dstCanvas, params);
 }
 
-function grayscale(r, g, b) {
+function grayColor(rgba) {
+    const [r, g, b, a] = rgba;
+    // CIE XYZ (BT.709 coeff & linear)
     const lr = 0.2126 * Math.pow(r / 255, 2.2);
     const lg = 0.7152 * Math.pow(g / 255, 2.2);
     const lb = 0.0722 * Math.pow(b / 255, 2.2);
-    return Math.pow(lr + lg + lb, 1 / 2.2) * 255;
-}
-
-function grayColor(rgba) {
-    const [r, g, b, a] = rgba;
-    const v = grayscale(r, g, b);
+    const v =  Math.pow(lr + lg + lb, 1 / 2.2) * 255;
     return [v, v, v, a];
 }
 
