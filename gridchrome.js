@@ -36,8 +36,12 @@ function drawSrcImageAndGridChrome(srcImage, srcCanvas, dstCancas, params) {
 }
 
 function grayscale(r, g, b) {
-    return (2*r + 4*g + b) / 7;
+    const lr = 0.2126 * Math.pow(r / 255, 2.2);
+    const lg = 0.7152 * Math.pow(g / 255, 2.2);
+    const lb = 0.0722 * Math.pow(b / 255, 2.2);
+    return Math.pow(lr + lg + lb, 1 / 2.2) * 255;
 }
+
 function grayColor(rgba) {
     const [r, g, b, a] = rgba;
     const v = grayscale(r, g, b);
