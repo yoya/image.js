@@ -60,14 +60,14 @@ function getHueHistogram(canvas, params) {
     let shist = new Uint32Array(256);  // saturation histogram
     for (let i = 0 ; i < length ; i+=4) {
         const rgba = data.slice(i, i+4);
-        const alpha = rgba[3];
+        const alpha = rgba[3] / 255;
         const [h, s, l] = RGB2HSL(rgba);
         const hh = Math.round(h);
-        hist[hh] += s * l * alpha;  // perspective hue
+        hist[hh] += s * alpha;
         const ss = Math.round(s * 100);
-        map[hh + (ss * 360)] += l * alpha;  // perspective hue
+        map[hh + (ss * 360)] += alpha;
         const sss = Math.round(s * 255);
-        shist[sss] += 1;
+        shist[sss] += alpha;
     }
     if (binHist > 1) {
         for (let i = 0; i < 360; i+= binHist) {
