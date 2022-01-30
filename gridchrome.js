@@ -14,23 +14,25 @@ function main() {
     const srcImage = new Image();
     const params = {};
     srcImage.onload = function() {
-	drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params);
+	drawSrcImageAndGridChrome(srcImage, srcCanvas, dstCanvas, params);
     }
     srcImage.src = "./img/RGBCube.png"
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+                  "periodRange":"periodText",
+                  "widthRange":"widthText"},
 		 function() {
-		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
+		     drawSrcImageAndGridChrome(srcImage, srcCanvas, dstCanvas,
                                          params);
 		 }, params);
 }
 
-function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndGridChrome(srcImage, srcCanvas, dstCancas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawCopy(srcCanvas, dstCanvas);
+    drawGridChrome(srcCanvas, dstCanvas, params);
 }
 
 function grayscale(r, g, b) {
@@ -52,17 +54,18 @@ function isGrid(x, y, period, width) {
     return false;
 }
 
-function gridChrome(x, y, rgba) {
+function gridChrome(x, y, rgba, params) {
     const [r, g, b, a] = rgba;
-    const period = 32, width = 2;
+    const period = params.periodRange;
+    const width = params.widthRange;
     if (isGrid(x, y, period, width)) {
         return rgba;
     }
     return grayColor(rgba);
 }
 
-function drawCopy(srcCanvas, dstCanvas) {
-    // console.debug("drawCopy");
+function drawGridChrome(srcCanvas, dstCanvas, params) {
+    // console.debug("drawGridChrome");
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const width = srcCanvas.width, height = srcCanvas.height;
@@ -74,7 +77,7 @@ function drawCopy(srcCanvas, dstCanvas) {
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
 	    const rgba = getRGBA(srcImageData, x, y);
-	    setRGBA(dstImageData, x, y, gridChrome(x, y, rgba));
+	    setRGBA(dstImageData, x, y, gridChrome(x, y, rgba, params));
 	}
     }
     dstCtx.putImageData(dstImageData, 0, 0);
