@@ -193,8 +193,11 @@ function drawSrcImageAndPseudoColor(srcImage, srcCanvas, grayCanvas, dstCancas, 
 }
 
 function pseudoColor(v, clutType, clutScale, clutOffset) {
-    const offset = 255 * clutOffset / 100;
-    const i = Math.round(offset + v * clutScale) % 256;
+    const offset = Math.round(255 * clutOffset / 100 + v * clutScale);
+    let i = offset % 256;
+    if (i < 0) {
+        i += Math.ceil(-i/256) * 256
+    }
     return CLUT[clutType][i];
 }
 
