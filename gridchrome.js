@@ -22,7 +22,8 @@ function main() {
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
                   "periodRange":"periodText",
-                  "widthRange":"widthText"},
+                  "widthRange":"widthText",
+                  "cheatRange":"cheatText"},
 		 function() {
 		     drawSrcImageAndGridChrome(srcImage, srcCanvas, dstCanvas,
                                          params);
@@ -61,15 +62,18 @@ function gridChrome(x, y, rgba, params) {
     const [r, g, b, a] = rgba;
     const period = params.periodRange;
     const width = params.widthRange;
-    if (isGrid(x, y, period, width / 2)) {
+    const cheat = params.cheatRange;
+    if (isGrid(x, y, period, width/2)) {
         return rgba;
     }
     if (isGrid(x, y, period, width)) {
         return grayColor(rgba).map(function(v, i) {
-            return (rgba[i] + v) / 2;
+            return (rgba[i]*(cheat/10) + v) / ((cheat/10)+ 1);
         });
     }
-    return grayColor(rgba);
+    return grayColor(rgba).map(function(v, i) {
+        return (rgba[i]*(cheat/100) + v) / ((cheat/100)+ 1);
+    });
 }
 
 function drawGridChrome(srcCanvas, dstCanvas, params) {

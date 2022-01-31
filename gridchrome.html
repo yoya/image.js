@@ -8,9 +8,16 @@
   <body>
     <div class="container">
       <div class="controlPanel" style="display:flex">
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
-        period:<input id="periodRange" type="range" min="1" max="48" step="1" value="32">:<input type="text" id="periodText" size="5">
-        width:<input id="widthRange" type="range" min="1" max="32" step="1" value="2">:<input type="text" id="widthText" size="5">
+        <div>
+	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+          <br />
+          cheat:<input id="cheatRange" type="range" min="0" max="20" step="1" value="4">:<input type="text" id="cheatText" size="3">
+        </div>
+        <div>
+          period:<input id="periodRange" type="range" min="1" max="48" step="1" value="32">:<input type="text" id="periodText" size="3">
+          <br />
+          width:<input id="widthRange" type="range" min="1" max="32" step="1" value="2">:<input type="text" id="widthText" size="3">
+        </div>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
