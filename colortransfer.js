@@ -27,7 +27,8 @@ function main() {
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
                   "fuzzRange":"fuzzText",
                   "srcColorText":null, "dstColorText":null,
-                  "colorSrcDstRadio1":null, "colorSrcDstRadio2":null},
+                  "colorSrcDstRadio1":null, "colorSrcDstRadio2":null,
+                  "diffSyncRange":"diffSyncText"},
 		 function(target) {
                      switch (target.id) {
                      case "srcColorText":
@@ -98,7 +99,7 @@ function drawColorTransfer(srcCanvas, dstCanvas, params) {
     const srcColor = getRGBAfromHexColor(params.srcColorText);
     const dstColor = getRGBAfromHexColor(params.dstColorText);
     const fuzz = params.fuzzRange;
-    
+    const diffSync = params.diffSyncRange;
     const srcImageData = srcCtx.getImageData(0, 0, width, height);
     const dstImageData = dstCtx.createImageData(width, height);
     for (let y = 0 ; y < height; y++) {
@@ -106,7 +107,7 @@ function drawColorTransfer(srcCanvas, dstCanvas, params) {
             const rgba = getRGBA(srcImageData, x, y);
             const diff = diffColor(rgba, srcColor);
             if (matchColor(diff, fuzz)) {
-                const rgba2 = transferColor(dstColor, diff, rgba[3]);
+                const rgba2 = transferColor(dstColor, diff, diffSync, rgba[3]);
 	        setRGBA(dstImageData, x, y, rgba2);
             } else {
                 setRGBA(dstImageData, x, y, rgba);
@@ -131,8 +132,10 @@ function matchColor(diff, fuzz) {
     return false;
 }
 
-function transferColor(dstColor, diff, a) {
+function transferColor(dstColor, diff, diffSync, a) {
     const [r1, g1, b1] = dstColor;
     const [r2, g2 ,b2] = diff;
-    return new Uint8ClampedArray([r1 + r2, g1 + g2, b1 + b2, a]);
+    return new Uint8ClampedArray([r1 + r2 * diffSync,
+                                  g1 + g2 * diffSync,
+                                  b1 + b2 * diffSync, a]);
 }
