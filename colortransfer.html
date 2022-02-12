@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2022/02/13- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Color Transfer </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel" style="display:flex">
+        <div>
+	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5"> <br/>
+          fuzz:<input id="fuzzRange" type="range" min="0.0" max="1.0" step="0.01" value="0">:<input type="text" id="fuzzText" size="5">
+        </div>
+        <div>
+          srcColor <br />
+          <input type="checkbox" id="colorSrcDstRadio1" checked>
+        </div>:
+        <input id="srcColorText" class="jscolor" value="000000" size="9"> <br/>
+        <div>
+          dstColor <br />
+          <input type="checkbox" id="colorSrcDstRadio2">
+        </div>:
+        <input id="dstColorText" class="jscolor" value="000000" size="9">
+        </div>
+      </div> <!-- controlPanel -->
+      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="dist/jscolor-2.0.4/jscolor.js"> </script>
+    <script type="text/javascript" src="lib/utils.js"> </script>
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="colortransfer.js"> </script>
+  </body>
+</html>
