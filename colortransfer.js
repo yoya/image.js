@@ -59,9 +59,7 @@ function main() {
         }
         if (touch) {
             const {x, y} = params[target.id];
-            console.log({x, y});
             const rgba = getCanvasRGBA(srcCanvas, x, y, OUTFILL_EDGE);
-            console.log(rgba);
             const rgb = rgba.subarray(0, 3);
             if (params.colorSrcDstRadio1) {
                 const colorText = Utils.ToHexArray(rgb).join("");
@@ -90,7 +88,7 @@ function drawSrcImageAndColorTransfer(srcImage, srcCanvas, dstCanvas, params) {
 }
 
 function drawColorTransfer(srcCanvas, dstCanvas, params) {
-    console.debug("drawColorTransfer", params);
+    // console.debug("drawColorTransfer", params);
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const width = srcCanvas.width, height = srcCanvas.height;
