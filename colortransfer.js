@@ -45,10 +45,23 @@ function main() {
                      params.colorSrcDstRadio2 = colorSrcDstRadio2.checked;
                      drawSrcImageAndColorTransfer(srcImage, srcCanvas, dstCanvas, params);
 		 }, params);
+    let touch = false;
     bindCursolFunction("srcCanvas", params, function(target, eventType) {
-        if (eventType === "mousedown") {
+        switch (eventType) {
+        case "mousedown":
+            touch = true;
+            break;
+        case "mouseup":
+        case "mouseenter":
+        case "mouseleave":
+            touch = false;
+            break;
+        }
+        if (touch) {
             const {x, y} = params[target.id];
-            const rgba = getCanvasRGBA(srcCanvas, x, y);
+            console.log({x, y});
+            const rgba = getCanvasRGBA(srcCanvas, x, y, OUTFILL_EDGE);
+            console.log(rgba);
             const rgb = rgba.subarray(0, 3);
             if (params.colorSrcDstRadio1) {
                 const colorText = Utils.ToHexArray(rgb).join("");
@@ -59,14 +72,15 @@ function main() {
                 dstColorText.value = params.dstColorText = colorText;
                 dstColorText.style.backgroundColor = "#"+colorText;
             }
+            drawSrcImageAndColorTransfer(srcImage, srcCanvas, dstCanvas, params);
         }
     });
 }
 
-function getCanvasRGBA(canvas, x, y) {
+function getCanvasRGBA(canvas, x, y, outfill) {
     const ctx = canvas.getContext("2d");
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    return getRGBA(imageData, x, y);
+    return getRGBA(imageData, x, y, outfill);
 }
 
 function drawSrcImageAndColorTransfer(srcImage, srcCanvas, dstCanvas, params) {
