@@ -66,12 +66,12 @@ function main() {
             const rgb = rgba.subarray(0, 3);
             if (params.colorSrcDstRadio1) {
                 const colorText = Utils.ToHexArray(rgb).join("");
-                srcColorText.value = params.srcColorText = colorText;
-                srcColorText.jscolor.backgroundColor = "#"+colorText;
+                params.srcColorText = colorText;
+                srcColorText.jscolor.fromString(colorText);
             } else {
                 const colorText = Utils.ToHexArray(rgb).join("");
-                dstColorText.value = params.dstColorText = colorText;
-                dstColorText.jscolor.backgroundColor = "#"+colorText;
+                params.dstColorText = colorText;
+                dstColorText.jscolor.fromString(colorText);
             }
             drawSrcImageAndColorTransfer(srcImage, srcCanvas, dstCanvas, params);
         }
