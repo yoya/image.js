@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
+jscolor.presets.default = { width:256, height:256 };
+
 function main() {
     // console.debug("main");
     const srcCanvas = document.getElementById("srcCanvas");
@@ -65,11 +67,11 @@ function main() {
             if (params.colorSrcDstRadio1) {
                 const colorText = Utils.ToHexArray(rgb).join("");
                 srcColorText.value = params.srcColorText = colorText;
-                srcColorText.style.backgroundColor = "#"+colorText;
+                srcColorText.jscolor.backgroundColor = "#"+colorText;
             } else {
                 const colorText = Utils.ToHexArray(rgb).join("");
                 dstColorText.value = params.dstColorText = colorText;
-                dstColorText.style.backgroundColor = "#"+colorText;
+                dstColorText.jscolor.backgroundColor = "#"+colorText;
             }
             drawSrcImageAndColorTransfer(srcImage, srcCanvas, dstCanvas, params);
         }
