@@ -30,7 +30,8 @@ function main() {
                   "fuzzRange":"fuzzText",
                   "srcColorText":null, "dstColorText":null,
                   "colorSrcDstRadio1":null, "colorSrcDstRadio2":null,
-                  "diffSyncRange":"diffSyncText"},
+                  "diffSyncRange":"diffSyncText",
+                  "diffRelativeRange":"diffRelativeText"},
 		 function(target) {
                      switch (target.id) {
                      case "srcColorText":
@@ -102,6 +103,7 @@ function drawColorTransfer(srcCanvas, dstCanvas, params) {
     const dstColor = getRGBAfromHexColor(params.dstColorText);
     const fuzz = params.fuzzRange;
     const diffSync = params.diffSyncRange;
+    const diffRelative = params.diffRelativeRange;
     const srcImageData = srcCtx.getImageData(0, 0, width, height);
     const dstImageData = dstCtx.createImageData(width, height);
     for (let y = 0 ; y < height; y++) {
@@ -109,7 +111,8 @@ function drawColorTransfer(srcCanvas, dstCanvas, params) {
             const rgba = getRGBA(srcImageData, x, y);
             const diff = diffColor(rgba, srcColor);
             if (matchColor(diff, fuzz)) {
-                const rgba2 = transferColor(dstColor, diff, diffSync, rgba[3]);
+                const rgba2 = transferColor(srcColor, dstColor, diff,
+                                            diffSync, diffRelative, rgba[3]);
 	        setRGBA(dstImageData, x, y, rgba2);
             } else {
                 setRGBA(dstImageData, x, y, rgba);
@@ -134,10 +137,18 @@ function matchColor(diff, fuzz) {
     return false;
 }
 
-function transferColor(dstColor, diff, diffSync, a) {
+function transferColor(srcColor, dstColor, diff, diffSync, diffRelative, a) {
     const [r1, g1, b1] = dstColor;
     const [r2, g2 ,b2] = diff;
-    return new Uint8ClampedArray([r1 + r2 * diffSync,
-                                  g1 + g2 * diffSync,
-                                  b1 + b2 * diffSync, a]);
+    if (diffRelative != 0) {  // [-1 ... 0 ... 1]
+        const [r3, g3, b3] = srcColor;
+        const ratio1 = (r1+g1+b1)/(r3+g3+b3) * (0.5 - diffRelative/2);
+        const ratio2 = (r3+g3+b3)/(r1+g1+b1) * (0.5 + diffRelative/2);
+        const ratio = ratio1 + ratio2;
+        diffSync *= ratio;
+    }
+    const r = r1 + r2 * diffSync;
+    const g = g1 + g2 * diffSync;
+    const b = b1 + b2 * diffSync;
+    return new Uint8ClampedArray([r, g, b, a]);
 }
