@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2022/03/25- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Morse code </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel" style="display:flex">
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+      </div> <!-- controlPanel -->
+      <canvas id="sendCanvas" class="borderBlue" width="400" height="400"> dstCanvas </canvas>
+      <canvas id="receiveCanvas" class="borderRed" width="400" height="400"> srcCanvas </canvas>
+      <br/>
+      <copyright> (c) https://twitter.com/hirax/status/1507271331192004608 </copyright>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="morse.js"> </script>
+  </body>
+</html>
