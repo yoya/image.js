@@ -89,6 +89,7 @@ function drawCoinCircle(canvas) {
 
 function drawTextCenteringWithRotate(canvas, text, fontsize,xp, yp, rotate,
                                      color) {
+    if (color === undefined) { color = "#eeee00"; }
     const ctx = canvas.getContext("2d");
     ctx.save();
     const {width, height} = canvas;
@@ -257,9 +258,7 @@ function drawPoint(canvas, a, color) {
             return ;
         }
     }
-    if (color === undefined) {
-        color = "#eeee00";
-    }
+    if (color === undefined) { color = "#eeee00"; }
     const ctx = canvas.getContext("2d");
     const {width, height} = canvas;
     const [x1, y1, c, x2, y2, p] = a;
@@ -300,9 +299,7 @@ function drawAlphabet(canvas, a, color) {
             return ;
         }
     }
-    if (color === undefined) {
-        color = "#eeee00";
-    }
+    if (color === undefined) { color = "#eeee00"; }
     const [x1, y1, c, x2, y2] = a;
     drawTextCenteringWithRotate(canvas, c, 0.05, (x1+x2), (y1+y2), 0, color);
 }
