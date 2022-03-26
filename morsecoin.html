@@ -8,7 +8,12 @@
   <body>
     <div class="container">
       <div class="controlPanel" style="display:flex">
-	widthHeight:<input id="widthHeightRange" type="range" min="16" max="2048" step="1" value="400">:<input type="text" id="widthHeightText" size="5">
+        <div>
+	  widthHeight:<input id="widthHeightRange" type="range" min="16" max="2048" step="1" value="400">:<input type="text" id="widthHeightText" size="5">
+          </div>
+        <div>
+          text:<input id="textText" type="text" value="SOS">
+        </div>
       </div> <!-- controlPanel -->
       <canvas id="sendCanvas" class="borderBlue" width="400" height="400"> dstCanvas </canvas>
       <canvas id="receiveCanvas" class="borderRed" width="400" height="400"> srcCanvas </canvas>

@@ -13,14 +13,45 @@ function main() {
     const receiveCanvas = document.getElementById("receiveCanvas");
     const srcImage = new Image();
     const params = {};
-    bindFunction({"widthHeightRange":"widthHeightText"},
-		 function() {
+    bindFunction({"widthHeightRange":"widthHeightText",
+                  "textText":null},
+                 function() {
                      const widthHeight = params['widthHeightRange'];
                      sendCanvas.width = sendCanvas.height = widthHeight;
                      receiveCanvas.width = receiveCanvas.height = widthHeight;
 		     drawSrcImageAndMorse(sendCanvas, receiveCanvas, params);
 		 }, params);
+    bindkeyFunction(params, function(event, eventType) {
+        const key = event.key;
+        if (key === "Enter") {
+            let delay = 0, delayAlphabet = 0;
+            let textText = document.getElementById("textText").value;
+            for (const c of textText.split('')) {
+                const uc = c.toUpperCase();
+                animationAlphabetAndPoint(uc, delay);
+                delay += 2000;
+            }
+        } else {
+            const uc = key.toUpperCase();
+            if  ((uc.length === 1) && ('A' <= uc) && (uc <= 'Z')) {
+                animationAlphabetAndPoint(uc, 0);
+            }
+        }
+    });
     drawSrcImageAndMorse(sendCanvas, receiveCanvas, params);
+}
+
+function animationAlphabetAndPoint(uc, delay) {
+    const morse = morseAlphabetListEntryByAlphabet(uc);
+    console.log(uc, morse);
+    const delayUnit = 500;
+    const alphabetPeriod = delayUnit * morse.length - 2;
+    for (let i = 1; i < morse.length; i++) {
+        const c = (i == (morse.length - 1))? morse[0]: morse[i];
+        animationPoint(c, 1000, delay);
+        delay += delayUnit;
+    }
+    animationAlphabet(uc, 1000, delay - delayUnit);
 }
 
 function drawSrcImageAndMorse(sendCancas, receiveCanvas, params) {
@@ -56,13 +87,13 @@ function drawCoinCircle(canvas) {
     ctx.restore();
 }
 
-function drawTextCenteringWithRotate(canvas, text, fontsize,xp, yp, rotate) {
+function drawTextCenteringWithRotate(canvas, text, fontsize,xp, yp, rotate,
+                                     color) {
     const ctx = canvas.getContext("2d");
     ctx.save();
     const {width, height} = canvas;
-    //ctx.strokeStyle = "#aaaa00";
     ctx.strokeStyle = "#444422";
-    ctx.fillStyle = "#eeee00";
+    ctx.fillStyle = color;
     ctx.font = "bold " + (width*fontsize)+"px sans-serif"
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
@@ -75,13 +106,54 @@ function drawTextCenteringWithRotate(canvas, text, fontsize,xp, yp, rotate) {
     ctx.restore();
 }
 
+const morseAlphabetList = [  // false:.  true:-
+    ['A', 'E', true],
+    ['B', 'T', 'N', 'D', false],
+    ['C', 'T', 'N', 'K', false],
+    ['D', 'T', 'N', false],
+    ['E', false],
+    ['F', 'E', 'I', 'U', false],
+    ['G', 'T', 'M', false],
+    ['H', 'E', 'I', 'S', false],
+    ['I', 'E', false],
+    ['J', 'E', 'A', 'W', true],
+    ['K', 'T', 'N', true],
+    ['L', 'E', 'A', 'R', false],
+    ['M', 'T', true],
+    ['N', 'T', false],
+    ['O', 'T', 'M', true],
+    ['P', 'E', 'A', 'W', false],
+    ['Q', 'T', 'M', 'G', true],
+    ['R', 'E', 'A', false],
+    ['S', 'E', 'I', false],
+    ['T', true],
+    ['U', 'E', 'I', true],
+    ['V', 'E', 'I', 'S', true],
+    ['W', 'E', 'A', true],
+    ['X', 'T', 'N', 'D', true],
+    ['Y', 'T', 'N', 'K', true],
+    ['Z', 'T', 'M', 'G', false],
+];
+function receiveTableEntryByAlphabet(alphabet) {
+    for (const aa of receiveAlphabetTable) {
+        if (aa[2] === alphabet) {
+            return aa;
+        }
+    }
+    return null;
+}
+
 function drawMorseSend(canvas) {
     const ctx = canvas.getContext("2d");
     drawCoinCircle(canvas);
     drawTextCenteringWithRotate(canvas, "SEND", 0.06, 0.35, 0.2,
-                                -20*Math.PI/180);
+                                -26*Math.PI/180);
     drawTextCenteringWithRotate(canvas, "SIDE", 0.06, 0.65, 0.2,
-                                20*Math.PI/180);
+                                26*Math.PI/180);
+    for (const a of morseAlphabetList) {
+        const [c, ...ca] = a;
+        // console.log(a, c, ca);
+    }
 }
 
 const receiveLineTable = [
@@ -124,7 +196,7 @@ function drawReceivelines(canvas) {
     ctx.restore();
 }
 
-const sendCharTable = [
+const receiveAlphabetTable = [
     // left hand
     [0.18, 0.33, 'H', 0.02, -0.04, 'p'],
     [0.26, 0.33, 'S', 0.01, -0.04, 'p'],
@@ -161,12 +233,37 @@ const sendCharTable = [
     [0.785, 0.67, 'C', 0.04, 0, 'p'],
     [0.74, 0.73, 'X', 0, -0.04, 'h'],
 ];
+function morseAlphabetListEntryByAlphabet(alphabet) {
+    for (const aa of morseAlphabetList) {
+        if (aa[0] === alphabet) {
+            return aa;
+        }
+    }
+    return null;
+}
 
 function drawPointAndCharactor(canvas, a) {
+    drawPoint(canvas, a);
+    drawAlphabet(canvas, a);
+}
+
+function drawPoint(canvas, a, color) {
+    if (a.length === 1) {
+        const aa = receiveTableEntryByAlphabet(a);
+        if (aa !== null) {
+            a = aa;
+        } else {
+            console.warn("alphabet unmatch:"+a);
+            return ;
+        }
+    }
+    if (color === undefined) {
+        color = "#eeee00";
+    }
     const ctx = canvas.getContext("2d");
     const {width, height} = canvas;
     const [x1, y1, c, x2, y2, p] = a;
-    ctx.fillStyle = "#eeee00";
+    ctx.fillStyle = color;
     ctx.beginPath();
     switch(p) {
     case 'p':
@@ -186,21 +283,136 @@ function drawPointAndCharactor(canvas, a) {
             ctx.rect((x1 - xlen/2)*width, (y1-ylen/2)*height, width*xlen, height*ylen);
         }
         break;
+    default:
+        console.error("drawPoint unknown point type:", p);
+        break;
     }
     ctx.fill();
-    drawTextCenteringWithRotate(canvas, c, 0.05, (x1+x2), (y1+y2), 0);
+}
+
+function drawAlphabet(canvas, a, color) {
+    if (a.length === 1) {
+        const aa = receiveTableEntryByAlphabet(a);
+        if (aa !== null) {
+            a = aa;
+        } else {
+            console.warn("alphabet unmatch:"+a);
+            return ;
+        }
+    }
+    if (color === undefined) {
+        color = "#eeee00";
+    }
+    const [x1, y1, c, x2, y2] = a;
+    drawTextCenteringWithRotate(canvas, c, 0.05, (x1+x2), (y1+y2), 0, color);
 }
 
 function drawMorseReceive(canvas) {
-    const ctx = canvas.getContext("2d");
+    //const ctx = canvas.getContext("2d");
     const {width, height} = canvas;
     drawCoinCircle(canvas);
     drawReceivelines(canvas);
     drawTextCenteringWithRotate(canvas, "RECEIVE SIDE", 0.06, 0.5, 0.21, 0);
-    for (const a of sendCharTable) {
-        drawPointAndCharactor(canvas, a);
-    }
+    drawMorseReceiveAlphabet(canvas);
     const starChar = '★';
     drawTextCenteringWithRotate(canvas, starChar, 0.07, 0.5, 0.325);
 }
 
+function drawMorseReceiveAlphabet(canvas) {
+    for (const a of receiveAlphabetTable) {
+        drawPointAndCharactor(canvas, a);
+    }
+}
+
+let intervalID = null;
+const interval = 100;  // TODO: 500 => 100
+const animationTable = [];
+
+function animationAlphabet(uc, period, delay) {
+    animationAdd(
+        [1, uc, period+delay, period, [0xff, 0x00, 0xff], [0xee, 0xee, 0x00]]
+    );
+    animationEnable();
+}
+
+function animationAlphabet(uc, period, delay) {
+    animationAdd(
+        [1, uc, period+delay, period, [0xff, 0x00, 0xff], [0xee, 0xee, 0x00]]
+    );
+    animationEnable();
+}
+
+function animationPoint(uc, period, delay) {
+    animationAdd(
+        [2, uc, period+delay, period, [0xff, 0x00, 0xff], [0xee, 0xee, 0x00]]
+    );
+    animationEnable();
+}
+
+function animationAdd(a) {
+    animationTable.push(a);
+}
+
+function animationEnable() {
+    if (intervalID !== null) {
+        clearInterval(intervalID);
+        intervalID = null;
+    }
+    tick();
+    intervalID = setInterval(tick, interval);
+}
+function animationDisable() {
+    if (intervalID !== null) {
+        clearInterval(intervalID);
+        intervalID = null;
+    }
+}
+
+function interpolateColor(startColor, endColor, ratio) {
+    const [r1, g1, b1] = startColor;
+    const [r2, g2, b2] = endColor;
+    const r = Math.round(r1*(1-ratio) + r2*ratio);
+    const g = Math.round(g1*(1-ratio) + g2*ratio);
+    const b = Math.round(b1*(1-ratio) + b2*ratio);
+    return "rgb("+r+","+g+","+b+")";
+}
+
+function tick() {
+    let remain = false;
+    for (const i in animationTable) {
+        const a = animationTable[i];
+        if (a === null) {  continue;  }  // skip empty entry
+        const [type, alphabet, timer, timerMax, startColor, endColor] = a;
+        if (timer < timerMax) {
+            const color = interpolateColor(startColor, endColor,
+                                           1 - (timer/timerMax));
+            switch (type) {
+            case 1:
+                tickAlphabet(alphabet, color);
+                break;
+            case 2:
+                tickPoint(alphabet, color);
+                break;
+            }
+        }
+        a[2] = timer - interval;
+        if (a[2] >= 0) {
+            remain = true;
+        } else {
+            animationTable[i] = null;
+        }
+    }
+    if (remain === false) {
+        animationDisable();
+    }
+}
+
+function  tickAlphabet(alphabet, color) {
+    const canvas = document.getElementById("receiveCanvas");
+    drawAlphabet(canvas, alphabet, color);
+}
+
+function tickPoint(alphabet, color) {
+    const canvas = document.getElementById("receiveCanvas");
+    drawPoint(canvas, alphabet, color);
+}
