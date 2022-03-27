@@ -43,15 +43,14 @@ function main() {
 
 function animationAlphabetAndPoint(uc, delay) {
     const morse = morseAlphabetListEntryByAlphabet(uc);
-    console.log(uc, morse);
     const delayUnit = 500;
     const alphabetPeriod = delayUnit * morse.length - 2;
     for (let i = 1; i < morse.length; i++) {
         const c = (i == (morse.length - 1))? morse[0]: morse[i];
-        animationPoint(c, 1000, delay);
+        animationPoint(c, 1000, delay, 200);
         delay += delayUnit;
     }
-    animationAlphabet(uc, 1000, delay - delayUnit);
+    animationAlphabet(uc, delay-delayUnit, 0, delay);
 }
 
 function drawSrcImageAndMorse(sendCancas, receiveCanvas, params) {
@@ -243,12 +242,12 @@ function morseAlphabetListEntryByAlphabet(alphabet) {
     return null;
 }
 
-function drawPointAndCharactor(canvas, a) {
-    drawPoint(canvas, a);
-    drawAlphabet(canvas, a);
+function drawReceivePointAndAlphabet(canvas, a) {
+    drawReceivePoint(canvas, a);
+    drawReceiveAlphabet(canvas, a);
 }
 
-function drawPoint(canvas, a, color) {
+function drawReceivePoint(canvas, a, color) {
     if (a.length === 1) {
         const aa = receiveTableEntryByAlphabet(a);
         if (aa !== null) {
@@ -283,13 +282,13 @@ function drawPoint(canvas, a, color) {
         }
         break;
     default:
-        console.error("drawPoint unknown point type:", p);
+        console.error("drawReceivePoint unknown point type:", p);
         break;
     }
     ctx.fill();
 }
 
-function drawAlphabet(canvas, a, color) {
+function drawReceiveAlphabet(canvas, a, color) {
     if (a.length === 1) {
         const aa = receiveTableEntryByAlphabet(a);
         if (aa !== null) {
@@ -317,32 +316,33 @@ function drawMorseReceive(canvas) {
 
 function drawMorseReceiveAlphabet(canvas) {
     for (const a of receiveAlphabetTable) {
-        drawPointAndCharactor(canvas, a);
+        drawReceivePointAndAlphabet(canvas, a);
     }
 }
 
 let intervalID = null;
-const interval = 100;  // TODO: 500 => 100
-const animationTable = [];
+//const interval = 500;  // DEBUG
+const interval = 100;
+let animationTable = [];
 
-function animationAlphabet(uc, period, delay) {
+function animationAlphabet(uc, period, delay, attack) {
+    console.log(uc, period, delay, attack);
+    console.log("A", attack+delay, attack);
+    console.log("B", period+attack+delay, period);
     animationAdd(
-        [1, uc, period+delay, period, [0xff, 0x00, 0xff], [0xee, 0xee, 0x00]]
+        [1, uc, attack+delay, attack, [0xee, 0xee, 0x00], [0xff, 0x00, 0xff]]
     );
+    animationAdd(
+        [1, uc, period+attack+delay, period, [0xff, 0x00, 0xff], [0xee, 0xee, 0x00]]);
     animationEnable();
 }
 
-function animationAlphabet(uc, period, delay) {
+function animationPoint(uc, period, delay, attack) {
     animationAdd(
-        [1, uc, period+delay, period, [0xff, 0x00, 0xff], [0xee, 0xee, 0x00]]
+        [2, uc, attack+delay, attack, [0xee, 0xee, 0x00], [0xff, 0x00, 0xff]]
     );
-    animationEnable();
-}
-
-function animationPoint(uc, period, delay) {
     animationAdd(
-        [2, uc, period+delay, period, [0xff, 0x00, 0xff], [0xee, 0xee, 0x00]]
-    );
+        [2, uc, period+attack+delay, period, [0xff, 0x00, 0xff], [0xee, 0xee, 0x00]]);
     animationEnable();
 }
 
@@ -375,6 +375,7 @@ function interpolateColor(startColor, endColor, ratio) {
 }
 
 function tick() {
+    //console.debug("tick:");
     let remain = false;
     for (const i in animationTable) {
         const a = animationTable[i];
@@ -401,15 +402,16 @@ function tick() {
     }
     if (remain === false) {
         animationDisable();
+        animationTable = [];
     }
 }
 
 function  tickAlphabet(alphabet, color) {
     const canvas = document.getElementById("receiveCanvas");
-    drawAlphabet(canvas, alphabet, color);
+    drawReceiveAlphabet(canvas, alphabet, color);
 }
 
 function tickPoint(alphabet, color) {
     const canvas = document.getElementById("receiveCanvas");
-    drawPoint(canvas, alphabet, color);
+    drawReceivePoint(canvas, alphabet, color);
 }
