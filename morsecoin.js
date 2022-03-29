@@ -50,7 +50,7 @@ function animationAlphabetAndPoint(uc, delay) {
         animationPoint(c, 1000, delay, 200);
         delay += delayUnit;
     }
-    animationAlphabet(uc, delay-delayUnit, 0, delay);
+    animationAlphabet(uc, delay, 0, delay-delayUnit);
 }
 
 function drawSrcImageAndMorse(sendCancas, receiveCanvas, params) {
