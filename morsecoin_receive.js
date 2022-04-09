@@ -123,7 +123,7 @@ function morseReceiveAlphabetTableEntryByAlphabet(alphabet) {
 }
 
 /*
- * Data Table
+ * Data List
  */
 
 const morseReceiveLineTable = [
