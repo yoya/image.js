@@ -47,12 +47,14 @@ function main() {
 }
 
 function animationAlphabetAndPoint(uc, delay) {
-    const morse = morseReceiveAlphabetListEntryByAlphabet(uc);
+    const morseSend = morseSendAlphabetListEntryByAlphabet(uc);
+    const morseReceieve = morseReceiveAlphabetListEntryByAlphabet(uc);
     const delayUnit = 500;
-    const alphabetPeriod = delayUnit * morse.length - 2;
-    for (let i = 1; i < morse.length; i++) {
-        const c = (i == (morse.length - 1))? morse[0]: morse[i];
-        animationPoint(c, 1000, delay, 200);
+    const alphabetPeriod = delayUnit * morseReceieve.length - 2;
+    for (let i = 1; i < morseReceieve.length; i++) {
+        const c = (i == (morseReceieve.length - 1))? morseReceieve[0]:
+              morseReceieve[i];
+        animationPoint([uc, i-1, c], 1000, delay, 200);
         delay += delayUnit;
     }
     animationAlphabet(uc, delay, 0, delay-delayUnit);
@@ -120,12 +122,12 @@ function animationAlphabet(uc, period, delay, attack) {
     animationEnable();
 }
 
-function animationPoint(uc, period, delay, attack) {
+function animationPoint(ucic, period, delay, attack) {
     animationAdd(
-        [2, uc, attack+delay, attack, [0xee, 0xee, 0x00], [0xff, 0x00, 0xff]]
+        [2, ucic, attack+delay, attack, [0xee, 0xee, 0x00], [0xff, 0x00, 0xff]]
     );
     animationAdd(
-        [2, uc, period+attack+delay, period, [0xff, 0x00, 0xff], [0xee, 0xee, 0x00]]);
+        [2, ucic, period+attack+delay, period, [0xff, 0x00, 0xff], [0xee, 0xee, 0x00]]);
     animationEnable();
 }
 
@@ -190,11 +192,16 @@ function tick() {
 }
 
 function  tickAlphabet(alphabet, color) {
+    const sendCanvas = document.getElementById("sendCanvas");
     const canvas = document.getElementById("receiveCanvas");
+    drawMorseSendAlphabet(sendCanvas, alphabet, color);
     drawMorseReceiveAlphabet(canvas, alphabet, color);
 }
 
 function tickPoint(alphabet, color) {
+    const [uc, idx, c] = alphabet;
+    const sendCanvas = document.getElementById("sendCanvas");
     const canvas = document.getElementById("receiveCanvas");
-    drawMorseReceivePoint(canvas, alphabet, color);
+    drawMorseSendPoint(sendCanvas, uc, color, idx);
+    drawMorseReceivePoint(canvas, c, color);
 }

@@ -21,12 +21,24 @@ function drawMorseSendPointAndAlphabet(canvas) {
 }
 
 function drawMorseSendPoint(canvas, a, color, idx) {
-    ;
+    if (a.length === 1) {
+        const aa = morseSendAlphabetListEntryByAlphabet(a);
+        if (aa !== null) {
+            a = aa;
+        } else {
+            console.warn("alphabet unmatch:"+a);
+            return ;
+        }
+    }
+    const [c, x, y, ...m] = a;
+    const ctx = canvas.getContext("2d");
+    ctx.save();
+    ctx.restore();
 }
 
 function drawMorseSendAlphabet(canvas, a, color) {
     if (a.length === 1) {
-        const aa = morseSndAlphabetListEntryByAlphabet(a);
+        const aa = morseSendAlphabetListEntryByAlphabet(a);
         if (aa !== null) {
             a = aa;
         } else {
