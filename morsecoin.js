@@ -49,6 +49,9 @@ function main() {
 function animationAlphabetAndPoint(uc, delay) {
     const morseSend = morseSendAlphabetListEntryByAlphabet(uc);
     const morseReceieve = morseReceiveAlphabetListEntryByAlphabet(uc);
+    if ((! morseSend) || (! morseReceieve)) {
+        return ;
+    }
     const delayUnit = 500;
     const alphabetPeriod = delayUnit * morseReceieve.length - 2;
     for (let i = 1; i < morseReceieve.length; i++) {
