@@ -55,6 +55,16 @@ function negateImage(canvas) {
     const width = canvas.width, height = canvas.height;
 }
 
+function rotateXY(x, y, width, height, angle) {
+    const xx = x + width / 2;
+    const yy = y + height / 2;
+    const _cos = Math.cos(angle);
+    const _sin = Math.sin(angle);
+    const xxx = xx * _cos + yy * _sin;
+    const yyy = -xx * _sin + yy * _cos;
+    return [xxx - width / 2, yyy - height / 2 ];
+}
+
 function drawHalftone(srcCanvas, dstCanvas, params) {
     console.debug("drawHalftone");
     const size = params.sizeRange;
@@ -68,22 +78,27 @@ function drawHalftone(srcCanvas, dstCanvas, params) {
     const srcImageData = srcCtx.getImageData(0, 0, width, height);
     const radius = size/2;
     const margin = (1.414 - 1.0 ) / 2;
-    const xMin = - width * margin - size;
-    const xMax = width * (1+margin) + size;
-    const yMin = - height * margin - size;
-    const yMax = height * (1+margin) + size;
+    const widthHeightMax = Math.max(width, height)
+    const xMin = - widthHeightMax * 2 - size;
+    const xMax = widthHeightMax * 2+ size;
+    const yMin = - widthHeightMax * 2 - size;
+    const yMax = widthHeightMax * 2 + size;
     for (let y = yMin ; y < yMax; y += size) {
         for (let x = xMin; x < xMax; x += size) {
+            const [ xx, yy ] = rotateXY(x, y, width, height, rotate);
+            if ((xx < -size) || (width + size < xx) ||
+                (yy < -size)  || (height + size < xx )) {
+                continue;
+            }
 	    const rgba = averageArea(srcImageData,
-                                     Math.round(x), Math.round(y), size);
+                                     Math.round(xx), Math.round(yy), size);
             const hexColor = "#"+Utils.ToHexArray(rgba).join("");
+            dstCtx.save();
             dstCtx.beginPath();
             dstCtx.fillStyle = hexColor;
-            dstCtx.translate(width / 2, height / 2);
-            dstCtx.rotate(rotate);
-            dstCtx.translate(-width / 2, -height / 2);
-            dstCtx.arc(x, y, radius, 0, Math.PI * 2, true);
+            dstCtx.arc(xx, yy, radius, 0, Math.PI * 2, true);
             dstCtx.fill();
+            dstCtx.restore();
 	}
     }
     
