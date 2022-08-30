@@ -9,17 +9,21 @@
     <div class="container">
       <div class="controlPanel" style="display:flex">
         <div>
-	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
-        </div>
-        <div>
+	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5"> <br />
           scale:<input id="scaleRange" type="range" min="1" max="8" step="0.1" value="1.0">:<input type="text" id="scaleText" size="4"> <br />
           size:<input id="sizeRange" type="range" min="1" max="32" step="1" value="8">:<input type="text" id="sizeText" size="3">
         </div>
         <div>
-          cRrotate:<input id="cRotateRange" type="range" min="0" max="180" step="1" value="15">:<input type="text" id="cRotateText" size="4"> <br />
+          cRotate:<input id="cRotateRange" type="range" min="0" max="180" step="1" value="15">:<input type="text" id="cRotateText" size="4"> <br />
           mRotate:<input id="mRotateRange" type="range" min="0" max="180" step="1" value="30">:<input type="text" id="mRotateText" size="4"> <br />
           yRotate:<input id="yRotateRange" type="range" min="0" max="180" step="1" value="45">:<input type="text" id="yRotateText" size="4"> <br />
           kRotate:<input id="kRotateRange" type="range" min="0" max="180" step="1" value="75">:<input type="text" id="kRotateText" size="4">
+        </div>
+        <div>
+          cAmount:<input id="cAmountRange" type="range" min="0" max="100" step="1" value="100">:<input type="text" id="cAmountText" size="4"> <br />
+          mAmount:<input id="mAmountRange" type="range" min="0" max="100" step="1" value="100">:<input type="text" id="mAmountText" size="4"> <br />
+          yAmount:<input id="yAmountRange" type="range" min="0" max="100" step="1" value="100">:<input type="text" id="yAmountText" size="4"> <br />
+          kAmount:<input id="kAmountRange" type="range" min="0" max="100" step="1" value="100">:<input type="text" id="kAmountText" size="4">
         </div>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>

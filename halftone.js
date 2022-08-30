@@ -26,7 +26,11 @@ function main() {
                    "cRotateRange":"cRotateText",
                    "mRotateRange":"mRotateText",
                    "yRotateRange":"yRotateText",
-                   "kRotateRange":"kRotateText" },
+                   "kRotateRange":"kRotateText" ,
+                   "cAmountRange":"cAmountText",
+                   "mAmountRange":"mAmountText",
+                   "yAmountRange":"yAmountText",
+                   "kAmountRange":"kAmountText" },
 		 function() {
 		     drawSrcImageAndHalftone(srcImage, srcCanvas, dstCanvas,
                                          params);
@@ -88,7 +92,8 @@ function rotateXY(x, y, width, height, angle) {
 function drawHalftone(srcCanvas, dstCanvas, params) {
     console.debug("drawHalftone");
     const size = params.sizeRange;
-    const rotate = [params.cRotateRange, params.mRotateRange, params.yRotateRange, params.kRotateRange].map(v => { return (v%45) / 180 * Math.PI });
+    const rotate = [params.cRotateRange, params.mRotateRange, params.yRotateRange, params.kRotateRange].map(v => { return (v%90) / 180 * Math.PI });
+    const amount = [params.cAmountRange, params.mAmountRange, params.yAmountRange, params.kAmountRange].map(v => { return v / 100; });
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const width = srcCanvas.width, height = srcCanvas.height;
@@ -118,7 +123,7 @@ function drawHalftone(srcCanvas, dstCanvas, params) {
                                      Math.round(x2), Math.round(y2), OUTFILL_EDGE);
                 const cmyk = RGB2CMYK(rgba);
                 let hexColor;
-                let intent = cmyk[c] / 255 * rgba[3] / 255;
+                let intent = cmyk[c] / 255 * rgba[3] / 255 * amount[c];
                 switch (c) {
                 case 0:  // C
                     hexColor = "#FF0000"
