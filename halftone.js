@@ -23,13 +23,15 @@ function main() {
     bindFunction({ "maxWidthHeightRange":"maxWidthHeightText",
                    "scaleRange":"scaleText",
                    "sizeRange":"sizeText",
-                   "rotateRange":"rotateText" },
+                   "cRotateRange":"cRotateText",
+                   "mRotateRange":"mRotateText",
+                   "yRotateRange":"yRotateText",
+                   "kRotateRange":"kRotateText" },
 		 function() {
 		     drawSrcImageAndHalftone(srcImage, srcCanvas, dstCanvas,
                                          params);
 		 }, params);
 }
-
 
 function drawSrcImageAndHalftone(srcImage, srcCanvas, dstCanvas, params) {
     const scale = params.scaleRange;
@@ -51,8 +53,26 @@ function averageArea(imageData, x, y, size) {
     return getRGBA(imageData, x, y, OUTFILL_EDGE);
 }
 
-function negateImage(canvas) {
-    const width = canvas.width, height = canvas.height;
+function negateCanvas(canvas) {
+    const ctx = canvas.getContext("2d");
+    ctx.save();
+    ctx.globalCompositeOperation='difference';
+    ctx.fillStyle = "white";
+    ctx.globalAlpha = 1;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+}
+
+function copyAlphaCanvas(srcCanvas, dstCanvas) {
+    const {width, height} = srcCanvas;
+    const srcCtx = srcCanvas.getContext("2d");
+    const dstCtx = dstCanvas.getContext("2d");
+    const srcImageData = srcCtx.getImageData(0, 0, width, height);
+    const dstImageData = dstCtx.getImageData(0, 0, width, height);
+    for (let i = 3; i < width * height * 4; i += 4) {
+        dstImageData.data[i] = srcImageData.data[i];
+    }
+    dstCtx.putImageData(dstImageData, 0, 0);
 }
 
 function rotateXY(x, y, width, height, angle) {
@@ -68,7 +88,7 @@ function rotateXY(x, y, width, height, angle) {
 function drawHalftone(srcCanvas, dstCanvas, params) {
     console.debug("drawHalftone");
     const size = params.sizeRange;
-    const rotate = params.rotateRange / 180 * Math.PI;
+    const rotate = [params.cRotateRange, params.mRotateRange, params.yRotateRange, params.kRotateRange].map(v => { return (v%45) / 180 * Math.PI });
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const width = srcCanvas.width, height = srcCanvas.height;
@@ -76,30 +96,53 @@ function drawHalftone(srcCanvas, dstCanvas, params) {
     dstCanvas.height = height;
     //
     const srcImageData = srcCtx.getImageData(0, 0, width, height);
-    const radius = size/2;
-    const margin = (1.414 - 1.0 ) / 2;
+    //const radius = size / 2;
+    const radius = size / 1.5;
+    //const radius = size * 1.414;
     const widthHeightMax = Math.max(width, height)
     const xMin = - widthHeightMax * 2 - size;
     const xMax = widthHeightMax * 2+ size;
     const yMin = - widthHeightMax * 2 - size;
     const yMax = widthHeightMax * 2 + size;
-    for (let y = yMin ; y < yMax; y += size) {
-        for (let x = xMin; x < xMax; x += size) {
-            const [ xx, yy ] = rotateXY(x, y, width, height, rotate);
-            if ((xx < -size) || (width + size < xx) ||
-                (yy < -size)  || (height + size < xx )) {
-                continue;
-            }
-	    const rgba = averageArea(srcImageData,
-                                     Math.round(xx), Math.round(yy), size);
-            const hexColor = "#"+Utils.ToHexArray(rgba).join("");
-            dstCtx.save();
-            dstCtx.beginPath();
-            dstCtx.fillStyle = hexColor;
-            dstCtx.arc(xx, yy, radius, 0, Math.PI * 2, true);
-            dstCtx.fill();
-            dstCtx.restore();
-	}
+    dstCtx.save();
+    dstCtx.globalCompositeOperation = "lighter";
+    for (let c = 0; c < 4; c += 1) {
+        for (let y = yMin ; y < yMax; y += size) {
+            for (let x = xMin; x < xMax; x += size) {
+                const [ x2, y2 ] = rotateXY(x, y, width, height, rotate[c]);
+                if ((x2 < -size) || (width + size < x2) ||
+                    (y2 < -size)  || (height + size < x2 )) {
+                    continue;
+                }
+	        const rgba = getRGBA(srcImageData,
+                                     Math.round(x2), Math.round(y2), OUTFILL_EDGE);
+                const cmyk = RGB2CMYK(rgba);
+                let hexColor;
+                let intent = cmyk[c] / 255 * rgba[3] / 255;
+                switch (c) {
+                case 0:  // C
+                    hexColor = "#FF0000"
+                    break;
+                case 1:  // M
+                    hexColor = "#00FF00"
+                    break;
+                case 2:  // Y
+                    hexColor = "#0000FF";
+                    break;
+                case 3:  // K
+                    hexColor = "#FFFFFF";
+                    break;
+                }
+                dstCtx.save();
+                dstCtx.beginPath();
+                dstCtx.fillStyle = hexColor;
+                dstCtx.arc(x2, y2, intent * radius, 0, Math.PI * 2, true);
+                dstCtx.fill();
+                dstCtx.restore();
+	    }
+        }
     }
-    
+    dstCtx.restore();
+    negateCanvas(dstCanvas);
+    copyAlphaCanvas(srcCanvas, dstCanvas);
 }

@@ -8,10 +8,19 @@
   <body>
     <div class="container">
       <div class="controlPanel" style="display:flex">
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
-        scale:<input id="scaleRange" type="range" min="1" max="8" step="0.1" value="1.0">:<input type="text" id="scaleText" size="4">
-        size:<input id="sizeRange" type="range" min="1" max="32" step="1" value="8">:<input type="text" id="sizeText" size="3">
-        rotate:<input id="rotateRange" type="range" min="0" max="45" step="1" value="0">:<input type="text" id="rotateText" size="3">
+        <div>
+	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+        </div>
+        <div>
+          scale:<input id="scaleRange" type="range" min="1" max="8" step="0.1" value="1.0">:<input type="text" id="scaleText" size="4"> <br />
+          size:<input id="sizeRange" type="range" min="1" max="32" step="1" value="8">:<input type="text" id="sizeText" size="3">
+        </div>
+        <div>
+          cRrotate:<input id="cRotateRange" type="range" min="0" max="180" step="1" value="15">:<input type="text" id="cRotateText" size="4"> <br />
+          mRotate:<input id="mRotateRange" type="range" min="0" max="180" step="1" value="30">:<input type="text" id="mRotateText" size="4"> <br />
+          yRotate:<input id="yRotateRange" type="range" min="0" max="180" step="1" value="45">:<input type="text" id="yRotateText" size="4"> <br />
+          kRotate:<input id="kRotateRange" type="range" min="0" max="180" step="1" value="75">:<input type="text" id="kRotateText" size="4">
+        </div>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
@@ -19,6 +28,7 @@
     <script type="text/javascript" src="lib/drop.js"> </script>
     <script type="text/javascript" src="lib/bind.js"> </script>
     <script type="text/javascript" src="lib/utils.js"> </script>
+    <script type="text/javascript" src="lib/color.js"> </script>
     <script type="text/javascript" src="lib/canvas.js"> </script>
     <script type="text/javascript" src="halftone.js"> </script>
   </body>
