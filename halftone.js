@@ -122,25 +122,35 @@ function drawHalftone(srcCanvas, dstCanvas, params) {
 	        const rgba = getRGBA(srcImageData,
                                      Math.round(x2), Math.round(y2), OUTFILL_EDGE);
                 const cmyk = RGB2CMYK(rgba);
-                let hexColor;
-                let intent = cmyk[c] / 255 * rgba[3] / 255 * amount[c];
+                const intent = cmyk[c] / 255 * rgba[3] / 255 * amount[c];
+                const grad = dstCtx.createRadialGradient(x2, y2, 0,
+                                                         x2, y2, intent * radius);
                 switch (c) {
                 case 0:  // C
-                    hexColor = "#FF0000"
+                    grad.addColorStop(0.4, "#FF0000");
+                    grad.addColorStop(0.7, "#800000");
+                    grad.addColorStop(1, "#000000");
                     break;
                 case 1:  // M
-                    hexColor = "#00FF00"
+                    grad.addColorStop(0.4, "#00FF00");
+                    grad.addColorStop(0.7, "#008000");
+                    grad.addColorStop(1, "#000000");
+
                     break;
                 case 2:  // Y
-                    hexColor = "#0000FF";
+                    grad.addColorStop(0.4, "#0000FF");
+                    grad.addColorStop(0.7, "#000080");
+                    grad.addColorStop(1, "#000000");
                     break;
                 case 3:  // K
-                    hexColor = "#FFFFFF";
+                    grad.addColorStop(0.4, "#FFFFFF");
+                    grad.addColorStop(0.7, "#808080");
+                    grad.addColorStop(1, "#000000");
                     break;
                 }
                 dstCtx.save();
                 dstCtx.beginPath();
-                dstCtx.fillStyle = hexColor;
+                dstCtx.fillStyle = grad;
                 dstCtx.arc(x2, y2, intent * radius, 0, Math.PI * 2, true);
                 dstCtx.fill();
                 dstCtx.restore();
