@@ -168,19 +168,27 @@ function load_mag(ab, canvas) {
 });
 
 document.body.addEventListener('drop', function(e) {
-    [].forEach.call(e.dataTransfer.files, function(file) {
-        var fr = new FileReader();
-        fr.onload = function(ev) {
-            document.body.insertBefore(document.createElement('hr'), document.body.firstChild);
+    e.preventDefault();
+    const hr = document.createElement('hr');
+    const br = document.createElement('br');
+    document.body.insertBefore(hr, document.body.firstElementChild.nextSibling);
+    Array.prototype.forEach.call(e.dataTransfer.files, function(file) {
+        var reader = new FileReader();
+        reader.onload = function(ev) {
+            const div = document.createElement('div');
+            document.body.insertBefore(div, hr.nextSibling);
             try {
                 var canvas = document.createElement('canvas');
                 load_mag(ev.target.result, canvas);
-                document.body.insertBefore(canvas, document.body.firstChild);
+                div.appendChild(canvas)
             } catch (ex) {
-                document.body.insertBefore(document.createTextNode(ex), document.body.firstChild);
+                const errtext = document.createTextNode(ex);
+                div.appendChild(errtext);
             }
+            div.className = "hovertext";
+            div.dataset.hover = file.name;
+            document.body.insertBefore(br, hr.nextSibling);
         };
-        fr.readAsArrayBuffer(file);
-    });
-    e.preventDefault();
+        reader.readAsArrayBuffer(file);
+     });
 }, true);
