@@ -3,33 +3,32 @@
     <meta charset="utf-8">
     <title> Mag Loarder </title>
     <style>
-      .hovertext {
-          border-bottom: 1px dotted black;
+      canvas {
+          cursor: pointer;
       }
-      .hovertext:before {
-          content: attr(data-hover);
-          font-size: 200%;
-          visibility: hidden;
-          opacity: 0;
-          background-color: black;
-          color: #fff;
-          text-align: center;
+      .hoverText {
+          position: absolute;
           border-radius: 5px;
-          padding: 5px 0;
-          transition: opacity 1s ease-in-out;
-          z-index: 1;
-      }
-      .hovertext:hover:before {
-          opacity: 1;
-          visibility: visible;
+          font-size: xx-large;
+          background-color: white;
+          opacity: 75%;
       }
     </style>
   </head>
   <body>
-    <h1> MAG Files Drop Here! </h1>
+    <div>
+      <h2> MAG Files Drop Here! </h2>
+      scale: <select id="scaleSelect" size="3">
+         <option value="25" selected> 25% </option>
+         <option value="50" selected> 50% </option>
+         <option value="100"> 100% </option>
+      </select>
+      download: <button id="downloadButton"> All </button>
+    </div>
     <hr>
+    <div id="container"> </div>
+    <div style="clear:both; display:none"> </div>
     <copyright> (c) <a href="http://emk.name/2015/03/magjs.html"> http://emk.name/2015/03/magjs.html </a> </copyright>
     <script src="mag.js"> </script>
   </body>
 </html>
-      

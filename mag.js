@@ -163,6 +163,8 @@ function load_mag(ab, canvas) {
     return "";
 }
 
+const CanvasList = [];
+
 ['dragenter', 'dragleave', 'dragover'].forEach(function(evname) {
     document.documentElement.addEventListener(evname, ev => {
         ev.preventDefault();
@@ -171,30 +173,91 @@ function load_mag(ab, canvas) {
     }, true);
 });
 
-document.body.addEventListener('drop', function(e) {
+function download_canvas(canvas) {
+    canvas.toBlob(blob => {  // PNG download
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = canvas.dataset.filename + ".png";
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }, 100);
+    }, "image/png");
+}
+
+function download_hook(canvas) {
+    canvas.addEventListener('click', e => {
+        download_canvas(canvas);
+    });
+}
+
+function hover_hook(canvas) {
+    const parent = canvas.parentNode;
+    const textDiv = document.createElement('hr');
+    parent.appendChild(textDiv)
+    console.log(canvas.dataset.filename);
+    textDiv.innerText = canvas.dataset.filename;
+    //textDiv.setAttribute('class', "hoverText");
+    textDiv.className = "hoverText";
+    textDiv.style.display = "none";
+    canvas.addEventListener('mouseenter', e => {
+        textDiv.style.display = "block";
+    });
+    canvas.addEventListener('mousemove', e => {
+        const { offsetX, offsetY } = e;
+        textDiv.style.left = String(offsetX) + "px";
+        textDiv.style.top = String(offsetY) + "px";
+    });
+    canvas.addEventListener('mouseleave', e => {
+        console.log("HOGEHOGE");
+        textDiv.style.display = "none";
+    });
+}
+
+scaleSelect.addEventListener('change', e => {
+    const scale = Number(scaleSelect.value) / 100;
+    CanvasList.forEach(canvas => {
+        canvas.style.width = (canvas.width * scale) | 0;
+    });
+});
+
+downloadButton.addEventListener('click', e => {
+    CanvasList.forEach(canvas => {
+        download_canvas(canvas);
+    });
+});
+
+document.body.addEventListener('drop', e => {
+    console.log("drop");
     e.preventDefault();
     const hr = document.createElement('hr');
-    const br = document.createElement('br');
     const first = document.body.firstElementChild;;
-    document.body.insertBefore(hr, first.nextSibling);
     Array.from(e.dataTransfer.files).forEach(file => {
+        const div = document.createElement('div');
+        div.style = "float:left;  position: relative;";
+        container.appendChild(div);
         const reader = new FileReader();
         reader.onload = function(ev) {
-            const div = document.createElement('div');
-            document.body.insertBefore(div, hr.nextSibling);
             const canvas = document.createElement('canvas');
             const ret = load_mag(ev.target.result, canvas);
             if (ret === "") {
+                canvas.dataset.filename = file.name;
                 div.appendChild(canvas)
+                download_hook(canvas);
+                hover_hook(canvas, file);
+                const scale = Number(scaleSelect.value) / 100;
+                canvas.style.width = (canvas.width * scale) | 0;
+                CanvasList.push(canvas);
             } else {
-                const errtext = document.createTextNode(ret);
+                const errtext = document.createTextNode(ret+"("+file.name+")");
                 div.appendChild(errtext);
             }
-            div.className = "hovertext";
-            div.dataset.hover = file.name;
-            document.body.insertBefore(br, hr.nextSibling);
         };
         reader.readAsArrayBuffer(file);
         return false;
-     });
+    });
 }, true);
