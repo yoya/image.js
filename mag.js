@@ -185,7 +185,7 @@ function download_canvas(canvas) {
         setTimeout(() => {
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
-        }, 100);
+        }, 10);
     }, "image/png");
 }
 
@@ -199,9 +199,7 @@ function hover_hook(canvas) {
     const parent = canvas.parentNode;
     const textDiv = document.createElement('hr');
     parent.appendChild(textDiv)
-    console.log(canvas.dataset.filename);
     textDiv.innerText = canvas.dataset.filename;
-    //textDiv.setAttribute('class', "hoverText");
     textDiv.className = "hoverText";
     textDiv.style.display = "none";
     canvas.addEventListener('mouseenter', e => {
@@ -213,7 +211,6 @@ function hover_hook(canvas) {
         textDiv.style.top = String(offsetY) + "px";
     });
     canvas.addEventListener('mouseleave', e => {
-        console.log("HOGEHOGE");
         textDiv.style.display = "none";
     });
 }
