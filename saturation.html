@@ -13,11 +13,11 @@
           saturation:<input id="saturationRange" type="range" min="0.0" max="3.0" step="0.1" value="1.0">:<input type="text" id="saturationText" size="4">
         </div>
         <select id="filterSelect" size="5" >
+          <option value="saturation"        > Saturation (CSS) </option>
+          <option value="grayscale"         > Grascale Extrapolation </option>
+          <option value="satugray"  selected> Gray & Saturation </option>
           <option value="HSL"               > HSL </option>
           <option value="HSV"               > HSV </option>
-          <option value="grayscale" selected> Grascale Extrapolation </option>
-          <option value="saturation"        > Saturation (nealy HSL/HSV) </option>
-          <option value="satugray"          > Gray & Saturation </option>
         </select>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
