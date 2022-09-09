@@ -11,6 +11,8 @@ function main() {
     // console.debug("main");
     let srcCanvas = document.getElementById("srcCanvas");
     let dstCanvas = document.getElementById("dstCanvas");
+    let hslCanvas = document.getElementById("hslCanvas");
+    let s1Canvas = document.getElementById("s1Canvas");
     let srcImage = new Image(srcCanvas.width, srcCanvas.height);
     let params = {};
     dropFunction(document, function(dataURL) {
@@ -74,6 +76,36 @@ function mogrifyGrayscale(imageData, amount) {
     }
 }
 
+function mogrifyHSL(imageData, s) {
+    const data = imageData.data;
+    const n = data.length;
+    for (let i = 0; i < n; ) {
+        const rgb = data.subarray(i, i + 3);
+        const a = data[i + 3];
+        const [h, ss, l] = RGB2HSL(rgb);
+        const [r, g, b] = HSV2RGB([h, Math.min(ss * s, 1.0), l]);
+        data[i++] = r;
+        data[i++] = g;
+        data[i++] = b;
+        data[i++] = a;
+    }
+}
+
+function mogrifyHSV(imageData, s) {
+    const data = imageData.data;
+    const n = data.length;
+    for (let i = 0; i < n; ) {
+        const rgb = data.subarray(i, i + 3);
+        const a = data[i + 3];
+        const [h, ss, v] = RGB2HSV(rgb);
+        const [r, g, b] = HSV2RGB([h, Math.min(ss * s, 1.0), v]);
+        data[i++] = r;
+        data[i++] = g;
+        data[i++] = b;
+        data[i++] = a;
+    }
+}
+
 function drawSaturation(srcCanvas, dstCanvas, params) {
     // console.debug("drawSaturation");
     let srcCtx = srcCanvas.getContext("2d");
@@ -98,6 +130,12 @@ function drawSaturation(srcCanvas, dstCanvas, params) {
         mogrifyGrayscale(imageData2, 1 - saturation);
         mogrifyCompose(imageData, imageData2, 0.5, 0.5);
         break;
+    case "HSL":
+        mogrifyHSL(imageData, saturation);
+            break;
+    case "HSV":
+        mogrifyHSV(imageData, saturation);
+            break;
     }
     dstCtx.putImageData(imageData, 0, 0);
 }

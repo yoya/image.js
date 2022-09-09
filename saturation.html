@@ -8,19 +8,26 @@
   <body>
     <div class="container">
       <div class="controlPanel">
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
-        <select id="filterSelect" size="3">
-          <option value="saturation" selected> Saturation </option>
-          <option value="grayscale"          > Grascale Extrapolation </option>
-          <option value="satugray"           > Satu & Gray </option>
+        <div style="float: left">
+	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5"> <br />
+          saturation:<input id="saturationRange" type="range" min="0.0" max="3.0" step="0.1" value="1.0">:<input type="text" id="saturationText" size="4">
+        </div>
+        <select id="filterSelect" size="5" >
+          <option value="HSL"               > HSL </option>
+          <option value="HSV"               > HSV </option>
+          <option value="grayscale" selected> Grascale Extrapolation </option>
+          <option value="saturation"        > Saturation (nealy HSL/HSV) </option>
+          <option value="satugray"          > Gray & Saturation </option>
         </select>
-        saturation:<input id="saturationRange" type="range" min="0.0" max="3.0" step="0.1" value="1.0">:<input type="text" id="saturationText" size="4">
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+      <canvas id="hslCanvas" class="borderBlue" width=200 height=200> hslCanvas </canvas>
+      <canvas id="s1Canvas" class="borderBlue" width=200 height=200> s1Canvas </canvas>
     </div>  <!-- container -->
     <script type="text/javascript" src="lib/drop.js"> </script>
     <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/color.js"> </script>
     <script type="text/javascript" src="lib/canvas.js"> </script>
     <script type="text/javascript" src="saturation.js"> </script>
   </body>
