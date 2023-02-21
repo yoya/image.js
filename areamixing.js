@@ -67,7 +67,7 @@ var compareRGBAArrFunc = function(rgba1, rgba2) {
 function medianRGBA(rgbaArr) {
     let n = rgbaArr.length;
     rgbaArr.sort(compareRGBAArrFunc);
-    const medianOffset = (((n + 1) / 2) | 0);
+    const medianOffset = (((n + 0.999999999) / 2) | 0);
     return rgbaArr[medianOffset];
 }
 
