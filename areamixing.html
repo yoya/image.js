@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2017/04/02- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> area mixing </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel" style="display:flex">
+        <div>
+	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+          <br />
+	  dx:<input id="dxRange" type="range" min="1" max="64" step="1" value="8">:<input type="text" id="dxText" size="3">
+          dxdy sync:<input id="dxdySyncCheckbox" type="checkbox" checked/>
+          <br />
+          dy:<input id="dyRange" type="range" min="1" max="64" step="1" value="8">:<input type="text" id="dyText" size="3">
+          </div>
+        <div>
+          <select id="methodSelect" size="4">
+            <option value="mean" selected> Mean </option>
+            <option value="median"       > Median </option>
+            <option value="max"       > Max </option>
+            <option value="min"       > Min </option>
+          </selecT>
+        </div>
+      </div> <!-- controlPanel -->
+      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="areamixing.js"> </script>
+  </body>
+</html>
