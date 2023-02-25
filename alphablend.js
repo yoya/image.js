@@ -23,24 +23,23 @@ function main() {
     var ratio1Text = document.getElementById("ratio1Text");
     var ratio2Text = document.getElementById("ratio2Text");
     //
-    var srcImage1 = new Image(srcCanvas1.width, srcCanvas1.height);
-    var srcImage2 = new Image(srcCanvas2.width, srcCanvas2.height);
-    
+    var srcImage1 = new Image();
+    var srcImage2 = new Image();
+    srcImage1.onload = function() {
+	drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
+	drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas);
+    }
+    srcImage2.onload = function() {
+	drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
+	drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas,
+		       linearGamma, true);
+    }
+    srcImage1.src = "img/4x4primary-400x400.png";
+    srcImage2.src = "img/RGBCube.png";
     dropFunction(srcCanvas1Container, function(dataURL) {
-	srcImage1 = new Image();
-	srcImage1.onload = function() {
-	    drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
-	    drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas);
-	}
 	srcImage1.src = dataURL;
     }, "DataURL");
     dropFunction(srcCanvas2Container, function(dataURL) {
-	srcImage2 = new Image();
-	srcImage2.onload = function() {
-	    drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
-	    drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas,
-			   linearGamma, true);
-	}
 	srcImage2.src = dataURL;
     }, "DataURL");
     
