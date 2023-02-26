@@ -7,23 +7,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
-function params2element(params) {
-    for (let k in params) {
-        const elem = document.getElementById(k);
-        if (! elem) {
-            // console.error(k+" elem is null");
-            continue;
-        }
-        if ('checked' in elem) {
-            elem.checked = params[k];
-        } else if ('value' in elem) {
-            elem.value = params[k];
-        } else {
-            console.error(k+" elem has no value");
-        }
-    }
-}
-
 function toOrientation(horizontal, vertical, diagonal) {
     const reverse = horizontal !== vertical;  // xor
     const o = (reverse? 1: 0) + (vertical? 2: 0) + (diagonal? 4: 0);
@@ -131,7 +114,7 @@ function main() {
                          const orientation = toOrientation(horizontal, vertical, diagonal);
                          params.orientationSelect = orientation;
                      }
-                     params2element(params);
+                     bind2elements(params);
 		     drawSrcImageAndOrientation(srcImage, srcCanvas,
                                                 dstCanvas, dstCanvas2, params);
 		 }, params);
