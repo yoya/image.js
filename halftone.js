@@ -23,14 +23,11 @@ function main() {
     bindFunction({ "maxWidthHeightRange":"maxWidthHeightText",
                    "scaleRange":"scaleText",
                    "sizeRange":"sizeText",
-                   "cRotateRange":"cRotateText",
-                   "mRotateRange":"mRotateText",
-                   "yRotateRange":"yRotateText",
-                   "kRotateRange":"kRotateText" ,
-                   "cAmountRange":"cAmountText",
-                   "mAmountRange":"mAmountText",
-                   "yAmountRange":"yAmountText",
-                   "kAmountRange":"kAmountText" },
+                   "cRotateRange":"cRotateText", "mRotateRange":"mRotateText",
+                   "yRotateRange":"yRotateText", "kRotateRange":"kRotateText" ,
+                   "cAmountRange":"cAmountText", "mAmountRange":"mAmountText",
+                   "yAmountRange":"yAmountText", "kAmountRange":"kAmountText"
+                 },
 		 function() {
 		     drawSrcImageAndHalftone(srcImage, srcCanvas, dstCanvas,
                                          params);
