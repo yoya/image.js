@@ -32,6 +32,20 @@ function main() {
 		     drawSrcImageAndHalftone(srcImage, srcCanvas, dstCanvas,
                                          params);
 		 }, params);
+    bindFunction({ "rc1Button":null, "rc2Button":null, "rc3Button":null,
+                   "rc4Button":null, "rc5Button":null,
+                 },
+		 function(target) {
+                     const p = params;
+                     const radiusCombination = target.innerText.split(",").map((n) => { return Number(n); });
+                     p.cRotateRange = p.cRotateText = radiusCombination[0];
+                     p.mRotateRange = p.mRotateText = radiusCombination[1];
+                     p.yRotateRange = p.yRotateText = radiusCombination[2];
+                     p.kRotateRange = p.kRotateText = radiusCombination[3];
+                     bind2elements(params);
+		     drawSrcImageAndHalftone(srcImage, srcCanvas, dstCanvas,
+                                         params);
+		 }, params);
 }
 
 function drawSrcImageAndHalftone(srcImage, srcCanvas, dstCanvas, params) {
