@@ -9,7 +9,7 @@ importScripts("../lib/canvas.js");
 
 onmessage = function(e) {
     const [srcImageData1, srcImageData2] = e.data.image;
-    const { method, ratio1, ratio2, linearGamma } = e.data;
+    const { method, ratio1, ratio2, linearGamma, shiftX, shiftY } = e.data;
     const srcWidth1 = srcImageData1.width, srcHeight1 = srcImageData1.height;
     const srcWidth2 = srcImageData2.width, srcHeight2 = srcImageData2.height;
     const dstWidth  = (srcWidth1  < srcWidth2) ? srcWidth1  : srcWidth2;
@@ -17,10 +17,15 @@ onmessage = function(e) {
 
     const dstImageData = new ImageData(dstWidth, dstHeight);
 
+    const startX1 = (shiftX < 0)? -shiftX: 0;
+    const startX2 = (shiftX < 0)? 0: shiftX;
+    const startY1 = (shiftY < 0)? -shiftY: 0;
+    const startY2 = (shiftY < 0)? 0: shiftY;
+
     for (let dstY = 0 ; dstY < dstHeight; dstY++) {
         for (let dstX = 0 ; dstX < dstWidth; dstX++) {
-	    const srcX1 = dstX, srcY1 = dstY;
-	    const srcX2 = dstX, srcY2 = dstY;
+	    const srcX1 = dstX + startX1, srcY1 = dstY + startY1;
+	    const srcX2 = dstX + startX2, srcY2 = dstY + startY2;
 	    let rgba1 = getRGBA(srcImageData1, srcX1, srcY1);
 	    let rgba2 = getRGBA(srcImageData2, srcX2, srcY2);
 	    let r1,g1,b1,a1, r2,g2,b2,a2;

@@ -38,8 +38,8 @@ function main() {
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
 		  "linearGammaCheckbox":null,
 		  "ratioRange":"ratioText",
-		  "ratio1Range":"ratio1Text",
-		  "ratio2Range":"ratio2Text"},
+		  "ratio1Range":"ratio1Text", "ratio2Range":"ratio2Text",
+                  "shiftXRange":"shiftXText", "shiftYRange":"shiftYText"},
 		 function(target, rel) {
 		     const maxWidthHeight = params.maxWidthHeightRange;
 		     if ((target.id === "ratioRange") || (target.id === "ratioText")) {
@@ -64,14 +64,18 @@ const worker = new workerProcess("worker/alphablend.js");
 
 function drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, params, sync) {
     // console.debug("drawAlphaBrend", params);
-    const { methodSelect, linearGammaCheckbox, ratio1Range, ratio2Range } = params;
+    const { methodSelect, linearGammaCheckbox, ratio1Range, ratio2Range,
+            shiftXRange, shiftYRange } = params;
+    const [shiftX, shiftY] = [shiftXRange, shiftYRange];
     const srcCtx1 = srcCanvas1.getContext("2d");
     const srcCtx2 = srcCanvas2.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const srcWidth1 = srcCanvas1.width, srcHeight1 = srcCanvas1.height;
     const srcWidth2 = srcCanvas2.width, srcHeight2 = srcCanvas2.height;
-    const dstWidth  = (srcWidth1  < srcWidth2) ? srcWidth1  : srcWidth2;
-    const dstHeight = (srcHeight1 < srcHeight2)? srcHeight1 : srcHeight2;
+    const dstWidth  = (shiftX < 0)? Math.min(srcWidth1 + shiftX, srcWidth2):
+          Math.min(srcWidth1, srcWidth2 - shiftX);
+    const dstHeight = (shiftY < 0)? Math.min(srcHeight1 + shiftY, srcHeight2):
+          Math.min(srcHeight1, srcHeight2 - shiftY);
     dstCanvas.width  = dstWidth;
     dstCanvas.height = dstHeight;
     //
@@ -79,6 +83,6 @@ function drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, params, sync) {
     const srcImageData2 = srcCtx2.getImageData(0, 0, srcWidth2, srcHeight2);
     //
     const params_w = {method:methodSelect, linearGamma:linearGammaCheckbox,
-                      ratio1:ratio1Range, ratio2:ratio2Range };
+                      ratio1:ratio1Range, ratio2:ratio2Range, shiftX, shiftY};
     worker.process([srcCanvas1, srcCanvas2], dstCanvas, params_w, sync)
 }
