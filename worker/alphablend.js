@@ -9,7 +9,8 @@ importScripts("../lib/canvas.js");
 
 onmessage = function(e) {
     const [srcImageData1, srcImageData2] = e.data.image;
-    const { method, ratio1, ratio2, linearGamma, shiftX, shiftY } = e.data;
+    const { method, ratio1, ratio2, linearGamma, shiftX, shiftY,
+            gradSlantX, gradSlantY} = e.data;
     const srcWidth1 = srcImageData1.width, srcHeight1 = srcImageData1.height;
     const srcWidth2 = srcImageData2.width, srcHeight2 = srcImageData2.height;
     const dstWidth  = (srcWidth1  < srcWidth2) ? srcWidth1  : srcWidth2;
@@ -26,6 +27,12 @@ onmessage = function(e) {
         for (let dstX = 0 ; dstX < dstWidth; dstX++) {
 	    const srcX1 = dstX + startX1, srcY1 = dstY + startY1;
 	    const srcX2 = dstX + startX2, srcY2 = dstY + startY2;
+            const ratioX1 = Math.max(1 + 2*(dstWidth/2 - dstX) / dstWidth * gradSlantX, 0.0000001); // (0.0 ... 2.0)
+            const ratioY1 = Math.max(1 + 2*(dstHeight/2- dstY) / dstHeight * gradSlantY, 0.0000001); // (0.0 ... 2.0)
+            const ratioX2 = 1 - (ratioX1 - 1);  // (2.0 ... 0.0) with slant
+            const ratioY2 = 1 - (ratioY1 - 1);  // (2.0 ... 0.0) with slant
+            const ratioXY1 = ratio1 * ratioX1 * ratioY1;
+            const ratioXY2 = ratio2 * ratioX2 * ratioY2;
 	    let rgba1 = getRGBA(srcImageData1, srcX1, srcY1);
 	    let rgba2 = getRGBA(srcImageData2, srcX2, srcY2);
 	    let r1,g1,b1,a1, r2,g2,b2,a2;
@@ -43,28 +50,28 @@ onmessage = function(e) {
 	    let rgba;
 	    switch (method) {
 	    case "plus":
-		rgba = [r1*ratio1 + r2*ratio2,
-			g1*ratio1 + g2*ratio2,
-			b1*ratio1 + b2*ratio2,
-			a1*ratio1 + a2*ratio2];
+		rgba = [r1*ratioXY1 + r2*ratioXY2,
+			g1*ratioXY1 + g2*ratioXY2,
+			b1*ratioXY1 + b2*ratioXY2,
+			a1*ratioXY1 + a2*ratioXY2];
 		break;
 	    case "minus":
-		rgba = [r1*ratio1 - r2*ratio2,
-			g1*ratio1 - g2*ratio2,
-			b1*ratio1 - b2*ratio2,
-                        a1*ratio1 - a2*ratio2];
+		rgba = [r1*ratioXY1 - r2*ratioXY2,
+			g1*ratioXY1 - g2*ratioXY2,
+			b1*ratioXY1 - b2*ratioXY2,
+                        a1*ratioXY1 - a2*ratioXY2];
 		break;
 	    case "multi":
-		rgba = [r1*ratio1 * r2*ratio2,
-			g1*ratio1 * g2*ratio2,
-			b1*ratio1 * b2*ratio2,
-                        a1*ratio1 * a2*ratio2];
+		rgba = [r1*ratioXY1 * r2*ratioXY2,
+			g1*ratioXY1 * g2*ratioXY2,
+			b1*ratioXY1 * b2*ratioXY2,
+                        a1*ratioXY1 * a2*ratioXY2];
 		break;
 	    case "div":
-		rgba = [r1*ratio1 / r2*ratio2,
-			g1*ratio1 / g2*ratio2,
-			b1*ratio1 / b2*ratio2,
-                        a1*ratio1 / a2*ratio2];
+		rgba = [r1*ratioXY1 / r2*ratioXY2,
+			g1*ratioXY1 / g2*ratioXY2,
+			b1*ratioXY1 / b2*ratioXY2,
+                        a1*ratioXY1 / a2*ratioXY2];
 		break;
 	    default:
 		console.error("unknown method:"+method);

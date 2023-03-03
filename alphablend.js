@@ -39,7 +39,9 @@ function main() {
 		  "linearGammaCheckbox":null,
 		  "ratioRange":"ratioText",
 		  "ratio1Range":"ratio1Text", "ratio2Range":"ratio2Text",
-                  "shiftXRange":"shiftXText", "shiftYRange":"shiftYText"},
+                  "shiftXRange":"shiftXText", "shiftYRange":"shiftYText",
+                  "gradSlantXRange":"gradSlantXText",
+                  "gradSlantYRange":"gradSlantYText"},
 		 function(target, rel) {
 		     const maxWidthHeight = params.maxWidthHeightRange;
 		     if ((target.id === "ratioRange") || (target.id === "ratioText")) {
@@ -65,7 +67,8 @@ const worker = new workerProcess("worker/alphablend.js");
 function drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, params, sync) {
     // console.debug("drawAlphaBrend", params);
     const { methodSelect, linearGammaCheckbox, ratio1Range, ratio2Range,
-            shiftXRange, shiftYRange } = params;
+            shiftXRange, shiftYRange,
+            gradSlantXRange, gradSlantYRange } = params;
     const [shiftX, shiftY] = [shiftXRange, shiftYRange];
     const srcCtx1 = srcCanvas1.getContext("2d");
     const srcCtx2 = srcCanvas2.getContext("2d");
@@ -83,6 +86,7 @@ function drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, params, sync) {
     const srcImageData2 = srcCtx2.getImageData(0, 0, srcWidth2, srcHeight2);
     //
     const params_w = {method:methodSelect, linearGamma:linearGammaCheckbox,
-                      ratio1:ratio1Range, ratio2:ratio2Range, shiftX, shiftY};
+                      ratio1:ratio1Range, ratio2:ratio2Range, shiftX, shiftY,
+                      gradSlantX:gradSlantXRange, gradSlantY:gradSlantYRange};
     worker.process([srcCanvas1, srcCanvas2], dstCanvas, params_w, sync)
 }
