@@ -48,23 +48,23 @@ function drawDither(srcCanvas, dstCanvas) {
                            13,  5, 15,  7,
                            4 , 12,  2, 10,
                            16,  8, 14, 6],
-                  divisor: 17 };
+                  divisor:17 };
     const levels = [4, 4, 4];
     const srcImageData = srcCtx.getImageData(0, 0, width, height);
     const dstImageData = dstCtx.createImageData(width, height);
+    const qrange = 255;
+    const qscale = 1 / 255;
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
 	    const rgba = getRGBA(srcImageData, x, y);
-            // 4x4 の場合、0〜16 に対応する
             for (let c = 0; c < 3; c++) {
-                // 輝度を map x ビット震度スケールに合わせる
-                let th = ((rgba[c] * ((levels[c] * (map.divisor-1))| 0)+1) / 255) | 0;
+                let th = (qscale * rgba[c] * ((levels[c] *
+                                               (map.divisor-1) ) + 1) ) | 0;
                 const level = (th / (map.divisor-1)) | 0;
                 th -= level * (map.divisor-1);
-                const m = (map.levels[((x % map.width) +
-                                       map.width * (y % map.height))] / levels[c]) ;
-//                console.log(lv + ((th >= m)? -1: 0))
-                rgba[c] = (level + ((th >= m)? 1: 0)) * 255 / levels[c];
+                const m = map.levels[((x % map.width) +
+                                      map.width * (y % map.height))];
+                rgba[c] = (level + ((th >= m)? 1: 0)) * qrange / levels[c];
             }
 	    setRGBA(dstImageData, x, y, rgba);
 	}
