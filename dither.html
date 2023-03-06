@@ -6,12 +6,67 @@
     <link rel="stylesheet" href="index.css">
   </head>
   <body>
-    <div class="container">
-      <div class="controlPanel" style="display:flex">
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
-      </div> <!-- controlPanel -->
-      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
-      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+    <div id="container" class="vertical">
+      <div id="control" class="horizontal" >
+        <div>
+	  maxWidthHeight: <br /> <input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+          <br />
+          scale:<input id="scaleRange" type="range" min="1.0" max="8.0" step="1" value="1.0">:<input type="text" id="scaleText" size="4">
+        </div>
+        <div class="horizontal">
+          threshold:
+          <select id="thresholdSelect" size="4" >
+            <option value="threshold"    > Threshold 1x1 (non-dither) </option>
+            <option value="checks"       > Checkboard 2x1 (dither) </option>
+            <option value="o2x2"         > Ordered 2x2 (dispersed) </option>
+            <option value="o3x3"         > Ordered 3x3 (dispersed) </option>
+            <option value="o4x4" selected> Ordered 4x4 (dispersed) </option>
+          </select>
+        </div>
+        <div class="horizontal">
+          <div class="vertical">
+            Red
+            <div class="horizontal">
+              <select id="level0Select">
+                <option value="2"         > 2 </option>
+                <option value="4"         > 4 </option>
+                <option value="8" selected> 8 </option>
+                <option value="16"        >16 </option>
+              </select>
+            </div>
+          </div>
+          <div class="vertical">
+            Green
+            <div class="horizontal">
+              <select id="level1Select">
+                <option value="2"         > 2 </option>
+                <option value="4"         > 4 </option>
+                <option value="8" selected> 8 </option>
+                <option value="16"        >16 </option>
+              </select>
+            </div>
+          </div>
+          <div class="vertical">
+            Blue
+            <div class="horizontal">
+              <select id="level2Select">
+                <option value="2"         > 2 </option>
+                <option value="4" selected> 4 </option>
+                <option value="8"         > 8 </option>
+                <option value="16"        >16 </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div> <!-- control -->
+      <div id="display" class="horizontal">
+        <div class="canvasContainer">
+          <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+        </div>
+        <div class="canvasContainer">
+          <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+        </div>
+      </div> <!-- display -->
     </div>  <!-- container -->
     <script type="text/javascript" src="lib/drop.js"> </script>
     <script type="text/javascript" src="lib/bind.js"> </script>
