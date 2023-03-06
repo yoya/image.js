@@ -35,7 +35,7 @@ function main() {
 
 function drawSrcImageAndDither(srcImage, srcCanvas, dstCancas, params) {
     const { scaleRange } = params;
-    drawSrcImage(srcImage, srcCanvas, params.maxWidthHeight);
+    drawSrcImage(srcImage, srcCanvas, params.maxWidthHeightRange);
     drawDither(srcCanvas, dstCanvas, params);
     rescaleCanvas(dstCanvas, scaleRange);
 }
