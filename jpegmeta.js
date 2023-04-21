@@ -17,9 +17,14 @@ function main() {
         const reader = new FileReader();
         reader.onload = function() {
 	    const url = this.result;
-            const img = document.createElement("img");
+            //const img = document.createElement("img");
+            const img = new Image();
+            img.onload = () => {
+                const sizeStr = img.naturalWidth + "x" + img.naturalHeight;
+                imageSize.innerText = sizeStr;
+                imageContainer.appendChild(img);
+            }
             img.src = url;
-            imageContainer.appendChild(img);
         }
         reader.readAsDataURL(blob);
     }, "ArrayBuffer");
@@ -42,7 +47,7 @@ function dump(arr) {
         const td = [version, units, xDensity, yDensity, xThumb, yThumb];
         items.push("JFIF version: " + version);
         items.push("Density: " + xDensity +":" + yDensity + " ("+["aspect ratio", "inch", "cm"][units] + ")");
-        jfifContainer.innerHTML = "";
+        items.push("Thumbnail: " + xThumb + "x" + yThumb);
         makeItems(jfifContainer, items);
     } else {
         makeItems(jfifContainer, ["JFIF not found"]);
@@ -54,11 +59,11 @@ function dump(arr) {
 }
 
 function makeItems(target, items) {
+    target.innerHTML = "";
     for (let item of items) {
         const div = document.createElement("div");
         div.innerText = item;
         div.className = "leaf";
-        console.log(target, div);
         target.appendChild(div);
     }
 }
