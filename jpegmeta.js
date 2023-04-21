@@ -48,6 +48,7 @@ function dump(arr) {
         makeItems(exifContainer, items);
     } else {
         exifCaption.innerText = "APP1-Exif not found";
+        makeItems(exifContainer, []);
     }
     if (icc) {
         iccCaption.innerText = "byte length:" + icc.length;
@@ -55,6 +56,7 @@ function dump(arr) {
         makeItems(iccContainer, items);
     } else {
         iccCaption.innerText = "APP2-ICC_Profile not found";
+        makeItems(iccContainer, []);
     }
     console.debug(chunkList);
 }
