@@ -44,13 +44,15 @@ function dump(arr) {
     }
     if (exif) {
         exifCaption.innerText = "byte length:" + exif.length;
-        console.log({ exif });
+        const items = exifFunction(exif);
+        makeItems(exifContainer, items);
     } else {
         exifCaption.innerText = "APP1-Exif not found";
     }
     if (icc) {
         iccCaption.innerText = "byte length:" + icc.length;
-        console.log({ icc });
+        const items = iccFunction(icc);
+        makeItems(iccContainer, items);
     } else {
         iccCaption.innerText = "APP2-ICC_Profile not found";
     }
@@ -67,6 +69,51 @@ function jfifFunction(jfif) {
     const unitsStr = ["aspect ratio", "inch (DPI)", "cm"][units];
     items.push("Density: " + xDensity +":" + yDensity + " (" + unitsStr + ")");
     items.push("Thumbnail: " + xThumb + "x" + yThumb);
+    return items;
+}
+
+function exifFunction(arr) {
+    const items = [];
+    let exif = new IO_TIFF();
+    exif.parse(arr);
+    console.log({exif});
+    return items;
+}
+
+function iccFunction(arr) {
+    const items = [];
+    let icc = new IO_ICC();
+    icc.parse(arr);
+    console.log({icc});
+    const version = icc.header.ProfileVersion.Major + "." + icc.header.ProfileVersion.Minor;
+    const dt = icc.header.DateTimeCreated;
+    const created = dt.Year + "/" + dt.Month + "/" + dt.Day + " " +
+          dt.Hours + ":" + dt.Minutes + ":" + dt.Seconds;
+    const headerKeys = [["AcspSignature", "acsp"],
+                        ["ColorSpace", "colorspace"],
+                        ["ConnectionSpace", "pcs"],
+                        ["PrimaryPlatform", "platform"],
+                        ["ProfileDeviceClass", "device"]];
+    const headers = [];
+    headers.push("version:" + version);
+    headers.push("created:" + created);
+    for (const h of headerKeys) {
+        const v = icc.header[h[0]];
+        headers.push(h[1]+":"+v);
+    }
+    items.push("[header] " + headers.join(" "));
+    for (const tag of icc.tagTable) {
+        const sig = tag.Signature;
+        console.log({tag, sig});
+        switch (sig) {
+        case "cprt":
+        case "desc":
+            const arr = tag.arr.subarray(tag.Offset,
+                                         tag.Offset + tag.Size);
+            items.push("["+sig+"] "+ Utils.ToText(arr));
+            break;
+        }
+    }
     return items;
 }
 
