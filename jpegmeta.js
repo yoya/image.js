@@ -14,6 +14,8 @@ image.onload = () => {
 
 function main() {
     dropFunction(document, function(arrbuf) {
+        jpegContainer.style.display = "none";
+        // display Image
         const reader = new FileReader();
         reader.onload = () => {
 	    const url = reader.result;
@@ -21,19 +23,25 @@ function main() {
         }
         const blob = new Blob([arrbuf]);
         reader.readAsDataURL(blob);
+        // JPEG dump
         const arr = new Uint8Array(arrbuf);
-        dump(arr);
+        if (IO_JPEG.verifySig(arr)) {
+            jpegContainer.style.display = "block";
+            dump(arr);
+        } else {
+            imageCaption.innerText = "not a JPEG File";
+        }
     }, "ArrayBuffer");
 }
 
-function dump(arr) {
+function dump(arr, img) {
     let jpeg = new IO_JPEG();
     jpeg.parse(arr);
+    const chunkList = jpeg.getChunkList();
+    console.debug( {chunkList });
     const jfif = jpeg.getJFIF();
     const exif = jpeg.getExif();
     const icc = jpeg.getICC();
-    const chunkList = jpeg.getChunkList();
-    console.debug( {chunkList });
     if (jfif) {
         jfifCaption.innerText = "byte length:" + jfif.length;
         const items = jfifFunction(jfif);
@@ -70,8 +78,8 @@ function jfifFunction(jfif) {
     items.push("JFIF version: " + version);
     const unitsStr = ["aspect ratio", "inch (DPI)", "cm"][units];
     items.push("Density: " + xDensity +":" + yDensity + " (" + unitsStr + ")");
-    const thumb = ((xThumb | yThumb) === 0)? "(nothing)" :
-          ("width:" + xThumb + " height:" + yThumb);
+    const thumb = "width:" + xThumb + " height:" + yThumb +
+          (((xThumb * yThumb) === 0)? " (nothing)" : "");
     items.push("Thumbnail: " + thumb);
     return items;
 }
