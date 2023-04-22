@@ -38,7 +38,6 @@ function dump(arr, img) {
     let jpeg = new IO_JPEG();
     jpeg.parse(arr);
     const chunkList = jpeg.getChunkList();
-    console.debug( {chunkList });
     const jfif = jpeg.getJFIF();
     const exif = jpeg.getExif();
     const icc = jpeg.getICC();
@@ -75,12 +74,12 @@ function jfifFunction(jfif) {
     const version = ver1 + "." + Utils.LeftPad(ver2, 2, "0");
     const xDensity = xd1 * 0xff  + xd2;
     const yDensity = yd1 * 0xff  + yd2;
-    items.push("JFIF version: " + version);
+    items.push("[JFIF version] " + version);
     const unitsStr = ["aspect ratio", "inch (DPI)", "cm"][units];
-    items.push("Density: " + xDensity +":" + yDensity + " (" + unitsStr + ")");
-    const thumb = "width:" + xThumb + " height:" + yThumb +
-          (((xThumb * yThumb) === 0)? " (nothing)" : "");
-    items.push("Thumbnail: " + thumb);
+    items.push("[Density] " + xDensity +":" + yDensity + " (" + unitsStr + ")");
+    const thumb = "width:" + xThumb + " height:" + yThumb;
+    const thumbNote = ((xThumb * yThumb) === 0)? " (nothing)" : "";
+    items.push("[Thumbnail] " + thumb + thumbNote);
     return items;
 }
 
@@ -88,7 +87,22 @@ function exifFunction(arr) {
     const items = [];
     let exif = new IO_TIFF();
     exif.parse(arr);
-    console.log({exif});
+    const chunkList = exif.getChunkList();
+    chunkList.forEach((chunk) => {
+        switch (chunk.name) {
+        case "Endian":
+            items.push("[Endian] " + chunk.infos[0].endian);
+            break;
+        case "Version":
+            items.push("[Version] " + chunk.infos[0].version);
+            break;
+        case "0thIFD":
+            for (const info of chunk.infos) {
+                console.log(info);
+            }
+            break;
+        }
+    });
     return items;
 }
 
@@ -96,11 +110,11 @@ function iccFunction(arr) {
     const items = [];
     let icc = new IO_ICC();
     icc.parse(arr);
-    console.log({icc});
     const version = icc.header.ProfileVersion.Major + "." + icc.header.ProfileVersion.Minor;
-    const dt = icc.header.DateTimeCreated;
-    const created = dt.Year + "/" + dt.Month + "/" + dt.Day + " " +
-          dt.Hours + ":" + dt.Minutes + ":" + dt.Seconds;
+    let {Year, Month, Day, Hours, Minutes, Seconds} = icc.header.DateTimeCreated;
+    [Hours, Minutes, Seconds] = [Hours, Minutes, Seconds].map((v) => { return Utils.LeftPad(v, 2, "0")})
+    const created = Year + "/" + Month + "/" + Day + "_" +
+          Hours + ":" + Minutes + ":" + Seconds;
     const headerKeys = [["AcspSignature", "acsp"],
                         ["ColorSpace", "colorspace"],
                         ["ConnectionSpace", "pcs"],
@@ -116,7 +130,6 @@ function iccFunction(arr) {
     items.push("[header] " + headers.join(" "));
     for (const tag of icc.tagTable) {
         const sig = tag.Signature;
-        console.log({tag, sig});
         switch (sig) {
         case "cprt":
         case "desc":
