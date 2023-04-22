@@ -70,7 +70,9 @@ function jfifFunction(jfif) {
     items.push("JFIF version: " + version);
     const unitsStr = ["aspect ratio", "inch (DPI)", "cm"][units];
     items.push("Density: " + xDensity +":" + yDensity + " (" + unitsStr + ")");
-    items.push("Thumbnail: " + xThumb + "x" + yThumb);
+    const thumb = ((xThumb | yThumb) === 0)? "(nothing)" :
+          ("width:" + xThumb + " height:" + yThumb);
+    items.push("Thumbnail: " + thumb);
     return items;
 }
 
