@@ -9,6 +9,18 @@
     img { max-width:256px; max-height:192px; }
     .container { border: 4px solid rgb(64,192,255); }
     .leaf { border: 2px solid rgb(255,128,64); }
+    .vertical {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .horizontal {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
   </style>
 </head>
 <body style="background-color: white;">
@@ -17,13 +29,16 @@
   <div id="imageContainer" class="container">
     <img id="image" src="" />
   </div>
-  <div id="jpegContainer">
+  <div id="jpegContainer" style="display:flex">
+    JPEG Chunk: <span id="chunkCaption"> </span>
+    <div id="chunkContainer" class="container horizontal">
+    </div>
     JFIF: <span id="jfifCaption"> </span>
-    <div id="jfifContainer" class="container"> </div>
+    <div id="jfifContainer" class="container horizontal"> </div>
     Exif: <span id="exifCaption"> </span>
-    <div id="exifContainer" class="container"> </div>
+    <div id="exifContainer" class="container horizontal"> </div>
     ICC Profile: <span id="iccCaption"> </span>
-    <div id="iccContainer" class="container"> </div>
+    <div id="iccContainer" class="container horizontal"> </div>
     <script type="text/javascript" src="lib/drop.js"> </script>
     <script type="text/javascript" src="lib/utils.js"> </script>
     <script type="text/javascript" src="lib/binary.js"> </script>

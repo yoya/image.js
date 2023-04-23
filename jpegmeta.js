@@ -41,6 +41,11 @@ function dump(arr, img) {
     const jfif = jpeg.getJFIF();
     const exif = jpeg.getExif();
     const icc = jpeg.getICC();
+
+    chunkCaption.innerText = "Chunk Num:" + chunkList.length;
+    const items = chunkFunction(chunkList);
+    makeItems(chunkContainer, items);
+
     if (jfif) {
         jfifCaption.innerText = "byte length:" + jfif.length;
         const items = jfifFunction(jfif);
@@ -68,6 +73,14 @@ function dump(arr, img) {
     console.debug(chunkList);
 }
 
+function chunkFunction(chunkList) {
+    const items = [];
+    chunkList.forEach((chunk) => {
+        items.push(chunk.name);
+    });
+    return items;
+}
+
 function jfifFunction(jfif) {
     const items = [];
     const [ver1, ver2, units, xd1, xd2, yd1, yd2, xThumb, yThumb] = jfif;
@@ -88,6 +101,7 @@ function exifFunction(arr) {
     let exif = new IO_TIFF();
     exif.parse(arr);
     const chunkList = exif.getChunkList();
+    console.log(exif, chunkList);
     chunkList.forEach((chunk) => {
         switch (chunk.name) {
         case "Endian":
@@ -98,7 +112,15 @@ function exifFunction(arr) {
             break;
         case "0thIFD":
             for (const info of chunk.infos) {
-                console.log(info);
+                const { tagNo, tagNoHex } = info;
+                let tagName = info.tagName;
+                if (tagName !== undefined) {
+                    tagName = " " + tagName; // format
+                }
+                if (tagNo) {
+                    console.debug({ ...info} );
+                    items.push("[" + tagNo + "(" + tagNoHex + ")"+tagName+"] " + info.tagData);
+                }
             }
             break;
         }
@@ -144,6 +166,10 @@ function iccFunction(arr) {
 
 function makeItems(target, items) {
     target.innerHTML = "";
+    addItems(target, items);
+}
+
+function addItems(target, items) {
     for (const item of items) {
         const div = document.createElement("div");
         div.innerText = item;
