@@ -119,7 +119,20 @@ function exifFunction(arr) {
                 }
                 if (tagNo) {
                     console.debug({ ...info} );
-                    items.push("[" + tagNo + "(" + tagNoHex + ")"+tagName+"] " + info.tagData);
+                    let note = "";
+                    switch (tagNo) {
+                    case 0x128: // Resolutin Unit
+                        switch (info.tagData[0]) {
+                        case 2:
+                            note = " (inch)";
+                            break;
+                        case 3:
+                            note = " (cm)";
+                            break;
+                        }
+                        break;
+                    }
+                    items.push("[" + tagNo + "(" + tagNoHex + ")"+tagName+"] " + info.tagData + note);
                 }
             }
             break;
