@@ -21,7 +21,8 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "amountRange":"amountText"},
+                  "amountRange":"amountText",
+                  "linearGammaCheckbox":null},
 		 function() {
 		     drawSrcImageAndSharpenBlur(srcImage, srcCanvas, dstCanvas,
                                                 params);
@@ -104,14 +105,18 @@ function convolutionFilter(srcImageData, dstImageData, kernel) {
 
 function drawSharpenBlur(srcCanvas, dstCanvas, params) {
     const amount = params.amountRange;
+    const linearGamma = params.linearGammaCheckbox;
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const width = srcCanvas.width, height = srcCanvas.height;
     dstCanvas.width  = width;
     dstCanvas.height = height;
     //
-    const srcImageData = srcCtx.getImageData(0, 0, width, height);
-    const dstImageData = dstCtx.createImageData(width, height);
+    let srcImageData = srcCtx.getImageData(0, 0, width, height);
+    let dstImageData = dstCtx.createImageData(width, height);
+    if (linearGamma) {
+        srcImageData = transformImageDataToLinearRGB(srcImageData);
+    }
     if (amount != 0) {  // sharpen or blur
         let s = amount / 20;
         let kernel = (amount > 0)? Float32Array.from([ -s, 1 + (2*s), -s ])
@@ -123,6 +128,9 @@ function drawSharpenBlur(srcCanvas, dstCanvas, params) {
         convolutionFilter(srcImageData, dstImageData, kernel);
     } else {  // ident
         dstImageData.data.set(srcImageData.data);
+    }
+    if (linearGamma) {
+        dstImageData = transformImageDataFromLinearRGB(dstImageData);
     }
     //
     dstCtx.putImageData(dstImageData, 0, 0);
