@@ -173,20 +173,27 @@ const CanvasList = [];
     }, true);
 });
 
-function download_canvas(canvas) {
-    canvas.toBlob(blob => {  // PNG download
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = canvas.dataset.filename + ".png";
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => {
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        }, 10);
-    }, "image/png");
+function resolve_download_canvas(canvas) {
+    return new Promise(resolve => {
+        canvas.toBlob(blob => {  // PNG download
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = canvas.dataset.filename + ".png";
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+                resolve();
+            }, 1000);
+        }, "image/png");
+    });
+}
+
+async function download_canvas(canvas) {
+    await resolve_download_canvas(canvas);
 }
 
 function download_hook(canvas) {
@@ -223,8 +230,8 @@ scaleSelect.addEventListener('change', e => {
 });
 
 downloadButton.addEventListener('click', e => {
-    CanvasList.forEach(canvas => {
-        download_canvas(canvas);
+    CanvasList.forEach(async canvas => {
+        await download_canvas(canvas);
     });
 });
 
