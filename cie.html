@@ -13,7 +13,7 @@
     <div id="controlPanel" style="float:left">
       <div>
         Color Matching Function: <br />
-        <select id="cieSelect" size="3">
+        <select id="cie" size="3">
           <option value="ciexyz31" selected> CIEXYZ 31 (2-degree) </option>
           <option value="ciexyz64"         > CIEXYZ 64 (10-degree)  </option>
           <option value="ciexyzjv"         > CIEXYZ 31 Judd & Vos  </option>
@@ -21,7 +21,7 @@
       </div>
       <div>
 	Chromaticity: <br />
-        <select id="chromaticitySelect" size="4">
+        <select id="chromaticity" size="4">
           <option value="ciexy" selected> CIE xy   (CIE1931) </option>
           <option value="ucsuv_judd"    > UCS uv   (Judd)    </option>
 	  <option value="ucsuv"         > UCS uv   (CIE1960) </option>
@@ -30,7 +30,7 @@
       </div>
       <div>
         maxWidthHeight: <br />
-	<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+	<input id="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
       </div>
     </div> <!-- controlPanel -->
 
@@ -39,8 +39,8 @@
     </div>
     <div style="float:left">
       <div style="float:left">
-	<input id="tristimulusCheckbox" type="checkbox" checked="checked" />:
-        <select id="colorspaceSelect" size="5">
+	<input id="tristimulus" type="checkbox" checked="checked" />:
+        <select id="colorspace" size="5">
           <option value="srgb" selected> sRGB </option>
 	  <option value="dcip3"        > DCI-P3 </option>
 	  <option value="adobe"        > Adobe RGB </option>
@@ -49,14 +49,14 @@
         </select>
       </div>
       <div style="float:left">
-	guide:<input id="guideCheckbox" type="checkbox" checked="checked" />
+	guide:<input id="guide" type="checkbox" checked="checked" />
       </div>
       <div style="float:left">
-        graphAlpha:<input id="graphAlphaRange" type="range" min="0.0" max="1.0" step="0.05" value="0.65">:<input type="text" id="graphAlphaText" size="5">
+        graphAlpha:<input id="graphAlpha" type="range" min="0.0" max="1.0" step="0.05" value="0.65">:<input type="text" id="graphAlphaText" size="5">
         <br />
-        pointSize:<input id="pointSizeRange" type="range" min="1" max="16" step="1" value="1">:<input type="text" id="pointSizeText" size="5">
+        pointSize:<input id="pointSize" type="range" min="1" max="16" step="1" value="1">:<input type="text" id="pointSizeText" size="5">
         <br />
-        pointDensity:<input id="pointDensityRange" type="range" min="0.05" max="1" step="0.05" value="1">:<input type="text" id="pointDensityText" size="5">
+        pointDensity:<input id="pointDensity" type="range" min="0.05" max="1" step="0.05" value="1">:<input type="text" id="pointDensityText" size="5">
       </div>
     </div> <!-- controlPanel 2 -->
 
