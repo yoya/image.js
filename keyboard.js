@@ -23,8 +23,17 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+                  "typeSelect": null,
+                  "fontSelect": null,
+                  "inputText": null},
 		 function() {
+                     const inputText = document.getElementById("inputText");
+                     if (params.typeSelect === "B") {
+                         inputText.style.display = "block";
+                     } else {
+                         inputText.style.display = "none";
+                     }
 		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
                                          params);
 		 }, params);
@@ -38,6 +47,16 @@ function main() {
         case "mouseleave":
             mousePointer = null;
             break;
+        case "mousedown":
+            if (params.typeSelect === "AB") {
+                annotate.push( { x:p.x, y:p.y, key:params.inputText } );
+                drawText(srcCanvas, dstCanvas, params);
+            }
+            if (params.typeSelect === "C") {
+                // let input = document.createElement("input");
+            }
+            break;
+
         }
     });
     bindkeyFunction(params,
@@ -47,8 +66,10 @@ function main() {
                             return ;
                         }
                         // console.log(event, mousePointer);
-                        annotate.push( { x:p.x, y:p.y, key:event.key } );
-                        drawText(srcCanvas, dstCanvas, params);
+                        if (params.typeSelect === "B") {
+                            annotate.push( { x:p.x, y:p.y, key:event.key } );
+                            drawText(srcCanvas, dstCanvas, params);
+                        }
                     });
 }
 
@@ -79,7 +100,8 @@ function drawText(srcCanvas, dstCanvas, params) {
     for (let i = 0, n = annotate.length; i < n; i++) {
         const a = annotate[i];
         const {x, y, key} = a;
-        dstCtx.font = "18px serif";
+        //dstCtx.font = "18px serif";
+        dstCtx.font = "18px Nico Moji, cursive";
         dstCtx.strokeText(key, x, y);
     }
 }

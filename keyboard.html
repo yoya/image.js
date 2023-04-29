@@ -4,14 +4,41 @@
     <meta charset="utf-8">
     <title> keyboard </title>
     <link rel="stylesheet" href="index.css">
+    <style>
+      @import url(//fonts.googleapis.com/earlyaccess/hannari.css);
+      @import url(//fonts.googleapis.com/earlyaccess/kokoro.css);
+      @import url(//fonts.googleapis.com/earlyaccess/nicomoji.css);
+      @import url(//fonts.googleapis.com/earlyaccess/nikukyu.css);
+      @import url(//fonts.googleapis.com/earlyaccess/notosansjapanese.css);
+      .nikomoji { font-family: 'Nico Moji', cursive; }
+    </style>
   </head>
   <body>
     <div class="container">
       <div class="controlPanel" style="display:flex">
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+        <div>
+	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+        </div>
+        <div>
+          <select id="typeSelect" size="3">
+            <option value="A" selected> A,案 </option>
+            <option value="B"         > B 案 </option>
+            <option value="C"         > C 案 </option>
+        </select>
+        </div>
       </div> <!-- controlPanel -->
-      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
-      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+      <div style="display:flex">
+        <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+        <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+        <div>
+          <select id="fontSelect">
+            <option value="'Noto Sans Japanese', sans-serif" selected> Noto Sans Japanese </option>
+            <option value="18px Nico Moji, cursive"> nikomoji </option>
+            <option value="18px Nikukyu, cursive"   > Nikukyu </option>
+          </select> <br />
+          <input id="inputText" type="text" class="nikomoji" style="display:none;"> </input>
+        </div>
+      </div>
     </div>  <!-- container -->
     <script type="text/javascript" src="lib/drop.js"> </script>
     <script type="text/javascript" src="lib/bind.js"> </script>
