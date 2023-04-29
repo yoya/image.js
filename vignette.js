@@ -24,6 +24,7 @@ function main() {
     bindFunction({
         maxWidthHeightRange:'maxWidthHeightText',
 	radiusRange:'radiusText',
+        biasRange:'biasText',
 	linearGammaCheckbox:null,
 	inverseCheckbox:null
     },
@@ -43,6 +44,7 @@ var worker = new workerProcess('worker/vignette.js');
 function drawVignette(srcCanvas, dstCanvas, params, sync) {
     const params_w = {
         radius     : params.radiusRange,
+        bias       : params.biasRange,
         linearGamma: params.linearGammaCheckbox,
         inverse    : params.inverseCheckbox,
     };
