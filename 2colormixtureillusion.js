@@ -9,14 +9,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function main() {
     // console.debug("main");
-    var srcCanvas = document.getElementById("srcCanvas");
-    var dstCanvas1 = document.getElementById("dstCanvas1");
-    var dstCanvas2 = document.getElementById("dstCanvas2");
-    var dstCanvas3 = document.getElementById("dstCanvas3");
-    var dstCanvasArr = [dstCanvas1, dstCanvas2, dstCanvas3];
-    var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    var mosaicCheckbox = document.getElementById("mosaicCheckbox");
-    var mosaic = mosaicCheckbox.checkded
+    const srcCanvas = document.getElementById("srcCanvas");
+    const dstCanvas1 = document.getElementById("dstCanvas1");
+    const dstCanvas2 = document.getElementById("dstCanvas2");
+    const dstCanvas3 = document.getElementById("dstCanvas3");
+    const dstCanvasArr = [dstCanvas1, dstCanvas2, dstCanvas3];
+    let srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    const mosaicCheckbox = document.getElementById("mosaicCheckbox");
+    let mosaic = mosaicCheckbox.checkded
     //
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
@@ -35,7 +35,7 @@ function main() {
 }
 
 function drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, mosaic) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    const maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawColorComponent(srcCanvas, dstCanvasArr, mosaic);
 }
@@ -46,9 +46,9 @@ function colorComponent(imageData, x, y, mosaic) {
 	x -= x%5;
 	y -= y%5;
     }
-    var rgba = getRGBA(imageData, x, y);
-    var [r, g, b, a] = rgba;
-    var rgbaArr;
+    const rgba = getRGBA(imageData, x, y);
+    const [r, g, b, a] = rgba;
+    let rgbaArr;
     if (Math.floor(x/5) % 2 ) {
 	rgbaArr = [[r, 0, 0, a],
 		   [0, g, 0, a],
@@ -63,29 +63,29 @@ function colorComponent(imageData, x, y, mosaic) {
 
 function drawColorComponent(srcCanvas, dstCanvasArr, mosaic) {
     // console.debug("drawColorTransform");
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtxArr = dstCanvasArr.map(function(c) {
+    const srcCtx = srcCanvas.getContext("2d");
+    const dstCtxArr = dstCanvasArr.map(function(c) {
 	return c.getContext("2d");
     });
-    var width = srcCanvas.width, height = srcCanvas.height;
+    const width = srcCanvas.width, height = srcCanvas.height;
     dstCanvasArr.forEach(function(c) {
 	c.width  = width; c.height = height;
     });
 
     //
-    var srcImageData = srcCtx.getImageData(0, 0, width, height);
-    var dstImageDataArr = dstCtxArr.map(function(c) {
+    const srcImageData = srcCtx.getImageData(0, 0, width, height);
+    const dstImageDataArr = dstCtxArr.map(function(c) {
 	return c.createImageData(width, height);
     });
-    for (var y = 0 ; y < height; y++) {
-        for (var x = 0 ; x < width; x++) {
-	    var rgbaArr = colorComponent(srcImageData, x, y, mosaic);
-	    for (var i = 0, n = rgbaArr.length ; i < n ; i++) {
+    for (let y = 0 ; y < height; y++) {
+        for (let x = 0 ; x < width; x++) {
+	    const rgbaArr = colorComponent(srcImageData, x, y, mosaic);
+	    for (let i = 0, n = rgbaArr.length ; i < n ; i++) {
 		setRGBA(dstImageDataArr[i], x, y, rgbaArr[i]);
 	    }
 	}
     }
-    for (var i = 0, n = dstImageDataArr.length ; i < n ; i++) {
+    for (let i = 0, n = dstImageDataArr.length ; i < n ; i++) {
 	dstCtxArr[i].putImageData(dstImageDataArr[i], 0, 0);
     }
 }
