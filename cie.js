@@ -26,7 +26,7 @@ function main() {
     }
     bindFunction({"cie":null},
 		 function(target, rel) {
-                     const cie = params.cie;
+                     const { cie } = params;
 		     if (cie === "ciexyz31") {
 			 params['cieArr'] = params['cie31Arr'];
 		     } else if (cie === "ciexyz64") {
@@ -72,7 +72,7 @@ function main() {
 const worker = new workerProcess("worker/cie.js");
 
 function drawDiagram(diagramBaseCanvas, dstCanvas, params, sync) {
-    const hist = params['hist'];
+    const { hist } = params;
     drawDiagramBase(diagramBaseCanvas, params);
     if (hist === null) {
 	copyCanvas(diagramBaseCanvas, dstCanvas);
