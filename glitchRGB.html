@@ -8,7 +8,21 @@
   <body>
     <div id="container" class="vertical">
       <div id="control" class="horizontal">
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+        <div>
+	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+        </div>
+        <div>
+	  R dx:<input id="dxR" type="range" min="0" max="64" step="1" value="0">:<input type="text" id="dxRText" size="3"> </br>
+          R dy:<input id="dyR" type="range" min="0" max="64" step="1" value="0">:<input type="text" id="dyRText" size="3"> </br>
+	  G dx:<input id="dxG" type="range" min="0" max="64" step="1" value="0">:<input type="text" id="dxGText" size="3"> </br>
+          G dy:<input id="dyG" type="range" min="0" max="64" step="1" value="0">:<input type="text" id="dyGText" size="3">
+        </div>
+        <div>
+	  B dx:<input id="dxB" type="range" min="0" max="64" step="1" value="0">:<input type="text" id="dxBText" size="3"> </br>
+          B dy:<input id="dyB" type="range" min="0" max="64" step="1" value="0">:<input type="text" id="dyBText" size="3"> </br>
+	  A dx:<input id="dxA" type="range" min="0" max="64" step="1" value="0">:<input type="text" id="dxAText" size="3"> </br>
+          A dy:<input id="dyA" type="range" min="0" max="64" step="1" value="0">:<input type="text" id="dyAText" size="3">
+        </div>
       </div> <!-- control -->
       <div id="display" class="horizontal">
         <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>

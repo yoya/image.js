@@ -20,8 +20,12 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
+                  "dxR":"dxRText", "dyR":"dyRText",
+                  "dxG":"dxGText", "dyG":"dyGText",
+                  "dxB":"dxBText", "dyB":"dyBText",
+                  "dxA":"dxAText", "dyA":"dyAText"},
+                 function() {
 		     drawSrcImageAndGlitchRGB(srcImage, srcCanvas, dstCanvas,
                                          params);
 		 }, params);
@@ -30,10 +34,10 @@ function main() {
 function drawSrcImageAndGlitchRGB(srcImage, srcCanvas, dstCancas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawGlitchRGB(srcCanvas, dstCanvas);
+    drawGlitchRGB(srcCanvas, dstCanvas, params);
 }
 
-function drawGlitchRGB(srcCanvas, dstCanvas) {
+function drawGlitchRGB(srcCanvas, dstCanvas, params) {
     // console.debug("drawGlitchRGB");
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
@@ -43,8 +47,8 @@ function drawGlitchRGB(srcCanvas, dstCanvas) {
     //
     const srcImageData = srcCtx.getImageData(0, 0, width, height);
     const dstImageData = dstCtx.createImageData(width, height);
-    const [dxR, dxG, dxB, dxA] = [0, 1, 2, 0];
-    const [dyR, dyG, dyB, dyA] = [0, 0, 0, 0];
+    const {dxR, dxG, dxB, dxA} = params;
+    const {dyR, dyG, dyB, dyA} = params;
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
             const rgbaR = getRGBA(srcImageData, x-dxR, y-dyR, OUTFILL_EDGE);
