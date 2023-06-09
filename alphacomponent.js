@@ -28,8 +28,10 @@ function main() {
     }, "DataURL");
     //
     bindFunction({"maxWidthHeight":"maxWidthHeightText",
-                  "amp1":"amp1Text", "amp2":"amp2Text",
-                  "amp3":"amp3Text", "amp4":"amp4Text"},
+                  "multi1":"multi1Text", "plus1":"plus1Text",
+                  "multi2":"multi2Text", "plus2":"plus2Text",
+                  "multi3":"multi3Text", "plus3":"plus3Text",
+                  "multi4":"multi4Text", "plus4":"plus4Text"},
 		 function() {
 		     drawSrcImageDataAndAlphacomponent(params);
 		 }, params);
@@ -42,7 +44,9 @@ function drawSrcImageDataAndAlphacomponent(params) {
 }
     
 function alphacomponent(dstImageDataArr, params) {
-    const { srcImageData, amp1, amp2, amp3, amp4 } = params;
+    const { srcImageData, multi1, multi2, multi3, multi4,
+            plus1, plus2, plus3, plus4,
+            } = params;
     
     const {width, height, data } = srcImageData;
     const [rData, gData, bData, aData, dstData] = dstImageDataArr.map(function(idata) {
@@ -50,26 +54,30 @@ function alphacomponent(dstImageDataArr, params) {
     });
     const count = width * height * 4;
     for (let i = 0; i < count; ) {
-        rData[i] = data[i++];  rData[i++] = rData[i++] = 0;
+        rData[i] = (data[i++] * multi1) + (plus1 * 255);
+        rData[i++] = rData[i++] = 0;
         rData[i++] = 255;
     }
     for (let i = 0; i < count; ) {
-        gData[i++] = 0;  gData[i] = data[i++];  gData[i++] = 0;
+        gData[i++] = 0;
+        gData[i] = (data[i++] * multi2) + (plus2 * 255);
+        gData[i++] = 0;
         gData[i++] = 255;
     }
     for (let i = 0; i < count; ) {
-        bData[i++] = bData[i++] = 0;  bData[i] = data[i++];
+        bData[i++] = bData[i++] = 0;
+        bData[i] = (data[i++] * multi3) + (plus3 * 255);
         bData[i++] = 255;
     }
     for (let i = 0; i < count; ) {
-        aData[i++] = aData[i++] = aData[i++] = data[i];
+        aData[i++] = aData[i++] = aData[i++] = (data[i] * multi4) + (plus4 * 255);
         aData[i++] = 255;
     }
     for (let i = 0; i < count; ) {
-        dstData[i] = data[i++] * amp1;
-        dstData[i] = data[i++] * amp2;
-        dstData[i] = data[i++] * amp3;
-        dstData[i] = data[i++] * amp4;
+        dstData[i] = (data[i++] * multi1) + (plus1 * 255);
+        dstData[i] = (data[i++] * multi2) + (plus2 * 255);
+        dstData[i] = (data[i++] * multi3) + (plus3 * 255);
+        dstData[i] = (data[i++] * multi4) + (plus4 * 255);
     }
 }
 
