@@ -9,9 +9,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function main() {
     // console.debug("main");
-    var srcCanvas = document.getElementById("srcCanvas");
-    var dstCanvasArr = ["dstCanvas1", "dstCanvas2", "dstCanvas3", "dstCanvas4", "dstCanvas"].map(function(id) { return document.getElementById(id); });
-    var srcImageData = new ImageData(srcCanvas.width, srcCanvas.height);
+    const srcCanvas = document.getElementById("srcCanvas");
+    const dstCanvasArr = ["dstCanvas1", "dstCanvas2", "dstCanvas3", "dstCanvas4", "dstCanvas"].map(function(id) { return document.getElementById(id); });
+    const params = { srcCanvas, dstCanvasArr };
     //
     dropFunction(document, function(dataURL) {
         /*
@@ -22,72 +22,67 @@ function main() {
 	srcImage.src = dataURL;
         */
         loadImageData(dataURL, function(imageData) {
-            srcImageData = imageData;
-            drawSrcImageDataAndAlphacomponent(srcImageData, srcCanvas, dstCanvasArr);
+            params.srcImageData = imageData;
+            drawSrcImageDataAndAlphacomponent(params);
         });
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeight":"maxWidthHeightText",
+                  "amp1":"amp1Text", "amp2":"amp2Text",
+                  "amp3":"amp3Text", "amp4":"amp4Text"},
 		 function() {
-		     drawSrcImageDataAndAlphacomponent(srcImageData, srcCanvas, dstCanvasArr);
-		 } );
-    bindFunction({"amp1Range":"amp1Text", "amp2Range":"amp2Text",
-                  "amp3Range":"amp3Text", "amp4Range":"amp4Text"},
-		 function() {
-		     drawSrcImageDataAndAlphacomponent(srcImageData, srcCanvas, dstCanvasArr);
-		 } );
+		     drawSrcImageDataAndAlphacomponent(params);
+		 }, params);
 }
 
-function drawSrcImageDataAndAlphacomponent(srcImageData, srcCanvas, dstCanvasArr) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var ampIdArr = ["amp1Range", "amp2Range", "amp3Range", "amp4Range"];
-    var ampArr = ampIdArr.map(function(id) { return parseFloat(document.getElementById(id).value); });
+function drawSrcImageDataAndAlphacomponent(params) {
+    const { srcImageData, srcCanvas, maxWidthHeight } = params;
     drawSrcImageData(srcImageData, srcCanvas, maxWidthHeight);
-    drawAlphacomponent(srcImageData, srcCanvas, dstCanvasArr, ampArr, maxWidthHeight);
+    drawAlphacomponent(params);
 }
     
-function alphacomponent(imageData, dstImageDataArr, ampArr) {
-    var data = imageData.data;
-    var [rData, gData, bData, aData, dstData] = dstImageDataArr.map(function(idata) {
+function alphacomponent(dstImageDataArr, params) {
+    const { srcImageData, amp1, amp2, amp3, amp4 } = params;
+    
+    const {width, height, data } = srcImageData;
+    const [rData, gData, bData, aData, dstData] = dstImageDataArr.map(function(idata) {
         return idata.data;
     });
-    var [rAmp, gAmp, bAmp, aAmp] = ampArr;
-    var count = imageData.width * imageData.height * 4;
-    var i;
-    for (i = 0; i < count; ) {
+    const count = width * height * 4;
+    for (let i = 0; i < count; ) {
         rData[i] = data[i++];  rData[i++] = rData[i++] = 0;
         rData[i++] = 255;
     }
-    for (i = 0; i < count; ) {
+    for (let i = 0; i < count; ) {
         gData[i++] = 0;  gData[i] = data[i++];  gData[i++] = 0;
         gData[i++] = 255;
     }
-    for (i = 0; i < count; ) {
+    for (let i = 0; i < count; ) {
         bData[i++] = bData[i++] = 0;  bData[i] = data[i++];
         bData[i++] = 255;
     }
-    for (i = 0; i < count; ) {
+    for (let i = 0; i < count; ) {
         aData[i++] = aData[i++] = aData[i++] = data[i];
         aData[i++] = 255;
     }
-    for (i = 0; i < count; ) {
-        dstData[i] = data[i++] * rAmp;
-        dstData[i] = data[i++] * gAmp;
-        dstData[i] = data[i++] * bAmp;
-        dstData[i] = data[i++] * aAmp;
+    for (let i = 0; i < count; ) {
+        dstData[i] = data[i++] * amp1;
+        dstData[i] = data[i++] * amp2;
+        dstData[i] = data[i++] * amp3;
+        dstData[i] = data[i++] * amp4;
     }
 }
 
-function drawAlphacomponent(srcImageData, srcCanvas, dstCanvasArr, ampArr,
-                            maxWidthHeight) {
-    var dstCtxArr = dstCanvasArr.map(function(c) {
+function drawAlphacomponent(params) {
+    const { srcImageData, srcCanvas, dstCanvasArr, maxWidthHeight } = params;
+    const dstCtxArr = dstCanvasArr.map(function(c) {
 	return c.getContext("2d");
     });
-    var srcWidth = srcImageData.width, srcHeight = srcImageData.height;
-    var dstImageDataArr = dstCtxArr.map(function(c) {
+    const srcWidth = srcImageData.width, srcHeight = srcImageData.height;
+    const dstImageDataArr = dstCtxArr.map(function(c) {
 	return c.createImageData(srcWidth, srcHeight);
     });
-    alphacomponent(srcImageData, dstImageDataArr, ampArr);
+    alphacomponent(dstImageDataArr, params);
     dstImageDataArr.forEach(function(imageData, i) {
         drawSrcImageData(imageData, dstCanvasArr[i], maxWidthHeight);
     });
