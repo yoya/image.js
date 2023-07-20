@@ -11,15 +11,22 @@
 	<div>
           Filter: <br />
 	  <div style="float:left; ">
-            <select id="thresholdSelect" size="3">
+            <select id="thresholdMethod" size="3">
               <option value="max-min"      > Max-Min </option>
 	      <option value="mean" selected> mean </option>
+              <!-- option value="histogram" selected> histogram </option -->
 	      <!-- option value="histogram"    > Histogram </option -->
             </select>
           </div>
 	</div>
 	<div style="float:left; ">
-	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+	  maxWidthHeight:<input id="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+	</div>
+	<div style="float:left; ">
+	  maxLuminance:<input id="maxLuminance" type="range" min="1" max="255" step="1" value="255">:<input type="text" id="maxLuminanceText" size="4">
+	</div>
+	<div style="float:left; ">
+	  minLuminance:<input id="minLuminance" type="range" min="0" max="254" step="1" value="0">:<input type="text" id="minLuminanceText" size="4">
 	</div>
       </div> <!-- controlPanel -->
       <div style="clear:both">

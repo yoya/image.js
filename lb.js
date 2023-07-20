@@ -9,33 +9,33 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function main() {
     // console.debug("main");
-    var srcCanvas = document.getElementById("srcCanvas");
-    var dstCanvas = document.getElementById("dstCanvas");
-    var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    const srcCanvas = document.getElementById("srcCanvas");
+    const dstCanvas = document.getElementById("dstCanvas");
+    let srcImage = new Image();
+    const params = {};
     dropFunction(document, function(dataURL) {
-	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, true);
+	    drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "thresholdSelect": null},
+    bindFunction({"maxWidthHeight":"maxWidthHeightText",
+		  "thresholdMethod": null,
+                  "maxLuminance":"maxLuminanceText",
+                  "minLuminance":"minLuminanceText"},
 		 function(target, rel) {
-		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, rel);
-		 } );
+		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params, rel);
+		 }, params);
  }
-function drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, sync) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var threshold = document.getElementById("thresholdSelect").value;
-    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawLB(srcCanvas, dstCanvas, threshold, sync);
+function drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params, sync) {
+    drawSrcImage(srcImage, srcCanvas, params.maxWidthHeight);
+    drawLB(srcCanvas, dstCanvas, params, sync);
 }
 
 
 var worker = new workerProcess("worker/lb.js");
 
-function drawLB(srcCanvas, dstCanvas, threshold, sync) {
-    var params = { threshold:threshold };
-    worker.process(srcCanvas, dstCanvas, params, sync);
+function drawLB(srcCanvas, dstCanvas, params, sync) {
+    var _params = { params: params };
+    worker.process(srcCanvas, dstCanvas, _params, sync);
 }
