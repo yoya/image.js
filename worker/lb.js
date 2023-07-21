@@ -62,12 +62,14 @@ function LBbuild(arr, thresholdMethod) {
 	}
 	v = c * 255 / m;
 	break;
-    case "histogram":
+    case "median":
 	const arr2 = new Uint8ClampedArray(arr);
 	arr2.sort();
         const th = arr2[4];  // medium value
+        v = c * 255 / th;
 	break;
     default:
+        console.error("unknown thresholdMethod:", thresholdMethod);
 	return ;
     }
     return v;
