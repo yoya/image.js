@@ -1,7 +1,8 @@
 "use strict";
 
 /*
-  2017/01/05- yoya@awm.jp
+  2023/04/21- yoya@awm.jp
+  ref) https://exiftool.org/TagNames/JPEG.html
 */
 
 document.addEventListener("DOMContentLoaded", function(event) {
