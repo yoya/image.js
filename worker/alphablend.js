@@ -10,7 +10,7 @@ importScripts("../lib/canvas.js");
 onmessage = function(e) {
     const [srcImageData1, srcImageData2] = e.data.image;
     const { method, ratio1, ratio2, linearGamma, shiftX, shiftY,
-            gradSlantX, gradSlantY} = e.data;
+            gradSlantX, gradSlantY, inverse } = e.data;
     const srcWidth1 = srcImageData1.width, srcHeight1 = srcImageData1.height;
     const srcWidth2 = srcImageData2.width, srcHeight2 = srcImageData2.height;
     const dstWidth  = (srcWidth1  < srcWidth2) ? srcWidth1  : srcWidth2;
@@ -35,6 +35,14 @@ onmessage = function(e) {
             const ratioXY2 = ratio2 * ratioX2 * ratioY2;
 	    let rgba1 = getRGBA(srcImageData1, srcX1, srcY1);
 	    let rgba2 = getRGBA(srcImageData2, srcX2, srcY2);
+            if (inverse) {
+                rgba1[0] = 255 - rgba1[0];
+                rgba1[1] = 255 - rgba1[1];
+                rgba1[2] = 255 - rgba1[2];
+                rgba2[0] = 255 - rgba2[0];
+                rgba2[1] = 255 - rgba2[1];
+                rgba2[2] = 255 - rgba2[2];
+            }
 	    let r1,g1,b1,a1, r2,g2,b2,a2;
 	    if (linearGamma) {
 		rgba1 = sRGB2linearRGB(rgba1);
@@ -82,6 +90,11 @@ onmessage = function(e) {
 	    } else {
 		rgba = rgba.map(function(v) { return v*255; });
 	    }
+            if (inverse) {
+                rgba[0] = 255 - rgba[0];
+                rgba[1] = 255 - rgba[1];
+                rgba[2] = 255 - rgba[2];
+            }
 	    setRGBA(dstImageData, dstX, dstY, rgba);
 	}
     }
