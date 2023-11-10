@@ -86,8 +86,8 @@ function jfifFunction(jfif) {
     const items = [];
     const [ver1, ver2, units, xd1, xd2, yd1, yd2, xThumb, yThumb] = jfif;
     const version = ver1 + "." + Utils.LeftPad(ver2, 2, "0");
-    const xDensity = xd1 * 0xff  + xd2;
-    const yDensity = yd1 * 0xff  + yd2;
+    const xDensity = xd1 * 0x100  + xd2;
+    const yDensity = yd1 * 0x100  + yd2;
     items.push("[JFIF version] " + version);
     const unitsStr = ["aspect ratio", "inch (DPI)", "cm"][units];
     items.push("[Density] " + xDensity +":" + yDensity + " (" + unitsStr + ")");
