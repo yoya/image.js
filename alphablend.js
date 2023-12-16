@@ -41,7 +41,9 @@ function main() {
 		  "ratio1Range":"ratio1Text", "ratio2Range":"ratio2Text",
                   "shiftXRange":"shiftXText", "shiftYRange":"shiftYText",
                   "gradSlantXRange":"gradSlantXText",
-                  "gradSlantYRange":"gradSlantYText"},
+                  "gradSlantYRange":"gradSlantYText",
+                  "gradInterceptXRange":"gradInterceptXText",
+                  "gradInterceptYRange":"gradInterceptYText"},
 		 function(target, rel) {
 		     const maxWidthHeight = params.maxWidthHeightRange;
 		     if ((target.id === "ratioRange") || (target.id === "ratioText")) {
@@ -69,7 +71,8 @@ function drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, params, sync) {
     const { methodSelect, linearGammaCheckbox, inverse,
             ratio1Range, ratio2Range,
             shiftXRange, shiftYRange,
-            gradSlantXRange, gradSlantYRange } = params;
+            gradSlantXRange, gradSlantYRange,
+            gradInterceptXRange, gradInterceptYRange} = params;
     const [shiftX, shiftY] = [shiftXRange, shiftYRange];
     const srcCtx1 = srcCanvas1.getContext("2d");
     const srcCtx2 = srcCanvas2.getContext("2d");
@@ -89,7 +92,8 @@ function drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, params, sync) {
     const params_w = {method:methodSelect, linearGamma:linearGammaCheckbox,
                       inverse,
                       ratio1:ratio1Range, ratio2:ratio2Range, shiftX, shiftY,
-                      gradSlantX:gradSlantXRange, gradSlantY:gradSlantYRange};
+                      gradSlantX:gradSlantXRange, gradSlantY:gradSlantYRange,
+                      gradInterceptX:gradInterceptXRange, gradInterceptY:gradInterceptYRange};
     console.log( {params, params_w} );
     worker.process([srcCanvas1, srcCanvas2], dstCanvas, params_w, sync)
 }

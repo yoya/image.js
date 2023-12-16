@@ -10,7 +10,8 @@ importScripts("../lib/canvas.js");
 onmessage = function(e) {
     const [srcImageData1, srcImageData2] = e.data.image;
     const { method, ratio1, ratio2, linearGamma, shiftX, shiftY,
-            gradSlantX, gradSlantY, inverse } = e.data;
+            gradSlantX, gradSlantY, gradInterceptX, gradInterceptY,
+            inverse } = e.data;
     const srcWidth1 = srcImageData1.width, srcHeight1 = srcImageData1.height;
     const srcWidth2 = srcImageData2.width, srcHeight2 = srcImageData2.height;
     const dstWidth  = (srcWidth1  < srcWidth2) ? srcWidth1  : srcWidth2;
@@ -27,10 +28,17 @@ onmessage = function(e) {
         for (let dstX = 0 ; dstX < dstWidth; dstX++) {
 	    const srcX1 = dstX + startX1, srcY1 = dstY + startY1;
 	    const srcX2 = dstX + startX2, srcY2 = dstY + startY2;
-            const ratioX1 = Math.max(1 + 2*(dstWidth/2 - dstX) / dstWidth * gradSlantX, 0.0000001); // (0.0 ... 2.0)
-            const ratioY1 = Math.max(1 + 2*(dstHeight/2- dstY) / dstHeight * gradSlantY, 0.0000001); // (0.0 ... 2.0)
-            const ratioX2 = 1 - (ratioX1 - 1);  // (2.0 ... 0.0) with slant
-            const ratioY2 = 1 - (ratioY1 - 1);  // (2.0 ... 0.0) with slant
+            const dstX2 = dstX + gradInterceptX * dstWidth;
+            const dstY2 = dstY + gradInterceptY * dstHeight;
+            // (0.0 ... 2.0) with slant
+            const ratioX1_ = 2*(dstWidth /2 - dstX2) / dstWidth  * gradSlantX;
+            const ratioY1_ = 2*(dstHeight/2 - dstY2) / dstHeight * gradSlantY;
+            const ratioX1 = Math.max(1 + ratioX1_, 0.0000001);
+            const ratioY1 = Math.max(1 + ratioY1_, 0.0000001);
+            // (2.0 ... 0.0) with slant
+            const ratioX2 = 1 - (ratioX1 - 1);
+            const ratioY2 = 1 - (ratioY1 - 1);
+            //
             const ratioXY1 = ratio1 * ratioX1 * ratioY1;
             const ratioXY2 = ratio2 * ratioX2 * ratioY2;
 	    let rgba1 = getRGBA(srcImageData1, srcX1, srcY1);
