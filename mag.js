@@ -1,4 +1,7 @@
 "use strict";
+/*
+ * original code: http://emk.name/2015/03/magjs.html
+ */
 
 function load_mag(ab, canvas) {
     const check = new Uint8Array(ab);
