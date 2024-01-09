@@ -9,16 +9,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function main() {
     // console.debug("main");
-    var srcCanvas = document.getElementById("srcCanvas");
-    var histCanvas = document.getElementById("histCanvas");
-    var diffhistCanvas = document.getElementById("diffhistCanvas");
-    var dstCanvas = document.getElementById("dstCanvas");
-    var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    const srcCanvas = document.getElementById("srcCanvas");
+    const histCanvas = document.getElementById("histCanvas");
+    const diffhistCanvas = document.getElementById("diffhistCanvas");
+    const dstCanvas = document.getElementById("dstCanvas");
+    let srcImage = new Image(srcCanvas.width, srcCanvas.height);
     //
-    var thresholdRange = document.getElementById("thresholdRange");
-    var thresholdText  = document.getElementById("thresholdText");
-    var ptileRange = document.getElementById("ptileRange");
-    var ptileText  = document.getElementById("ptileText");
+    const thresholdRange = document.getElementById("thresholdRange");
+    const thresholdText  = document.getElementById("thresholdText");
+    const ptileRange = document.getElementById("ptileRange");
+    const ptileText  = document.getElementById("ptileText");
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
@@ -42,15 +42,15 @@ function main() {
 		 function(target, rel) {
                      if ((target.id == "thresholdRange") ||
                          (target.id == "thresholdText")) {
-                         var threshold = parseFloat(thresholdRange.value);
-                         var ptile = getThresholdToPtile(threshold, hist);
+                         const threshold = parseFloat(thresholdRange.value);
+                         const ptile = getThresholdToPtile(threshold, hist);
                          pTileRange.value = ptile;
                          pTileText.value = ptile;
                      }
                      if ((target.id == "pTileRange") ||
                          (target.id == "pTileText")) {
-                         var ptile = parseFloat(pTileRange.value);
-                         var th = getThresholdFromTile(ptile, hist);
+                         const ptile = parseFloat(pTileRange.value);
+                         const th = getThresholdFromTile(ptile, hist);
                          thresholdRange.value = th;
                          thresholdText.value = th;
                      }
@@ -58,13 +58,13 @@ function main() {
 		 } );
 }
 
-var hist     = [null, null, null];
-var diffhist = [null, null, null];
-var laphist  = [null, null, null];
+const hist     = [null, null, null];
+const diffhist = [null, null, null];
+const laphist  = [null, null, null];
 
 function drawSrcImageAndGetHistogram(srcImage, srcCanvas) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var grayscale = document.getElementById("grayscaleCheckbox").checked;
+    const maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    const grayscale = document.getElementById("grayscaleCheckbox").checked;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     //
     if (grayscale) {
@@ -92,12 +92,12 @@ function getThresholdToPtile(threshold, hist) {
     if (hist[0] === null) {
         return 0;
     }
-    var channels = hist.length;
-    var histogramArea = 0;
-    var histogramAreaTotal = 0;
-    for (var c = 0 ; c < channels ; c++) {
-        var h = hist[c];
-        for (var i = 0 ; i < 256 ; i++) {
+    const channels = hist.length;
+    let histogramArea = 0;
+    let histogramAreaTotal = 0;
+    for (let c = 0 ; c < channels ; c++) {
+        const h = hist[c];
+        for (let i = 0 ; i < 256 ; i++) {
             if (i < threshold) {
                 histogramArea += h[i];
             }
@@ -115,19 +115,19 @@ function getThresholdFromTile(ptile, hist) {
     if (hist[0] === null) {
         return 0;
     }
-    var channels = hist.length;
-    var histogramAreaTotal = 0;
-    for (var c = 0 ; c < channels ; c++) {
-        var h = hist[c];
-        for (var i = 0 ; i < 256 ; i++) {
+    const channels = hist.length;
+    let histogramAreaTotal = 0;
+    for (const c = 0 ; c < channels ; c++) {
+        const h = hist[c];
+        for (const i = 0 ; i < 256 ; i++) {
             histogramAreaTotal += h[i];
         }
     }
-    var histogramPtile = 0;
+    let histogramPtile = 0;
     ptile /= 100;
-    for (var i = 0 ; i < 256 ; i++) {
-        for (var c = 0 ; c < channels ; c++) {
-            var h = hist[c];
+    for (let i = 0 ; i < 256 ; i++) {
+        for (let c = 0 ; c < channels ; c++) {
+            const h = hist[c];
             histogramPtile += h[i];
             if (ptile <= (histogramPtile / histogramAreaTotal)) {
                 return i;
@@ -138,21 +138,21 @@ function getThresholdFromTile(ptile, hist) {
 }
 
 function drawHistogramAndBinarize(srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, sync) {
-    var threshold = parseFloat(document.getElementById("thresholdRange").value);
-    var grayscale = document.getElementById("grayscaleCheckbox").checked;
-    var dither = document.getElementById("ditherSelect").value;
-    var histogram = document.getElementById("histogramCheckbox").checked;
-    var totalLine = document.getElementById("totalLineCheckbox").checked;
-    var params = {threshold:threshold,
-		  grayscale:grayscale,
-                  dither:dither};
+    const threshold = parseFloat(document.getElementById("thresholdRange").value);
+    const grayscale = document.getElementById("grayscaleCheckbox").checked;
+    const dither = document.getElementById("ditherSelect").value;
+    const histogram = document.getElementById("histogramCheckbox").checked;
+    const totalLine = document.getElementById("totalLineCheckbox").checked;
+    const params = {threshold:threshold,
+		    grayscale:grayscale,
+                    dither:dither};
     drawHistgramGraph(histCanvas, hist[0], hist[1], hist[2], 0, threshold, totalLine, histogram);
     drawHistgramGraph(diffhistCanvas, diffhist[0], diffhist[1], diffhist[2], 0, threshold, totalLine, histogram);
     drawHistgramGraph(laphistCanvas, laphist[0], laphist[1], laphist[2], 0, threshold, totalLine, histogram);
     drawBinarize(srcCanvas, dstCanvas, params, sync);
 }
 
-var worker = new workerProcess("worker/binarize.js");
+const worker = new workerProcess("worker/binarize.js");
 
 function drawBinarize(srcCanvas, dstCanvas, params, sync) {
     worker.process(srcCanvas, dstCanvas, params, sync);
