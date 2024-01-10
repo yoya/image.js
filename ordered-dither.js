@@ -9,12 +9,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function main() {
     // console.debug("main");
+    const matrixCanvas = document.getElementById("matrixCanvas");
     const srcCanvas = document.getElementById("srcCanvas");
+    const halftoneCanvas = document.getElementById("halftoneCanvas");
     const dstCanvas = document.getElementById("dstCanvas");
     const srcImage = new Image();
     const params = {};
     srcImage.onload = function() {
-	drawSrcImageAndDither(srcImage, srcCanvas, dstCanvas, params);
+	drawSrcImageAndDither(srcImage, matrixCanvas, srcCanvas,
+                              halftoneCanvas, dstCanvas, params);
     }
     //    srcImage.src = "./img/RGBCube.png"
     srcImage.src = "./img/grad-white-magenta.png";
@@ -28,16 +31,16 @@ function main() {
                    "level1Select":null,
                    "level2Select":null },
 		 function() {
-		     drawSrcImageAndDither(srcImage, srcCanvas, dstCanvas,
-                                         params);
+		     drawSrcImageAndDither(srcImage, matrixCanvas, srcCanvas,
+                                           halftoneCanvas, dstCanvas, params);
 		 }, params);
 }
 
-function drawSrcImageAndDither(srcImage, srcCanvas, dstCancas, params) {
-    const { scaleRange } = params;
-    drawSrcImage(srcImage, srcCanvas, params.maxWidthHeightRange);
-    drawDither(srcCanvas, dstCanvas, params);
-    rescaleCanvas(dstCanvas, scaleRange);
+function drawSrcImageAndDither(srcImage, matrixCanvas, srcCanvas,
+                               halftoneCanvas, dstCanvas, params) {
+    const maxWidthHeight = params.maxWidthHeightRange;
+    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+    drawDither(matrixCanvas, srcCanvas, halftoneCanvas, dstCanvas, params);
 }
 
 const DitherThresholdTable = {
@@ -190,22 +193,56 @@ const DitherThresholdTable = {
             },
 };
 
-function drawDither(srcCanvas, dstCanvas, params) {
+function drawDither(matrixCanvas, srcCanvas, halftoneCanvas, dstCanvas, params) {
     // console.debug("drawDither");
-    const { thresholdSelect,
+    const { thresholdSelect, scaleRange,
             level0Select, level1Select, level2Select } = params;
+    const matrixCtx = matrixCanvas.getContext("2d");
     const srcCtx = srcCanvas.getContext("2d");
+    const halftoneCtx = halftoneCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const { width, height } = srcCanvas;
     dstCanvas.width  = width;
     dstCanvas.height = height;
     //
-    const map = DitherThresholdTable[thresholdSelect];
-    const levels = [ level0Select, level1Select, level2Select ];
     const srcImageData = srcCtx.getImageData(0, 0, width, height);
     const dstImageData = dstCtx.createImageData(width, height);
+    const map = DitherThresholdTable[thresholdSelect];
     const qrange = 255;
     const qscale = 1 / 255;
+    matrixCanvas.width  = map.width;
+    matrixCanvas.height = map.height;
+    const matrixImageData = matrixCtx.createImageData(map.width, map.height);
+    for (let y = 0 ; y < map.height; y++) {
+        for (let x = 0 ; x < map.width; x++) {
+            const m = map.levels[((x % map.width) +
+                                  map.width * (y % map.height))];
+            const v = m / map.divisor * 255;
+            const o = 4 * (x + map.width * y);
+            const d = matrixImageData.data;
+            d[o + 0] = d[o + 1] = d[o + 2] = v;
+            d[o + 3] = 255;
+        }
+    }
+    matrixCtx.putImageData(matrixImageData, 0, 0);
+    rescaleCanvas(matrixCanvas, 10);
+    halftoneCanvas.width  = width;
+    halftoneCanvas.height = height;
+    const halftoneImageData = halftoneCtx.createImageData(width, height);
+    for (let y = 0 ; y < height; y++) {
+        for (let x = 0 ; x < width; x++) {
+            const m = map.levels[((x % map.width) +
+                                  map.width * (y % map.height))];
+            const v = m / map.divisor * 255;
+            const o = 4 * (x + width * y);
+            const d = halftoneImageData.data;
+            d[o + 0] = d[o + 1] = d[o + 2] = v;
+            d[o + 3] = 255;
+        }
+    }
+    halftoneCtx.putImageData(halftoneImageData, 0, 0);
+    rescaleCanvas(halftoneCanvas, scaleRange);
+    const levels = [ level0Select, level1Select, level2Select ];
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
 	    const rgba = getRGBA(srcImageData, x, y);
@@ -222,4 +259,5 @@ function drawDither(srcCanvas, dstCanvas, params) {
 	}
     }
     dstCtx.putImageData(dstImageData, 0, 0);
+    rescaleCanvas(dstCanvas, scaleRange);
 }

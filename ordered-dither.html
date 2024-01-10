@@ -9,7 +9,7 @@
     <div id="container" class="vertical">
       <div id="control" class="horizontal" >
         <div>
-	  maxWidthHeight: <br /> <input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+	  maxWidthHeight: <br /> <input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
           <br />
           scale:<input id="scaleRange" type="range" min="1" max="8" step="1" value="1">:<input type="text" id="scaleText" size="2">
         </div>
@@ -73,6 +73,9 @@
               </select>
             </div>
           </div>
+        </div>
+        <div>
+          <canvas id="matrixCanvas" class="borderMagenta" width=100 height=100> srcCanvas </canvas>
         </div>
       </div> <!-- control -->
       <div id="display" class="horizontal">
