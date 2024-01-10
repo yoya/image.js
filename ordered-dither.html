@@ -41,6 +41,7 @@
             <div style="color: #F44"> Red </div>
             <div class="horizontal">
               <select id="level0Select">
+                <option value="1"         > 1 </option>
                 <option value="2"         > 2 </option>
                 <option value="4"         > 4 </option>
                 <option value="8" selected> 8 </option>
@@ -52,6 +53,7 @@
             <div style="color: #2A2"> Green </div>
             <div class="horizontal">
               <select id="level1Select">
+                <option value="1"         > 1 </option>
                 <option value="2"         > 2 </option>
                 <option value="4"         > 4 </option>
                 <option value="8" selected> 8 </option>
@@ -63,6 +65,7 @@
             <div style="color: #48F"> Blue </div>
             <div class="horizontal">
               <select id="level2Select">
+                <option value="1"         > 1 </option>
                 <option value="2"         > 2 </option>
                 <option value="4" selected> 4 </option>
                 <option value="8"         > 8 </option>
@@ -75,6 +78,9 @@
       <div id="display" class="horizontal">
         <div class="canvasContainer">
           <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+        </div>
+        <div class="canvasContainer">
+          <canvas id="halftoneCanvas" class="borderGreen" width=200 height=200> halftoneCanvas </canvas>
         </div>
         <div class="canvasContainer">
           <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
