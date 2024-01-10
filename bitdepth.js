@@ -9,10 +9,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function main() {
     // console.debug("main");
-    var srcCanvas = document.getElementById("srcCanvas");
-    var dstCanvas = document.getElementById("dstCanvas");
-    var graphCanvas = document.getElementById("graphCanvas");
-    var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    const srcCanvas = document.getElementById("srcCanvas");
+    const dstCanvas = document.getElementById("dstCanvas");
+    const graphCanvas = document.getElementById("graphCanvas");
+    let srcImage = new Image(srcCanvas.width, srcCanvas.height);
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
@@ -32,13 +32,13 @@ function main() {
 }
 
 function drawSrcImageAndBitDepth(srcImage, srcCanvas, dstCancas, sync) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var srcBitDepth = parseFloat(document.getElementById("srcBitDepthRange").value);
-    var dstBitDepth = parseFloat(document.getElementById("dstBitDepthRange").value);
-    var dither = document.getElementById("ditherSelect").value;
-    var quantize = document.getElementById("quantizeSelect").value;
+    const maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    const srcBitDepth = parseFloat(document.getElementById("srcBitDepthRange").value);
+    const dstBitDepth = parseFloat(document.getElementById("dstBitDepthRange").value);
+    const dither = document.getElementById("ditherSelect").value;
+    const quantize = document.getElementById("quantizeSelect").value;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    var params = {
+    const params = {
 	"srcBitDepth":srcBitDepth,
 	"dstBitDepth":dstBitDepth,
 	"dither":dither,
@@ -48,34 +48,34 @@ function drawSrcImageAndBitDepth(srcImage, srcCanvas, dstCancas, sync) {
 }
 
 
-var worker = new workerProcess("worker/bitdepth.js");
+const worker = new workerProcess("worker/bitdepth.js");
 
 function drawBitDepth(srcCanvas, dstCanvas, params, sync) {
     worker.process(srcCanvas, dstCanvas, params, sync);
     worker.addListener(drawBitDepthGraph);
 }
 
-function drawBitDepthGraph(dstImageData) {
-    var srcCanvas = document.getElementById("srcCanvas");
-    var dstCanvas = document.getElementById("dstCanvas");
-    var graphCanvas = document.getElementById("graphCanvas");
-    var srcCtx = srcCanvas.getContext("2d");
-    var dstCtx = dstCanvas.getContext("2d");
-    var graphCtx = graphCanvas.getContext("2d");
-    var width = srcCanvas.width, height = srcCanvas.height;
-    var srcImageData = srcCtx.getImageData(0, 0, width, height);
-    var dstImageData = dstCtx.getImageData(0, 0, width, height);
-    var pointsR = [], pointsG = [], pointsB = [];
-    for (var y = 0 ; y < height ; y++) {
-	for (var x = 0 ; x < width ; x++) {
-	    var [srcR, srcG, srcB] = getRGBA(srcImageData, x, y);
-	    var [dstR, dstG, dstB] = getRGBA(dstImageData, x, y);
+function drawBitDepthGraph() {
+    const srcCanvas = document.getElementById("srcCanvas");
+    const dstCanvas = document.getElementById("dstCanvas");
+    const graphCanvas = document.getElementById("graphCanvas");
+    const srcCtx = srcCanvas.getContext("2d");
+    const dstCtx = dstCanvas.getContext("2d");
+    const graphCtx = graphCanvas.getContext("2d");
+    const width = srcCanvas.width, height = srcCanvas.height;
+    const srcImageData = srcCtx.getImageData(0, 0, width, height);
+    const dstImageData = dstCtx.getImageData(0, 0, width, height);
+    const pointsR = [], pointsG = [], pointsB = [];
+    for (let y = 0 ; y < height ; y++) {
+	for (let x = 0 ; x < width ; x++) {
+	    const [srcR, srcG, srcB] = getRGBA(srcImageData, x, y);
+	    const [dstR, dstG, dstB] = getRGBA(dstImageData, x, y);
 	    pointsR.push(srcR, srcR, srcR, dstR);
 	    pointsG.push(srcG, srcG, srcG, dstG);
 	    pointsB.push(srcB, srcB, srcB, dstB);
 	}
     }
-    var graph ={
+    const graph ={
 	canvas:graphCanvas,
 	lineColor:"",
 	lineWidth:1,

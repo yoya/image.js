@@ -8,15 +8,15 @@ importScripts("../lib/canvas.js");
 
 onmessage = function(e) {
     // console.debug("worker/onmessage:", e);
-    var params = e.data;
-    var srcImageData = e.data.image;
-    var width = srcImageData.width, height = srcImageData.height;
-    var dstImageData = new ImageData(width, height);
+    const params = e.data;
+    const srcImageData = e.data.image;
+    const width = srcImageData.width, height = srcImageData.height;
+    const dstImageData = new ImageData(width, height);
     drawBitDepth(srcImageData, dstImageData, params);
     postMessage({image:dstImageData}, [dstImageData.data.buffer]);
 }
 
-var maxValueByBitDepth = {
+const maxValueByBitDepth = {
     0: 1 - 1,
     1: 2 - 1,
     2: 2*2 - 1,
@@ -29,7 +29,7 @@ var maxValueByBitDepth = {
 };
 
 function quantizeDepth(v, srcBitDepth, dstBitDepth, quantize, dither, srcX, srcY) {
-    var ditherSpread = 0;
+    let ditherSpread = 0;
     switch (dither) {
     case "none":
 	ditherSpread = 0;
@@ -40,8 +40,8 @@ function quantizeDepth(v, srcBitDepth, dstBitDepth, quantize, dither, srcX, srcY
     default:
 	console.error("wrong dither method:", dither);
     }
-    var depthRatio = maxValueByBitDepth[dstBitDepth] / maxValueByBitDepth[srcBitDepth];
-    var depthRatio2 = (maxValueByBitDepth[dstBitDepth]+1) / (maxValueByBitDepth[srcBitDepth]+1);
+    const depthRatio = maxValueByBitDepth[dstBitDepth] / maxValueByBitDepth[srcBitDepth];
+    const depthRatio2 = (maxValueByBitDepth[dstBitDepth]+1) / (maxValueByBitDepth[srcBitDepth]+1);
     if (srcBitDepth < dstBitDepth) {
 	ditherSpread *= depthRatio;
 	v = Math.round(v * depthRatio + ditherSpread);
@@ -75,17 +75,17 @@ function bitDepth(rgba, srcBitDepth, dstBitDepth, quantize, dither, srcX, srcY) 
 
 function drawBitDepth(srcImageData, dstImageData, params) {
     // console.debug("drawBitDepth");
-    var srcBitDepth = params.srcBitDepth;
-    var dstBitDepth = params.dstBitDepth;
-    var dither = params.dither;2
-    var quantize = params.quantize;
-    var width = srcImageData.width, height = srcImageData.height;
-    for (var y = 0 ; y < height; y++) {
-        for (var x = 0 ; x < width; x++) {
-	    var rgba = getRGBA(srcImageData, x, y);
-	    rgba = bitDepth(rgba, srcBitDepth, dstBitDepth,
-			    quantize, dither, x, y);
-	    setRGBA(dstImageData, x, y, rgba);
+    const srcBitDepth = params.srcBitDepth;
+    const dstBitDepth = params.dstBitDepth;
+    const dither = params.dither;2
+    const quantize = params.quantize;
+    const width = srcImageData.width, height = srcImageData.height;
+    for (let y = 0 ; y < height; y++) {
+        for (let x = 0 ; x < width; x++) {
+	    const rgba = getRGBA(srcImageData, x, y);
+	    const rgba2 = bitDepth(rgba, srcBitDepth, dstBitDepth,
+			           quantize, dither, x, y);
+	    setRGBA(dstImageData, x, y, rgba2);
 	}
     }
 }
