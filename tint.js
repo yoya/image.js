@@ -69,7 +69,6 @@ function tint(a, b, weightFunc, amount) {
 
 function drawTint(srcCanvas, dstCanvas, params) {
     const { equation, color, amount, linear } = params;
-    console.debug("drawTint", {equation, color, amount});
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const width = srcCanvas.width, height = srcCanvas.height;
