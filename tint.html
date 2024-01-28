@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2024/01/28- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Tint </title>
+    <link rel="stylesheet" href="index.css" \>
+    <style>
+      span { vertical-align: top; }
+    </style>
+  </head>
+  <body>
+    <div id="container" class="vertical">
+      <div id="control" class="horizontal">
+        <div> <span> Equation: </span>
+          <select id="equation" size="4">
+            <option value="flat"              > Flat </option>
+            <option value="quadratic" selected> Quadratic </option>
+            <option value="quadratic2"        > Quadratic 2 </option>
+            <option value="lanczos"           > Lanczos </option>
+          </select>
+        </div>
+        <div>
+          linear:<input id="linear" type="checkbox" />
+          <br />
+          color: <input id="color" type="color" value="#FFFFFF" \> <input id="colorText" type="text" value="#FFFFFF" size="8"\>
+          <br />
+	  amount:<input id="amount" type="range" min="0.0" max="1.0" step="0.01" value="0.5" \>:<input type="text" id="amountText" size="4" \>
+        </div>
+        <div>
+	  maxWidthHeight:<input id="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640" \>:<input type="text" id="maxWidthHeightText" size="5" \>
+        </div>
+      </div> <!-- control -->
+      <div id="display" class="horizontal">
+        <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+        <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+      </div>  <!-- display -->
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="lib/math.js"> </script>
+    <script type="text/javascript" src="lib/interpolate.js"> </script>
+    <script type="text/javascript" src="lib/color.js"> </script>
+    <script type="text/javascript" src="tint.js"> </script>
+  </body>
+</html>
