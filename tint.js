@@ -86,15 +86,14 @@ function drawTint(srcCanvas, dstCanvas, params) {
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
 	    let [r,g,b,a] = getRGBA(srcImageData, x, y);
-            [r, g, b, a] = linear? sRGB2linearRGB([r,g,b,a]):
-                [r / 255, g/255, b/255, a/255];
+            [r, g, b] = linear? sRGB2linearRGB([r,g,b]):
+                [r / 255, g/255, b/255];
             r = tint(r, color_rgba[0]/255, twFunc, amount);
             g = tint(g, color_rgba[1]/255, twFunc, amount);
             b = tint(b, color_rgba[2]/255 ,twFunc, amount);
-            a = tint(a, color_rgba[3]/255 ,twFunc, amount);
-            const rgba2 = linear?linearRGB2sRGB([r,g,b,a]):
-                  [r*255,g*255,b*255,a*255];
-	    setRGBA(dstImageData, x, y, rgba2);
+            const [r2, g2, b2] = linear?linearRGB2sRGB([r,g,b,a]):
+                  [r*255,g*255,b*255,a];
+	    setRGBA(dstImageData, x, y, [r2, g2, b2, a]);
 	}
     }
     dstCtx.putImageData(dstImageData, 0, 0);
