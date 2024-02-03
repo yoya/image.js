@@ -9,18 +9,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function main() {
     // console.debug("main");
-    var canvas = document.getElementById("canvas");
-    bindFunction({"widthRange":"widthText",
-                  "heightRange":"heightText",
-                  "countRange":"countText"},
+    const params = {};
+    const canvas = document.getElementById("canvas");
+    bindFunction({"width":"widthText",
+                  "height":"heightText",
+                  "count":"countText"},
 		 function() {
-		     drawFern(canvas);
-		 } );
-    drawFern(canvas);
+		     drawFern(canvas, params);
+		 }, params );
+    drawFern(canvas, params);
 }
 
 function fern(x, y) {    
-    let r = Math.random();
+    const r = Math.random();
     let xy;
     if (r < 0.01) {
         xy = [ 0,
@@ -38,24 +39,19 @@ function fern(x, y) {
     return xy;
 }
 
-function drawFern(canvas) {
-    var ctx = canvas.getContext("2d");
-    const widthRange  = document.getElementById("widthRange");
-    const heightRange = document.getElementById("heightRange");
-    const countRange = document.getElementById("countRange");
-    const width  = parseFloat(widthRange.value);
-    const height = parseFloat(heightRange.value);
-    const count =  parseFloat(countRange.value);
+function drawFern(canvas, params) {
+    const ctx = canvas.getContext("2d");
+    const { width, height, count } = params
     canvas.width = width;
     canvas.height = height;
-    var imageData = ctx.createImageData(width, height);
-    var x = 0, y = 0;
+    const imageData = ctx.createImageData(width, height);
+    let x = 0, y = 0;
     for (let i = 0; i < count; i++) {
         const xx = (x + 2.5) * width  / 5.3;
         const yy = (10.5 - y) * height / 11;
         const offset = ((xx|0) + (yy|0) * width) * 4;
-        imageData.data[offset+ 1] += 0xc0;  // green
-        imageData.data[offset+ 3] = 255;    // alpha
+        imageData.data[offset + 1] += 0xc0;  // green
+        imageData.data[offset + 3] = 255;    // alpha
         [x, y] = fern(x, y);
     }
     ctx.putImageData(imageData, 0, 0);
