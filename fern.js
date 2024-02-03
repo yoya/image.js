@@ -11,13 +11,27 @@ function main() {
     // console.debug("main");
     const params = {};
     const canvas = document.getElementById("canvas");
-    bindFunction({"width":"widthText",
-                  "height":"heightText",
-                  "count":"countText"},
+    bindFunction({ "width":"widthText",
+                   "height":"heightText",
+                   "count":"countText",
+                   "animation":null },
 		 function() {
-		     drawFern(canvas, params);
+                     if (params.animation) {
+                         const args = { canvas, params };
+                         requestAnimationFrame(tick.bind(args))
+                     } else {
+                         drawFern(canvas, params);
+                     }
 		 }, params );
     drawFern(canvas, params);
+}
+
+function tick() {
+    const { canvas, params } = this;
+    drawFern(canvas, params);
+    if (params.animation) {
+        requestAnimationFrame(tick.bind(this))
+    }
 }
 
 function fern(x, y) {    
