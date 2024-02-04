@@ -8,7 +8,15 @@
   <body>
     <div id="container" class="vertical">
       <div id="control" class="horizontal">
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+        <div>
+	  maxWidthHeight:<input id="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+        </div>
+        <div>
+	  amount:<input id="amount" type="range" min="-1024" max="1024" step="1" value="-512">:<input type="text" id="amountText" size="5">
+        </div>
+        <div>
+	  scale:<input id="scale" type="range" min="0.01" max="1" step="0.01" value="0.05">:<input type="text" id="scaleText" size="5">
+        </div>
       </div> <!-- control -->
       <div id="display" class="horizontal">
         <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
