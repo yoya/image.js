@@ -59,6 +59,7 @@ table {
 
 .borderBlack  { border: thick solid black; }
 .borderGray   { border: thick solid gray;  }
+.borderWhite  { border: thick solid white; }
 
 .bgWhite { background-color: white;}
 

@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     const srcCanvas = document.getElementById("srcCanvas");
-    const dstCanvasArr = ["dstCanvas1", "dstCanvas2", "dstCanvas3", "dstCanvas4", "dstCanvas"].map(function(id) { return document.getElementById(id); });
+    const dstCanvasArr = ["dstCanvas0", "dstCanvas1", "dstCanvas2", "dstCanvas3", "dstCanvas4", "dstCanvas"].map(function(id) { return document.getElementById(id); });
     const params = { srcCanvas, dstCanvasArr };
     //
     dropFunction(document, function(dataURL) {
@@ -49,7 +49,7 @@ function alphacomponent(dstImageDataArr, params) {
             } = params;
     
     const {width, height, data } = srcImageData;
-    const [rData, gData, bData, aData, dstData] = dstImageDataArr.map(function(idata) {
+    const [rgbData, rData, gData, bData, aData, dstData] = dstImageDataArr.map(function(idata) {
         return idata.data;
     });
     const count = width * height * 4;
@@ -72,6 +72,12 @@ function alphacomponent(dstImageDataArr, params) {
     for (let i = 0; i < count; ) {
         aData[i++] = aData[i++] = aData[i++] = (data[i] * multi4) + (plus4 * 255);
         aData[i++] = 255;
+    }
+    for (let i = 0; i < count; ) {
+        rgbData[i] = (data[i++] * multi1) + (plus1 * 255);
+        rgbData[i] = (data[i++] * multi2) + (plus2 * 255);
+        rgbData[i] = (data[i++] * multi3) + (plus3 * 255);
+        rgbData[i] = 255; i++;
     }
     for (let i = 0; i < count; ) {
         dstData[i] = (data[i++] * multi1) + (plus1 * 255);
