@@ -1,0 +1,52 @@
+<html>
+<head>
+  <meta name="copyright" content="Copyright &copy; 2024/04/13- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> Helmelt Transform </title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="container">
+    <div>
+      <div id="controlPanel" style="float:left">
+        Helmert Transform:  <br />
+	<div style="float:left; ">
+          <select id="helmertSelect" size="10">
+            <option value="ident" selected> 元のまま </option>
+	    <option value="scale2"        > 2倍拡大  </option>
+	    <option value="scale0.5"      > 半分縮小 </option>
+	    <option value="rotate45"      > 45度回転 </option>
+	    <option value="rotate90"      > 90度回転 </option>
+	    <option value="rotate180"     > 180度回転 </option>
+	    <option value="rotate270"     > 270度回転 </option>
+          </select>
+	</div>
+        </div> helmertMatrix:<table id="helmertMatrixTable" style="border:1 "> </table>
+     </div>
+      <div>
+        Out-side fill style:  <br />
+        <select id="outfillSelect" size="5">
+          <option value="black" selected> 黒埋め </option>
+          <option value="transparent"   > 透明  </option>
+          <option value="edge"          > エッジ拡張 </option>
+          <option value="tile"          > タイル補完 </option>
+          <option value="mirror"        > ミラー補完 </option>
+          <option value="white"         > 白埋め </option>
+        </select>
+      </div>
+      <div>
+        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+      </div>
+    </div>
+    <div style="clear:both">
+    <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+    <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+  </div>
+  <script type="text/javascript" src="lib/drop.js"> </script>
+  <script type="text/javascript" src="lib/bind.js"> </script>
+  <script type="text/javascript" src="lib/canvas.js"> </script>
+  <script type="text/javascript" src="lib/loading.js"> </script>
+  <script type="text/javascript" src="lib/worker.js"> </script>
+  <script type="text/javascript" src="helmerttrans.js"> </script>
+</body>
+</html>
