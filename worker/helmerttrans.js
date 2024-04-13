@@ -7,7 +7,7 @@ importScripts("../lib/matrix.js");
 importScripts("../lib/canvas.js");
 
 onmessage = function(e) {
-    console.debug("worker/onmessage:", e);
+    // console.debug("worker/onmessage:", e);
     var srcImageData = e.data.image;
     var helmertMatrix = e.data.helmertMatrix;
     var outfill = e.data.outfill;
