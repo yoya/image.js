@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2024/04/21- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Spectrum Filter </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel">
+	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+      </div> <!-- controlPanel -->
+      <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      <canvas id="spectrumCanvas" class="borderGreen" width=200 height=200> spectrumCanvas </canvas>
+      
+      <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/drop.js"> </script>
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="lib/canvas.js"> </script>
+    <script type="text/javascript" src="lib/math.js"> </script>
+    <script type="text/javascript" src="lib/kernel.js"> </script>
+    <script type="text/javascript" src="lib/convolve.js"> </script>
+    <script type="text/javascript" src="spectrumfilter.js"> </script>
+  </body>
+</html>
