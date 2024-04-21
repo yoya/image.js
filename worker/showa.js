@@ -38,7 +38,7 @@ onmessage = function(e) {
     mogrifyVignette(tmpImageData, params_vignette);
     mosaic_showa(tmpImageData, mosaic);
     const filterWindow = smoothing;
-    const filterMatrix = makeKernel_PascalTriangle(filterWindow);
+    const filterMatrix = makeKernel_PascalTriangle_2D(filterWindow);
     const params_smoothing = {
         filterMatrix: filterMatrix,
         filterWindow: filterWindow,

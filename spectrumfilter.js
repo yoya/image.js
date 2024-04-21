@@ -80,7 +80,7 @@ function drawSpectrumFilter(canvases) {
         }
     }
     const windowSize = ((width + height) / 32) | 0;
-    const kernel = makeKernel_PascalTriangle(windowSize);
+    const kernel = makeKernel_PascalTriangle_1D(windowSize);
     console.debug({ windowSize, kernel });
     spectrumImageData = convolveImage(spectrumImageData, kernel);
     // spectrumImageData = convolveImage(srcImageData, kernel);

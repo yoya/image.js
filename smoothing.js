@@ -102,7 +102,7 @@ function makeFilterMatrix(filter, filterWindow, sigma) {
 	filterMatrix = filterMatrix.map(function(v) { return 1 / n; });
 	break;
     case "pascal":
-        filterMatrix = makeKernel_PascalTriangle(filterWindow);
+        filterMatrix = makeKernel_PascalTriangle_2D(filterWindow);
 	break;
     case "gaussian":
         filterMatrix = makeKernel_Gaussian(filterWindow, sigma);

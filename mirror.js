@@ -7,17 +7,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
-function makeblurKernel(blurKernelSize) {
-    
-}
-
 function main() {
     // console.debug("main");
     const srcCanvas = document.getElementById("srcCanvas");
     const dstCanvas = document.getElementById("dstCanvas");
     let srcImage = new Image(srcCanvas.width, srcCanvas.height);
     let blurKernelSize = 1;
-    let blurKernel = makeKernel_PascalTriangle(blurKernelSize);
+    let blurKernel = makeKernel_PascalTriangle_2D(blurKernelSize);
     const params = { blurKernelSize: blurKernelSize,
                      blurKernel: blurKernel };
     dropFunction(document, function(dataURL) {
@@ -35,7 +31,7 @@ function main() {
 		 function(target, rel) {
                      const blur = params.blurRange;
                      params.blurKernelSize = blur,
-                     params.blurKernel = makeKernel_PascalTriangle(blur);
+                     params.blurKernel = makeKernel_PascalTriangle_2D(blur);
 		     drawSrcImageAndMirror(srcImage, srcCanvas, dstCanvas, params, rel);
 		 }, params );
 }
