@@ -35,16 +35,16 @@ function main() {
 		 }, params );
 }
 
-const gray = [0.5, 0.5, 0.5];
+const gray = [0.6, 0.6, 0.6];
 const colorPoints = [
     // corners
     [-0.2, -0.2, gray], [-0.2, 1.2, gray],
     [1.2, -0.2, gray], [1.2, 1.2, gray],
-    [0.5, 0.5, [1.0, 0.2, 0.2]],   // center: red
-    [0.5, 0.0, [0.5, 1.0, 0.3]],  // up: green
-    [1.0, 0.5, [0.2, 0.3, 1.0]],  // right:  blue
-    [0.5, 1.0, [0.9, 0.3, 1.0]],  // bottom: magenta
-    [0.0, 0.5, [1.0, 0.9, 0.2]],  // left: yellow
+    [0.5, 0.5, [1.0, 0.4, 0.4]],  // center: red
+    [0.5, 0.0, [0.4, 1.0, 0.3]],  // up: green
+    [1.0, 0.5, [0.2, 0.5, 1.0]],  // right:  blue
+    [0.5, 1.0, [0.9, 0.2, 1.0]],  // bottom: magenta
+    [0.0, 0.5, [0.8, 0.7, 0.1]],  // left: yellow
 ];
 function detectColor(x, y, w, h) {
     let color = null;
@@ -82,6 +82,7 @@ function drawSpectrumCanvas(canvases, params) {
     const kernel = makeKernel_Mean_1D(windowSize);
     spectrumImageData = convolveImage(spectrumImageData, kernel);
     spectrumCtx.putImageData(spectrumImageData, 0, 0);
+    params.spectrumImageData = spectrumImageData;
 }
 
 function drawSpectrumFilter(canvases, params) {
@@ -97,7 +98,7 @@ function drawSpectrumFilter(canvases, params) {
     const dstCtx = dstCanvas.getContext("2d");
     //
     const srcImageData = srcCtx.getImageData(0, 0, width, height);
-    const spectrumImageData = spectrumCtx.getImageData(0, 0, width, height);
+    const spectrumImageData = params.spectrumImageData;
     let dstImageData = dstCtx.createImageData(width, height);
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
