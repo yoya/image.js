@@ -9,27 +9,27 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function main() {
     // console.debug("main");
-    const canvases = { srcCanvas: document.getElementById("srcCanvas"),
-                       spectrumCanvas: document.getElementById("spectrumCanvas"),
-                       dstCanvas: document.getElementById("dstCanvas") };
+    const srcCanvas = document.getElementById("srcCanvas"),
+          spectrumCanvas = document.getElementById("spectrumCanvas"),
+          dstCanvas = document.getElementById("dstCanvas");
+    const canvases = { srcCanvas, spectrumCanvas, dstCanvas };
     let srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    const params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndCopy(srcImage, canvases);
+            drawSrcImage(srcImage, srcCanvas, params.maxWidthHeight);
+            drawSpectrumCanvas(canvases, params);
+            drawSpectrumFilter(canvases, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
+    bindFunction({"maxWidthHeight":"maxWidthHeightText"},
 		 function() {
-		     drawSrcImageAndCopy(srcImage, srcCanvas, spectrumCanvas, dstCanvas);
-		 } );
-}
-function drawSrcImageAndCopy(srcImage, canvases) {
-    const { srcCanvas } = canvases;
-    let maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    drawSpectrumFilter(canvases);
+                     drawSrcImage(srcImage, srcCanvas, params.maxWidthHeight);
+                     drawSpectrumCanvas(canvases, params);
+                     drawSpectrumFilter(canvases, params);
+		 }, params );
 }
 
 const gray = [0.5, 0.5, 0.5];
@@ -57,18 +57,15 @@ function detectColor(x, y, w, h) {
     return color;
 }
 
-function drawSpectrumFilter(canvases) {
+function drawSpectrumCanvas(canvases, params) {
     // console.debug("drawSpectrumFilter");
-    const { srcCanvas, spectrumCanvas, dstCanvas } = canvases;
+    const { srcCanvas, spectrumCanvas } = canvases;
     let  { width, height } = srcCanvas;
-    spectrumCanvas.width  = dstCanvas.width  = width;
-    spectrumCanvas.height = dstCanvas.height = height;
+    spectrumCanvas.width  = width;
+    spectrumCanvas.height = height;
     //
-    const srcCtx = srcCanvas.getContext("2d");
     const spectrumCtx = spectrumCanvas.getContext("2d");
-    const dstCtx = dstCanvas.getContext("2d");
     //
-    let srcImageData = srcCtx.getImageData(0, 0, width, height);
     let spectrumImageData = spectrumCtx.createImageData(width, height);
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
@@ -81,17 +78,32 @@ function drawSpectrumFilter(canvases) {
     const windowSize = ((_windowSize / 2) | 0) * 2 + 1;
     const kernel = makeKernel_Mean_1D(windowSize);
     spectrumImageData = convolveImage(spectrumImageData, kernel);
+    spectrumCtx.putImageData(spectrumImageData, 0, 0);
+}
+
+function drawSpectrumFilter(canvases, params) {
+    // console.debug("drawSpectrumFilter");
+    const { srcCanvas, spectrumCanvas, dstCanvas } = canvases;
+    const { contrast } = params;
+    let  { width, height } = srcCanvas;
+    dstCanvas.width  = width;
+    dstCanvas.height = height;
+    //
+    const srcCtx = srcCanvas.getContext("2d");
+    const spectrumCtx = spectrumCanvas.getContext("2d");
+    const dstCtx = dstCanvas.getContext("2d");
+    //
+    let srcImageData = srcCtx.getImageData(0, 0, width, height);
+    let spectrumImageData = spectrumCtx.getImageData(0, 0, width, height);
     let dstImageData = dstCtx.createImageData(width, height);
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
             const [r, g, b, a] = getRGBA(srcImageData, x, y);
             const [fr, fg, fb] = getRGBA(spectrumImageData, x, y);
-            const contrast = 1.1;
 	    setRGBA(dstImageData, x, y, [r*fr/255*contrast,
                                          g*fg/255*contrast,
                                          b*fb/255*contrast, a]);
         }
     }
-    spectrumCtx.putImageData(spectrumImageData, 0, 0);
     dstCtx.putImageData(dstImageData, 0, 0);
 }
