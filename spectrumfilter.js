@@ -26,8 +26,11 @@ function main() {
     }, "DataURL");
     bindFunction({"maxWidthHeight":"maxWidthHeightText"},
 		 function() {
-                     drawSrcImage(srcImage, srcCanvas, params.maxWidthHeight);
                      drawSpectrumCanvas(canvases, params);
+                     drawSpectrumFilter(canvases, params);
+		 }, params );
+    bindFunction({"contrast":"contrastText"},
+		 function() {
                      drawSpectrumFilter(canvases, params);
 		 }, params );
 }
@@ -60,7 +63,7 @@ function detectColor(x, y, w, h) {
 function drawSpectrumCanvas(canvases, params) {
     // console.debug("drawSpectrumFilter");
     const { srcCanvas, spectrumCanvas } = canvases;
-    let  { width, height } = srcCanvas;
+    const { width, height } = srcCanvas;
     spectrumCanvas.width  = width;
     spectrumCanvas.height = height;
     //
@@ -74,7 +77,7 @@ function drawSpectrumCanvas(canvases, params) {
             setRGBA(spectrumImageData, x, y, [fr*255, fg*255, fb*255, 255]);
         }
     }
-    let  _windowSize = (width + height) / 4;
+    const _windowSize = (width + height) / 4;
     const windowSize = ((_windowSize / 2) | 0) * 2 + 1;
     const kernel = makeKernel_Mean_1D(windowSize);
     spectrumImageData = convolveImage(spectrumImageData, kernel);
@@ -85,7 +88,7 @@ function drawSpectrumFilter(canvases, params) {
     // console.debug("drawSpectrumFilter");
     const { srcCanvas, spectrumCanvas, dstCanvas } = canvases;
     const { contrast } = params;
-    let  { width, height } = srcCanvas;
+    const { width, height } = srcCanvas;
     dstCanvas.width  = width;
     dstCanvas.height = height;
     //
@@ -93,8 +96,8 @@ function drawSpectrumFilter(canvases, params) {
     const spectrumCtx = spectrumCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     //
-    let srcImageData = srcCtx.getImageData(0, 0, width, height);
-    let spectrumImageData = spectrumCtx.getImageData(0, 0, width, height);
+    const srcImageData = srcCtx.getImageData(0, 0, width, height);
+    const spectrumImageData = spectrumCtx.getImageData(0, 0, width, height);
     let dstImageData = dstCtx.createImageData(width, height);
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {
