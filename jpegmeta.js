@@ -42,6 +42,7 @@ function dump(arr, img) {
     const jfif = jpeg.getJFIF();
     const exif = jpeg.getExif();
     const icc = jpeg.getICC();
+    const adobe = jpeg.getAdobe();
 
     chunkCaption.innerText = "Chunk Num:" + chunkList.length;
     const items = chunkFunction(chunkList);
@@ -70,6 +71,14 @@ function dump(arr, img) {
     } else {
         iccCaption.innerText = "APP2-ICC_Profile not found";
         makeItems(iccContainer, []);
+    }
+    if (adobe) {
+        adobeCaption.innerText = "byte length:" + adobe.length;
+        const items = adobeFunction(adobe);
+        makeItems(adobeContainer, items);
+    } else {
+        adobeCaption.innerText = "APP14 not found";
+        makeItems(adobeContainer, []);
     }
     console.debug(chunkList);
 }
@@ -177,6 +186,21 @@ function iccFunction(arr) {
     }
     return items;
 }
+
+function adobeFunction(adobe) {
+    const items = [];
+    const [ver1, ver2, f0_1, f0_2, f1_1, f1_2, tr] = adobe;
+    const version = "0x" + Utils.LeftPad(ver1 * 0x100 + ver2, 4, "0");
+    const flag0 = "0x" + Utils.LeftPad(f0_1 * 0x100  + f0_2, 4, "0");
+    const flag1 = "0x" + Utils.LeftPad(f1_1 * 0x100  + f1_2, 4, "0");
+    items.push("[Adobe segment version] " + version);
+    items.push("[flag0] " + flag0 + ", [flag1] " + flag1);
+    const trStr = ["RGB or CMYK", "YCbCr", "YCCK - inversed CMYK"][tr];
+    items.push("[Transform] " + tr + " (" + trStr + ")");
+    console.log({adobe, items});
+    return items;
+}
+
 
 function makeItems(target, items) {
     target.innerHTML = "";
