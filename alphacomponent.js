@@ -14,13 +14,6 @@ function main() {
     const params = { srcCanvas, dstCanvasArr };
     //
     dropFunction(document, function(dataURL) {
-        /*
-	srcImage = new Image();
-	srcImage.onload = function() {
-	    drawSrcImageAndAlphacomponent(srcImage, srcCanvas, dstCanvasArr);
-	}
-	srcImage.src = dataURL;
-        */
         loadImageData(dataURL, function(imageData) {
             params.srcImageData = imageData;
             drawSrcImageDataAndAlphacomponent(params);
@@ -28,6 +21,7 @@ function main() {
     }, "DataURL");
     //
     bindFunction({"maxWidthHeight":"maxWidthHeightText",
+                  "backgroundColor":"backgroundColorText",
                   "multi1":"multi1Text", "plus1":"plus1Text",
                   "multi2":"multi2Text", "plus2":"plus2Text",
                   "multi3":"multi3Text", "plus3":"plus3Text",
@@ -35,6 +29,11 @@ function main() {
 		 function() {
 		     drawSrcImageDataAndAlphacomponent(params);
 		 }, params);
+    const dataURL = "img/CMYK.png";
+    loadImageData(dataURL, function(imageData) {
+        params.srcImageData = imageData;
+        drawSrcImageDataAndAlphacomponent(params);
+    });
 }
 
 function drawSrcImageDataAndAlphacomponent(params) {
@@ -88,7 +87,12 @@ function alphacomponent(dstImageDataArr, params) {
 }
 
 function drawAlphacomponent(params) {
-    const { srcImageData, srcCanvas, dstCanvasArr, maxWidthHeight } = params;
+    const { srcImageData, srcCanvas, dstCanvasArr, maxWidthHeight,
+            backgroundColor } = params;
+    const allCanvases = [srcCanvas].concat(...dstCanvasArr);
+    allCanvases.forEach(function(canvas, i) {
+        canvas.style.backgroundColor = backgroundColor;
+    });
     const dstCtxArr = dstCanvasArr.map(function(c) {
 	return c.getContext("2d");
     });
