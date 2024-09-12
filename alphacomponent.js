@@ -22,6 +22,7 @@ function main() {
     //
     bindFunction({"maxWidthHeight":"maxWidthHeightText",
                   "backgroundColor":"backgroundColorText",
+                  "checkboard":null,
                   "multi1":"multi1Text", "plus1":"plus1Text",
                   "multi2":"multi2Text", "plus2":"plus2Text",
                   "multi3":"multi3Text", "plus3":"plus3Text",
@@ -88,9 +89,16 @@ function alphacomponent(dstImageDataArr, params) {
 
 function drawAlphacomponent(params) {
     const { srcImageData, srcCanvas, dstCanvasArr, maxWidthHeight,
-            backgroundColor } = params;
+            backgroundColor, checkboard } = params;
     const allCanvases = [srcCanvas].concat(...dstCanvasArr);
     allCanvases.forEach(function(canvas, i) {
+        if (checkboard) {
+            canvas.classList.add("checkboard");
+        } else {
+            if (canvas.classList.contains("checkboard")) {
+                canvas.classList.remove("checkboard");
+            }
+        }
         canvas.style.backgroundColor = backgroundColor;
     });
     const dstCtxArr = dstCanvasArr.map(function(c) {
