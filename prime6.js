@@ -22,7 +22,7 @@ function main() {
 
 function isPrime(n) {
     const n2 = Math.sqrt(n);
-    for (let i = 2; i < n2; i++) {
+    for (let i = 2; i <= n2 ; i++) {
         if ((n % i) === 0) {
             return false;
         }
