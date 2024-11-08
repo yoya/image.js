@@ -39,7 +39,7 @@ function drawPrime6(canvas, params) {
     canvas.height = height;
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, width, height);
-    const n = 1000;
+    const n = 500;
     const cx = width / 2;  // center
     const cy = height / 2;
     const gap = 20;
