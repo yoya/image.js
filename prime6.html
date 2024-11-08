@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <meta name="copyright" content="Copyright &copy; 2024/11/08- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> prime 6 </title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <div id="container" class="vertical">
+      <div id="control" class="horizontal">
+	WidthHeight:<input id="widthHeight" type="range" min="16" max="2048" step="1" value="512">:<input type="text" id="widthHeightText" size="5">
+      </div> <!-- control -->
+      <div id="display" class="horizontal">
+        <canvas id="canvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      </div>  <!-- display -->
+    </div>  <!-- container -->
+    <script type="text/javascript" src="lib/bind.js"> </script>
+    <script type="text/javascript" src="prime6.js"> </script>
+  </body>
+</html>
