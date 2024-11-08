@@ -11,8 +11,9 @@ function main() {
     // console.debug("main");
     const canvas = document.getElementById("canvas");
     const params = {};
-    bindFunction({"widthHeight":"widthHeightText",
-                  "period":"periodText"},
+    bindFunction({ "widthHeight":"widthHeightText",
+                   "period":"periodText",
+                   "circle": null },
 		 function() {
 		     drawPrime6(canvas, params);
 		 }, params);
@@ -33,6 +34,7 @@ function drawText(ctx, x, y, text, color) {
     ctx.save();
     ctx.fillStyle = color;
     ctx.textAlign = "center";
+    ctx.textBaseline = 'middle';
     ctx.fillText(text, x, y);
     ctx.restore();
 }
@@ -40,7 +42,7 @@ function drawText(ctx, x, y, text, color) {
 function drawPrime6(canvas, params) {
     // console.debug("drawCopy");
     const ctx = canvas.getContext("2d");
-    const { widthHeight, period } = params;
+    const { widthHeight, period, circle } = params;
     const width = widthHeight;
     const height = widthHeight;
     console.log(params, {width, height });
@@ -62,6 +64,14 @@ function drawPrime6(canvas, params) {
         const x = cx + r * Math.sin(t / period * (2 * 3.14159));
         const y = cy - r * Math.cos(t / period * (2 * 3.14159));
         if (isPrime(i)) {
+            if (circle) {
+                ctx.save();
+                ctx.strokeStyle = "red";
+                ctx.beginPath();
+                ctx.arc(x, y, 10, 0, 2*3.14159);
+                ctx.closePath();
+                ctx.stroke();
+            }
             drawText(ctx, x, y, String(i), "#FE0");
         } else {
             drawText(ctx, x, y, String(i), "cyan");

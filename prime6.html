@@ -4,12 +4,24 @@
     <meta charset="utf-8">
     <title> prime 6 </title>
     <link rel="stylesheet" href="index.css">
+    <style>
+      span {
+          margin: 0px 10px;;
+      }
+    </style>
   </head>
   <body>
     <div id="container" class="vertical">
       <div id="control" class="horizontal">
-	WidthHeight:<input id="widthHeight" type="range" min="16" max="2048" step="1" value="512">:<input type="text" id="widthHeightText" size="5">
-        Perioa:<input id="period" type="range" min="2" max="19" step="1" value="6">:<input type="text" id="periodText" size="2">
+        <span>
+	  WidthHeight:<input id="widthHeight" type="range" min="16" max="2048" step="1" value="512">:<input type="text" id="widthHeightText" size="5">
+        </span>
+        <span>
+          Perioa:<input id="period" type="range" min="2" max="19" step="1" value="6">:<input type="text" id="periodText" size="2">
+        </span>
+        <span>
+          Circle:<input id="circle" type="checkbox" checked>
+        </span>
       </div> <!-- control -->
       <div id="display" class="horizontal">
         <canvas id="canvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
