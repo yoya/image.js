@@ -20,7 +20,7 @@ function main() {
 }
 
 function isPrime(n) {
-    const n2 = Math.ceil(Math.sqrt(n));
+    const n2 = Math.sqrt(n);
     for (let i = 2; i < n2; i++) {
         if ((n % i) === 0) {
             return false;
@@ -48,7 +48,7 @@ function drawPrime6(canvas, params) {
     canvas.height = height;
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, width, height);
-    const n = 500;
+    const n = 100 * period * width / 2048;  // あてずっぽの閾値
     const cx = width / 2;  // center
     const cy = height / 2;
     const gap1 = period*1.5 + 12;
