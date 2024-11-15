@@ -142,15 +142,15 @@ function drawMarker(canvas, coeff, params) {
     let width = canvas.width, height = canvas.height;
     let xyArr = [
         homography(0.0, 0.0, coeff), homography(1.0, 0.0, coeff),
-        homography(1.0, 1.0, coeff), homography(0.0, 1.0, coeff),
+        homography(0.0, 1.0, coeff), homography(1.0, 1.0, coeff),
     ];
     for (let i = 0, n = xyArr.length; i < n; i++) {
         let [x, y] = xyArr[i];
         xyArr[i] = [x * width, y * height];
     }
-    params.markerArray = xyArr;
+    let markerArray = xyArr;
     ctx.lineWidth = 2;
-    let colors = ["red", "yellow", "green", "blue"];
+    let colors = ["red", "yellow", "blue", "green"];
     for (let i = 0, n = xyArr.length; i < n; i++) {
         let [x, y] = xyArr[i];
         //
@@ -169,9 +169,15 @@ function drawMarker(canvas, coeff, params) {
         ctx.beginPath();
         ctx.moveTo(x, y);
         ctx.strokeStyle = colors[i];
-        var xyArrNext = xyArr[(i+1)%4];
+        // 0=>1,1=>3,2=>0,3=>2
+        // floor((i+3)/2): 0=>1,1=>2,2=>2, 3=>3
+        // floor((3*i+3)/2): 0=>1,1=>2,2=>2, 3=>3
+        console.log({i}, (i+2)%4, (i+1));
+        var xyArrNext = xyArr[Math.floor((3*i+3)/2)%4];
+        console.log({x, y}, {xyArrNext});
         ctx.lineTo(xyArrNext[0], xyArrNext[1]);
         ctx.stroke();
     }
+    return markerArray
 }
 
