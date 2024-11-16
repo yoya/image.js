@@ -8,6 +8,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     main();
 });
 
+const markerNameList = [ "markerX0", "markerY0",
+                         "markerX1", "markerY1",
+                         "markerX2", "markerY2",
+                         "markerX3", "markerY3" ];
 var coeffNameList = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
 function coeffNameIndex(name) {
@@ -34,6 +38,7 @@ function main() {
     let srcCanvas = document.getElementById("srcCanvas");
     let dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    const markerArray =  [[0,0], [0,100], [100,0], [100,100]];
     var params = {
         coeff: [1, 0, 0,
                 0, 1, 0,
@@ -42,23 +47,60 @@ function main() {
                        0, 1, 0,
                        0, 0, 1],
         grabbedMarker: null,
+        markerArray: markerArray,
     };
-    dropFunction(document, function(dataURL) {
+    const imageOnLoad = (url) => {
 	srcImage = new Image();
 	srcImage.onload = function() {
+            params.markerX0 = 0;
+            params.markerY0 = 0;
+            params.markerX1 = srcImage.width;
+            params.markerY1 = 0;
+            params.markerX2 = 0;
+            params.markerY2 = srcImage.height;
+            params.markerX3 = srcImage.width;
+            params.markerY3 = srcImage.height;
+            bind2elements(params);
             drawHomograpy(srcImage, srcCanvas, dstCanvas, params, true);
 	}
-	srcImage.src = dataURL;
-    }, "DataURL");
+	srcImage.src = url;
+    }
+    dropFunction(document, imageOnLoad, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
                   "markerCheckbox":null,
                   "interpolationSelect":null,
+                  "markerX0":null, "markerY0":null,
+                  "markerX1":null, "markerY1":null,
+                  "markerX2":null, "markerY2":null,
+                  "markerX3":null, "markerY3":null,
                   "aRange":"aText", "bRange":"bText", "cRange":"cText",
                   "dRange":"dText", "eRange":"eText", "fRange":"fText",
                   "gRange":"gText", "hRange":"hText"},
 		 function(target, rel) {
                      // params["maxWidthHeight"] = parseFloat(maxWidthHeightRange.value);
                      let num = coeffNameIndex(target.id);
+                     if (markerNameList.includes(target.id)) {
+                         markerArray[0][0] = params.markerX0;
+                         markerArray[0][1] = params.markerY0;
+                         markerArray[1][0] = params.markerX1;
+                         markerArray[1][1] = params.markerY1;
+                         markerArray[2][0] = params.markerX2;
+                         markerArray[2][1] = params.markerY2;
+                         markerArray[3][0] = params.markerX3;
+                         markerArray[3][1] = params.markerY3;
+                         const { width, height } = srcCanvas;
+                         const markersNorm = [ [ markerArray[0][0] / width,
+                                                 markerArray[0][1] / height ],
+                                               [ markerArray[1][0] / width,
+                                                 markerArray[1][1] / height ],
+                                               [ markerArray[2][0] / width,
+                                                 markerArray[2][1] / height ],
+                                               [ markerArray[3][0] / width,
+                                                 markerArray[3][1] / height ]
+                                           ];
+                         params.coeff = homographyCoeffByMarkers(markersNorm);
+
+                     }
                      if (num >= 0) {
                          params.coeff[num] = parseFloat(target.value);
                      }
@@ -104,6 +146,9 @@ function main() {
             let rel = (eventType === "mouseup");
             // console.debug(eventType, x, y, rel);
             markerArray[params.grabbedMarker] = [x, y];
+            params[markerNameList[params.grabbedMarker*2]] = x;
+            params[markerNameList[params.grabbedMarker*2+1]] = y;
+            bind2elements(params);
             var markersNorm = [
                 [markerArray[0][0] / width, markerArray[0][1] / height],
                 [markerArray[1][0] / width, markerArray[1][1] / height],
@@ -135,8 +180,8 @@ function drawHomograpy(srcImage, srcCanvas, dstCanvas, params, sync) {
     worker.process(srcCanvas, dstCanvas, params, sync);
     worker.addListener(function() {
         if (params.marker) {
-            console.log("coeff:", params.coeff);
-            console.log("coeff invert:", invertMatrix(params.coeff, 3));
+            // console.log("coeff:", params.coeff);
+            // console.log("coeff invert:", invertMatrix(params.coeff, 3));
             //
             let width = dstCanvas.width, height = dstCanvas.height;
             let xyArr = drawMarker(srcCanvas, params.coeff);
