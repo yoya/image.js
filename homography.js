@@ -178,29 +178,27 @@ function drawHomograpy(srcImage, srcCanvas, dstCanvas, params, sync) {
     }
     worker.process(srcCanvas, dstCanvas, params, sync);
     worker.addListener(function() {
-        if (params.srcMarkers) {
-            // console.log("coeff:", params.coeff);
-            // console.log("coeff invert:", invertMatrix(params.coeff, 3));
-            //
-            let width = dstCanvas.width, height = dstCanvas.height;
-            let xyArr = drawMarker(srcCanvas, params.coeff);
-            params.markerArray = xyArr;
-            if (params.dstMarkers) {
-                let xyNorm = [
-                    [xyArr[0][0] / width, xyArr[0][1] / height],
-                    [xyArr[1][0] / width, xyArr[1][1] / height],
-                    [xyArr[2][0] / width, xyArr[2][1] / height],
-                    [xyArr[3][0] / width, xyArr[3][1] / height]
-                ];
-                // let forwardCoeff =  homographyCoeffByMarkers(xyNorm, true);
-                let forwardCoeff = invertMatrix(params.coeff, 3);
-                //console.log("forwardCoeff:", forwardCoeff);
-                params.forwardCoeff = forwardCoeff;
-                let dstMarkerArray = drawMarker(dstCanvas, forwardCoeff, xyNorm[0]);
-                params.dstMarkerArray = dstMarkerArray;
-            }
+        if (params.dstMarkers) {
+            const { width , height } = dstCanvas;
+            let xyNorm = [
+                [xyArr[0][0] / width, xyArr[0][1] / height],
+                [xyArr[1][0] / width, xyArr[1][1] / height],
+                [xyArr[2][0] / width, xyArr[2][1] / height],
+                [xyArr[3][0] / width, xyArr[3][1] / height]
+            ];
+            // 計算間違えているのでコメントアウト
+            // let forwardCoeff =  homographyCoeffByMarkers(xyNorm, true);
+            let forwardCoeff = invertMatrix(params.coeff, 3);
+            params.forwardCoeff = forwardCoeff;
+            let dstMarkerArray = drawMarker(dstCanvas, forwardCoeff, xyNorm[0]);
+            params.dstMarkerArray = dstMarkerArray;
         }
     });
+    if (params.srcMarkers) {
+        const { width , height } = srcCanvas;
+        let xyArr = drawMarker(srcCanvas, params.coeff);
+        params.markerArray = xyArr;
+    }
 }
 
 /*
