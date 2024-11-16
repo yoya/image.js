@@ -192,12 +192,16 @@ function drawMarker(canvas, coeff, xy00) {
         ctx.beginPath();
         ctx.moveTo(x, y);
         ctx.strokeStyle = colors[i];
-        // 0=>1,1=>3,2=>0,3=>2
-        // floor((i+3)/2): 0=>1,1=>2,2=>2, 3=>3
-        // floor((3*i+3)/2): 0=>1,1=>2,2=>2, 3=>3
-        console.log({i}, (i+2)%4, (i+1));
+        /*
+         *  0 ---->1
+         *  ^      |
+         *  |      V
+         *  2 <--- 3
+         * i: 0=>1,1=>3,2=>0,3=>2
+         * floor((i+3)/2): 0=>1,1=>2,2=>2, 3=>3
+         * floor((3*i+3)/2)%4: 0=>1,1=>3,2=>0, 3=>2
+         */
         var xyArrNext = xyArr[Math.floor((3*i+3)/2)%4];
-        console.log({x, y}, {xyArrNext});
         ctx.lineTo(xyArrNext[0], xyArrNext[1]);
         ctx.stroke();
     }
