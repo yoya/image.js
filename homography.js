@@ -67,7 +67,7 @@ function main() {
     }
     dropFunction(document, imageOnLoad, "DataURL");
     bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "markerCheckbox":null,
+                  "srcMarkers":null, "dstMarkers":null,
                   "interpolationSelect":null,
                   "markerX0":null, "markerY0":null,
                   "markerX1":null, "markerY1":null,
@@ -107,7 +107,7 @@ function main() {
                      drawHomograpy(srcImage, srcCanvas, dstCanvas, params, rel);
 		 }, params);
     bindCursolFunction("srcCanvas", params, function(target, eventType) {
-        if ((!params.markerCheckbox) || (!params.markerArray)) {
+        if ((!params.srcMarkers) || (!params.markerArray)) {
             return ;  // skip
         }
         var {x, y} = params[target.id];
@@ -171,7 +171,6 @@ var worker = new workerProcess("worker/homography.js");
 function drawHomograpy(srcImage, srcCanvas, dstCanvas, params, sync) {
     drawSrcImage(srcImage, srcCanvas, params["maxWidthHeightRange"]);
     //
-    params.marker = params.markerCheckbox;
     if (params.interpolationSelect === "NNBL") {
         params.interpolation = sync? "BL": "NN";
     } else {
@@ -179,25 +178,27 @@ function drawHomograpy(srcImage, srcCanvas, dstCanvas, params, sync) {
     }
     worker.process(srcCanvas, dstCanvas, params, sync);
     worker.addListener(function() {
-        if (params.marker) {
+        if (params.srcMarkers) {
             // console.log("coeff:", params.coeff);
             // console.log("coeff invert:", invertMatrix(params.coeff, 3));
             //
             let width = dstCanvas.width, height = dstCanvas.height;
             let xyArr = drawMarker(srcCanvas, params.coeff);
             params.markerArray = xyArr;
-            let xyNorm = [
-                [xyArr[0][0] / width, xyArr[0][1] / height],
-                [xyArr[1][0] / width, xyArr[1][1] / height],
-                [xyArr[2][0] / width, xyArr[2][1] / height],
-                [xyArr[3][0] / width, xyArr[3][1] / height]
-            ];
-            // let forwardCoeff =  homographyCoeffByMarkers(xyNorm, true);
-            let forwardCoeff = invertMatrix(params.coeff, 3);
-            //console.log("forwardCoeff:", forwardCoeff);
-            params.forwardCoeff = forwardCoeff;
-            let dstMarkerArray = drawMarker(dstCanvas, forwardCoeff, xyNorm[0]);
-            params.dstMarkerArray = dstMarkerArray;
+            if (params.dstMarkers) {
+                let xyNorm = [
+                    [xyArr[0][0] / width, xyArr[0][1] / height],
+                    [xyArr[1][0] / width, xyArr[1][1] / height],
+                    [xyArr[2][0] / width, xyArr[2][1] / height],
+                    [xyArr[3][0] / width, xyArr[3][1] / height]
+                ];
+                // let forwardCoeff =  homographyCoeffByMarkers(xyNorm, true);
+                let forwardCoeff = invertMatrix(params.coeff, 3);
+                //console.log("forwardCoeff:", forwardCoeff);
+                params.forwardCoeff = forwardCoeff;
+                let dstMarkerArray = drawMarker(dstCanvas, forwardCoeff, xyNorm[0]);
+                params.dstMarkerArray = dstMarkerArray;
+            }
         }
     });
 }
