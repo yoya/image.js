@@ -38,6 +38,9 @@ function main() {
         coeff: [1, 0, 0,
                 0, 1, 0,
                 0, 0, 1],
+        forwardCoeff: [1, 0, 0,
+                       0, 1, 0,
+                       0, 0, 1],
         grabbedMarker: null,
     };
     dropFunction(document, function(dataURL) {
@@ -132,23 +135,43 @@ function drawHomograpy(srcImage, srcCanvas, dstCanvas, params, sync) {
     worker.process(srcCanvas, dstCanvas, params, sync);
     worker.addListener(function() {
         if (params.marker) {
-            drawMarker(srcCanvas, params.coeff, params);
+            console.log("coeff:", params.coeff);
+            console.log("coeff invert:", invertMatrix(params.coeff, 3));
+            //
+            let width = dstCanvas.width, height = dstCanvas.height;
+            let xyArr = drawMarker(srcCanvas, params.coeff);
+            params.markerArray = xyArr;
+            let xyNorm = [
+                [xyArr[0][0] / width, xyArr[0][1] / height],
+                [xyArr[1][0] / width, xyArr[1][1] / height],
+                [xyArr[2][0] / width, xyArr[2][1] / height],
+                [xyArr[3][0] / width, xyArr[3][1] / height]
+            ];
+            // let forwardCoeff =  homographyCoeffByMarkers(xyNorm, true);
+            let forwardCoeff = invertMatrix(params.coeff, 3);
+            //console.log("forwardCoeff:", forwardCoeff);
+            params.forwardCoeff = forwardCoeff;
+            let dstMarkerArray = drawMarker(dstCanvas, forwardCoeff, xyNorm[0]);
+            params.dstMarkerArray = dstMarkerArray;
         }
     });
 }
 
-function drawMarker(canvas, coeff, params) {
+/*
+  xy00 if toSquare transform
+*/
+function drawMarker(canvas, coeff, xy00) {
     let ctx = canvas.getContext("2d");
     let width = canvas.width, height = canvas.height;
     let xyArr = [
-        homography(0.0, 0.0, coeff), homography(1.0, 0.0, coeff),
-        homography(1.0, 1.0, coeff), homography(0.0, 1.0, coeff),
+        homography(0.0, 0.0, coeff, xy00), homography(1.0, 0.0, coeff, xy00),
+        homography(1.0, 1.0, coeff, xy00), homography(0.0, 1.0, coeff, xy00),
     ];
     for (let i = 0, n = xyArr.length; i < n; i++) {
         let [x, y] = xyArr[i];
         xyArr[i] = [x * width, y * height];
     }
-    params.markerArray = xyArr;
+    let markerArray = xyArr;
     ctx.lineWidth = 2;
     let colors = ["red", "yellow", "green", "blue"];
     for (let i = 0, n = xyArr.length; i < n; i++) {
@@ -173,5 +196,6 @@ function drawMarker(canvas, coeff, params) {
         ctx.lineTo(xyArrNext[0], xyArrNext[1]);
         ctx.stroke();
     }
+    return markerArray
 }
 
