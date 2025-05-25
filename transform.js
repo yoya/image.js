@@ -51,6 +51,22 @@ function main() {
 	affinMatrix = values;
 	drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params);
     }, affinMatrix, affinWindow);
+    bindCursolFunction("dstCanvas", params, function(target, eventType) {
+        const p = params[target.id];
+        const {x, y} = p;
+        switch (eventType) {
+        case "mousedown":
+            p.dragging = true;
+            p.prevX = x;
+            p.prevY = y;
+            break;
+        case "mousemove":
+            const {prevX, prevY} = p;
+        case "mouseup":
+        case "mouseleave":
+             break;
+         }
+    }, params);
 }
 
 function makeAffinMatrix(canvas, params) {
@@ -84,6 +100,9 @@ function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, sync) {
 	rotateRoundCenter: params["rotateRoundCenterCheckbox"],
         axisGuide        : params["axisGuideCheckbox"],
         outfill          : outfillStyleNumber(params["outfillSelect"]),
+        dragging         : params["dstCanvas"].dragging,
+        drag_x           : params["dstCanvas"].x,
+        drag_y           : params["dstCanvas"].y,
     }
     worker.process(srcCanvas, dstCanvas, params_w, sync);
 }
