@@ -68,7 +68,7 @@ function main() {
     });
 }
 
-function drawSrcImageAndTransparent(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndTransparent(srcImage, srcCanvas, dstCanvas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawTransparent(srcCanvas, dstCanvas, params);

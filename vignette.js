@@ -33,7 +33,7 @@ function main() {
 		 }, params);
 }
 
-function drawSrcImageAndVignette(srcImage, srcCanvas, dstCancas, params, sync) {
+function drawSrcImageAndVignette(srcImage, srcCanvas, dstCanvas, params, sync) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawVignette(srcCanvas, dstCanvas, params, sync);

@@ -254,7 +254,7 @@ var filter2Matrix = {
 
 var worker = new workerProcess("worker/convolution.js");
 
-function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params) {
     var maxWidthHeight = params["maxWidthHeightRange"];
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     //

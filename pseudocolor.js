@@ -186,7 +186,7 @@ function drawClutTable(canvas, clutType) {
     ctx.fill();
 }
 
-function drawSrcImageAndPseudoColor(srcImage, srcCanvas, grayCanvas, dstCancas, params) {
+function drawSrcImageAndPseudoColor(srcImage, srcCanvas, grayCanvas, dstCanvas, params) {
     drawSrcImage(srcImage, srcCanvas, params.maxWidthHeightRange);
     drawGrayImage(srcCanvas, grayCanvas);
     drawPseudoColor(grayCanvas, dstCanvas, params);

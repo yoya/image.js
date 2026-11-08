@@ -113,7 +113,7 @@ function makeFilterMatrix(filter, filterWindow, sigma) {
 
 var worker = new workerProcess("worker/smoothing.js");
 
-function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCancas, params, sync) {
+function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params, sync) {
     var maxWidthHeight = params["maxWidthHeightRange"];
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     //

@@ -148,7 +148,7 @@ function constraintMarker(markers, i, x, y) {
     m.y = y;
 }
 
-function drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCanvas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawToneCurve(srcCanvas, dstCanvas, params);
@@ -239,7 +239,8 @@ function neighborMarkers(markers, x, num) {
             } else {
                 const m0 = markers[0], m1 = markers[1];
                 m = Object.assign({}, m0);
-                m.x = m0.x - (m1.x - m0.x);
+                m.x = m0.x - (m1.x - m0.x);  // linear extrapolation
+                m.y = m0.y - (m1.y - m0.y);
             }
             neighbors.splice(0, 0, m); // append to head
             a -= 1;
@@ -250,8 +251,8 @@ function neighborMarkers(markers, x, num) {
             } else {
                 const m0 = markers[n - 2], m1 = markers[n - 1];
                 m = Object.assign({}, m1);
-                m.x = m1.x + (m1.x - m0.x);
-                console.log(m0.x, m1.x, m.x);
+                m.x = m1.x + (m1.x - m0.x);  // linear extrapolation
+                m.y = m1.y + (m1.y - m0.y);
             }
             neighbors.push(m);  // append to tail
             b += 1;
@@ -280,35 +281,39 @@ function makeToneTable_Linear(params) {  // only sample code
         const x1 = m1.x, y1 = 255 - m1.y;
         const x2 = m2.x, y2 = 255 - m2.y;
         // Bi-Linear
-        const x1_dist = (x - x1) / (x2 - x1);
-        const x2_dist = (x2 - x) / (x2 - x1);
+        const scale = 1 / (x2 - x1);
+        const x1_dist = (x - x1) * scale;
+        const x2_dist = (x2 - x) * scale;
         const y = y1 * (1 - x1_dist) + y2 * (1 - x2_dist);
         toneTable[x] = y;
     }
 }
 
-function makeToneTable_Cubic(params) {  // cubic(1/3,1/3): mitchell filter
+function makeToneTable_Cubic(params) {  // catmull-rom spline
     const markers = params.markers;
     const toneTable = params.toneTable;
     for (let x = 0; x < 256; x++) {
         const [m1, m2, m3, m4] = neighborMarkers(markers, x, 4);
-        console.debug(x, [m1, m2, m3, m4]);
         const x1 = m1.x, y1 = 255 - m1.y;
         const x2 = m2.x, y2 = 255 - m2.y;
         const x3 = m3.x, y3 = 255 - m3.y;
         const x4 = m4.x, y4 = 255 - m4.y;
-        // Bi-Cubic: Mitchell
+        // Catmull-Rom (non-uniform): cubic Hermite on [x2, x3]
         // x1  x2   x3   x4
         // |    | .  |    |
         //        x
-        const scale = 1 / (x2 - x1);
-        const x1_dist = (x - x1) * scale;
-        const x2_dist = (x - x2) * scale;
-        const x3_dist = (x3 - x) * scale;
-        const x4_dist = (x4 - x) * scale;
-        const c = MITCHELL_COEFF;
-        const y = y1 * cubicBC(x1_dist, c) + y2 * cubicBC(x2_dist, c) +
-              y3 * cubicBC(x3_dist, c) + y4 * cubicBC(x4_dist, c);
+        // passes through markers even if the intervals are uneven.
+        const h = x3 - x2;
+        if (h <= 0) {
+            toneTable[x] = y2;
+            continue;
+        }
+        const t = (x - x2) / h;
+        const d2 = (y3 - y1) / (x3 - x1) * h;  // tangent at x2
+        const d3 = (y4 - y2) / (x4 - x2) * h;  // tangent at x3
+        const t2 = t * t, t3 = t2 * t;
+        const y = ( 2*t3 - 3*t2 + 1) * y2 + (t3 - 2*t2 + t) * d2 +
+                  (-2*t3 + 3*t2    ) * y3 + (t3 -   t2    ) * d3;
         toneTable[x] = y;
     }
 }

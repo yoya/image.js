@@ -29,7 +29,7 @@ function main() {
 		 }, params);
 }
 
-function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawRGYB(srcCanvas, dstCanvas, params);

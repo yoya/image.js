@@ -31,13 +31,13 @@ function main() {
 		 }, params);
 }
 
-function drawSrcImageAndTint(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndTint(srcImage, srcCanvas, dstCanvas, params) {
     const { maxWidthHeight } = params;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawTint(srcCanvas, dstCanvas, params);
 }
 function tintWeightFlat(a) {
-    return 0.5;
+    return 1.0;
 }
 
 function tintWeightQuadratic(a) {
@@ -56,15 +56,8 @@ function tintWeightLanczos(a) {
 
 function tint(a, b, weightFunc, amount) {
     const w = weightFunc(a)
-    let w2;
-    if (amount > 0.5) {
-        const r = (amount - 0.5) * 2;
-        w2 = w * (1-r) + r;
-    } else {
-        const r = (0.5 - amount)  * 2;
-        w2 = w * (1-r);
-    }
-    return a + b * w2;
+    //return a * (1-amount) + w*b*amount;
+    return a + w*b*amount;
 }
 
 function drawTint(srcCanvas, dstCanvas, params) {
@@ -81,7 +74,6 @@ function drawTint(srcCanvas, dstCanvas, params) {
                      "quadratic" : tintWeightQuadratic,
                      "quadratic2": tintWeightQuadratic2,
                      "lanczos"   : tintWeightLanczos} [equation]
-    
     const color_rgba = getRGBAfromHexColor(color);
     for (let y = 0 ; y < height; y++) {
         for (let x = 0 ; x < width; x++) {

@@ -69,7 +69,7 @@ function main() {
 		 } );
 }
 
-function drawSrcImageAndHistogram(srcImage, srcCanvas, dstCancas, srcHistCanvas, dstHistCanvas) {
+function drawSrcImageAndHistogram(srcImage, srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var equalizeRatio = parseFloat(document.getElementById("equalizeRatioRange").value);
     var maxValue = parseFloat(document.getElementById("maxValueRange").value);

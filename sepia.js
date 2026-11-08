@@ -81,7 +81,7 @@ function main() {
 }
 
 
-function drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCancas, colorMatrix) {
+function drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var linear = document.getElementById("linearCheckbox").checked;
     var radius = parseFloat(document.getElementById("radiusRange").value);

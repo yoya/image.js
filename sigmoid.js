@@ -56,7 +56,7 @@ function main() {
     drawSrcImageAndSigmoid(srcImage, srcCanvas, dstCanvas, gammaCanvas, true);
 }
 
-function drawSrcImageAndSigmoid(srcImage, srcCanvas, dstCancas, gammaCanvas, sync) {
+function drawSrcImageAndSigmoid(srcImage, srcCanvas, dstCanvas, gammaCanvas, sync) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var a = parseFloat(document.getElementById("aRange").value);
     var b = parseFloat(document.getElementById("bRange").value);

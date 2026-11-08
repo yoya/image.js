@@ -29,7 +29,7 @@ function main() {
 		 }, params);
 }
 
-function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params) {
   drawSrcImage(srcImage, srcCanvas);
   drawCopy(srcCanvas, dstCanvas, params);
 }

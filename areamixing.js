@@ -38,7 +38,7 @@ function main() {
     }, params);
 }
 
-function drawSrcImageAndAreaMixing(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndAreaMixing(srcImage, srcCanvas, dstCanvas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawAreaMixing(srcCanvas, dstCanvas, params);

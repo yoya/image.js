@@ -121,7 +121,7 @@ function main() {
 }
 
 function drawSrcImageAndOrientation(srcImage, srcCanvas,
-                                    dstCancas, dstCancas2, params) {
+                                    dstCanvas, dstCanvas2, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawOrientation(srcCanvas, dstCanvas, params);
