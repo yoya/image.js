@@ -56,6 +56,9 @@ function main() {
             if (idx === null) {  // add action
                 idx = addMarker(params, {x:x, y:y, r:7, lw:2, c:COLOR_GREEN});
             }
+            if (idx === null) {  // no room to add
+                break;
+            }
             // grab action
             params.grabStatus = true;
             params.grabIndex = idx;
@@ -92,15 +95,22 @@ function main() {
     drawToneCanvas(toneCanvas, params);
 }
 
+// insert a marker strictly between the both end markers.
+// return null if there is no room (markers must not share the same x).
 function addMarker(params, m) {
     const markers = params.markers;
-    let i;
     const n = markers.length;
-    for (i = 0 ; i < n ; i++) {
+    let i;
+    for (i = 1 ; i < n - 1 ; i++) {
         if (m.x < markers[i].x) {
             break;
         }
     }
+    const lo = markers[i - 1].x, hi = markers[i].x;
+    if ((hi - lo) < 2) {
+        return null;
+    }
+    m.x = Math.min(Math.max(Math.round(m.x), lo + 1), hi - 1);
     markers.splice(i, 0, m);
     return i;
 }
@@ -137,13 +147,8 @@ function constraintMarker(markers, i, x, y) {
     } else {
         const m1 = markers[i-1];
         const m2 = markers[i+1];
-        if (x <= m1.x) {
-            m.x = m1.x + 1;
-        } else if (m2.x <= x) {
-            m.x = m2.x - 1;
-        } else {
-            m.x = x;
-        }
+        // integer x keeps markers from sharing the same x.
+        m.x = Math.min(Math.max(Math.round(x), m1.x + 1), m2.x - 1);
     }
     m.y = y;
 }
