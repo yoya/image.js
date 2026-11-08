@@ -27,7 +27,7 @@ function main() {
 		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas);
 		 } );
 }
-function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCancas) {
+function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     var addRed    = parseFloat(document.getElementById("addRedRange").value);

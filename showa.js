@@ -29,7 +29,7 @@ function main() {
 		     drawSrcImageAndShowa(srcImage, srcCanvas, dstCanvas, params, rel);
 		 }, params);
 }
-function drawSrcImageAndShowa(srcImage, srcCanvas, dstCancas, params, sync) {
+function drawSrcImageAndShowa(srcImage, srcCanvas, dstCanvas, params, sync) {
     const maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawShowa(srcCanvas, dstCanvas, params, sync);

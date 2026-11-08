@@ -44,7 +44,7 @@ function main() {
     drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas, true);
 }
 
-function drawSrcImageAndGamma(srcImage, srcCanvas, dstCancas, gammaCanvas, sync) {
+function drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas, sync) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var gamma = parseFloat(document.getElementById("gammaRange").value);
     var R = document.getElementById("RCheckbox").checked;

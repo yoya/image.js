@@ -30,7 +30,7 @@ function main() {
 		 }, params);
 }
 
-function drawSrcImageAndSaturation(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndSaturation(srcImage, srcCanvas, dstCanvas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawSaturation(srcCanvas, dstCanvas, params);

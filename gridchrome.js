@@ -30,7 +30,7 @@ function main() {
 		 }, params);
 }
 
-function drawSrcImageAndGridChrome(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndGridChrome(srcImage, srcCanvas, dstCanvas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawGridChrome(srcCanvas, dstCanvas, params);

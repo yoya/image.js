@@ -220,7 +220,7 @@ var color2Matrix = {
 	0.299*(43/107) , 0.587*(43/107) , 0.114*(43/107) , 0],
 };
 
-function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCancas, colorMatrix, rel) {
+function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, rel) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var linear = document.getElementById("linearCheckbox").checked;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);

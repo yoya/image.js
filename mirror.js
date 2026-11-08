@@ -35,7 +35,7 @@ function main() {
 		     drawSrcImageAndMirror(srcImage, srcCanvas, dstCanvas, params, rel);
 		 }, params );
 }
-function drawSrcImageAndMirror(srcImage, srcCanvas, dstCancas, params, sync) {
+function drawSrcImageAndMirror(srcImage, srcCanvas, dstCanvas, params, sync) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawMirror(srcCanvas, dstCanvas, params, sync);

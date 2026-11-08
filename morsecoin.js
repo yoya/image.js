@@ -63,7 +63,7 @@ function animationAlphabetAndPoint(uc, delay) {
     animationAlphabet(uc, delay, 0, delay-delayUnit);
 }
 
-function drawSrcImageAndMorse(sendCancas, receiveCanvas, params) {
+function drawSrcImageAndMorse(sendCanvas, receiveCanvas, params) {
     //drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     sendCanvas.width = sendCanvas.width;  // clear
     receiveCanvas.width = receiveCanvas.width;  // clear

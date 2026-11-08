@@ -31,7 +31,7 @@ function main() {
 		 }, params);
 }
 
-function drawSrcImageAndContrast(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndContrast(srcImage, srcCanvas, dstCanvas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawContrast(srcCanvas, dstCanvas, params);

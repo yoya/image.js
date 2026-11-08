@@ -28,7 +28,7 @@ function main() {
 		 }, params);
 }
 
-function drawSrcImageAndFlipflop(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndFlipflop(srcImage, srcCanvas, dstCanvas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawFlipflop(srcCanvas, dstCanvas, params);

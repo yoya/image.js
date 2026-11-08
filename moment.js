@@ -25,7 +25,7 @@ function main() {
 		     drawSrcImageAndMoment(srcImage, srcCanvas, dstCanvas);
 		 } );
 }
-function drawSrcImageAndMoment(srcImage, srcCanvas, dstCancas) {
+function drawSrcImageAndMoment(srcImage, srcCanvas, dstCanvas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     var reverse = document.getElementById("reverseCheckbox").checked;

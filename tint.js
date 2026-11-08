@@ -31,7 +31,7 @@ function main() {
 		 }, params);
 }
 
-function drawSrcImageAndTint(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndTint(srcImage, srcCanvas, dstCanvas, params) {
     const { maxWidthHeight } = params;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawTint(srcCanvas, dstCanvas, params);

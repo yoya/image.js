@@ -31,7 +31,7 @@ function main() {
     drawBitDepthGraph(srcCanvas, dstCanvas, graphCanvas);
 }
 
-function drawSrcImageAndBitDepth(srcImage, srcCanvas, dstCancas, sync) {
+function drawSrcImageAndBitDepth(srcImage, srcCanvas, dstCanvas, sync) {
     const maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     const srcBitDepth = parseFloat(document.getElementById("srcBitDepthRange").value);
     const dstBitDepth = parseFloat(document.getElementById("dstBitDepthRange").value);

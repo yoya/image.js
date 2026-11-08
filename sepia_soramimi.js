@@ -33,7 +33,7 @@ function main() {
 }
 
 
-function drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     const linear = params.linearCheckbox;
     const amount = params.amountRange;

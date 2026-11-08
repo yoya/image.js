@@ -128,7 +128,7 @@ function main() {
 		     selectOverlapImage(overlap);
 		 } );
 }
-function drawSrcImageAndConvert(srcImage, srcCanvas, dstCancas,
+function drawSrcImageAndConvert(srcImage, srcCanvas, dstCanvas,
 				bilinear, overlapImage) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
     var guide = document.getElementById("guideCheckbox").checked;

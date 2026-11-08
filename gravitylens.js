@@ -42,7 +42,7 @@ function main() {
     bindCursolFunction("dstCanvas", params, cursolFunction);
 }
 
-function drawSrcImageAndGravityLens(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndGravityLens(srcImage, srcCanvas, dstCanvas, params) {
     const { maxWidthHeight } = params;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawGravityLens(srcCanvas, dstCanvas, params);

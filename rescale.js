@@ -34,7 +34,7 @@ function main() {
 
 var worker = new workerProcess("worker/rescale.js");
 
-function drawSrcImageAndRescale(srcImage, srcCanvas, dstCancas, params, sync) {
+function drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas, params, sync) {
     // console.debug("drawSrcImageAndRescale", params);
     var maxWidthHeight = params["maxWidthHeightRange"];
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);

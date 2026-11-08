@@ -148,7 +148,7 @@ function constraintMarker(markers, i, x, y) {
     m.y = y;
 }
 
-function drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCanvas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawToneCurve(srcCanvas, dstCanvas, params);

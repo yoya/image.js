@@ -31,7 +31,7 @@ function main() {
 		 }, params);
 }
 
-function drawSrcImageAndGlitchRGB(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndGlitchRGB(srcImage, srcCanvas, dstCanvas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawGlitchRGB(srcCanvas, dstCanvas, params);

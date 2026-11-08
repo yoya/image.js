@@ -73,7 +73,7 @@ function main() {
                     });
 }
 
-function drawSrcImageAndCopy(srcImage, srcCanvas, dstCancas, params) {
+function drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params) {
     const maxWidthHeight = params.maxWidthHeightRange;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawText(srcCanvas, dstCanvas, params);
