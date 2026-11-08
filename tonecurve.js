@@ -200,6 +200,9 @@ function makeToneTable(params) {
     case "Cubic":
         makeToneTable_Cubic(params);
         break;
+    case "MonotoneCubic":
+        makeToneTable_MonotoneCubic(params);
+        break;
     case "Buggy":
         makeToneTable_Cubic(params);
         break;
@@ -314,6 +317,64 @@ function makeToneTable_Cubic(params) {  // catmull-rom spline
         const t2 = t * t, t3 = t2 * t;
         const y = ( 2*t3 - 3*t2 + 1) * y2 + (t3 - 2*t2 + t) * d2 +
                   (-2*t3 + 3*t2    ) * y3 + (t3 -   t2    ) * d3;
+        toneTable[x] = y;
+    }
+}
+
+// Monotone cubic Hermite interpolation (Fritsch-Carlson, 1980)
+// no overshoot: monotone where the markers are monotone.
+function makeToneTable_MonotoneCubic(params) {
+    const markers = params.markers;
+    const toneTable = params.toneTable;
+    const n = markers.length;
+    const xs = markers.map(m => m.x);
+    const ys = markers.map(m => 255 - m.y);
+    // secant slope of each interval
+    const delta = new Array(n - 1);
+    for (let k = 0; k < n - 1; k++) {
+        const h = xs[k+1] - xs[k];
+        delta[k] = (h > 0)? (ys[k+1] - ys[k]) / h: 0;
+    }
+    // initial tangents
+    const m = new Array(n);
+    m[0] = delta[0];
+    m[n-1] = delta[n-2];
+    for (let k = 1; k < n - 1; k++) {
+        if (delta[k-1] * delta[k] <= 0) {  // local extremum or flat
+            m[k] = 0;
+        } else {
+            m[k] = (delta[k-1] + delta[k]) / 2;
+        }
+    }
+    // limit tangents to keep monotonicity
+    for (let k = 0; k < n - 1; k++) {
+        if (delta[k] === 0) {
+            m[k] = m[k+1] = 0;
+            continue;
+        }
+        const a = m[k] / delta[k], b = m[k+1] / delta[k];
+        const s = a * a + b * b;
+        if (s > 9) {
+            const tau = 3 / Math.sqrt(s);
+            m[k]   = tau * a * delta[k];
+            m[k+1] = tau * b * delta[k];
+        }
+    }
+    // evaluate cubic Hermite
+    let k = 0;
+    for (let x = 0; x < 256; x++) {
+        while ((k < n - 2) && (xs[k+1] <= x)) {
+            k++;
+        }
+        const h = xs[k+1] - xs[k];
+        if (h <= 0) {
+            toneTable[x] = ys[k+1];
+            continue;
+        }
+        const t = (x - xs[k]) / h;
+        const t2 = t * t, t3 = t2 * t;
+        const y = ( 2*t3 - 3*t2 + 1) * ys[k] + (t3 - 2*t2 + t) * m[k] * h +
+                  (-2*t3 + 3*t2    ) * ys[k+1] + (t3 - t2) * m[k+1] * h;
         toneTable[x] = y;
     }
 }

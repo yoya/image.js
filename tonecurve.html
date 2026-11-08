@@ -13,10 +13,11 @@
 	    maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
           </div>
           <span style="vertical-align: top"> interpSelect: </span>
-           <select id="interpSelect" size="3">
+           <select id="interpSelect" size="4">
             <option value="Nearest"        > Nearest </option>
             <option value="Linear" selected> Linear </option>
             <option value="Cubic"          > Cubic (Catmull-Rom)</option>
+            <option value="MonotoneCubic"  > Monotone Cubic (Fritsch-Carlson) </option>
           </select>
         </div>
         <div>
