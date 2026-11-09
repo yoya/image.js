@@ -12,11 +12,9 @@
     <div class="container">
       <div class="controlPanel">
 	<div style="float:left">
-	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-	  <br />
-	  dstWidth:<input id="dstWidthRange" data-bind="dstWidth" type="range" min="1" max="2048" step="1" value="200">:<input type="text" id="dstWidthText" data-bind="dstWidth" size="5">
-	  <br />
-	  dstHeight:<input id="dstHeightRange" data-bind="dstHeight" type="range" min="1" max="2048" step="1" value="200">:<input type="text" id="dstHeightText" data-bind="dstHeight" size="5">
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+	  <label class="param"><span class="name">dstWidth</span><input id="dstWidthRange" data-bind="dstWidth" type="range" min="1" max="2048" step="1" value="200"><input type="text" id="dstWidthText" data-bind="dstWidth" size="5"></label>
+	  <label class="param"><span class="name">dstHeight</span><input id="dstHeightRange" data-bind="dstHeight" type="range" min="1" max="2048" step="1" value="200"><input type="text" id="dstHeightText" data-bind="dstHeight" size="5"></label>
 	</div>
 	<div style="float:left">
 	  gravity:<table id="gravityTable"> </table>

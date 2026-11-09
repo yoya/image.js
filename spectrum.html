@@ -11,14 +11,12 @@
 <body>
   <div class="container">
     <div class="controlPanel">
-      maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="256">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+      <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="256"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
       <div>
-	highPass:<input id="highPassRange" data-bind="highPass" type="range" min="0" max="1" step="0.001" value="0">:<input type="text" id="highPassText" data-bind="highPass" size="5">
-	<br />
-	lowPass:<input id="lowPassRange" data-bind="lowPass" type="range" min="0" max="1" step="0.001" value="1">:<input type="text" id="lowPassText" data-bind="lowPass" size="5">
-	<br />
-	keepContrast:<input id="keepContrastCheckbox" data-bind="keepContrast" type="checkbox" checked="checked" />
-	floor2N:<input id="floor2NCheckbox" data-bind="floor2N" type="checkbox" />
+	<label class="param"><span class="name">highPass</span><input id="highPassRange" data-bind="highPass" type="range" min="0" max="1" step="0.001" value="0"><input type="text" id="highPassText" data-bind="highPass" size="5"></label>
+	<label class="param"><span class="name">lowPass</span><input id="lowPassRange" data-bind="lowPass" type="range" min="0" max="1" step="0.001" value="1"><input type="text" id="lowPassText" data-bind="lowPass" size="5"></label>
+	<label class="check"><input id="keepContrastCheckbox" data-bind="keepContrast" type="checkbox" checked="checked" /> keepContrast</label>
+	<label class="check"><input id="floor2NCheckbox" data-bind="floor2N" type="checkbox" /> floor2N</label>
       </div>
     </div> <!-- controlPanel -->
     <div> <!-- src -->

@@ -15,12 +15,12 @@
     <div class="container">
       <div class="controlPanel" style="display:flex">
       <div>
-	Width:<input id="width" data-bind="width" type="range" min="64" max="2048" step="1" value="420">:<input type="text" id="widthText" data-bind="width" size="5"> <br />
-        Height:<input id="height" data-bind="height" type="range" min="64" max="2048" step="1" value="640">:<input type="text" id="heightText" data-bind="height" size="5">
+	<label class="param"><span class="name">Width</span><input id="width" data-bind="width" type="range" min="64" max="2048" step="1" value="420"><input type="text" id="widthText" data-bind="width" size="5"></label>
+        <label class="param"><span class="name">Height</span><input id="height" data-bind="height" type="range" min="64" max="2048" step="1" value="640"><input type="text" id="heightText" data-bind="height" size="5"></label>
       </div>
       <div>
-        Count:<input id="count" data-bind="count" type="range" min="1" max="100000" step="1" value="1000">:<input type="text" id="countText" data-bind="count" size="7"> <br />
-        Animation: <input id="animation" data-bind="animation" type="checkbox" />
+        <label class="param"><span class="name">Count</span><input id="count" data-bind="count" type="range" min="1" max="100000" step="1" value="1000"><input type="text" id="countText" data-bind="count" size="7"></label>
+        <label class="check"><input id="animation" data-bind="animation" type="checkbox" /> Animation</label>
       </div>
       </div> <!-- controlPanel -->
       <canvas id="canvas" class="borderRed" width=320 height=320> canvas </canvas>

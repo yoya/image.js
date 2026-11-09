@@ -11,8 +11,8 @@
   <body>
     <div class="container">
      <div class="controlPanel">
-	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-	block:<input id="blockSizeRange" data-bind="blockSize" type="range" min="1" max="128" step="1" value="16">:<input type="text" id="blockSizeText" data-bind="blockSize" size="4">
+	<label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+	<label class="param"><span class="name">block</span><input id="blockSizeRange" data-bind="blockSize" type="range" min="1" max="128" step="1" value="16"><input type="text" id="blockSizeText" data-bind="blockSize" size="4"></label>
 	<div style="float:left">
           block type:  <br />
 	  <select id="blockTypeSelect" data-bind="blockType" size="2">

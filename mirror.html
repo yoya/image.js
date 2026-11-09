@@ -11,11 +11,11 @@
   <body>
     <div class="container">
       <div class="controlPanel">
-	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-        border:<input id="borderRange" data-bind="borderRange" type="range" min="0.0" max="100.0" step="0.1" value="75.0">:<input type="text" id="borderText" data-bind="borderRange" size="5">
-        blur:<input id="blurRange" data-bind="blur" type="range" min="1" max="5" step="1" value="3">:<input type="text" id="blurText" data-bind="blur" size="5">
-        amp:<input id="ampRange" data-bind="ampRange" type="range" min="0.0" max="100.0" step="0.1" value="82">:<input type="text" id="ampText" data-bind="ampRange" size="5">
-        linearRGB:<input id="linearRGBCheckbox" data-bind="linearRGBCheckbox" type="checkbox" checked/>
+	<label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+        <label class="param"><span class="name">border</span><input id="borderRange" data-bind="borderRange" type="range" min="0.0" max="100.0" step="0.1" value="75.0"><input type="text" id="borderText" data-bind="borderRange" size="5"></label>
+        <label class="param"><span class="name">blur</span><input id="blurRange" data-bind="blur" type="range" min="1" max="5" step="1" value="3"><input type="text" id="blurText" data-bind="blur" size="5"></label>
+        <label class="param"><span class="name">amp</span><input id="ampRange" data-bind="ampRange" type="range" min="0.0" max="100.0" step="0.1" value="82"><input type="text" id="ampText" data-bind="ampRange" size="5"></label>
+        <label class="check"><input id="linearRGBCheckbox" data-bind="linearRGBCheckbox" type="checkbox" checked/> linearRGB</label>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>

@@ -14,18 +14,17 @@
       <div style="float:left">
         <div>
           <div>
-            maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+            <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
           </div>
           <div>
-            gamma:<input id="gammaRange" data-bind="gamma" type="range" min="0.25" max="4" step="0.01" value="1"> : <input type="text" id="gammaText" data-bind="gamma" size="5">
-            <br />
-            gamma逆数: <input id="gammaReciprocalRange" data-bind="gammaReciprocal" type="range" min="0.25" max="4" step="0.01" value="1"> : <input type="text" id="gammaReciprocalText" data-bind="gammaReciprocal" size="5">
+            <label class="param"><span class="name">gamma</span><input id="gammaRange" data-bind="gamma" type="range" min="0.25" max="4" step="0.01" value="1"><input type="text" id="gammaText" data-bind="gamma" size="5"></label>
+            <label class="param"><span class="name">gamma逆数</span><input id="gammaReciprocalRange" data-bind="gammaReciprocal" type="range" min="0.25" max="4" step="0.01" value="1"><input type="text" id="gammaReciprocalText" data-bind="gammaReciprocal" size="5"></label>
           </div>
         </div>
         <div align="center">
-          R:<input id="RCheckbox" data-bind="R" type="checkbox" checked> <br />
-          G:<input id="GCheckbox" data-bind="G" type="checkbox" checked> <br />
-          B:<input id="BCheckbox" data-bind="B" type="checkbox" checked> <br />
+          <label class="check"><input id="RCheckbox" data-bind="R" type="checkbox" checked> R</label> <br />
+          <label class="check"><input id="GCheckbox" data-bind="G" type="checkbox" checked> G</label> <br />
+          <label class="check"><input id="BCheckbox" data-bind="B" type="checkbox" checked> B</label> <br />
         </div>
       </div>
       <div>

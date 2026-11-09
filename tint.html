@@ -23,14 +23,14 @@
           </select>
         </div>
         <div>
-          linear:<input id="linear" data-bind="linear" type="checkbox" />
+          <label class="check"><input id="linear" data-bind="linear" type="checkbox" /> linear</label>
           <br />
           color: <input id="color" data-bind="color" type="color" value="#FFFFFF" \> <input id="colorText" data-bind="color" type="text" value="#FFFFFF" size="8"\>
           <br />
-	  amount:<input id="amount" data-bind="amount" type="range" min="0.0" max="1.0" step="0.01" value="0.5" \>:<input type="text" id="amountText" data-bind="amount" size="4" \>
+	  <label class="param"><span class="name">amount</span><input id="amount" data-bind="amount" type="range" min="0.0" max="1.0" step="0.01" value="0.5" \><input type="text" id="amountText" data-bind="amount" size="4" \></label>
         </div>
         <div>
-	  maxWidthHeight:<input id="maxWidthHeight" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640" \>:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5" \>
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeight" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640" \><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5" \></label>
         </div>
       </div> <!-- control -->
       <div id="display" class="horizontal">

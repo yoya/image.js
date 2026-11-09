@@ -11,9 +11,9 @@
   <body>
     <div class="container">
       <div class="controlPanel">
-	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-        amount:<input id="amountRange" data-bind="amount" type="range" min="-15" max="15" step="1" value="0">:<input type="text" id="amountText" data-bind="amount" size="4">
-        linearGamma:<input id="linearGammaCheckbox" data-bind="linearGamma" type="checkbox"/>
+	<label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+        <label class="param"><span class="name">amount</span><input id="amountRange" data-bind="amount" type="range" min="-15" max="15" step="1" value="0"><input type="text" id="amountText" data-bind="amount" size="4"></label>
+        <label class="check"><input id="linearGammaCheckbox" data-bind="linearGamma" type="checkbox"/> linearGamma</label>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>

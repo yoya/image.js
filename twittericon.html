@@ -13,8 +13,8 @@
     <div class="container">
       <div class="controlPanel">
 	<div>
-	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-	  guide:<input id="guideCheckbox" data-bind="guide" type="checkbox" />
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+	  <label class="check"><input id="guideCheckbox" data-bind="guide" type="checkbox" /> guide</label>
 	  guideColor:<input id="guideColorText" data-bind="guideColor" class="jscolor" value="BBBBBB" size="9">
 	</div>
 	<div style="float:left">
@@ -42,14 +42,9 @@
 	<div style="float:left">
 	  Offset, Radius:
 	  <br />
-	  srcProjX:
-	  <input id="srcProjXRange" data-bind="srcProjX" type="range" min="0.0" max="1.0" step="0.01" value="0.5">:<input type="text" id="srcProjXText" data-bind="srcProjX" size="4">
-	  <br />
-	  srcProjY:
-	  <input id="srcProjYRange" data-bind="srcProjY" type="range" min="0.0" max="1.0" step="0.01" value="0.5">:<input type="text" id="srcProjYText" data-bind="srcProjY" size="4">
-	  <br />
-	  srcProjR:
-	  <input id="srcProjRRange" data-bind="srcProjR" type="range" min="0.0" max="2.0" step="0.01" value="1.0">:<input type="text" id="srcProjRText" data-bind="srcProjR" size="4">
+	  <label class="param"><span class="name">srcProjX</span><input id="srcProjXRange" data-bind="srcProjX" type="range" min="0.0" max="1.0" step="0.01" value="0.5"><input type="text" id="srcProjXText" data-bind="srcProjX" size="4"></label>
+	  <label class="param"><span class="name">srcProjY</span><input id="srcProjYRange" data-bind="srcProjY" type="range" min="0.0" max="1.0" step="0.01" value="0.5"><input type="text" id="srcProjYText" data-bind="srcProjY" size="4"></label>
+	  <label class="param"><span class="name">srcProjR</span><input id="srcProjRRange" data-bind="srcProjR" type="range" min="0.0" max="2.0" step="0.01" value="1.0"><input type="text" id="srcProjRText" data-bind="srcProjR" size="4"></label>
 	</div>
 	<div style="float:left">
 	  OverlapImage: <br />

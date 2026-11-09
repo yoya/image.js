@@ -11,8 +11,8 @@
   <body>
     <div class="container">
       <div class="controlPanel">
-	width:<input id="widthRange" data-bind="width" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="widthText" data-bind="width" size="5">
-	height:<input id="heightRange" data-bind="height" type="range" min="16" max="2048" step="1" value="320">:<input type="text" id="heightText" data-bind="height" size="5">
+	<label class="param"><span class="name">width</span><input id="widthRange" data-bind="width" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="widthText" data-bind="width" size="5"></label>
+	<label class="param"><span class="name">height</span><input id="heightRange" data-bind="height" type="range" min="16" max="2048" step="1" value="320"><input type="text" id="heightText" data-bind="height" size="5"></label>
       </div> <!-- controlPanel -->
       <canvas id="dstCanvas" width=200 height=200> dstCanvas </canvas>
     </div>  <!-- container -->

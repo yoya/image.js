@@ -12,8 +12,8 @@
     <div class="container">
       <div class="controlPanel" style="display:flex">
         <div>
-	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"> <br/>
-          fuzz:<input id="fuzzRange" data-bind="fuzz" type="range" min="0.0" max="1.0" step="0.01" value="0.2">:<input type="text" id="fuzzText" data-bind="fuzz" size="5">
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+          <label class="param"><span class="name">fuzz</span><input id="fuzzRange" data-bind="fuzz" type="range" min="0.0" max="1.0" step="0.01" value="0.2"><input type="text" id="fuzzText" data-bind="fuzz" size="5"></label>
         </div>
         <div>
           srcColor <br />
@@ -26,8 +26,8 @@
         </div>:
         <input id="dstColorText" data-bind="dstColor" class="jscolor" value="000000" size="9"> <br/>
         <div>
-          diffSync:<input id="diffSyncRange" data-bind="diffSync" type="range" min="0.0" max="1.0" step="0.01" value="1.0">:<input type="text" id="diffSyncText" data-bind="diffSync" size="5"> <br />
-          diffRelative:<input id="diffRelativeRange" data-bind="diffRelative" type="range" min="-1.0" max="1.0" step="0.1" value="0.0">:<input type="text" id="diffRelativeText" data-bind="diffRelative" size="4"> <br />
+          <label class="param"><span class="name">diffSync</span><input id="diffSyncRange" data-bind="diffSync" type="range" min="0.0" max="1.0" step="0.01" value="1.0"><input type="text" id="diffSyncText" data-bind="diffSync" size="5"></label>
+          <label class="param"><span class="name">diffRelative</span><input id="diffRelativeRange" data-bind="diffRelative" type="range" min="-1.0" max="1.0" step="0.1" value="0.0"><input type="text" id="diffRelativeText" data-bind="diffRelative" size="4"></label>
         </div>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>

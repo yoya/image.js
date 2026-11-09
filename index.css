@@ -58,6 +58,7 @@ a:hover { text-decoration: underline; }
 div { margin: 4px; }
 
 .controlPanel, #controlPanel {
+    flex-wrap: wrap;  /* for panels laid out with display:flex (narrow screens) */
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -266,6 +267,14 @@ figcaption { margin-top: 4px; color: var(--text-sub); font-size: 12px; text-alig
     /* fit images to the screen width (CSS scaling only; the pixel size is kept.
        mouse positions and markers are corrected by the display scale) */
     canvas { max-width: 100%; height: auto; }
+    canvas { margin-left: 0; margin-right: 0; }
+    /* rows laid out with inline display:flex wrap instead of overflowing */
+    [style*="display:flex"], [style*="display: flex"] { flex-wrap: wrap; }
+    table input[type="text"] { width: 3.8em; }
+    .param > .name { min-width: 0; }
+    .param > input[type="range"] { min-width: 60px; }
+    .param > input[type="text"] { width: 4em; }
+    body { overflow-wrap: anywhere; }
     .indexPage { padding: 16px 12px 40px; }
     .indexPage .search { margin-left: 0; width: 100%; }
 }

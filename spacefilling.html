@@ -12,26 +12,24 @@
     <div class="container">
       <div class="controlPanel">
 	<div style="float:left">
-	  level:<input id="levelRange" data-bind="level" type="range" min="1" max="7" step="1" value="4">:
+	  <label class="param"><span class="name">level</span><input id="levelRange" data-bind="level" type="range" min="1" max="7" step="1" value="4"></label>
 	  <input id="levelDownButton" data-bind="levelDownButton" type="button" value="<<" />
 	  <input type="text" id="levelText" data-bind="level" size="2" />
 	  <input id="levelUpButton" data-bind="levelUpButton" type="button" value=">>" />
 	  <br />
-	  widthHeight:<input id="widthHeightRange" data-bind="widthHeight" type="range" min="64" max="2048" step="1" value="480">:<input type="text" id="widthHeightText" data-bind="widthHeight" size="5">
-	  <br />
-	  colors:<input id="colorsRange" data-bind="colors" type="range" min="1" max="7" step="1" value="4">:
+	  <label class="param"><span class="name">widthHeight</span><input id="widthHeightRange" data-bind="widthHeight" type="range" min="64" max="2048" step="1" value="480"><input type="text" id="widthHeightText" data-bind="widthHeight" size="5"></label>
+	  <label class="param"><span class="name">colors</span><input id="colorsRange" data-bind="colors" type="range" min="1" max="7" step="1" value="4"></label>
 	  <input id="colorsDownButton" data-bind="colorsDownButton" type="button" value="<<" />
 	  <input type="text" id="colorsText" data-bind="colors" size="2" />
 	  <input id="colorsUpButton" data-bind="colorsUpButton" type="button" value=">>" />
 	</div>
 	<div style="float:left">
-	  gap:<input id="gapCheckbox" data-bind="gap" type="checkbox" value="gap" checked/>
+	  <label class="check"><input id="gapCheckbox" data-bind="gap" type="checkbox" value="gap" checked/> gap</label>
 	  <input id="playButton" data-bind="playButton" type="button" value="play" />
 	  <input id="stopButton" data-bind="stopButton" type="button" value="stop" />
 	  <br />
-	  volume:<input id="volumeRange" data-bind="volume" type="range" min="0" max="1.0" step="0.1" value="0.5">:<input type="text" id="volumeText" data-bind="volume" size="4" />
-	  <br />
-	  tempo:<input id="tempoRange" data-bind="tempo" type="range" min="60" max="252" step="12" value="180">:<input type="text" id="tempoText" data-bind="tempo" size="4" />
+	  <label class="param"><span class="name">volume</span><input id="volumeRange" data-bind="volume" type="range" min="0" max="1.0" step="0.1" value="0.5"><input type="text" id="volumeText" data-bind="volume" size="4" /></label>
+	  <label class="param"><span class="name">tempo</span><input id="tempoRange" data-bind="tempo" type="range" min="60" max="252" step="12" value="180"><input type="text" id="tempoText" data-bind="tempo" size="4" /></label>
 	</div>
       </div> <!-- controlPanel -->
       <div style="clear:both"> </div>

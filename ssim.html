@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="index.css">
   <script src="lib/page.js"></script>
   <style>
-    span { background:black ; color: #0F0; padding: 0.25em}
+    span[id$="Span"] { background:black ; color: #0F0; padding: 0.25em}
     </style>
 </head>
 <body>
@@ -16,14 +16,12 @@
     <div id="controlPanel" style="float:left">
       <div style="float:left">
         <div style="float:left">
-          maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="1024">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-          <br />
-          dstNormalize:<input id="dstNormalizeCheckbox" data-bind="dstNormalize" type="checkbox" />
+          <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="1024"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+          <label class="check"><input id="dstNormalizeCheckbox" data-bind="dstNormalize" type="checkbox" /> dstNormalize</label>
         </div>
         <div style="float:left">
-          windowSize:<input id="windowSizeRange" data-bind="windowSize" type="range" min="8" max="11" step="1" value="8">:<input type="text" id="windowSizeText" data-bind="windowSize" size="2">
-          <br />
-          slideSize:<input id="slideSizeRange" data-bind="slideSize" type="range" min="1" max="11" step="1" value="1">:<input type="text" id="slideSizeText" data-bind="slideSize" size="2">
+          <label class="param"><span class="name">windowSize</span><input id="windowSizeRange" data-bind="windowSize" type="range" min="8" max="11" step="1" value="8"><input type="text" id="windowSizeText" data-bind="windowSize" size="2"></label>
+          <label class="param"><span class="name">slideSize</span><input id="slideSizeRange" data-bind="slideSize" type="range" min="1" max="11" step="1" value="1"><input type="text" id="slideSizeText" data-bind="slideSize" size="2"></label>
       </div>
       </div>
     </div> <!-- controlPanel -->

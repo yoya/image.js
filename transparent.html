@@ -12,11 +12,9 @@
     <div class="container">
       <div class="controlPanel" style="display:flex">
         <div>
-	  maxWidthHeight: <br /> <input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-          <br />
-          alpha:<input id="alphaRange" data-bind="alpha" type="range" min="0" max="255" step="1" value="0">:<input type="text" id="alphaText" data-bind="alpha" size="5">
-          <br />
-          fuzz:<input id="fuzzRange" data-bind="fuzz" type="range" min="0.0" max="1.0" step="0.01" value="0">:<input type="text" id="fuzzText" data-bind="fuzz" size="5">
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+          <label class="param"><span class="name">alpha</span><input id="alphaRange" data-bind="alpha" type="range" min="0" max="255" step="1" value="0"><input type="text" id="alphaText" data-bind="alpha" size="5"></label>
+          <label class="param"><span class="name">fuzz</span><input id="fuzzRange" data-bind="fuzz" type="range" min="0.0" max="1.0" step="0.01" value="0"><input type="text" id="fuzzText" data-bind="fuzz" size="5"></label>
         </div>
         <div>
           Transparent Color:<span id="transparentColorRect" style="display:block; width:2em; height:1em; background-color: white"> </span> <br />

@@ -15,10 +15,8 @@
     <div class="container" style="display:flex;">
       <div class="controlPanel">
         <div>
-	  maxWidthHeight:           <br />
-          <input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-          <br />
-          Guide:<input id="guideCheckbox" data-bind="guide" type="checkbox" checked/>
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+          <label class="check"><input id="guideCheckbox" data-bind="guide" type="checkbox" checked/> Guide</label>
         </div>
         <div>
           <select id="orientationSelect" data-bind="orientation" size="8">
@@ -33,10 +31,10 @@
           </select>
         </div>
         <div>
-          Horizontal:<input id="horizontalCheckbox" data-bind="horizontal" type="checkbox" />
-          Vertical:<input id="verticalCheckbox" data-bind="vertical" type="checkbox" />
+          <label class="check"><input id="horizontalCheckbox" data-bind="horizontal" type="checkbox" /> Horizontal</label>
+          <label class="check"><input id="verticalCheckbox" data-bind="vertical" type="checkbox" /> Vertical</label>
           <br />
-          Diagonal:<input id="diagonalCheckbox" data-bind="diagonal" type="checkbox" />
+          <label class="check"><input id="diagonalCheckbox" data-bind="diagonal" type="checkbox" /> Diagonal</label>
         </div>
         <div>
           <button id="rotate270Button" data-bind="rotate270Button" type="button"> rotate 270 </button>

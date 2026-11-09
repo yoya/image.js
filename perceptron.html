@@ -12,10 +12,10 @@
     <div class="container">
       <div class="controlPanel">
         <div>
-	  w1:<input id="w1Range" data-bind="w1" type="range" min="-1" max="1" step="0.1" value="0.5">:<input type="text" id="w1Text" data-bind="w1" size="5">
-          w2:<input id="w2Range" data-bind="w2" type="range" min="-1" max="1" step="0.1" value="0.5">:<input type="text" id="w2Text" data-bind="w2" size="5">
+	  <label class="param"><span class="name">w1</span><input id="w1Range" data-bind="w1" type="range" min="-1" max="1" step="0.1" value="0.5"><input type="text" id="w1Text" data-bind="w1" size="5"></label>
+          <label class="param"><span class="name">w2</span><input id="w2Range" data-bind="w2" type="range" min="-1" max="1" step="0.1" value="0.5"><input type="text" id="w2Text" data-bind="w2" size="5"></label>
         </div>
-        theta:<input id="thetaRange" data-bind="theta" type="range" min="-1" max="1" step="0.1" value="0.5">:<input type="text" id="thetaText" data-bind="theta" size="5">
+        <label class="param"><span class="name">theta</span><input id="thetaRange" data-bind="theta" type="range" min="-1" max="1" step="0.1" value="0.5"><input type="text" id="thetaText" data-bind="theta" size="5"></label>
         </div>
       </div> <!-- controlPanel -->
       <canvas id="graphCanvas" class="borderGreen" width=512 height=512> srcCanvas </canvas>

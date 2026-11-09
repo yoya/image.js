@@ -11,9 +11,9 @@
   <body>
     <div class="container">
       <div class="controlPanel">
-	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="4096" step="1" value="2048">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-	fuzz:<input id="fuzzRange" data-bind="fuzz" type="range" min="0" max="1" step="0.01" value="0.15">:<input type="text" id="fuzzText" data-bind="fuzz" size="5">
-	margin:<input id="marginRange" data-bind="margin" type="range" min="0" max="100" step="1" value="8">:<input type="text" id="marginText" data-bind="margin" size="5">
+	<label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="4096" step="1" value="2048"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+	<label class="param"><span class="name">fuzz</span><input id="fuzzRange" data-bind="fuzz" type="range" min="0" max="1" step="0.01" value="0.15"><input type="text" id="fuzzText" data-bind="fuzz" size="5"></label>
+	<label class="param"><span class="name">margin</span><input id="marginRange" data-bind="margin" type="range" min="0" max="100" step="1" value="8"><input type="text" id="marginText" data-bind="margin" size="5"></label>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
