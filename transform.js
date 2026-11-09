@@ -33,7 +33,7 @@ function main() {
     }, "DataURL");
     //
     bindParams(params, function(key, target, rel) {
-		     // console.debug("bindFunction:", target.id, rel);
+		     // console.debug("bindParams:", key, rel);
                      let maxWidthHeight = params.maxWidthHeight;
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     affinMatrix = makeAffinMatrix(srcCanvas, params);
