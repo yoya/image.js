@@ -1,0 +1,223 @@
+/*
+  2026/11/09- "soft" theme, loaded after index.css
+  borrowed from Astryx (meta/astryx) themes such as butter / matcha:
+   - palette -> semantic token layering, light-dark() pairs
+   - radius tiers (inner / element / container / page)
+   - layered, tinted shadows (low / med / high)
+   - warm cream neutrals + signature accent + a second "fun" color
+   - rounded OS typeface (no web fonts), motion tokens, outline buttons
+   - categorical colors, bigger touch targets on coarse pointers
+*/
+
+:root {
+    color-scheme: light dark;
+
+    /* ---- palette (private) ---- */
+    --p-cream-100: #fffdf7;
+    --p-cream-95:  #fbf6ea;
+    --p-cream-90:  #f3ecda;
+    --p-cream-80:  #e6dcc4;
+    --p-ink-15:    #2b2620;
+    --p-ink-45:    #75695a;
+    --p-blue-40:   #225bff;   /* signature accent (butter) */
+    --p-butter-90: #fdee8c;   /* signature fun color (butter) */
+    --p-night-10:  #1b1916;
+    --p-night-15:  #23201c;
+    --p-night-20:  #2e2a25;
+    --p-night-30:  #403a33;
+
+    /* ---- semantic tokens (what index.css uses) ---- */
+    --bg:          light-dark(var(--p-cream-95), var(--p-night-10));
+    --surface:     light-dark(var(--p-cream-100), var(--p-night-15));
+    --muted:       light-dark(var(--p-cream-90), var(--p-night-20));
+    --text:        light-dark(var(--p-ink-15), #f2ead9);
+    --text-sub:    light-dark(var(--p-ink-45), #b8ac98);
+    --border:      light-dark(var(--p-cream-80), var(--p-night-30));
+    --accent:      light-dark(var(--p-blue-40), var(--p-butter-90));
+    --accent-weak: light-dark(#225bff1f, #fdee8c26);
+    --on-accent:   light-dark(#ffffff, var(--p-ink-15));
+    --fun:         light-dark(var(--p-butter-90), #5a4d1c);
+    --on-fun:      light-dark(var(--p-ink-15), var(--p-butter-90));
+
+    /* radius tiers */
+    --radius-inner: 6px;
+    --radius-element: 10px;
+    --radius-container: 18px;
+    --radius-page: 28px;
+    --radius: var(--radius-container);
+
+    /* layered, warm-tinted shadows */
+    --shadow-low:  0 1px 2px #2b26200d, 0 2px 6px #2b262014;
+    --shadow-med:  0 2px 4px #2b26200d, 0 6px 16px #2b26201f;
+    --shadow-high: 0 4px 8px #2b26201a, 0 14px 32px #2b262029;
+    --shadow: var(--shadow-low);
+
+    /* motion */
+    --motion-fast: 125ms;
+    --motion-medium: 300ms;
+    --ease: cubic-bezier(.2, .8, .3, 1.2);   /* slight overshoot = playful */
+
+    /* sizes */
+    --size-element: 32px;
+
+    /* canvas role colors: softer, same hue meaning */
+    --red: #f0675e;
+    --green: #3fb96b;
+    --blue: #5a8cff;
+    --cyan: #2ec4cf;
+    --magenta: #d466e0;
+    --yellow: #f2c418;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --shadow-low:  0 1px 2px #0006, 0 2px 6px #0004;
+        --shadow-med:  0 2px 4px #0006, 0 6px 16px #0005;
+        --shadow-high: 0 4px 8px #0007, 0 14px 32px #0006;
+    }
+}
+/* touch + narrow: larger hit areas (Astryx "adaptations") */
+@media (pointer: coarse) {
+    :root { --size-element: 40px; }
+}
+
+body {
+    font-family: "Hiragino Maru Gothic ProN", "Zen Maru Gothic", system-ui,
+                 -apple-system, BlinkMacSystemFont, "Segoe UI", "BIZ UDPGothic",
+                 "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+    font-size: 15px;
+    letter-spacing: .01em;
+}
+
+/* ---- header: floating pill instead of a ruled bar ---- */
+.pageHeader {
+    position: sticky; top: 8px; z-index: 10;
+    margin: 8px 12px 4px;
+    padding: 8px 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-page);
+    background: color-mix(in srgb, var(--surface) 85%, transparent);
+    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow-med);
+}
+.pageHeader .home {
+    padding: 2px 12px;
+    border-radius: 999px;
+    background: var(--fun);
+    color: var(--on-fun);
+}
+.pageHeader .home::before { color: inherit; }
+.pageHeader h1 { font-weight: 700; }
+
+/* ---- cards ---- */
+.controlPanel, #controlPanel, .category {
+    border-color: transparent;
+    border-radius: var(--radius-container);
+    box-shadow: var(--shadow-med);
+}
+.controlPanel, #controlPanel { padding: 14px 18px; }
+
+/* ---- controls ---- */
+input[type="text"], input[type="number"], select, table {
+    border-radius: var(--radius-element);
+    background: var(--muted);
+    border-color: transparent;
+    transition: box-shadow var(--motion-fast), background var(--motion-fast);
+}
+input[type="text"], input[type="number"] { padding: 3px 8px; }
+input[type="text"]:focus, select:focus {
+    outline: none;
+    background: var(--surface);
+    box-shadow: 0 0 0 2px var(--accent);
+}
+/* secondary button = accent outline, translucent hover (butter) */
+input[type="button"], button {
+    min-height: var(--size-element);
+    padding: 4px 16px;
+    border: 1.5px solid var(--accent);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--accent);
+    font-weight: 600;
+    transition: background var(--motion-fast), transform var(--motion-fast) var(--ease);
+}
+input[type="button"]:hover, button:hover { background: var(--accent-weak); }
+input[type="button"]:active, button:active { transform: scale(.96); }
+
+/* range: thick rounded track + big thumb */
+input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    height: 22px; background: transparent;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 8px; border-radius: 999px; background: var(--muted);
+    box-shadow: inset 0 1px 2px #0000001a;
+}
+input[type="range"]::-moz-range-track {
+    height: 8px; border-radius: 999px; background: var(--muted);
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px; margin-top: -5px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--surface);
+    box-shadow: var(--shadow-low);
+    transition: transform var(--motion-fast) var(--ease);
+}
+input[type="range"]::-moz-range-thumb {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--accent); border: 3px solid var(--surface);
+}
+input[type="range"]:hover::-webkit-slider-thumb,
+input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.2); }
+
+.param > .name, .params > label { color: var(--text); font-weight: 500; }
+
+/* ---- canvases: thinner role ring + soft frame ---- */
+canvas {
+    border-radius: var(--radius-element);
+    box-shadow: var(--shadow-med);
+}
+.borderRed, .borderGreen, .borderBlue, .borderCyan, .borderMagenta,
+.borderYellow, .borderBlack, .borderGray, .borderWhite { border-width: 3px; }
+
+/* ---- index ---- */
+.indexPage > header h1 {
+    font-size: 34px; font-weight: 700;
+    background: linear-gradient(transparent 62%, var(--fun) 62%);
+    padding: 0 4px;
+}
+.indexPage .search {
+    min-height: var(--size-element);
+    padding: 6px 16px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    box-shadow: var(--shadow-low);
+}
+.category {
+    padding-top: 0; overflow: hidden;
+    transition: transform var(--motion-medium) var(--ease), box-shadow var(--motion-medium);
+}
+.category:hover { transform: translateY(-3px); box-shadow: var(--shadow-high); }
+/* categorical color strip per card */
+.category h2 {
+    margin: 0 0 6px; padding: 12px 16px 10px;
+    background: color-mix(in srgb, var(--cat) 22%, var(--surface));
+}
+.category h2 .count {
+    padding: 0 8px; border-radius: 999px;
+    background: var(--surface); color: var(--text);
+}
+.category:nth-child(8n+1) { --cat: #5a8cff; }
+.category:nth-child(8n+2) { --cat: #f0675e; }
+.category:nth-child(8n+3) { --cat: #3fb96b; }
+.category:nth-child(8n+4) { --cat: #f2c418; }
+.category:nth-child(8n+5) { --cat: #d466e0; }
+.category:nth-child(8n+6) { --cat: #2ec4cf; }
+.category:nth-child(8n+7) { --cat: #ff9a3c; }
+.category:nth-child(8n+8) { --cat: #8f7cf0; }
+.category li a, .category li span.todo {
+    margin: 0 6px; border-radius: var(--radius-element);
+    transition: background var(--motion-fast), padding var(--motion-fast) var(--ease);
+}
+.category li a:hover { background: color-mix(in srgb, var(--cat) 16%, transparent); padding-left: 18px; }
