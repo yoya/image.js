@@ -50,7 +50,7 @@ function main() {
         // console.debug(eventType, x, y);
         switch (eventType) {
         case "mousedown":
-            let idx = grabMarker(markers, x, y);
+            let idx = grabMarker(markers, x, y, getCanvasDisplayScale(toneCanvas));
             if (idx === null) {  // add action
                 idx = addMarker(params, {x:x, y:y, r:7, lw:2, c:COLOR_GREEN});
             }
@@ -118,7 +118,8 @@ function delMarker(params, i) {
     markers.splice(i, 1);
 }
 
-function grabMarker(markers, x, y) {
+// scale: canvas pixels per CSS pixel (keeps the hit area on the screen)
+function grabMarker(markers, x, y, scale = 1) {
     let i;
     const n = markers.length;
     let mindist = Number.MAX_VALUE;
@@ -126,7 +127,7 @@ function grabMarker(markers, x, y) {
     for (i = 0 ; i < n ; i++) {
         const m = markers[i]
         const dd = (m.x - x)**2 + (m.y - y)**2;
-        const rr = (m.r*1.8) ** 2;  // hittest boost rate:1.8
+        const rr = (m.r*1.8*scale) ** 2;  // hittest boost rate:1.8
         if ((dd < rr) && (dd < mindist)) {
             mindist = dd;
             idx = i;

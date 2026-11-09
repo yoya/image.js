@@ -91,7 +91,8 @@ function main() {
         var {x, y} = params[target.id];
         // console.debug(eventType, x, y, params.markerArray);
         //
-        let hittestRadius2 = 16 ** 2;
+        // 16 CSS px on the screen, whatever the display scale
+        let hittestRadius2 = (16 * getCanvasDisplayScale(srcCanvas)) ** 2;
         let markerArray = params.markerArray;
         switch (eventType) {
         case "mousedown":
@@ -134,7 +135,7 @@ function main() {
             return ;  // skip
         }
         const {x, y} = params[target.id];
-        const hittestRadius2 = 16 ** 2;
+        const hittestRadius2 = (16 * getCanvasDisplayScale(dstCanvas)) ** 2;
         const dstMarkerArray = params.dstMarkerArray;
         switch (eventType) {
         case "mousedown":
