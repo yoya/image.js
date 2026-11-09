@@ -31,27 +31,21 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function(target, rel) {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params, rel);
-		 }, params);
-    bindFunction({"filterSelect":null,
-		  "filterWindowRange":"filterWindowText",
-		  "sigmaRange":"sigmaText",
-		  "bilateralCheckbox":null,
-		  "colorScaleRange":"colorScaleText",},
-		 function(target, rel) {
-		     filter       = params["filterSelect"];
-		     filterWindow = params["filterWindowRange"];
-		     sigma        = params["sigmaRange"];
-		     var colorScale = params["colorScaleRange"];
+		 }, {keys: ["maxWidthHeight"]});
+    bindParams(params, function(key, target, rel) {
+		     filter       = params.filter;
+		     filterWindow = params.filterWindow;
+		     sigma        = params.sigma;
+		     var colorScale = params.colorScale;
 		     if (filter === "gaussian") {
 			 filterWindow = Math.floor(sigma * 5 - 3) * 2 + 1;
 			 filterWindow = (filterWindow < 1)?1:filterWindow;
 			 document.getElementById("filterWindowRange").value = filterWindow;
                          filterWindow = document.getElementById("filterWindowRange").value;
 			 document.getElementById("filterWindowText").value = filterWindow;
-                         params["filterWindowRange"] = parseFloat(filterWindow);
+                         params.filterWindow = parseFloat(filterWindow);
 		     }
 		     filterMatrix = makeFilterMatrix(filter, filterWindow, sigma);
                      params["filterMatrix"] = filterMatrix;
@@ -63,7 +57,7 @@ function main() {
 			 document.getElementById("sigmaRange").value = sigma;
                          sigma = document.getElementById("sigmaRange").value;
 			 document.getElementById("sigmaText").value = sigma;
-                         params["sigmaRange"] = parseFloat(sigma);
+                         params.sigma = parseFloat(sigma);
 		     }
 		     if (filter === "gaussian") {
 			 ;
@@ -81,7 +75,7 @@ function main() {
 		     }, filterMatrix, filterWindow);
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params, rel);
 		     setTableValues("filterMatrixTable", filterMatrix);
-		 }, params);
+		 }, {keys: ["filter", "filterWindow", "sigma", "bilateral", "colorScale"]});
     //
     bindTableFunction("filterMatrixTable", function(table, values, width) {
 	params["filterMatrix"] = filterMatrix = values;
@@ -114,15 +108,15 @@ function makeFilterMatrix(filter, filterWindow, sigma) {
 var worker = new workerProcess("worker/smoothing.js");
 
 function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params, sync) {
-    var maxWidthHeight = params["maxWidthHeightRange"];
+    var maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     //
     var params_w = {
         filterMatrix: params["filterMatrix"],
-        filterWindow: params["filterWindowRange"],
-	sigma       : params["sigmaRange"],
-        bilateral   : params["bilateralCheckbox"],
-        colorScale  : params["colorScaleRange"],
+        filterWindow: params.filterWindow,
+	sigma       : params.sigma,
+        bilateral   : params.bilateral,
+        colorScale  : params.colorScale,
     };
     // console.debug(params_w);
     worker.process(srcCanvas, dstCanvas, params_w, sync);

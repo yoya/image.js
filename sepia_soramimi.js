@@ -23,20 +23,17 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "linearCheckbox":null,
-                  "amountRange":"amountText"},
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas,
                                              params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "linear", "amount"]});
 }
 
 
 function drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
-    const linear = params.linearCheckbox;
-    const amount = params.amountRange;
+    const maxWidthHeight = params.maxWidthHeight;
+    const linear = params.linear;
+    const amount = params.amount;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawSepiaTone(srcCanvas, dstCanvas, linear, amount);
 }

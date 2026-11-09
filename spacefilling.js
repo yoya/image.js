@@ -35,13 +35,7 @@ function main() {
 		   tempo:tempo,
 		   scaleString:scaleString,
 		   cancel:false};
-    bindFunction({"widthHeightRange":"widthHeightText",
-		  "gapCheckbox":null,
-		  "volumeRange":"volumeText",
-		  "tempoRange":"tempoText",
-		  "scaleSelect":null,
-		 },
-		 function(target, rel) {
+    bindParams({}, function(key, target, rel) {
 		     var id = target.id;
 		     if (id === "gapCheckbox") {
 			 gapTable = gapCheckbox.checked?getGapTable(level):null;
@@ -59,11 +53,8 @@ function main() {
 			 params['scaleString'] = scaleString;
 		     }
 		     drawSpaceFilling(dstCanvas, params);
-		  } );
-    bindFunction({"levelDownButton":null, "levelUpButton":null,
-		  "levelRange":"levelText",
-		  },
-		 function(target, rel) {
+		  }, {keys: ["widthHeight", "gap", "volume", "tempo", "scale"]});
+    bindParams({}, function(key, target, rel) {
 		     var id = target.id;
 		     if (id === "levelDownButton") {
 			 levelRange.value--;
@@ -77,11 +68,8 @@ function main() {
 		     gapTable = gapCheckbox.checked?getGapTable(level):null;
 		     params['gapTable'] = gapTable;
 		     drawSpaceFilling(dstCanvas, params);
-		 } );
-    bindFunction({"colorsDownButton":null, "colorsUpButton":null,
-		  "colorsRange":"colorsText",
-		  },
-		 function(target, rel) {
+		 }, {keys: ["levelDownButton", "levelUpButton", "level"]});
+    bindParams({}, function(key, target, rel) {
 		     var id = target.id;
 		     if (id === "colorsDownButton") {
 			 colorsRange.value--;
@@ -92,10 +80,9 @@ function main() {
 		     colorsText.value = colors;
 		     params['colors'] = colors;
 		     drawSpaceFilling(dstCanvas, params);
-		 } );
+		 }, {keys: ["colorsDownButton", "colorsUpButton", "colors"]});
     var timerId = null;
-    bindFunction({"playButton":null, "stopButton":null },
-		 function(target, rel) {
+    bindParams({}, function(key, target, rel) {
 		     var id = target.id;
 		     if (timerId) {
 			 clearInterval(timerId);
@@ -116,7 +103,7 @@ function main() {
 			     ;
 			 }
 		     }
-		 } );
+		 }, {keys: ["playButton", "stopButton"]});
     drawSpaceFilling(dstCanvas, params);
 }
 

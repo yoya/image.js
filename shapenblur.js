@@ -20,17 +20,14 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "amountRange":"amountText",
-                  "linearGammaCheckbox":null},
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndSharpenBlur(srcImage, srcCanvas, dstCanvas,
                                                 params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "amount", "linearGamma"]});
 }
 
 function drawSrcImageAndSharpenBlur(srcImage, srcCanvas, dstCanvas, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawSharpenBlur(srcCanvas, dstCanvas, params);
 }
@@ -104,8 +101,8 @@ function convolutionFilter(srcImageData, dstImageData, kernel) {
 }
 
 function drawSharpenBlur(srcCanvas, dstCanvas, params) {
-    const amount = params.amountRange;
-    const linearGamma = params.linearGammaCheckbox;
+    const amount = params.amount;
+    const linearGamma = params.linearGamma;
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const width = srcCanvas.width, height = srcCanvas.height;

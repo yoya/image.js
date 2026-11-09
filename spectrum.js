@@ -30,18 +30,13 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "highPassRange":"highPassText",
-		  "lowPassRange":"lowPassText",
-		  "keepContrastCheckbox":null,
-		  "floor2NCheckbox":null},
-		 function() {
+    bindParams({}, function(key, target, rel) {
 	    drawSrcImageAndDCTAndFilter(srcImage, srcCanvas, src2NCanvas,
 					srcSpectrumRedCanvas, srcSpectrumGreenCanvas, srcSpectrumBlueCanvas,
 					dstSpectrumRedCanvas, dstSpectrumGreenCanvas, dstSpectrumBlueCanvas,
 					dst2NCanvas, dstCanvas);
 
-		 } );
+		 }, {keys: ["maxWidthHeight", "highPass", "lowPass", "keepContrast", "floor2N"]});
 }
 
 function drawSrcImageAndDCTAndFilter(srcImage, srcCanvas, src2NCanvas,

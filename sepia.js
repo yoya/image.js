@@ -57,21 +57,16 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "linearCheckbox":null,
-                  "radiusRange":"radiusText"},
-		 function() {
+    bindParams({}, function(key, target, rel) {
 		     drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix);
-		 } );
-    bindFunction({"amountRange":"amountText",
-                  "matrixSelect":null},
-		 function() {
+		 }, {keys: ["maxWidthHeight", "linear", "radius"]});
+    bindParams({}, function(key, target, rel) {
 		     amount = parseFloat(amountRange.value);
 		     matrix = matrixSelect.value;
 		     colorMatrix = sepiaToneMatrix(amount, matrix);
 		     setTableValues("colorMatrixTable", colorMatrix);
 		     drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix);
-		 } );
+		 }, {keys: ["amount", "matrix"]});
     //
     bindTableFunction("colorMatrixTable", function(table, values, width) {
 	colorMatrix = values;

@@ -11,22 +11,22 @@
       <div id="controlPanel" style="float:left">
         Smoothing Filter:  <br />
 	<div style="float:left; ">
-          <select id="filterSelect" size="3">
+          <select id="filterSelect" data-bind="filter" size="3">
             <option value="average"        > 移動平均 </option>
 	    <option value="pascal" selected> パスカル三角形 </option>
 	    <option value="gaussian"       > ガウス分布 </option>
           </select>
 	  <br />
-          maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="4096" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="4">
+          maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="4096" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="4">
 	  <br />
-          filterWindow:<input id="filterWindowRange" type="range" min="1" max="9" step="2" value="5">:<input type="text" id="filterWindowText" size="3">
+          filterWindow:<input id="filterWindowRange" data-bind="filterWindow" type="range" min="1" max="9" step="2" value="5">:<input type="text" id="filterWindowText" data-bind="filterWindow" size="3">
 	  <br />
-	  sigma:<input id="sigmaRange" type="range" min="0.5" max="1.5" step="0.01" value="1.0"/>
-	  <input id="sigmaText" type="text" size="4"/>
+	  sigma:<input id="sigmaRange" data-bind="sigma" type="range" min="0.5" max="1.5" step="0.01" value="1.0"/>
+	  <input id="sigmaText" data-bind="sigma" type="text" size="4"/>
 	  <br />
-	  bilateral :<input id="bilateralCheckbox" type="checkbox" />
-	  colorScale:<input id="colorScaleRange" type="range" min="1" max="100" step="1" value="20"/>
-	  <input id="colorScaleText" type="text" size="4"/>
+	  bilateral :<input id="bilateralCheckbox" data-bind="bilateral" type="checkbox" />
+	  colorScale:<input id="colorScaleRange" data-bind="colorScale" type="range" min="1" max="100" step="1" value="20"/>
+	  <input id="colorScaleText" data-bind="colorScale" type="text" size="4"/>
 	</div>
 	<div style="float:left; ">
 	    filterMatrix:<table id="filterMatrixTable"> </table>

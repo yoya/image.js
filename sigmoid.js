@@ -26,21 +26,15 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "aRange":"aText", "bRange":"bText", "zRange":"zText",
-		  "linearCheckbox":null},
-		 function(target, rel) {
+    bindParams({}, function(key, target, rel) {
 		     // console.debug(target.id);
-		     switch (target.id) {
-		     case "aRange":
-		     case "aText":
-		     case "bRange":
-		     case "bText":
+		     switch (key) {
+		     case "a":
+		     case "b":
 			 zRange.value = 0;
 			 zText.value = 0;
 			 break;
-		     case "zRange":
-		     case "zText":
+		     case "z":
 			 // -1.0
 			 var z = parseFloat(zRange.value);
 			 var a = Math.abs(z) * 50;
@@ -52,7 +46,7 @@ function main() {
 			 break;
 		     }
 		     drawSrcImageAndSigmoid(srcImage, srcCanvas, dstCanvas, gammaCanvas, rel);
-		 } );
+		 }, {keys: ["maxWidthHeight", "a", "b", "z", "linear"]});
     drawSrcImageAndSigmoid(srcImage, srcCanvas, dstCanvas, gammaCanvas, true);
 }
 

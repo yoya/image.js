@@ -22,16 +22,13 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "filterSelect":null,
-                  "saturationRange":"saturationText"},
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndSaturation(srcImage, srcCanvas, dstCanvas, params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "filter", "saturation"]});
 }
 
 function drawSrcImageAndSaturation(srcImage, srcCanvas, dstCanvas, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawSaturation(srcCanvas, dstCanvas, params);
 }
@@ -114,8 +111,8 @@ function drawSaturation(srcCanvas, dstCanvas, params) {
     dstCanvas.width  = width;
     dstCanvas.height = height;
     let imageData = srcCtx.getImageData(0, 0, width, height);
-    const filter = params.filterSelect;
-    const saturation = params.saturationRange;
+    const filter = params.filter;
+    const saturation = params.saturation;
     switch (filter) {
     case "saturation":
         mogrifySaturation(imageData, saturation);
