@@ -13,51 +13,39 @@ function main() {
     var dstCanvas = document.getElementById("dstCanvas");
     var gammaCanvas = document.getElementById("gammaCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    var gammaRange = document.getElementById("gammaRange");
-    var gammaText = document.getElementById("gammaText");
-    var gammaReciprocalRange = document.getElementById("gammaReciprocalRange");
-    var gammaReciprocalText = document.getElementById("gammaReciprocalText");
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas, true);
+	    drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "gammaRange":"gammaText",
-		  "gammaReciprocalRange":"gammaReciprocalText",
-                  "RCheckbox":null, "GCheckbox":null, "BCheckbox":null},
-		 function(target, rel) {
-		     console.debug(target.id);
-		     if ((target.id === "gammaRange") || (target.id === "gammaText")) {
-			 gammaReciprocalRange.value = 1.0 / parseFloat(gammaRange.value);
-			 gammaReciprocalText.value = gammaReciprocalRange.value;
-		     } else if ((target.id === "gammaReciprocalRange") || (target.id === "gammaReciprocalText")) {
-			 gammaRange.value = 1.0 / parseFloat(gammaReciprocalRange.value);
-			 gammaText.value = gammaRange.value;
-		     }
-		     drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas, rel);
-		 } );
-    gammaReciprocalRange.value = 1.0 / parseFloat(gammaRange.value);
-    gammaReciprocalText.value = gammaReciprocalRange.value;
-    drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas, true);
+    bindParams(params, function(key, elem, rel) {
+        if (key === "gamma") {
+            params.gammaReciprocal = 1.0 / params.gamma;
+            syncParamsToElements(params, {keys: ["gammaReciprocal"]});
+        } else if (key === "gammaReciprocal") {
+            params.gamma = 1.0 / params.gammaReciprocal;
+            syncParamsToElements(params, {keys: ["gamma"]});
+        }
+        drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas, params, rel);
+    });
+    params.gammaReciprocal = 1.0 / params.gamma;
+    syncParamsToElements(params, {keys: ["gammaReciprocal"]});
+    drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas, params, true);
 }
 
-function drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas, sync) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var gamma = parseFloat(document.getElementById("gammaRange").value);
-    var R = document.getElementById("RCheckbox").checked;
-    var G = document.getElementById("GCheckbox").checked;
-    var B = document.getElementById("BCheckbox").checked;
+function drawSrcImageAndGamma(srcImage, srcCanvas, dstCanvas, gammaCanvas, params, sync) {
+    const { maxWidthHeight, gamma, R, G, B } = params;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawGammaGraph(gammaCanvas, gamma, [R, G, B]);
-    var params = {
+    var workerParams = {
         RGamma: R?gamma:1.0,
         GGamma: G?gamma:1.0,
         BGamma: B?gamma:1.0
     };
-    drawGammaImage(srcCanvas, dstCanvas, params, sync);
+    drawGammaImage(srcCanvas, dstCanvas, workerParams, sync);
 }
 
 function drawGammaGraph(canvas, gamma, RGBchecked) {
