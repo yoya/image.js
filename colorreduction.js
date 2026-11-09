@@ -42,7 +42,7 @@ function drawSrcImageAndColorReduction(srcImage, srcCanvas, params) {
     if (worker) {
 	worker.terminate();
     }
-    var div = loadingStart();
+    var div = loadingStart(dstCanvas);
     worker = new Worker("worker/colorreduction.js");
     worker.onmessage = function(e) {
 	var [dstImageData, palette] = [e.data.image, e.data.palette];
