@@ -49,6 +49,12 @@ function main() {
         grabbedMarker: null,
         markerArray: markerArray,
     };
+    // register once. (drawHomograpy is called on every redraw)
+    worker.addListener(function() {
+        if (params.dstMarkers) {
+            drawDstMarkers(dstCanvas, params);
+        }
+    });
     const imageOnLoad = (url) => {
 	srcImage = new Image();
 	srcImage.onload = function() {
@@ -177,28 +183,22 @@ function drawHomograpy(srcImage, srcCanvas, dstCanvas, params, sync) {
         params.interpolation = params.interpolationSelect;
     }
     worker.process(srcCanvas, dstCanvas, params, sync);
-    worker.addListener(function() {
-        if (params.dstMarkers) {
-            const { width , height } = dstCanvas;
-            let xyNorm = [
-                [xyArr[0][0] / width, xyArr[0][1] / height],
-                [xyArr[1][0] / width, xyArr[1][1] / height],
-                [xyArr[2][0] / width, xyArr[2][1] / height],
-                [xyArr[3][0] / width, xyArr[3][1] / height]
-            ];
-            // 計算間違えているのでコメントアウト
-            // let forwardCoeff =  homographyCoeffByMarkers(xyNorm, true);
-            let forwardCoeff = invertMatrix(params.coeff, 3);
-            params.forwardCoeff = forwardCoeff;
-            let dstMarkerArray = drawMarker(dstCanvas, forwardCoeff, xyNorm[0]);
-            params.dstMarkerArray = dstMarkerArray;
-        }
-    });
     if (params.srcMarkers) {
         const { width , height } = srcCanvas;
         let xyArr = drawMarker(srcCanvas, params.coeff);
         params.markerArray = xyArr;
     }
+}
+
+/*
+  draw the src image corners on dst, mapped by the forward transform.
+  (coeff maps dst => src, so forward is its inverse.
+   homographyCoeffByMarkers(srcMarkersNorm, true) gives the same up to scale)
+*/
+function drawDstMarkers(dstCanvas, params) {
+    const forwardCoeff = invertMatrix(params.coeff, 3);
+    params.forwardCoeff = forwardCoeff;
+    params.dstMarkerArray = drawMarker(dstCanvas, forwardCoeff);
 }
 
 /*
