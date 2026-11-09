@@ -37,6 +37,7 @@
     --accent-weak: light-dark(#225bff1f, #fdee8c26);
     --on-accent:   light-dark(#ffffff, var(--p-ink-15));
     --fun:         light-dark(var(--p-butter-90), #5a4d1c);
+    --on-fun:      light-dark(var(--p-ink-15), var(--p-butter-90));
 
     /* radius tiers */
     --radius-inner: 6px;
@@ -102,7 +103,7 @@ body {
     padding: 2px 12px;
     border-radius: 999px;
     background: var(--fun);
-    color: var(--p-ink-15);
+    color: var(--on-fun);
 }
 .pageHeader .home::before { color: inherit; }
 .pageHeader h1 { font-weight: 700; }
