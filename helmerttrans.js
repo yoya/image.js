@@ -22,26 +22,24 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    let maxWidthHeight = params["maxWidthHeightRange"];
+	    let maxWidthHeight = params.maxWidthHeight;
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    drawHelmertTransform(srcCanvas, dstCanvas, helmertMatrix, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function(target, rel) {
-                     let maxWidthHeight = params["maxWidthHeightRange"];
+    bindParams(params, function(key, target, rel) {
+                     let maxWidthHeight = params.maxWidthHeight;
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     drawHelmertTransform(srcCanvas, dstCanvas, helmertMatrix, params, rel);
-		 }, params);
-    bindFunction({"helmertSelect":null, "outfillSelect":null},
-		 function(target, rel) {
-		     let helmert = params["helmertSelect"];
+		 }, {keys: ["maxWidthHeight"]});
+    bindParams(params, function(key, target, rel) {
+		     let helmert = params.helmert;
 		     helmertMatrix = helmert2Matrix(helmert, srcCanvas);
 		     drawHelmertTransform(srcCanvas, dstCanvas, helmertMatrix, params, rel);
 		     setTableValues("helmertMatrixTable", helmertMatrix);
-		 }, params);
+		 }, {keys: ["helmert", "outfill"]});
     //
     bindTableFunction("helmertMatrixTable", function(table, values, width) {
         for (const idx in helmertMatrix) {
@@ -61,7 +59,7 @@ function main() {
 	drawHelmertTransform(srcCanvas, dstCanvas, helmertMatrix, params, true);
     }, helmertMatrix, helmertWindow);
     //
-    helmert = params["helmertSelect"];
+    helmert = params.helmert;
     helmertMatrix = helmert2Matrix(helmert, srcCanvas);
 }
 
@@ -114,7 +112,7 @@ var worker = new workerProcess("worker/helmerttrans.js");
 function drawHelmertTransform(srcCanvas, dstCanvas, helmertMatrix, params, sync) {
     var params_w = {
         helmertMatrix: helmertMatrix,
-        outfill    : outfillStyleNumber(params["outfillSelect"]),
+        outfill    : outfillStyleNumber(params.outfill),
     };
     worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

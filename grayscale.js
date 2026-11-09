@@ -23,12 +23,9 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "colorFactorRange":"colorFactorText",
-		  "linearGammaCheckbox":null},
-		 function(target, rel) {
+    bindParams({}, function(key, target, rel) {
 		     drawSrcImageAndGrayscale(srcImage, srcCanvas, dstCanvasArr, rel);
-		 } );
+		 }, {keys: ["maxWidthHeight", "colorFactor", "linearGamma"]});
 }
 
 var workers = [];

@@ -34,18 +34,10 @@ var kmc = null;
 function main() {
     console.debug("main");
     canvas.style.background = "black";
-    bindFunction({ "restartButton":null,
-		   "resetButton":null,
-		   "widthRange":"widthText",
-		   "heightRange":"heightText",
-		   "nPointsRange":"nPointsText",
-		   "nCenterPointsRange":"nCenterPointsText",
-                   "delayRange":"delayText"},
-		 function(target) {
-                     switch (target.id) {
+    bindParams({}, function(key, target, rel) {
+                     switch (key) {
 		     case "restartButton":
-                     case "delayRange":
-                     case "delayText":
+                     case "delay":
 			 revert();
                          break;
                      default:
@@ -53,7 +45,7 @@ function main() {
                          break;
 		     }
 		     restart();
-		 });
+		 }, {keys: ["restartButton", "resetButton", "width", "height", "nPoints", "nCenterPoints", "delay"]});
     reset();
     restart();
 }

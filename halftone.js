@@ -20,37 +20,26 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({ "maxWidthHeightRange":"maxWidthHeightText",
-                   "scaleRange":"scaleText",
-                   "sizeRange":"sizeText",
-                   "cRotateRange":"cRotateText", "mRotateRange":"mRotateText",
-                   "yRotateRange":"yRotateText", "kRotateRange":"kRotateText" ,
-                   "cAmountRange":"cAmountText", "mAmountRange":"mAmountText",
-                   "yAmountRange":"yAmountText", "kAmountRange":"kAmountText"
-                 },
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndHalftone(srcImage, srcCanvas, dstCanvas,
                                          params);
-		 }, params);
-    bindFunction({ "rc1Button":null, "rc2Button":null, "rc3Button":null,
-                   "rc4Button":null, "rc5Button":null,
-                 },
-		 function(target) {
+		 }, {keys: ["maxWidthHeight", "scale", "size", "cRotate", "mRotate", "yRotate", "kRotate", "cAmount", "mAmount", "yAmount", "kAmount"]});
+    bindParams(params, function(key, target, rel) {
                      const p = params;
                      const radiusCombination = target.innerText.split(",").map((n) => { return Number(n); });
-                     p.cRotateRange = p.cRotateText = radiusCombination[0];
-                     p.mRotateRange = p.mRotateText = radiusCombination[1];
-                     p.yRotateRange = p.yRotateText = radiusCombination[2];
-                     p.kRotateRange = p.kRotateText = radiusCombination[3];
-                     bind2elements(params);
+                     p.cRotate = radiusCombination[0];
+                     p.mRotate = radiusCombination[1];
+                     p.yRotate = radiusCombination[2];
+                     p.kRotate = radiusCombination[3];
+                     syncParamsToElements(params);
 		     drawSrcImageAndHalftone(srcImage, srcCanvas, dstCanvas,
                                          params);
-		 }, params);
+		 }, {keys: ["rc1Button", "rc2Button", "rc3Button", "rc4Button", "rc5Button"]});
 }
 
 function drawSrcImageAndHalftone(srcImage, srcCanvas, dstCanvas, params) {
-    const scale = params.scaleRange;
-    const maxWidthHeight = Math.round(params.maxWidthHeightRange / scale);
+    const scale = params.scale;
+    const maxWidthHeight = Math.round(params.maxWidthHeight / scale);
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     rescaleCanvas(srcCanvas, scale);
     drawHalftone(srcCanvas, dstCanvas, params);
@@ -102,9 +91,9 @@ function rotateXY(x, y, width, height, angle) {
 
 function drawHalftone(srcCanvas, dstCanvas, params) {
     console.debug("drawHalftone");
-    const size = params.sizeRange;
-    const rotate = [params.cRotateRange, params.mRotateRange, params.yRotateRange, params.kRotateRange].map(v => { return (v%90) / 180 * Math.PI });
-    const amount = [params.cAmountRange, params.mAmountRange, params.yAmountRange, params.kAmountRange].map(v => { return v / 100; });
+    const size = params.size;
+    const rotate = [params.cRotate, params.mRotate, params.yRotate, params.kRotate].map(v => { return (v%90) / 180 * Math.PI });
+    const amount = [params.cAmount, params.mAmount, params.yAmount, params.kAmount].map(v => { return v / 100; });
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const width = srcCanvas.width, height = srcCanvas.height;

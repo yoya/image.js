@@ -17,7 +17,7 @@ function main() {
     var params = {};
     //
     var drawImageAndGravity = function(rel) {
-	var maxWidthHeight = params["maxWidthHeightRange"];
+	var maxWidthHeight = params.maxWidthHeight;
 	drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	let dstWidth  = srcCanvas.width;
 	let dstHeight = srcCanvas.height;
@@ -26,8 +26,8 @@ function main() {
 	document.getElementById("dstWidthText").value  = dstWidth;
 	document.getElementById("dstHeightRange").value = dstHeight;
 	document.getElementById("dstHeightText").value  = dstHeight;
-        params["dstWidthRange"]  = params["dstWidthText"]  = dstWidth;
-        params["dstHeightRange"] = params["dstHeightText"] = dstHeight;
+        params.dstWidth  = params.dstWidth  = dstWidth;
+        params.dstHeight = params.dstHeight = dstHeight;
 	drawGravity(srcCanvas, dstCanvas, params, rel);
     }
     dropFunction(document, function(dataURL) {
@@ -35,16 +35,12 @@ function main() {
 	srcImage.onload = drawImageAndGravity;
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function(target, rel) {
+    bindParams(params, function(key, target, rel) {
 		     drawImageAndGravity(rel);
-		 }, params);
-    bindFunction({"dstWidthRange":"dstWidthText",
-		  "dstHeightRange":"dstHeightText",
-		  "outfillSelect":null},
-		 function(target, rel) {
+		 }, {keys: ["maxWidthHeight"]});
+    bindParams(params, function(key, target, rel) {
 		     drawGravity(srcCanvas, dstCanvas, params, rel);
-		 }, params);
+		 }, {keys: ["dstWidth", "dstHeight", "outfill"]});
     var gravityTable = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     gravityTable[gravity-1] = 1;
     bindTableFunction("gravityTable", function(table, values, width) {
@@ -68,9 +64,9 @@ function drawGravity(srcCanvas, dstCanvas, params, sync) {
     // console.debug("drawGravity", params);
     var params_w = {
         gravity  : params["gravity"],
-        dstWidth : params["dstWidthRange"],
-        dstHeight: params["dstHeightRange"],
-	outfill  : outfillStyleNumber(params["outfillSelect"]),
+        dstWidth : params.dstWidth,
+        dstHeight: params.dstHeight,
+	outfill  : outfillStyleNumber(params.outfill),
     };
     worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

@@ -9,18 +9,18 @@
     <div class="container">
       <div class="controlPanel">
 	<div style="float:left">
-	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
 	  <br />
-	  dstWidth:<input id="dstWidthRange" type="range" min="1" max="2048" step="1" value="200">:<input type="text" id="dstWidthText" size="5">
+	  dstWidth:<input id="dstWidthRange" data-bind="dstWidth" type="range" min="1" max="2048" step="1" value="200">:<input type="text" id="dstWidthText" data-bind="dstWidth" size="5">
 	  <br />
-	  dstHeight:<input id="dstHeightRange" type="range" min="1" max="2048" step="1" value="200">:<input type="text" id="dstHeightText" size="5">
+	  dstHeight:<input id="dstHeightRange" data-bind="dstHeight" type="range" min="1" max="2048" step="1" value="200">:<input type="text" id="dstHeightText" data-bind="dstHeight" size="5">
 	</div>
 	<div style="float:left">
 	  gravity:<table id="gravityTable"> </table>
 	</div>
 	<div>
           Out-side fill style:  <br />
-          <select id="outfillSelect" size="5">
+          <select id="outfillSelect" data-bind="outfill" size="5">
             <option value="black" selected> 黒埋め </option>
             <option value="transparent"   > 透明  </option>
             <option value="edge"          > エッジ拡張 </option>

@@ -20,17 +20,14 @@ function main() {
 	unitWidth: parseFloat(unitWidthRange.value),
 	unitHeight: parseFloat(unitHeightRange.value)
     };
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "unitWidthRange":"unitWidthText",
-		  "unitHeightRange":"unitHeightText"},
-		 function() {
+    bindParams({}, function(key, target, rel) {
 		     var params = {
 			 maxWidthHeight: parseFloat(maxWidthHeighRange.value),
 			 unitWidth:  parseFloat(unitWidthRange.value),
 			 unitHeight: parseFloat(unitHeightRange.value),
 		     };
 		     drawColor(hueCanvas, colorCanvas, params);
-		 } );
+		 }, {keys: ["maxWidthHeightRange", "unitWidthRange", "unitHeightRange"]});
     drawColor(hueCanvas, colorCanvas, params);
 }
 

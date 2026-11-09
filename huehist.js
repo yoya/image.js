@@ -22,7 +22,7 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-            const maxWidthHeight = params.maxWidthHeightRange;
+            const maxWidthHeight = params.maxWidthHeight;
             drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
             [hist, map, shist] = getHueHistogram(srcCanvas, params);
             drawHueHistogram(histCanvas, histRingCanvas, mapCanvas,
@@ -30,26 +30,22 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "binHistRange":"binHistText",
-                  "logHistCheckbox":null},
-		 function() {
-                     const maxWidthHeight = params.maxWidthHeightRange;
+    bindParams(params, function(key, target, rel) {
+                     const maxWidthHeight = params.maxWidthHeight;
                      drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
                      [hist, map, shist] = getHueHistogram(srcCanvas, params);
                      drawHueHistogram(histCanvas, histRingCanvas, mapCanvas,
                                       shistCanvas, hist, map, shist, params);
-		 }, params);
-    bindFunction({"maxRatioRange":"maxRatioText"},
-		 function() {
+		 }, {keys: ["maxWidthHeight", "binHist", "logHist"]});
+    bindParams(params, function(key, target, rel) {
                      drawHueHistogram(histCanvas, histRingCanvas, mapCanvas,
                                       shistCanvas, hist, map, shist, params);
-		 }, params);
+		 }, {keys: ["maxRatio"]});
 }
 
 function getHueHistogram(canvas, params) {
-    const binHist = params.binHistRange;
-    const logHist = params.logHistCheckbox;
+    const binHist = params.binHist;
+    const logHist = params.logHist;
     //
     const ctx = canvas.getContext("2d");
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -94,7 +90,7 @@ function drawHueHistogram(canvas, canvasRing, mapCanvas, shistCanvas,
 }
 
 function drawHistGraph(canvas, hist, params) {
-    const maxRatio = params.maxRatioRange;
+    const maxRatio = params.maxRatio;
     // console.debug("drawHueHistogram");
     canvas.style.backgroundColor = "black";
     const ctx = canvas.getContext("2d");
@@ -115,7 +111,7 @@ function drawHistGraph(canvas, hist, params) {
 }
 
 function drawHistRing(canvas, hist, params) {
-    const maxRatio = params.maxRatioRange;
+    const maxRatio = params.maxRatio;
     canvas.style.backgroundColor = "black";
     const ctx = canvas.getContext("2d");
     const width  = canvas.width, height = canvas.height;
@@ -146,7 +142,7 @@ function drawHistRing(canvas, hist, params) {
 }
 
 function drawHueSaturationMap(canvas, map, params) {
-    const maxRatio = params.maxRatioRange;
+    const maxRatio = params.maxRatio;
     canvas.style.backgroundColor = "black";
     const ctx = canvas.getContext("2d");
     const width  = canvas.width, height = canvas.height;
