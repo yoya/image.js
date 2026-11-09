@@ -73,6 +73,9 @@ function main() {
                          }
                      }
                      var arr = params['cieArrAll'];
+                     if (! arr) {
+                         return ;  // data not loaded yet (drawn when it arrives)
+                     }
                      arr = arr.filter(function(p) {
                          if (! elems[p["Sex"]+"Checkbox"].checked) {
                              return false;
