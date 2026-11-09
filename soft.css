@@ -41,6 +41,9 @@
     /* slider track: clearly darker (light) / lighter (dark) than the card */
     --track:       light-dark(#d4c6a6, #6b6052);
     --track-edge:  light-dark(#968257, #8f8270);
+    /* text field: halfway between the card and the slider track */
+    --field:       color-mix(in srgb, var(--track) 50%, var(--surface));
+    --field-edge:  color-mix(in srgb, var(--track-edge) 50%, var(--surface));
 
     /* radius tiers */
     --radius-inner: 6px;
@@ -126,7 +129,12 @@ input[type="text"], input[type="number"], select, table {
     border-color: transparent;
     transition: box-shadow var(--motion-fast), background var(--motion-fast);
 }
-input[type="text"], input[type="number"] { padding: 3px 8px; }
+/* text fields: about half the slider track's tint, so the typing area stands out */
+input[type="text"], input[type="number"] {
+    padding: 3px 8px;
+    background: var(--field);
+    border-color: var(--field-edge);
+}
 input[type="text"]:focus, select:focus {
     outline: none;
     background: var(--surface);
