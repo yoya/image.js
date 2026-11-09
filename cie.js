@@ -16,34 +16,45 @@ function main() {
     const params = {
         'xMin':400, 'xMax':700,
     };
+    // the CIE XYZ data (cie31Arr, cie64Arr, cieJVArr) arrive asynchronously;
+    // cieArr stays undefined until the selected one is loaded, and nothing
+    // is drawn until then (controls may be used right after the page opens).
+    const selectCieArr = function() {
+	const { cie } = params;
+	if (cie === "ciexyz64") {
+	    params['cieArr'] = params['cie64Arr'];
+	} else if (cie === "ciexyzjv") {
+	    params['cieArr'] = params['cieJVArr'];
+	} else { // "ciexyz31" (also the default before the controls are read)
+	    params['cieArr'] = params['cie31Arr'];
+	}
+    }
+    const drawAll = function(sync) {
+	if (! params['cieArr']) {
+	    return ;  // data not loaded yet; drawn again when it arrives
+	}
+	drawSpectrumGraph(graphCanvas, params, params.graphAlpha);
+	drawDiagram(diagramBaseCanvas, dstCanvas, params, sync);
+    }
     const onCIEXYZdata = function(name, arr, isDefault) {
 	params[name] = arr;
-	if (isDefault) {
-	    params['cieArr'] = arr;
-	    drawSpectrumGraph(graphCanvas, params, params.graphAlpha);
-	    drawDiagram(diagramBaseCanvas, dstCanvas, params, true);
+	const prev = params['cieArr'];
+	selectCieArr();
+	if (params['cieArr'] !== prev) {  // the selected data has just arrived
+	    drawAll(true);
 	}
     }
     bindParams(params, function(key, target, rel) {
-                     const { cie } = params;
-		     if (cie === "ciexyz31") {
-			 params['cieArr'] = params['cie31Arr'];
-		     } else if (cie === "ciexyz64") {
-			 params['cieArr'] = params['cie64Arr'];
-		     } else { // "ciexyzjv"
-			 params['cieArr'] = params['cieJVArr'];
-		     }
-		     drawSpectrumGraph(graphCanvas, params, params.graphAlpha);
-		     drawDiagram(diagramBaseCanvas, dstCanvas, params, rel);
+		     selectCieArr();
+		     drawAll(rel);
 		 }, {keys: ["cie"]});
     bindParams(params, function(key, target, rel) {
 		     drawSrcImage(srcImage, srcCanvas, params.maxWidthHeight);
 		     params['hist'] = getColorHistogram(srcCanvas);
-		     drawDiagram(diagramBaseCanvas, dstCanvas, params, rel);
+		     drawAll(rel);
 		 }, {keys: ["maxWidthHeight"]});
     bindParams(params, function(key, target, rel) {
-		     drawSpectrumGraph(graphCanvas, params, params.graphAlpha);
-		     drawDiagram(diagramBaseCanvas, dstCanvas, params, rel);
+		     drawAll(rel);
 		 }, {keys: ["chromaticity", "pointSize", "pointDensity", "colorspace", "tristimulus", "guide", "graphAlpha"]});
     //
     dropFunction(document, function(dataURL) {
@@ -52,7 +63,7 @@ function main() {
 	srcImage.onload = function() {
 	    drawSrcImage(srcImage, srcCanvas, params.maxWidthHeight);
 	    params['hist'] = getColorHistogram(srcCanvas);
-	    drawDiagram(diagramBaseCanvas, dstCanvas, params, true);
+	    drawAll(true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
