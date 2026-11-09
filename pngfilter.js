@@ -24,6 +24,7 @@ function main() {
         if (! IO_PNG.verifySig(arr)) {
             let console = document.getElementById('console');
             console.innerHTML = "not PNG!";
+            origArr = workArr = null;  // forget the previous PNG
             return ;
         }
         png.parse(arr);
@@ -39,6 +40,9 @@ function main() {
         }
     }, "ArrayBuffer");
     bindParams(params, function(key, target, rel) {
+                     if (! origArr) {
+                         return ;  // no PNG loaded yet
+                     }
                      pngFilterSummarize(png, origArr);
                      if (params.filterView) {
                          pngFilterView(png, origArr);
