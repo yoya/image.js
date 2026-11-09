@@ -208,8 +208,8 @@ function makeToneTable(params) {
     case "MonotoneCubic":
         makeToneTable_MonotoneCubic(params);
         break;
-    case "Buggy":
-        makeToneTable_Cubic(params);
+    case "Buggy":  // not in interpSelect options (experimental)
+        makeToneTable_Buggy(params);
         break;
     default:
         console.error("unknown interp:"+interp)
