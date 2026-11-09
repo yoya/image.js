@@ -43,10 +43,7 @@ function main() {
             pngFilterOverwrite(png, workArr, filter, alphaOn);
         }
     }, "ArrayBuffer");
-    bindFunction({"filterSelect":null,
-                  "filterViewCheckbox":null,
-                  "alphaOnCheckbox":null},
-                 function() {
+    bindParams({}, function(key, target, rel) {
                      filterView = filterViewCheckbox.checked;
                      alphaOn       = alphaOnCheckbox.checked;
                      filter = filterSelect.value;
@@ -56,7 +53,7 @@ function main() {
                      } else {
                          pngFilterOverwrite(png, workArr, filter, alphaOn);
                      }
-                 });
+                 }, {keys: ["filter", "filterView", "alphaOn"]});
 }
 
 function pngFilterSummarize(png, origArr) {

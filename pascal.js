@@ -10,14 +10,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     var dstCanvas = document.getElementById("dstCanvas");
-    bindFunction({"widthRange":"widthText",
-		  "heightRange":"heightText",
-                  "nPascalRange":"nPascalText",
-                  "nColorRange":"nColorText",
-                  "bottomBarCheckbox":null},
-		 function() {
+    bindParams({}, function(key, target, rel) {
 		     drawPascalTriangle(dstCanvas);
-		 } );
+		 }, {keys: ["width", "height", "nPascal", "nColor", "bottomBar"]});
     drawPascalTriangle(dstCanvas);
 }
 

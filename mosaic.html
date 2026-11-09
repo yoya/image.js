@@ -8,11 +8,11 @@
   <body>
     <div class="container">
      <div class="controlPanel">
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
-	block:<input id="blockSizeRange" type="range" min="1" max="128" step="1" value="16">:<input type="text" id="blockSizeText" size="4">
+	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+	block:<input id="blockSizeRange" data-bind="blockSize" type="range" min="1" max="128" step="1" value="16">:<input type="text" id="blockSizeText" data-bind="blockSize" size="4">
 	<div style="float:left">
           block type:  <br />
-	  <select id="blockTypeSelect" size="2">
+	  <select id="blockTypeSelect" data-bind="blockType" size="2">
             <option value="square" selected> 正方形 </option>
             <option value="hexagon"        > 六角形 </option>
           </select>

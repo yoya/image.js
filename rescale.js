@@ -20,15 +20,9 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "filterType":null,
-		  "scaleRange":"scaleText",
-		  "cubicBRange":"cubicBText",
-		  "cubicCRange":"cubicCText",
-		  "lobeRange":"lobeText"},
-		 function(target, rel) {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas, params, rel);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "filterType", "scale", "cubicBRange", "cubicCRange", "lobeRange"]});
     drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas, params, true);
 }
 
@@ -36,11 +30,11 @@ var worker = new workerProcess("worker/rescale.js");
 
 function drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas, params, sync) {
     // console.debug("drawSrcImageAndRescale", params);
-    var maxWidthHeight = params["maxWidthHeightRange"];
+    var maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     var params_w = {
 	filterType: params["filterType"],
-	scale: params["scaleRange"],
+	scale: params.scale,
         cubicB: params["cubicBRange"],
         cubicC: params["cubicCRange"],
         lobe  : params["lobeRange"],

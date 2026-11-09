@@ -18,25 +18,20 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawClutTable(clutCanvas, params.clutTypeSelect);
+	    drawClutTable(clutCanvas, params.clutType);
 	    drawSrcImageAndPseudoColor(srcImage, srcCanvas, grayCanvas, dstCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "clutTypeSelect":null,
-                  "clutScaleRange":"clutScaleText",
-                  "clutOffsetRange":"clutOffsetText",
-                  "linearCheckbox":null},
-		 function(target, rel) {
-                     if (target.id === "linearCheckbox") {
-                         makeCLUT(params.linearCheckbox);
+    bindParams(params, function(key, target, rel) {
+                     if (key === "linear") {
+                         makeCLUT(params.linear);
                      }
-		     drawClutTable(clutCanvas, params.clutTypeSelect);
+		     drawClutTable(clutCanvas, params.clutType);
 		     drawSrcImageAndPseudoColor(srcImage, srcCanvas, grayCanvas, dstCanvas, params);
-		 }, params );
-    makeCLUT(params.linearCheckbox);
-    drawClutTable(clutCanvas, params.clutTypeSelect);
+		 }, {keys: ["maxWidthHeight", "clutType", "clutScale", "clutOffset", "linear"]});
+    makeCLUT(params.linear);
+    drawClutTable(clutCanvas, params.clutType);
 }
 
 function makeCLUTfromCRGB(points, linear) {
@@ -187,7 +182,7 @@ function drawClutTable(canvas, clutType) {
 }
 
 function drawSrcImageAndPseudoColor(srcImage, srcCanvas, grayCanvas, dstCanvas, params) {
-    drawSrcImage(srcImage, srcCanvas, params.maxWidthHeightRange);
+    drawSrcImage(srcImage, srcCanvas, params.maxWidthHeight);
     drawGrayImage(srcCanvas, grayCanvas);
     drawPseudoColor(grayCanvas, dstCanvas, params);
 }
@@ -203,9 +198,9 @@ function pseudoColor(v, clutType, clutScale, clutOffset) {
 
 function drawPseudoColor(grayCanvas, dstCanvas, params) {
     // console.debug("drawPseudoColor");
-    const clutType = params.clutTypeSelect;
-    const clutScale = params.clutScaleRange;
-    const clutOffset = params.clutOffsetRange;
+    const clutType = params.clutType;
+    const clutScale = params.clutScale;
+    const clutOffset = params.clutOffset;
     
     var grayCtx = grayCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");

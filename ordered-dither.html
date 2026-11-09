@@ -9,13 +9,13 @@
     <div id="container" class="vertical">
       <div id="control" class="horizontal" >
         <div>
-	  maxWidthHeight: <br /> <input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+	  maxWidthHeight: <br /> <input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
           <br />
-          scale:<input id="scaleRange" type="range" min="1" max="8" step="1" value="1">:<input type="text" id="scaleText" size="2">
+          scale:<input id="scaleRange" data-bind="scale" type="range" min="1" max="8" step="1" value="1">:<input type="text" id="scaleText" data-bind="scale" size="2">
         </div>
         <div class="horizontal">
           threshold:
-          <select id="thresholdSelect" size="4" >
+          <select id="thresholdSelect" data-bind="threshold" size="4" >
             <option value="threshold"    > Threshold 1x1 (non-dither) </option>
             <option value="checks"       > Checkboard 2x1 (dither) </option>
             <option value="o2x2"         > Ordered 2x2 (dispersed) </option>
@@ -41,7 +41,7 @@
           <div class="vertical">
             <div style="color: #F44"> Red </div>
             <div class="horizontal">
-              <select id="level0Select">
+              <select id="level0Select" data-bind="level0">
                 <option value="1"         > 1 </option>
                 <option value="2"         > 2 </option>
                 <option value="4"         > 4 </option>
@@ -53,7 +53,7 @@
           <div class="vertical">
             <div style="color: #2A2"> Green </div>
             <div class="horizontal">
-              <select id="level1Select">
+              <select id="level1Select" data-bind="level1">
                 <option value="1"         > 1 </option>
                 <option value="2"         > 2 </option>
                 <option value="4"         > 4 </option>
@@ -65,7 +65,7 @@
           <div class="vertical">
             <div style="color: #48F"> Blue </div>
             <div class="horizontal">
-              <select id="level2Select">
+              <select id="level2Select" data-bind="level2">
                 <option value="1"         > 1 </option>
                 <option value="2"         > 2 </option>
                 <option value="4" selected> 4 </option>

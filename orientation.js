@@ -66,76 +66,68 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "guideCheckbox":null
-                 }, function(target) {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndOrientation(srcImage, srcCanvas,
                                                 dstCanvas, dstCanvas2, params);
-		 }, params);
-    bindFunction({"orientationSelect":null,
-                  "horizontalCheckbox":null,
-                  "verticalCheckbox":null,
-                  "diagonalCheckbox":null,
-                  "rotate90Button":null, "rotate270Button":null,
-                  "horizontalButton":null, "verticalButton":null,
-                 }, function(target) {
-                     if ((target.id === "orientationSelect") ||
-                         (target.id === "rotate90Button") ||
-                         (target.id === "rotate270Button") ||
-                         (target.id === "horizontalButton") ||
-                         (target.id === "verticalButton")) {
-                         let orientation = params.orientationSelect;
-                         switch (target.id) {
+		 }, {keys: ["maxWidthHeight", "guide"]});
+    bindParams(params, function(key, target, rel) {
+                     if ((key === "orientation") ||
+                         (key === "rotate90Button") ||
+                         (key === "rotate270Button") ||
+                         (key === "horizontalButton") ||
+                         (key === "verticalButton")) {
+                         let orientation = params.orientation;
+                         switch (key) {
                          case "rotate90Button":
                              orientation = rotateOrientation(orientation, 90);
-                             params.orientationSelect = orientation;
+                             params.orientation = orientation;
                              break;
                          case "rotate270Button":
                              orientation = rotateOrientation(orientation, 270);
-                             params.orientationSelect = orientation;
+                             params.orientation = orientation;
                              break;
                          case "horizontalButton":
                              orientation = mirrorOrientation(orientation, 0);
-                             params.orientationSelect = orientation;
+                             params.orientation = orientation;
                              break;
                          case "verticalButton":
                              orientation = mirrorOrientation(orientation, 1);
-                             params.orientationSelect = orientation;
+                             params.orientation = orientation;
                              break;
                          }
                          const [horizontal, vertical, diagonal] = fromOrientation(orientation);
-                         params.horizontalCheckbox = horizontal;
-                         params.verticalCheckbox = vertical;
-                         params.diagonalCheckbox = diagonal;
+                         params.horizontal = horizontal;
+                         params.vertical = vertical;
+                         params.diagonal = diagonal;
                      } else {
-                         const horizontal = params.horizontalCheckbox;
-                         const vertical = params.verticalCheckbox;
-                         const diagonal = params.diagonalCheckbox;
+                         const horizontal = params.horizontal;
+                         const vertical = params.vertical;
+                         const diagonal = params.diagonal;
                          const orientation = toOrientation(horizontal, vertical, diagonal);
-                         params.orientationSelect = orientation;
+                         params.orientation = orientation;
                      }
-                     bind2elements(params);
+                     syncParamsToElements(params);
 		     drawSrcImageAndOrientation(srcImage, srcCanvas,
                                                 dstCanvas, dstCanvas2, params);
-		 }, params);
+		 }, {keys: ["orientation", "horizontal", "vertical", "diagonal", "rotate90Button", "rotate270Button", "horizontalButton", "verticalButton"]});
 }
 
 function drawSrcImageAndOrientation(srcImage, srcCanvas,
                                     dstCanvas, dstCanvas2, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawOrientation(srcCanvas, dstCanvas, params);
     const params2 = Object.assign({}, params);
-    const orientation = params2.orientationSelect;
-    params2.orientationSelect = [0, 1, 2, 3, 4, 5, 8, 7, 6][orientation];
+    const orientation = params2.orientation;
+    params2.orientation = [0, 1, 2, 3, 4, 5, 8, 7, 6][orientation];
     drawOrientation(srcCanvas, dstCanvas2, params2);
 }
 
 function drawOrientation(srcCanvas, dstCanvas, params) {
     // console.debug("drawOrientation");
-    const orientation = params.orientationSelect;
+    const orientation = params.orientation;
     const [horizontal, vertical, diagonal] = fromOrientation(orientation);
-    const guide = params.guideCheckbox;
+    const guide = params.guide;
     //
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");

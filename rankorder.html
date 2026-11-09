@@ -10,7 +10,7 @@
     <div id="controlPanel"  style="display:flex">
       Filter:  <br />	
       <div style="float:left; ">
-        <select id="filterSelect" size="4">
+        <select id="filterSelect" data-bind="filter" size="4">
           <option value="min"            > 最小値 </option>
 	  <option value="median" selected> 中央値(median)</option>
           <option value="max"            > 最大値 </option>
@@ -18,12 +18,12 @@
         </select>
       </div>
       <div>
-        filterWindow:<input id="filterWindowRange" type="range" min="1" max="11" step="2" value="5">:<input type="text" id="filterWindowText" size="3">
+        filterWindow:<input id="filterWindowRange" data-bind="filterWindow" type="range" min="1" max="11" step="2" value="5">:<input type="text" id="filterWindowText" data-bind="filterWindow" size="3">
         <br />
-        rankOrder:<input id="rankOrderRange" type="range" min="1" max="25" step="1" value="13">:<input type="text" id="rankOrderText" size="3">
+        rankOrder:<input id="rankOrderRange" data-bind="rankOrder" type="range" min="1" max="25" step="1" value="13">:<input type="text" id="rankOrderText" data-bind="rankOrder" size="3">
       </div>
       <div>
-        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+        maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
       </div>
     </div>
     <div style="clear:both">

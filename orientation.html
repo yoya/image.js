@@ -13,12 +13,12 @@
       <div class="controlPanel">
         <div>
 	  maxWidthHeight:           <br />
-          <input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+          <input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
           <br />
-          Guide:<input id="guideCheckbox" type="checkbox" checked/>
+          Guide:<input id="guideCheckbox" data-bind="guide" type="checkbox" checked/>
         </div>
         <div>
-          <select id="orientationSelect" size="8">
+          <select id="orientationSelect" data-bind="orientation" size="8">
             <option value="1" selected> 1 </option>
             <option value="2"> 2 - hori </option>
             <option value="3"> 3 - hori & vert </option>
@@ -30,17 +30,17 @@
           </select>
         </div>
         <div>
-          Horizontal:<input id="horizontalCheckbox" type="checkbox" />
-          Vertical:<input id="verticalCheckbox" type="checkbox" />
+          Horizontal:<input id="horizontalCheckbox" data-bind="horizontal" type="checkbox" />
+          Vertical:<input id="verticalCheckbox" data-bind="vertical" type="checkbox" />
           <br />
-          Diagonal:<input id="diagonalCheckbox" type="checkbox" />
+          Diagonal:<input id="diagonalCheckbox" data-bind="diagonal" type="checkbox" />
         </div>
         <div>
-          <button id="rotate270Button" type="button"> rotate 270 </button>
-          <button id="rotate90Button" type="button"> rotate 90 </button>
+          <button id="rotate270Button" data-bind="rotate270Button" type="button"> rotate 270 </button>
+          <button id="rotate90Button" data-bind="rotate90Button" type="button"> rotate 90 </button>
           <br />
-          <button id="horizontalButton" type="button"> horizontal </button>
-          <button id="verticalButton" type="button"> vertical </button>
+          <button id="horizontalButton" data-bind="horizontalButton" type="button"> horizontal </button>
+          <button id="verticalButton" data-bind="verticalButton" type="button"> vertical </button>
         </div>
       </div> <!-- controlPanel -->
       <div>

@@ -10,12 +10,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     var graphCanvas = document.getElementById("graphCanvas");
-    bindFunction({"w1Range":"w1Text",
-                  "w2Range":"w2Text",
-                  "thetaRange":"thetaText"},
-		 function() {
+    bindParams({}, function(key, target, rel) {
                      drawPerceptron(graphCanvas);
-		 } );
+		 }, {keys: ["w1", "w2", "theta"]});
     drawPerceptron(graphCanvas);
 }
 

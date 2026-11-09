@@ -24,21 +24,15 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({ "maxWidthHeightRange":"maxWidthHeightText",
-                   "scaleRange":"scaleText",
-                   "thresholdSelect":null,
-                   "level0Select":null,
-                   "level1Select":null,
-                   "level2Select":null },
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndDither(srcImage, matrixCanvas, srcCanvas,
                                            halftoneCanvas, dstCanvas, params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "scale", "threshold", "level0", "level1", "level2"]});
 }
 
 function drawSrcImageAndDither(srcImage, matrixCanvas, srcCanvas,
                                halftoneCanvas, dstCanvas, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawDither(matrixCanvas, srcCanvas, halftoneCanvas, dstCanvas, params);
 }
@@ -205,8 +199,8 @@ const DitherThresholdTable = {
 
 function drawDither(matrixCanvas, srcCanvas, halftoneCanvas, dstCanvas, params) {
     // console.debug("drawDither");
-    const { thresholdSelect, scaleRange,
-            level0Select, level1Select, level2Select } = params;
+    const { threshold: thresholdSelect, scale: scaleRange,
+            level0: level0Select, level1: level1Select, level2 : level2Select} = params;
     const matrixCtx = matrixCanvas.getContext("2d");
     const srcCtx = srcCanvas.getContext("2d");
     const halftoneCtx = halftoneCanvas.getContext("2d");

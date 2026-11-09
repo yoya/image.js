@@ -16,31 +16,28 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    let maxWidthHeight = params["maxWidthHeightRange"];
+	    let maxWidthHeight = params.maxWidthHeight;
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    drawMosaic(srcCanvas, dstCanvas, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function(target, rel) {
-		     let maxWidthHeight = params["maxWidthHeightRange"];
+    bindParams(params, function(key, target, rel) {
+		     let maxWidthHeight = params.maxWidthHeight;
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     drawMosaic(srcCanvas, dstCanvas, params, rel);
-		 }, params);
-    bindFunction({"blockSizeRange":"blockSizeText",
-		  "blockTypeSelect":null},
-		 function(target, rel) {
+		 }, {keys: ["maxWidthHeight"]});
+    bindParams(params, function(key, target, rel) {
 		     drawMosaic(srcCanvas, dstCanvas, params, rel);
-		 }, params);
+		 }, {keys: ["blockSize", "blockType"]});
 }
 
 var worker = new workerProcess("worker/mosaic.js");
 
 function drawMosaic(srcCanvas, dstCanvas, params, sync) {
     let params_w = {
-        blockSize: params["blockSizeRange"],
-        blockType: params["blockTypeSelect"],
+        blockSize: params.blockSize,
+        blockType: params.blockType,
     };
     worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

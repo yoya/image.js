@@ -24,7 +24,7 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-            let maxWidthHeight = params["maxWidthHeightRange"];
+            let maxWidthHeight = params.maxWidthHeight;
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    dstCanvas.width = srcCanvas.width;
 	    dstCanvas.height = srcCanvas.height;
@@ -32,15 +32,11 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"filterSelect":null,
-                  "filterWindowRange":"filterWindowText",
-                  "rankOrderRange":"rankOrderText"},
-		 function(target, rel) {
-                     let filterWindow = params["filterWindowRange"];
-                     let rankOrder    = params["rankOrderRange"];
-                     if ((target.id == "filterSelect") || (target.id == "filterWindowRange") ||
-                         (target.id == "filterWindowText")) {
-                         var filter = params["filterSelect"];
+    bindParams(params, function(key, target, rel) {
+                     let filterWindow = params.filterWindow;
+                     let rankOrder    = params.rankOrder;
+                     if ((key == "filter") || (key == "filterWindow")) {
+                         var filter = params.filter;
                          switch (filter) {
                          case "min":
                              rankOrder = 1;
@@ -59,7 +55,7 @@ function main() {
                          }
                          rankOrderRange.value = rankOrder;
                          rankOrderText.value  = rankOrder;
-                         params["rankOrderRange"] = rankOrder;
+                         params.rankOrder = rankOrder;
                      }
                      console.log(rankOrder, filterWindow, ((filterWindow*filterWindow/2) | 0));
                      if (rankOrder == 1) {
@@ -72,23 +68,22 @@ function main() {
                          filterSelect.value = "etc";
                      }
 		     drawRankOrderFilter(srcCanvas, dstCanvas, params, rel);
-		 }, params);
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function(target, rel) {
-		     let maxWidthHeight = params["maxWidthHeightRange"];
+		 }, {keys: ["filter", "filterWindow", "rankOrder"]});
+    bindParams(params, function(key, target, rel) {
+		     let maxWidthHeight = params.maxWidthHeight;
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     dstCanvas.width = srcCanvas.width;
 		     dstCanvas.height = srcCanvas.height;
 		     drawRankOrderFilter(srcCanvas, dstCanvas, params, rel);
-		 }, params);
+		 }, {keys: ["maxWidthHeight"]});
 }
 
 var worker = new workerProcess("worker/rankorder.js");
 
 function drawRankOrderFilter(srcCanvas, dstCanvas, params, sync) {
     var params_w = {
-        rankOrder   : params["rankOrderRange"],
-        filterWindow: params["filterWindowRange"],
+        rankOrder   : params.rankOrder,
+        filterWindow: params.filterWindow,
     };
     worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

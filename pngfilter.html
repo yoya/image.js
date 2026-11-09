@@ -9,10 +9,10 @@
     <div id="controlPanel" style="float:left">
       <div style="float:left">
         <div style="float:left"> PNG overwrite type: <br />
-          alpha on:<input id="alphaOnCheckbox" type="checkbox" />
+          alpha on:<input id="alphaOnCheckbox" data-bind="alphaOn" type="checkbox" />
         </div>
         <div style="float:left">
-          <select id="filterSelect" size="5">
+          <select id="filterSelect" data-bind="filter" size="5">
             <option value="" selected> </option>
             <option value="0"         > 0: None </option>
             <option value="1"         > 1: Sub </option>
@@ -23,7 +23,7 @@
         </div>
         <img src="img/dropImageHere.png" id="srcImage" width="192" class="borderRed"  style="float:left;"/>
         <div style="float:left">
-          filter view:<input id="filterViewCheckbox" type="checkbox" /> <br />
+          filter view:<input id="filterViewCheckbox" data-bind="filterView" type="checkbox" /> <br />
           <br />
           <span id="console" style="background:black; color:white ; padding: 0.5em"> </span>
         </div>

@@ -30,8 +30,7 @@ function main() {
 	    }
 	    image.src = dataURL;
 	}, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+    bindParams({}, function(key, target, rel) {
 		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(image, offCanvas, maxWidthHeight);
 		     var width = parseFloat(offCanvas.width);
@@ -39,44 +38,33 @@ function main() {
 		     widthRange.value = widthText.value = width;
 		     heightRange.value = heightText.value = height;
 		     drawRandomAndHistogram(canvas, offCanvas, histCanvas);
-		 } );
-    bindFunction({"refreshButton":null,
-		  "animationButton":null,
-		  "ejectButton":null,
-		  "widthRange":"widthText",
-		  "heightRange":"heightText",
-		  "redRatioRange":"redRatioText",
-		  "greenRatioRange":"greenRatioText",
-		  "blueRatioRange":"blueRatioText",
-		  "ampRange":"ampText",
-                  "offsetRange":"offsetText",
-		  "densityRange":"densityText"},
-		 function(target) {
+		 }, {keys: ["maxWidthHeight"]});
+    bindParams({}, function(key, target, rel) {
                      var ampRange = document.getElementById("ampRange");
                      var ampText = document.getElementById("ampText");
                      var offsetRange = document.getElementById("offsetRange");
                      var offsetText = document.getElementById("offsetText");
                      var amp = parseFloat(ampRange.value);
                      var offset = parseFloat(document.getElementById("offsetRange").value);
-	             if (target.id === "ampRange") {
+	             if (key === "amp") {
                          if (1 < (offset + amp)) {
                              offsetRange.value = offsetText.value = 1 - amp;
                          }
                      }
-                     if (target.id === "offsetRange") {
+                     if (key === "offset") {
                          if (1 < (offset + amp)) {
                              ampRange.value = ampText.value = 1 - offset;
                          }
                      }
-		     if (target.id === "ejectButton") {
+		     if (key === "ejectButton") {
 			 offCanvas = null;
 		     }
-		     if (target.id === "animationButton") {
+		     if (key === "animationButton") {
 			 animationRandomAndHistogram(canvas, offCanvas, histCanvas);
 		     }
 		     drawRandomAndHistogram(canvas, offCanvas, histCanvas);
 		     
-		 } );
+		 }, {keys: ["refreshButton", "animationButton", "ejectButton", "width", "height", "redRatio", "greenRatio", "blueRatio", "amp", "offset", "density"]});
     drawRandomAndHistogram(canvas, offCanvas, histCanvas);
 }
 
