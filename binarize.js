@@ -101,9 +101,9 @@ function getThresholdFromTile(ptile, hist) {
     }
     const channels = hist.length;
     let histogramAreaTotal = 0;
-    for (const c = 0 ; c < channels ; c++) {
+    for (let c = 0 ; c < channels ; c++) {
         const h = hist[c];
-        for (const i = 0 ; i < 256 ; i++) {
+        for (let i = 0 ; i < 256 ; i++) {
             histogramAreaTotal += h[i];
         }
     }
