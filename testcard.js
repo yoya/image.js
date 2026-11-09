@@ -14,13 +14,11 @@ function main() {
     var heightRange = document.getElementById("heightRange");
     var width = parseFloat(widthRange.value);
     var height = parseFloat(heightRange.value);
-    bindFunction({"widthRange":"widthText",
-                  "heightRange":"heightText"},
-		 function(target, rel) {
+    bindParams({}, function(key, target, rel) {
                      width  = parseFloat(widthRange.value);
                      height = parseFloat(heightRange.value);
                      drawTestcard(canvas, width, height);
-		 } );
+		 }, {keys: ["width", "height"]});
     drawTestcard(canvas, width, height);
 }
 

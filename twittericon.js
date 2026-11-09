@@ -22,27 +22,18 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "guideCheckbox":null,
-		  "guideColorText":null,
-		  "outfillSelect":null,
-		  "projSelect":null,
-		  "srcProjXRange":"srcProjXText",
-		  "srcProjYRange":"srcProjYText",
-		  "srcProjRRange":"srcProjRText"},
-		 function(e) {
+    bindParams({}, function(key, e, rel) {
 		     // console.debug(e);
 		     var bilinear = false;
 		     drawSrcImageAndConvert(srcImage, srcCanvas, dstCanvas,
 					    bilinear, overlapImage);
-		 } );
-    bindFunction({"bilinearButton":null},
-		 function(e) {
+		 }, {keys: ["maxWidthHeight", "guide", "guideColor", "outfill", "proj", "srcProjX", "srcProjY", "srcProjR"]});
+    bindParams({}, function(key, e, rel) {
 		     // console.debug(e);
 		     var bilinear = true;
 		     drawSrcImageAndConvert(srcImage, srcCanvas, dstCanvas,
 					    bilinear, overlapImage);
-		 } );
+		 }, {keys: ["bilinearButton"]});
     
     var loadOverlapImage = function(file) {
 	var image = new Image();
@@ -121,12 +112,11 @@ function main() {
 	    }
 	}
     }
-    bindFunction({"overlapSelect":null},
-		 function(e) {
+    bindParams({}, function(key, e, rel) {
 		     // console.debug(e);
 		     var overlap= document.getElementById("overlapSelect").value;
 		     selectOverlapImage(overlap);
-		 } );
+		 }, {keys: ["overlap"]});
 }
 function drawSrcImageAndConvert(srcImage, srcCanvas, dstCanvas,
 				bilinear, overlapImage) {

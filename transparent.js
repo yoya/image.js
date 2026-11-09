@@ -26,13 +26,10 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "alphaRange":"alphaText",
-                  "fuzzRange":"fuzzText"},
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndTransparent(srcImage, srcCanvas, dstCanvas,
                                                 params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "alpha", "fuzz"]});
     bindCursolFunction("srcCanvas", params, function(target, eventType) {
         const {x, y} = params[target.id];
         const {width, height} = srcCanvas;
@@ -69,15 +66,15 @@ function main() {
 }
 
 function drawSrcImageAndTransparent(srcImage, srcCanvas, dstCanvas, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawTransparent(srcCanvas, dstCanvas, params);
 }
 
 function drawTransparent(srcCanvas, dstCanvas, params) {
     // console.debug("drawTransparent");
-    const alpha = params.alphaRange;
-    const fuzz = params.fuzzRange;
+    const alpha = params.alpha;
+    const fuzz = params.fuzz;
     const transparentColor = params.transparentColor;
     //
     const srcCtx = srcCanvas.getContext("2d");

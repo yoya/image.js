@@ -18,10 +18,9 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+    bindParams({}, function(key, target, rel) {
 		     drawSrcImageAndTransSet(srcImage, srcCanvas);
-		 } );
+		 }, {keys: ["maxWidthHeight"]});
 }
 function drawSrcImageAndTransSet(srcImage, srcCanvas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);

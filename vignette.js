@@ -21,20 +21,13 @@ function main() {
 	};
 	srcImage.src = dataURL;
     }, 'DataURL');
-    bindFunction({
-        maxWidthHeightRange:'maxWidthHeightText',
-	radiusRange:'radiusText',
-        biasRange:'biasText',
-	linearGammaCheckbox:null,
-	inverseCheckbox:null
-    },
-		 function(target, rel) {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndVignette(srcImage, srcCanvas, dstCanvas, params, rel);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "radius", "bias", "linearGamma", "inverse"]});
 }
 
 function drawSrcImageAndVignette(srcImage, srcCanvas, dstCanvas, params, sync) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawVignette(srcCanvas, dstCanvas, params, sync);
 }
@@ -43,10 +36,10 @@ var worker = new workerProcess('worker/vignette.js');
 
 function drawVignette(srcCanvas, dstCanvas, params, sync) {
     const params_w = {
-        radius     : params.radiusRange,
-        bias       : params.biasRange,
-        linearGamma: params.linearGammaCheckbox,
-        inverse    : params.inverseCheckbox,
+        radius     : params.radius,
+        bias       : params.bias,
+        linearGamma: params.linearGamma,
+        inverse    : params.inverse,
     };
     worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

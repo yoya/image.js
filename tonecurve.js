@@ -35,18 +35,16 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCanvas,
                                               params);
-		 }, params);
-    bindFunction({"interpSelect": null},
-		 function() {
+		 }, {keys: ["maxWidthHeight"]});
+    bindParams(params, function(key, target, rel) {
                      makeToneTable(params)
                      drawToneCanvas(toneCanvas, params);
 		     drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCanvas,
                                               params);
-		 }, params);
+		 }, {keys: ["interp"]});
     bindCursolFunction("toneCanvas", params, function(target, eventType) {
         var {x, y} = params[target.id];
         // console.debug(eventType, x, y);
@@ -154,7 +152,7 @@ function constraintMarker(markers, i, x, y) {
 }
 
 function drawSrcImageAndToneCurve(srcImage, srcCanvas, dstCanvas, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawToneCurve(srcCanvas, dstCanvas, params);
 }
@@ -194,7 +192,7 @@ function drawMarkers(canvas, params) {
 function makeToneTable(params) {
     const markers = params.markers;
     const toneTable = params.toneTable;
-    const interp = params.interpSelect;
+    const interp = params.interp;
     switch (interp) {
     case "Nearest":
         makeToneTable_Nearest(params);

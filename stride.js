@@ -18,32 +18,29 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-            let maxWidthHeight = params["maxWidthHeightRange"];
+            let maxWidthHeight = params.maxWidthHeight;
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    let stride = srcCanvas.width;
 	    strideRange.value = strideText.value = stride;
-            params["strideRange"] = parseFloat(strideRange.value);
+            params.stride = parseFloat(strideRange.value);
 	    drawStride(srcCanvas, dstCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "strideRange":"strideText"},
-		 function(target, rel) {
-		     let maxWidthHeight = params["maxWidthHeightRange"];
+    bindParams(params, function(key, target, rel) {
+		     let maxWidthHeight = params.maxWidthHeight;
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-		     if ((target.id === "maxWidthHeightRange") ||
-			 (target.id === "maxWidthHeightText")) {
+		     if ((key === "maxWidthHeight")) {
 			 strideRange.value = strideText.value = srcCanvas.width;
-                         params["strideRange"] = strideRange.value;
+                         params.stride = strideRange.value;
 		     }
 		     drawStride(srcCanvas, dstCanvas, params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "stride"]});
 }
 
 function drawStride(srcCanvas, dstCanvas, params) {
     // console.debug("drawCopy");
-    let stride = params["strideRange"];
+    let stride = params.stride;
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
     var srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;

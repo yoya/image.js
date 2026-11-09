@@ -92,8 +92,7 @@ function main() {
 	}
 	srcImage2.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+    bindParams({}, function(key, target, rel) {
                      displayValues("-", "-", "-", "-");
                      maxWidthHeight = parseFloat(maxWidthHeightRange.value);
                      if (srcImage1) {
@@ -105,11 +104,8 @@ function main() {
                      if (srcImage1 && srcImage2) {
 		         drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, params, callback, false);
                      }
-		 } );
-    bindFunction({"dstNormalizeCheckbox":null,
-                  "windowSizeRange":"windowSizeText",
-                  "slideSizeRange":"slideSizeText"},
-		 function() {
+		 }, {keys: ["maxWidthHeight"]});
+    bindParams({}, function(key, target, rel) {
                      params['dstNormalize'] = dstNormalizeCheckbox.checked;
                      params['windowSize'] = parseFloat(windowSizeRange.value);
                      params['slideSize'] = parseFloat(slideSizeRange.value);
@@ -117,7 +113,7 @@ function main() {
                      if (srcImage1 && srcImage2) {
 		         drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, params, callback, false);
                      }
-		 } );
+		 }, {keys: ["dstNormalize", "windowSize", "slideSizeRange"]});
 }
 
 var worker = new workerProcess("worker/ssim.js");

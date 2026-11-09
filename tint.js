@@ -20,15 +20,10 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({ "maxWidthHeight": "maxWidthHeightText",
-                   "equation": null,
-                   "color": "colorText",
-                   "amount": "amountText",
-                   "linear": null },
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndTint(srcImage, srcCanvas, dstCanvas,
                                          params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "equation", "color", "amount", "linear"]});
 }
 
 function drawSrcImageAndTint(srcImage, srcCanvas, dstCanvas, params) {

@@ -10,7 +10,7 @@
     <div id="controlPanel">
       <div style="float:left">
           Out-side fill style:  <br />
-          <select id="outfillSelect" size="5">
+          <select id="outfillSelect" data-bind="outfill" size="5">
             <option value="black" selected> 黒埋め </option>
             <option value="transparent"   > 透明  </option>
             <option value="edge"          > エッジ拡張 </option>
@@ -22,21 +22,21 @@
       <div>
 	affinMatrix:<table id="affinMatrixTable" style="border:1 "> </table> </div>
 	<div style="clear:both">
-	  rotateRoundCenter:<input id="rotateRoundCenterCheckbox" type="checkbox" checked="checked" />
-          axisGuide:<input id="axisGuideCheckbox" type="checkbox" checked="checked" />
+	  rotateRoundCenter:<input id="rotateRoundCenterCheckbox" data-bind="rotateRoundCenter" type="checkbox" checked="checked" />
+          axisGuide:<input id="axisGuideCheckbox" data-bind="axisGuide" type="checkbox" checked="checked" />
           <br />
-          rotate:<input id="rotateRange" type="range" min="0" max="360" step="1" value="0" style="width:200px;">:<input type="text" id="rotateText" size="4">
+          rotate:<input id="rotateRange" data-bind="rotate" type="range" min="0" max="360" step="1" value="0" style="width:200px;">:<input type="text" id="rotateText" data-bind="rotate" size="4">
         </div>
         <div>
-	  transX:<input id="transXRange" type="range" min="-1" max="1" step="0.1" value="0">:<input type="text" id="transXText" size="5">
+	  transX:<input id="transXRange" data-bind="transX" type="range" min="-1" max="1" step="0.1" value="0">:<input type="text" id="transXText" data-bind="transX" size="5">
 	  <br />
-	  transY:<input id="transYRange" type="range" min="-1" max="1" step="0.1" value="0">:<input type="text" id="transYText" size="5">
+	  transY:<input id="transYRange" data-bind="transY" type="range" min="-1" max="1" step="0.1" value="0">:<input type="text" id="transYText" data-bind="transY" size="5">
         </div>
       </div>
       <div style="clear:both"> </div>
       <br />
       <div>
-        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText">
+        maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight">
       </div>
     </div>
     <div style="clear:both">
