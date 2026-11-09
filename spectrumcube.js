@@ -13,19 +13,20 @@ function main() {
     var tmpCanvas = document.getElementById("tmpCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndCopy(srcImage, srcCanvas, tmpCanvas, dstCanvas);
+	    drawSrcImageAndCopy(srcImage, srcCanvas, tmpCanvas, dstCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindParams({}, function(key, target, rel) {
-		     drawSrcImageAndCopy(srcImage, srcCanvas, tmpCanvas, dstCanvas);
+    bindParams(params, function(key, target, rel) {
+		     drawSrcImageAndCopy(srcImage, srcCanvas, tmpCanvas, dstCanvas, params);
 		 }, {keys: ["maxWidthHeight"]});
 }
-function drawSrcImageAndCopy(srcImage, srcCanvas, tmpCanvas, dstCanvas) {
-    let maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+function drawSrcImageAndCopy(srcImage, srcCanvas, tmpCanvas, dstCanvas, params) {
+    let maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawSpectrumCube(srcCanvas, tmpCanvas, dstCanvas);
 }

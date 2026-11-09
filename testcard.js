@@ -10,16 +10,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     var canvas = document.getElementById("canvas");
-    var widthRange = document.getElementById("widthRange");
-    var heightRange = document.getElementById("heightRange");
-    var width = parseFloat(widthRange.value);
-    var height = parseFloat(heightRange.value);
-    bindParams({}, function(key, target, rel) {
-                     width  = parseFloat(widthRange.value);
-                     height = parseFloat(heightRange.value);
-                     drawTestcard(canvas, width, height);
+    var params = {};
+    bindParams(params, function(key, target, rel) {
+                     drawTestcard(canvas, params.width, params.height);
 		 }, {keys: ["width", "height"]});
-    drawTestcard(canvas, width, height);
+    drawTestcard(canvas, params.width, params.height);
 }
 
 function drawTestcard(canvas, width, height) {

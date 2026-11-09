@@ -20,21 +20,22 @@ function main() {
     var dstSpectrumGreenCanvas = document.getElementById("dstSpectrumGreenCanvas");
     var dstSpectrumBlueCanvas  = document.getElementById("dstSpectrumBlueCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
 	    drawSrcImageAndDCTAndFilter(srcImage, srcCanvas, src2NCanvas,
 					srcSpectrumRedCanvas, srcSpectrumGreenCanvas, srcSpectrumBlueCanvas,
 					dstSpectrumRedCanvas, dstSpectrumGreenCanvas, dstSpectrumBlueCanvas,
-					dst2NCanvas, dstCanvas);
+					dst2NCanvas, dstCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindParams({}, function(key, target, rel) {
+    bindParams(params, function(key, target, rel) {
 	    drawSrcImageAndDCTAndFilter(srcImage, srcCanvas, src2NCanvas,
 					srcSpectrumRedCanvas, srcSpectrumGreenCanvas, srcSpectrumBlueCanvas,
 					dstSpectrumRedCanvas, dstSpectrumGreenCanvas, dstSpectrumBlueCanvas,
-					dst2NCanvas, dstCanvas);
+					dst2NCanvas, dstCanvas, params);
 
 		 }, {keys: ["maxWidthHeight", "highPass", "lowPass", "keepContrast", "floor2N"]});
 }
@@ -42,12 +43,8 @@ function main() {
 function drawSrcImageAndDCTAndFilter(srcImage, srcCanvas, src2NCanvas,
 				     srcSpectrumRedCanvas, srcSpectrumGreenCanvas, srcSpectrumblueCanvas,
 				     dstSpectrumRedCanvas, dstSpectrumGreenCanvas, dstSpectrumBlueCanvas,
-				     dst2NCanvas, dstCanvas) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var highPass = parseFloat(document.getElementById("highPassRange").value);
-    var lowPass = parseFloat(document.getElementById("lowPassRange").value);
-    var keepContrast = document.getElementById("keepContrastCheckbox").checked;
-    var floor2N = document.getElementById("floor2NCheckbox").checked;
+				     dst2NCanvas, dstCanvas, params) {
+    var { maxWidthHeight, highPass, lowPass, keepContrast, floor2N } = params;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     draw2NCanvas(srcCanvas, src2NCanvas ,floor2N);
 

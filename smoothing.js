@@ -15,12 +15,7 @@ function main() {
     var params = {};
     //
     var filterMatrixTable = document.getElementById("filterMatrixTable");
-    var filter = document.getElementById("filterSelect").value;
-    var filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
-    var sigma = parseFloat(document.getElementById("sigmaRange").value);
-    var colorScale = parseFloat(document.getElementById("colorScaleRange").value);
-    var filterMatrix = makeFilterMatrix(filter, filterWindow, sigma);
-    params["filterMatrix"] = filterMatrix;
+    var filter, filterWindow, sigma, filterMatrix;  // set after bindParams
     // document.getElementById("sigmaText").style = "background-color: lightgray";
     //
     dropFunction(document, function(dataURL) {
@@ -42,10 +37,9 @@ function main() {
 		     if (filter === "gaussian") {
 			 filterWindow = Math.floor(sigma * 5 - 3) * 2 + 1;
 			 filterWindow = (filterWindow < 1)?1:filterWindow;
-			 document.getElementById("filterWindowRange").value = filterWindow;
-                         filterWindow = document.getElementById("filterWindowRange").value;
-			 document.getElementById("filterWindowText").value = filterWindow;
-                         params.filterWindow = parseFloat(filterWindow);
+			 params.filterWindow = filterWindow;
+			 syncParamsToElements(params, {keys: ["filterWindow"]});
+			 filterWindow = params.filterWindow;  // clamped by the range
 		     }
 		     filterMatrix = makeFilterMatrix(filter, filterWindow, sigma);
                      params["filterMatrix"] = filterMatrix;
@@ -54,10 +48,9 @@ function main() {
 			 var center = (filterWindow*filterWindow - 1) / 2;
 			 var centerValue = filterMatrix[center];
 			 sigma = 1 / Math.sqrt(2 * Math.PI * centerValue);
-			 document.getElementById("sigmaRange").value = sigma;
-                         sigma = document.getElementById("sigmaRange").value;
-			 document.getElementById("sigmaText").value = sigma;
-                         params.sigma = parseFloat(sigma);
+			 params.sigma = sigma;
+			 syncParamsToElements(params, {keys: ["sigma"]});
+			 sigma = params.sigma;  // rounded by the range step
 		     }
 		     if (filter === "gaussian") {
 			 ;
@@ -76,6 +69,11 @@ function main() {
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params, rel);
 		     setTableValues("filterMatrixTable", filterMatrix);
 		 }, {keys: ["filter", "filterWindow", "sigma", "bilateral", "colorScale"]});
+    filter       = params.filter;
+    filterWindow = params.filterWindow;
+    sigma        = params.sigma;
+    filterMatrix = makeFilterMatrix(filter, filterWindow, sigma);
+    params["filterMatrix"] = filterMatrix;
     //
     bindTableFunction("filterMatrixTable", function(table, values, width) {
 	params["filterMatrix"] = filterMatrix = values;

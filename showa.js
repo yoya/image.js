@@ -25,7 +25,7 @@ function main() {
 		 }, {keys: ["maxWidthHeight", "color", "vignette", "mosaic", "smoothing"]});
 }
 function drawSrcImageAndShowa(srcImage, srcCanvas, dstCanvas, params, sync) {
-    const maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawShowa(srcCanvas, dstCanvas, params, sync);
 }

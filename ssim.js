@@ -20,11 +20,6 @@ function mean(arr) {
 
 function main() {
     // console.debug("main");
-    var maxWidthHeightRange = document.getElementById("maxWidthHeightRange");
-    var dstNormalizeCheckbox = document.getElementById("dstNormalizeCheckbox");
-    var windowSizeRange = document.getElementById("windowSizeRange");
-    var slideSizeRange = document.getElementById("slideSizeRange")
-    //
     var srcCanvas1 = document.getElementById("srcCanvas1");
     var srcCanvas2 = document.getElementById("srcCanvas2");
     var srcCanvas1Container = document.getElementById("srcCanvas1Container");
@@ -39,14 +34,11 @@ function main() {
     var structureSpan = document.getElementById("structureSpan");
     var ssimSpan = document.getElementById("ssimSpan");
     //
+    // maxWidthHeight, dstNormalize, windowSize, slideSize are set by bindParams
     var params = {
-        dstNormalize: dstNormalizeCheckbox.checked,
-        windowSize: parseFloat(windowSizeRange.value),
-        slideSize: parseFloat(slideSizeRange.value),
         k1:0.01, k2: 0.03,
         alpha:1, beta:1, gamma:1
     };
-    var maxWidthHeight = parseFloat(maxWidthHeightRange.value);
     var srcImage1 = null;
     var srcImage2 = null;
     var displayValues = function(luminance, contrast, structure, ssim) {
@@ -74,7 +66,7 @@ function main() {
 	srcImage1 = new Image();
 	srcImage1.onload = function() {
             displayValues("-", "-", "-", "-");
-	    drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
+	    drawSrcImage(srcImage1, srcCanvas1, params.maxWidthHeight);
             if (srcImage1 && srcImage2) {
 	        drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, params, callback, true);
             }
@@ -85,35 +77,31 @@ function main() {
 	srcImage2 = new Image();
 	srcImage2.onload = function() {
             displayValues("-", "-", "-", "-");
-	    drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
+	    drawSrcImage(srcImage2, srcCanvas2, params.maxWidthHeight);
             if (srcImage1 && srcImage2) {
 	        drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, params, callback, true);
             }
 	}
 	srcImage2.src = dataURL;
     }, "DataURL");
-    bindParams({}, function(key, target, rel) {
+    bindParams(params, function(key, target, rel) {
                      displayValues("-", "-", "-", "-");
-                     maxWidthHeight = parseFloat(maxWidthHeightRange.value);
                      if (srcImage1) {
-                         drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
+                         drawSrcImage(srcImage1, srcCanvas1, params.maxWidthHeight);
                      }
                      if (srcImage2) {
-                         drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
+                         drawSrcImage(srcImage2, srcCanvas2, params.maxWidthHeight);
                      }
                      if (srcImage1 && srcImage2) {
 		         drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, params, callback, false);
                      }
 		 }, {keys: ["maxWidthHeight"]});
-    bindParams({}, function(key, target, rel) {
-                     params['dstNormalize'] = dstNormalizeCheckbox.checked;
-                     params['windowSize'] = parseFloat(windowSizeRange.value);
-                     params['slideSize'] = parseFloat(slideSizeRange.value);
+    bindParams(params, function(key, target, rel) {
                      displayValues("-", "-", "-", "-");
                      if (srcImage1 && srcImage2) {
 		         drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, params, callback, false);
                      }
-		 }, {keys: ["dstNormalize", "windowSize", "slideSizeRange"]});
+		 }, {keys: ["dstNormalize", "windowSize", "slideSize"]});
 }
 
 var worker = new workerProcess("worker/ssim.js");

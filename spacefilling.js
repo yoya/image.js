@@ -11,79 +11,51 @@ function main() {
     // console.debug("main");
     var dstCanvas = document.getElementById("dstCanvas");
     dstCanvas.style.backgroundColor = "black";
-    var levelDownButton = document.getElementById("levelDownButton");
-    var levelUpButton = document.getElementById("levelUpButton");
-    var levelRange = document.getElementById("levelRange");
-    var colorsRange = document.getElementById("colorsRange");
-    var gapCheckbox = document.getElementById("gapCheckbox");
-    var volumeRange = document.getElementById("volumeRange");
-    var tempoRange = document.getElementById("tempoRange");
-    var scaleSelect = document.getElementById("scaleSelect");
-    var level = parseFloat(levelRange.value);
-    var colors = parseFloat(colorsRange.value);
-    var volume = parseFloat(volumeRange.value);
-    var tempo = parseFloat(tempoRange.value);
-    var scaleString = scaleSelect.value;
-    var elapse = 60 / tempo * 1000 / 2;
-    var gapTable = gapCheckbox.checked?getGapTable(level):null;
-    var params = { level: level,
-		   colors: colors,
-		   orderTableRev: getOrderTableRev(level),
-		   gapTable: gapTable,
-		   elapse: elapse,
-		   volume:volume,
-		   tempo:tempo,
-		   scaleString:scaleString,
-		   cancel:false};
-    bindParams({}, function(key, target, rel) {
-		     var id = target.id;
-		     if (id === "gapCheckbox") {
-			 gapTable = gapCheckbox.checked?getGapTable(level):null;
-			 params['gapTable'] = gapTable;
-		     } else if ((id === "volumeRange") || (id === "volumeText")) {
-			 volume = parseFloat(volumeRange.value);
-			 params['volume'] = volume;
-		     } else if ((id === "tempoRange") || (id === "tempoText")) {
-			 tempo = parseFloat(tempoRange.value);
-			 elapse = 60 / tempo * 1000 / 2; // 8th note
-			 params['tempo'] = tempo;
-			 params['elapse'] = elapse;
-		     } else if (id === 'scaleSelect') {
-			 scaleString = scaleSelect.value;
-			 params['scaleString'] = scaleString;
+    // bound: widthHeight, gap, volume, tempo, scale, level, colors
+    // derived: orderTableRev, gapTable, elapse, scaleString
+    var params = { cancel:false };
+    const updateLevel = function() {
+	params.orderTableRev = getOrderTableRev(params.level);
+	params.gapTable = params.gap? getGapTable(params.level): null;
+    };
+    const updateTempo = function() {
+	params.elapse = 60 / params.tempo * 1000 / 2; // 8th note
+    };
+    bindParams(params, function(key, target, rel) {
+		     if (key === "gap") {
+			 updateLevel();
+		     } else if (key === "tempo") {
+			 updateTempo();
+		     } else if (key === "scale") {
+			 params.scaleString = params.scale;
 		     }
 		     drawSpaceFilling(dstCanvas, params);
 		  }, {keys: ["widthHeight", "gap", "volume", "tempo", "scale"]});
-    bindParams({}, function(key, target, rel) {
-		     var id = target.id;
-		     if (id === "levelDownButton") {
-			 levelRange.value--;
-		     } else if (id === "levelUpButton") {
-			 levelRange.value++;
+    bindParams(params, function(key, target, rel) {
+		     if (key === "levelDownButton") {
+			 params.level--;
+		     } else if (key === "levelUpButton") {
+			 params.level++;
 		     }
-		     var level = parseFloat(levelRange.value);
-		     levelText.value = level;
-		     params['level'] = level
-		     params['orderTableRev'] = getOrderTableRev(level);
-		     gapTable = gapCheckbox.checked?getGapTable(level):null;
-		     params['gapTable'] = gapTable;
+		     syncParamsToElements(params, {keys: ["level"]});
+		     updateLevel();
 		     drawSpaceFilling(dstCanvas, params);
 		 }, {keys: ["levelDownButton", "levelUpButton", "level"]});
-    bindParams({}, function(key, target, rel) {
-		     var id = target.id;
-		     if (id === "colorsDownButton") {
-			 colorsRange.value--;
-		     } else if (id === "colorsUpButton") {
-			 colorsRange.value++;
+    bindParams(params, function(key, target, rel) {
+		     if (key === "colorsDownButton") {
+			 params.colors--;
+		     } else if (key === "colorsUpButton") {
+			 params.colors++;
 		     }
-		     var colors = parseFloat(colorsRange.value);
-		     colorsText.value = colors;
-		     params['colors'] = colors;
+		     syncParamsToElements(params, {keys: ["colors"]});
 		     drawSpaceFilling(dstCanvas, params);
 		 }, {keys: ["colorsDownButton", "colorsUpButton", "colors"]});
+    updateLevel();
+    updateTempo();
+    params.scaleString = params.scale;
     var timerId = null;
-    bindParams({}, function(key, target, rel) {
-		     var id = target.id;
+    bindParams({}, function(key, target, rel) {  // buttons only
+		     var id = key;
 		     if (timerId) {
 			 clearInterval(timerId);
 			 timerId = null;
@@ -96,7 +68,7 @@ function main() {
 			     this.params = params;
 			     this.cursol = 0;
 			 }
-			 timerId = setTimeout(playSpaceFilling.bind(ctx), elapse);
+			 timerId = setTimeout(playSpaceFilling.bind(ctx), params.elapse);
 		     } else if (id === "stopButton") {
 			 params['cancel'] = true;
 			 if (timerId) {
@@ -239,7 +211,7 @@ function drawSpaceFilling(canvas, params) {
 	[red, orange, yellow, green, blue, violet],
 	[red, orange, yellow, yellowgreen, green, blue, violet],
     ];
-    var widthHeight = parseFloat(document.getElementById("widthHeightRange").value);
+    var widthHeight = params.widthHeight;
     var level = params['level'];
     var colors = params['colors'];
     var orderTableRev = params['orderTableRev'];

@@ -20,9 +20,8 @@ function main() {
 	srcImage.onload = function() {
             let maxWidthHeight = params.maxWidthHeight;
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-	    let stride = srcCanvas.width;
-	    strideRange.value = strideText.value = stride;
-            params.stride = parseFloat(strideRange.value);
+	    params.stride = srcCanvas.width;
+	    syncParamsToElements(params, {keys: ["stride"]});
 	    drawStride(srcCanvas, dstCanvas, params);
 	}
 	srcImage.src = dataURL;
@@ -31,8 +30,8 @@ function main() {
 		     let maxWidthHeight = params.maxWidthHeight;
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     if ((key === "maxWidthHeight")) {
-			 strideRange.value = strideText.value = srcCanvas.width;
-                         params.stride = strideRange.value;
+			 params.stride = srcCanvas.width;
+			 syncParamsToElements(params, {keys: ["stride"]});
 		     }
 		     drawStride(srcCanvas, dstCanvas, params);
 		 }, {keys: ["maxWidthHeight", "stride"]});
