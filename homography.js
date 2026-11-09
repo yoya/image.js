@@ -66,7 +66,12 @@ function main() {
             params.markerY2 = srcImage.height;
             params.markerX3 = srcImage.width;
             params.markerY3 = srcImage.height;
+            // reset the transform to match the markers at the image corners.
+            params.coeff = [1, 0, 0,
+                            0, 1, 0,
+                            0, 0, 1];
             bind2elements(params);
+            coeffValueSet(params.coeff);  // after bind2elements (it overwrites)
             drawHomograpy(srcImage, srcCanvas, dstCanvas, params, true);
 	}
 	srcImage.src = url;
@@ -86,26 +91,15 @@ function main() {
                      // params["maxWidthHeight"] = parseFloat(maxWidthHeightRange.value);
                      let num = coeffNameIndex(target.id);
                      if (markerNameList.includes(target.id)) {
-                         markerArray[0][0] = params.markerX0;
-                         markerArray[0][1] = params.markerY0;
-                         markerArray[1][0] = params.markerX1;
-                         markerArray[1][1] = params.markerY1;
-                         markerArray[2][0] = params.markerX2;
-                         markerArray[2][1] = params.markerY2;
-                         markerArray[3][0] = params.markerX3;
-                         markerArray[3][1] = params.markerY3;
-                         const { width, height } = srcCanvas;
-                         const markersNorm = [ [ markerArray[0][0] / width,
-                                                 markerArray[0][1] / height ],
-                                               [ markerArray[1][0] / width,
-                                                 markerArray[1][1] / height ],
-                                               [ markerArray[2][0] / width,
-                                                 markerArray[2][1] / height ],
-                                               [ markerArray[3][0] / width,
-                                                 markerArray[3][1] / height ]
-                                           ];
+                         // marker fields are in the source image pixels
+                         // (independent of maxWidthHeight scaling).
+                         const { width, height } = srcImage;
+                         const markersNorm = [0, 1, 2, 3].map(i => [
+                             parseFloat(params[markerNameList[i*2]]) / width,
+                             parseFloat(params[markerNameList[i*2+1]]) / height
+                         ]);
                          params.coeff = homographyCoeffByMarkers(markersNorm);
-
+                         coeffValueSet(params.coeff);
                      }
                      if (num >= 0) {
                          params.coeff[num] = parseFloat(target.value);
@@ -135,9 +129,12 @@ function main() {
             }
             let rel = (eventType === "mouseup");
             // console.debug(eventType, x, y, rel);
-            markerArray[params.grabbedMarker] = [x, y];
-            params[markerNameList[params.grabbedMarker*2]] = x;
-            params[markerNameList[params.grabbedMarker*2+1]] = y;
+            markerArray[params.grabbedMarker] = [x, y];  // canvas pixels
+            // marker fields are in the source image pixels
+            params[markerNameList[params.grabbedMarker*2]] =
+                x * srcImage.width / width;
+            params[markerNameList[params.grabbedMarker*2+1]] =
+                y * srcImage.height / height;
             bind2elements(params);
             var markersNorm = [
                 [markerArray[0][0] / width, markerArray[0][1] / height],
@@ -182,12 +179,12 @@ function main() {
             let coeff = homographyCoeffByMarkers(dstMarkersNorm, true);
             coeff = coeff.map(v => v / coeff[8]);  // normalize i to 1
             params.coeff = coeff;
-            // src markers follow: dst corners mapped on src.
+            // src markers follow: dst corners mapped on src (image pixels).
             const corners = [[0, 0], [1, 0], [0, 1], [1, 1]];
             for (let i = 0; i < 4; i++) {
                 const [sx, sy] = homography(corners[i][0], corners[i][1], coeff);
-                params[markerNameList[i*2]]   = sx * srcCanvas.width;
-                params[markerNameList[i*2+1]] = sy * srcCanvas.height;
+                params[markerNameList[i*2]]   = sx * srcImage.width;
+                params[markerNameList[i*2+1]] = sy * srcImage.height;
             }
             bind2elements(params);
             coeffValueSet(params.coeff);  // after bind2elements (it overwrites)
