@@ -172,6 +172,14 @@ function main() {
             break;
         }
     });
+    // redraw the markers at a constant size when the display scale changes
+    const redraw = function() {
+        if (srcImage.complete && srcImage.naturalWidth) {
+            drawHomograpy(srcImage, srcCanvas, dstCanvas, params, true);
+        }
+    };
+    observeCanvasDisplayScale(srcCanvas, redraw);
+    observeCanvasDisplayScale(dstCanvas, redraw);
 }
 
 // index of the nearest marker within the radius, or null.
@@ -239,7 +247,9 @@ function drawMarker(canvas, coeff, xy00) {
     // dark outline under the colored stroke, visible on any background.
     // (light enough not to dull the stroke color)
     const outlineColor = "rgba(0,0,0,0.35)";
-    const outlineWidth = 4, strokeWidth = 2;
+    // sizes are in CSS px; scaled to keep them constant on the screen
+    const scale = getCanvasDisplayScale(canvas);
+    const outlineWidth = 4 * scale, strokeWidth = 2 * scale;
     // lines (all outlines first, then colors, so outlines don't cover colors)
     for (const [lineWidth, isOutline] of [[outlineWidth, true],
                                           [strokeWidth, false]]) {
@@ -268,7 +278,7 @@ function drawMarker(canvas, coeff, xy00) {
         let [x, y] = xyArr[i];
         ctx.beginPath();
         ctx.fillStyle = "rgba(255,255,255,0.5)";
-        ctx.arc(x, y, 8, 0, 2*Math.PI, false);
+        ctx.arc(x, y, 8 * scale, 0, 2*Math.PI, false);
         ctx.fill();
         ctx.lineWidth = outlineWidth;
         ctx.strokeStyle = outlineColor;
@@ -279,7 +289,7 @@ function drawMarker(canvas, coeff, xy00) {
         //
         ctx.beginPath();
         ctx.fillStyle = "black";
-        ctx.arc(x, y, 2, 0, 2*Math.PI, false);
+        ctx.arc(x, y, 2 * scale, 0, 2*Math.PI, false);
         ctx.fill();
     }
     return markerArray

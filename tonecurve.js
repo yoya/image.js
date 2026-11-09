@@ -91,6 +91,10 @@ function main() {
     });
     makeToneTable(params)
     drawToneCanvas(toneCanvas, params);
+    // redraw the markers at a constant size when the display scale changes
+    observeCanvasDisplayScale(toneCanvas, function() {
+        drawToneCanvas(toneCanvas, params);
+    });
 }
 
 // insert a marker strictly between the both end markers.
@@ -168,9 +172,12 @@ function drawToneCanvas(canvas, params) {
 function drawMarkers(canvas, params) {
     const markers = params.markers;
     const ctx = canvas.getContext("2d");
+    // r and lw are in CSS px; scaled to keep them constant on the screen
+    const scale = getCanvasDisplayScale(canvas);
     //console.log("drawMarkers:", markers);
     for (let i in markers) {
-        const {x, y, r, lw, c} = markers[i];
+        const {x, y, c} = markers[i];
+        const r = markers[i].r * scale, lw = markers[i].lw * scale;
         //console.log(markers);
         //console.log(x, y, r, lw, c);
         // cross
