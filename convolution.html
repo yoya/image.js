@@ -11,7 +11,7 @@
       <div id="controlPanel" style="float:left">
         Convolution Filter:  <br />
 	<div style="float:left">
-          <select id="filterSelect" size="8">
+          <select id="filterSelect" data-bind="filter" size="8">
             <option value="smoothing" selected> 平滑化 </option>
 	    <option value="smoothing2"        > 平滑化2(横) </option>
 	    <option value="smoothing3"        > 平滑化3(斜め) </option>
@@ -44,13 +44,13 @@
       </div> filterMatrix:<table id="filterMatrixTable"> </table>
     </div>
     <div>
-      filterWindow:<input id="filterWindowRange" type="range" min="1" max="9" step="2" value="3">:<input type="text" id="filterWindowText" size="3">
-      matrix-normalize:<input id="matrixNormalizeCheckbox" type="checkbox" />
-      matrix-zero-centering:<input id="matrixZerocenteringCheckbox" type="checkbox" />
+      filterWindow:<input id="filterWindowRange" data-bind="filterWindowRange" type="range" min="1" max="9" step="2" value="3">:<input type="text" id="filterWindowText" data-bind="filterWindowRange" size="3">
+      matrix-normalize:<input id="matrixNormalizeCheckbox" data-bind="matrixNormalize" type="checkbox" />
+      matrix-zero-centering:<input id="matrixZerocenteringCheckbox" data-bind="matrixZerocentering" type="checkbox" />
       <br />
-      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
-      linearRGB:<input id="linearRGBCheckbox" type="checkbox" />
-      image-normalize:<input id="imageNormalizeCheckbox" type="checkbox" />
+      maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+      linearRGB:<input id="linearRGBCheckbox" data-bind="linearRGB" type="checkbox" />
+      image-normalize:<input id="imageNormalizeCheckbox" data-bind="imageNormalize" type="checkbox" />
     </div>
   </div>
   <div style="clear:both">

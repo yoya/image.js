@@ -23,17 +23,13 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+    bindParams({}, function(key, target, rel) {
 		     drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, component);
-		 } );
-    bindFunction({"componentSelect":null,
-                  "amp1Range":"amp1Text", "amp2Range":"amp2Text",
-                  "amp3Range":"amp3Text", "amp4Range":"amp4Text"},
-		 function() {
+		 }, {keys: ["maxWidthHeight"]});
+    bindParams({}, function(key, target, rel) {
 		     component = document.getElementById("componentSelect").value;
 		     drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, component);
-		 } );
+		 }, {keys: ["component", "amp1", "amp2", "amp3", "amp4"]});
 }
 
 function drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, component) {

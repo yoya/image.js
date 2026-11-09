@@ -9,22 +9,22 @@
   <div class="container">
     <div>
     <div>
-      maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+      maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
     </div>
     <div>
-      multiRed:<input id="multiRedRange" type="range" min="0" max="3" step="0.1" value="1">:<input type="text" id="multiRedText" size="4">
-      multiGreen:<input id="multiGreenRange" type="range" min="0" max="3" step="0.1" value="1">:<input type="text" id="multiGreenText" size="4">
-      multiBlue:<input id="multiBlueRange" type="range" min="0" max="3" step="0.1" value="1">:<input type="text" id="multiBlueText" size="4">
+      multiRed:<input id="multiRedRange" data-bind="multiRed" type="range" min="0" max="3" step="0.1" value="1">:<input type="text" id="multiRedText" data-bind="multiRed" size="4">
+      multiGreen:<input id="multiGreenRange" data-bind="multiGreen" type="range" min="0" max="3" step="0.1" value="1">:<input type="text" id="multiGreenText" data-bind="multiGreen" size="4">
+      multiBlue:<input id="multiBlueRange" data-bind="multiBlue" type="range" min="0" max="3" step="0.1" value="1">:<input type="text" id="multiBlueText" data-bind="multiBlue" size="4">
     </div>
     <div>
-      addRed:<input id="addRedRange" type="range" min="-100" max="100" step="1" value="0">:<input type="text" id="addRedText" size="4">
-      addGreen:<input id="addGreenRange" type="range" min="-100" max="100" step="1" value="0">:<input type="text" id="addGreenText" size="4">
-      addBlue:<input id="addBlueRange" type="range" min="-100" max="100" step="1" value="0">:<input type="text" id="addBlueText" size="4">
+      addRed:<input id="addRedRange" data-bind="addRed" type="range" min="-100" max="100" step="1" value="0">:<input type="text" id="addRedText" data-bind="addRed" size="4">
+      addGreen:<input id="addGreenRange" data-bind="addGreen" type="range" min="-100" max="100" step="1" value="0">:<input type="text" id="addGreenText" data-bind="addGreen" size="4">
+      addBlue:<input id="addBlueRange" data-bind="addBlue" type="range" min="-100" max="100" step="1" value="0">:<input type="text" id="addBlueText" data-bind="addBlue" size="4">
     </div>
     <div>
-      sigmoidRed:<input id="sigmoidRedRange" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="sigmoidRedText" size="4">
-      sigmoidGreen:<input id="sigmoidGreenRange" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="sigmoidGreenText" size="4">
-      sigmoidBlue:<input id="sigmoidBlueRange" type="range" min="-1.0" max="1" step="0.01" value="0">:<input type="text" id="sigmoidBlueText" size="4">
+      sigmoidRed:<input id="sigmoidRedRange" data-bind="sigmoidRed" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="sigmoidRedText" data-bind="sigmoidRed" size="4">
+      sigmoidGreen:<input id="sigmoidGreenRange" data-bind="sigmoidGreen" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="sigmoidGreenText" data-bind="sigmoidGreen" size="4">
+      sigmoidBlue:<input id="sigmoidBlueRange" data-bind="sigmoidBlue" type="range" min="-1.0" max="1" step="0.01" value="0">:<input type="text" id="sigmoidBlueText" data-bind="sigmoidBlue" size="4">
     </div>
     <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
     <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>

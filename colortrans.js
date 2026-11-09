@@ -19,13 +19,9 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "addRedRange":"addRedText", "addGreenRange":"addGreenText", "addBlueRange":"addBlueText",
-		  "multiRedRange":"multiRedText", "multiGreenRange":"multiGreenText", "multiBlueRange":"multiBlueText",
-		  "sigmoidRedRange":"sigmoidRedText", "sigmoidGreenRange":"sigmoidGreenText", "sigmoidBlueRange":"sigmoidBlueText"},
-		 function() {
+    bindParams({}, function(key, target, rel) {
 		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas);
-		 } );
+		 }, {keys: ["maxWidthHeight", "addRed", "addGreen", "addBlue", "multiRed", "multiGreen", "multiBlue", "sigmoidRed", "sigmoidGreen", "sigmoidBlue"]});
 }
 function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);

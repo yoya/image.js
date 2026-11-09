@@ -34,18 +34,14 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "amountRange":"amountText",
-		  "linearCheckbox":null},
-		 function(target, rel) {
+    bindParams({}, function(key, target, rel) {
                      var identMatrix = color2Matrix["ident"];
                      var amount = parseFloat(document.getElementById("amountRange").value);
                      var matrix = interpMatrix(identMatrix, colorMatrix, amount);
                      
 		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, matrix, rel);
-		 } );
-    bindFunction({"categorySelect":null},
-		 function() {
+		 }, {keys: ["maxWidthHeight", "amount", "linear"]});
+    bindParams({}, function(key, target, rel) {
                      category = categorySelect.value;
                      while (colorSelect.options.length > 0) {
                          colorSelect.remove(0);
@@ -66,15 +62,14 @@ function main() {
                              }
                          }
                      }
-		 } );
-    bindFunction({"colorSelect":null},
-		 function(target, rel) {
+		 }, {keys: ["category"]});
+    bindParams({}, function(key, target, rel) {
 		     color = colorSelect.value;
 		     colorMatrix = color2Matrix[color];
 		     // console.log(color, colorMatrix);
 		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, rel);
 		     setTableValues("colorMatrixTable", colorMatrix);
-		 } );
+		 }, {keys: ["color"]});
     //
     bindTableFunction("colorMatrixTable", function(table, values, width) {
 	colorMatrix = values;

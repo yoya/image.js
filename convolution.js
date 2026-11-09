@@ -52,24 +52,17 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params);
-		 }, params);
-    bindFunction({"filterSelect":null,
-                  "filterWindowRange":"filterWindowText",
-                  "matrixNormalizeCheckbox":null,
-                  "matrixZerocenteringCheckbox":null,
-                  "linearRGBCheckbox":null,
-                  "imageNormalizeCheckbox":null},
-		 function(target) {
-                     if (target.id === "filterSelect") {
-		         filter = params["filterSelect"];
+		 }, {keys: ["maxWidthHeight"]});
+    bindParams(params, function(key, target, rel) {
+                     if (key === "filter") {
+		         filter = params.filter;
 		         [filterMatrix, filterWindow] = filter2Matrix[filter];
                          filterWindowRange.value = filterWindow;
                          filterWindowText.value  = filterWindow;
                          params["filterWindowRange"] = filterWindow;
-                         params["filterWindowText"]  = filterWindow;
+                         params.filterWindowRange  = filterWindow;
                      } else {
                          var oldFilterWindow = filterWindow;
                          filterWindow = params["filterWindowRange"];
@@ -83,7 +76,7 @@ function main() {
 		     }, filterMatrix, filterWindow);
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params);
 		     setTableValues("filterMatrixTable", filterMatrix);
-		 }, params);
+		 }, {keys: ["filter", "filterWindowRange", "matrixNormalize", "matrixZerocentering", "linearRGB", "imageNormalize"]});
     //
     bindTableFunction("filterMatrixTable", function(table, values, width) {
 	params["filterMatrix"] = filterMatrix = values;
@@ -255,15 +248,15 @@ var filter2Matrix = {
 var worker = new workerProcess("worker/convolution.js");
 
 function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params) {
-    var maxWidthHeight = params["maxWidthHeightRange"];
+    var maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     //
     var filterMatrix = params["filterMatrix"];
     var filterWindow = params["filterWindow"];
-    var matrixNormalize = params["matrixNormalizeCheckbox"];
-    var zerocentering   = params["matrixZerocenteringCheckbox"];
-    var linearRGB       = params["linearRGBCheckbox"];
-    var imageNormalize  = params["imageNormalizeCheckbox"];
+    var matrixNormalize = params.matrixNormalize;
+    var zerocentering   = params.matrixZerocentering;
+    var linearRGB       = params.linearRGB;
+    var imageNormalize  = params.imageNormalize;
     //
     if (matrixNormalize) {
         var total = filterMatrix.reduce(function(a, b) { return a + b; });

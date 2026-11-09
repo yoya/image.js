@@ -20,15 +20,14 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
                                          params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight"]});
 }
 
 function drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawCopy(srcCanvas, dstCanvas);
 }

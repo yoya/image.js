@@ -20,19 +20,14 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({ "maxWidthHeightRange":"maxWidthHeightText",
-                   "amountRange":"amountText",
-		   "RCheckbox":null,
-		   "GCheckbox":null,
-		   "BCheckbox":null },
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndContrast(srcImage, srcCanvas, dstCanvas,
                                          params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "amount", "R", "G", "B"]});
 }
 
 function drawSrcImageAndContrast(srcImage, srcCanvas, dstCanvas, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawContrast(srcCanvas, dstCanvas, params);
 }
@@ -48,10 +43,10 @@ function contrast(rgba, slope, intercept, R, G, B) {
 }
 
 function drawContrast(srcCanvas, dstCanvas, params) {
-    const amount = params.amountRange;
-    const R = params.RCheckbox;
-    const G = params.GCheckbox;
-    const B = params.BCheckbox;
+    const amount = params.amount;
+    const R = params.R;
+    const G = params.G;
+    const B = params.B;
     console.debug("drawContrast", {amount, R, G, B});
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");

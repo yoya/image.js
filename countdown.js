@@ -41,27 +41,21 @@ function main() {
         // elapse: 1000 / 4, // debug
         count: 10,
     };
-    bindFunction({"widthRange":"widthText",
-                  "heightRange":"heightText",
-                  "typeSelect":null},
-		 function(target, rel) {
+    bindParams({}, function(key, target, rel) {
                      params['width']  = parseFloat(widthRange.value);
                      params['height'] = parseFloat(heightRange.value);
                      params['type'] = typeSelect.value;
                      drawBackgroundImage(params);
-		 } );
-    bindFunction({"playButton":null},
-		 function(target, rel) {
+		 }, {keys: ["widthRange", "heightRange", "typeSelect"]});
+    bindParams({}, function(key, target, rel) {
 		     start(params);
-		 } );
-    bindFunction({"stopButton":null},
-		 function(target, rel) {
+		 }, {keys: ["playButton"]});
+    bindParams({}, function(key, target, rel) {
 		     stop();
-		 } );
-    bindFunction({"downloadButton":null},
-		 function(target, rel) {
+		 }, {keys: ["stopButton"]});
+    bindParams({}, function(key, target, rel) {
 		     download();
-		 } );
+		 }, {keys: ["downloadButton"]});
     // start(params);
     drawBackgroundImage(params);
 }

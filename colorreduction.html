@@ -10,7 +10,7 @@
     <div class="controlPanel">
       <div style="float:left">
 	Quantize Method: <br />
-	<select id="quantizeMethod" size="6">
+	<select id="quantizeMethod" data-bind="quantizeMethod" size="6">
           <option value="uniform" selected> 均等量子化 </option>
           <option value="popularity"> 頻度法 </option>
           <option value="linearCut"> 線形分割 </option>
@@ -23,8 +23,8 @@
 	nColor Src:<input id="nColorSrc" type="text" size="6" readonly> <br />
 	nColor Dst:<input id="nColorDst" type="text" size="6" readonly> <br />
 	maxWidthHeight:<br />
-	<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="640">:<br />
-	<input type="text" id="maxWidthHeightText" size="5">
+	<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="640">:<br />
+	<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
       </div>
     </div> <!-- controlPanel -->
     <canvas id="paletteCanvas" class="borderGreen" width=200 height=200> paletteCanvas </canvas>
