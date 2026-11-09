@@ -49,6 +49,12 @@ function main() {
         grabbedMarker: null,
         markerArray: markerArray,
     };
+    // register once. (drawHomograpy is called on every redraw)
+    worker.addListener(function() {
+        if (params.dstMarkers) {
+            drawDstMarkers(dstCanvas, params);
+        }
+    });
     const imageOnLoad = (url) => {
 	srcImage = new Image();
 	srcImage.onload = function() {
@@ -117,24 +123,8 @@ function main() {
         let markerArray = params.markerArray;
         switch (eventType) {
         case "mousedown":
-            let grabbedDist2 = 0;
-            let grabbedMarker = null;
-            for (let i = 0, n = markerArray.length; i < n; i++) {
-                let [xx, yy] = markerArray[i];
-                let dist2 = (x-xx)**2 + (y-yy)**2;
-                if (dist2 < hittestRadius2) {
-                    if (grabbedMarker === null) {
-                        grabbedMarker = i;
-                        grabbedDist2 = dist2;
-                    } else {
-                        if (grabbedDist < dist2) {
-                            grabbedMarker = i;
-                            grabbedDist2 = dist2;
-                        }
-                    }
-                }
-            }
-            params.grabbedMarker = grabbedMarker;
+            params.grabbedMarker = grabMarkerIndex(markerArray, x, y,
+                                                   hittestRadius2);
             // console.debug(eventType, params.grabbedMarker, x, y);
             break;
         case "mousemove":
@@ -164,6 +154,65 @@ function main() {
             break;
         }
     });
+    // dst markers: the src image corners mapped on dst.
+    bindCursolFunction("dstCanvas", params, function(target, eventType) {
+        if ((!params.dstMarkers) || (!params.dstMarkerArray)) {
+            return ;  // skip
+        }
+        const {x, y} = params[target.id];
+        const hittestRadius2 = 16 ** 2;
+        const dstMarkerArray = params.dstMarkerArray;
+        switch (eventType) {
+        case "mousedown":
+            params.dstGrabbedMarker = grabMarkerIndex(dstMarkerArray, x, y,
+                                                      hittestRadius2);
+            break;
+        case "mousemove":
+        case "mouseup":
+            if ((params.dstGrabbedMarker === null) ||
+                (params.dstGrabbedMarker === undefined)) {
+                break;
+            }
+            const rel = (eventType === "mouseup");
+            dstMarkerArray[params.dstGrabbedMarker] = [x, y];
+            const { width, height } = dstCanvas;
+            const dstMarkersNorm = dstMarkerArray.map(([xx, yy]) =>
+                                                      [xx / width, yy / height]);
+            // dst markers => unit square (src) : that is dst => src coeff.
+            let coeff = homographyCoeffByMarkers(dstMarkersNorm, true);
+            coeff = coeff.map(v => v / coeff[8]);  // normalize i to 1
+            params.coeff = coeff;
+            // src markers follow: dst corners mapped on src.
+            const corners = [[0, 0], [1, 0], [0, 1], [1, 1]];
+            for (let i = 0; i < 4; i++) {
+                const [sx, sy] = homography(corners[i][0], corners[i][1], coeff);
+                params[markerNameList[i*2]]   = sx * srcCanvas.width;
+                params[markerNameList[i*2+1]] = sy * srcCanvas.height;
+            }
+            bind2elements(params);
+            coeffValueSet(params.coeff);  // after bind2elements (it overwrites)
+            drawHomograpy(srcImage, srcCanvas, dstCanvas, params, rel);
+            if (eventType === "mouseup") {
+                params.dstGrabbedMarker = null;
+            }
+            break;
+        }
+    });
+}
+
+// index of the nearest marker within the radius, or null.
+function grabMarkerIndex(markerArray, x, y, radius2) {
+    let grabbedMarker = null;
+    let grabbedDist2 = radius2;
+    for (let i = 0, n = markerArray.length; i < n; i++) {
+        const [xx, yy] = markerArray[i];
+        const dist2 = (x-xx)**2 + (y-yy)**2;
+        if (dist2 < grabbedDist2) {
+            grabbedMarker = i;
+            grabbedDist2 = dist2;
+        }
+    }
+    return grabbedMarker;
 }
 
 var worker = new workerProcess("worker/homography.js");
@@ -177,28 +226,22 @@ function drawHomograpy(srcImage, srcCanvas, dstCanvas, params, sync) {
         params.interpolation = params.interpolationSelect;
     }
     worker.process(srcCanvas, dstCanvas, params, sync);
-    worker.addListener(function() {
-        if (params.dstMarkers) {
-            const { width , height } = dstCanvas;
-            let xyNorm = [
-                [xyArr[0][0] / width, xyArr[0][1] / height],
-                [xyArr[1][0] / width, xyArr[1][1] / height],
-                [xyArr[2][0] / width, xyArr[2][1] / height],
-                [xyArr[3][0] / width, xyArr[3][1] / height]
-            ];
-            // 計算間違えているのでコメントアウト
-            // let forwardCoeff =  homographyCoeffByMarkers(xyNorm, true);
-            let forwardCoeff = invertMatrix(params.coeff, 3);
-            params.forwardCoeff = forwardCoeff;
-            let dstMarkerArray = drawMarker(dstCanvas, forwardCoeff, xyNorm[0]);
-            params.dstMarkerArray = dstMarkerArray;
-        }
-    });
     if (params.srcMarkers) {
         const { width , height } = srcCanvas;
         let xyArr = drawMarker(srcCanvas, params.coeff);
         params.markerArray = xyArr;
     }
+}
+
+/*
+  draw the src image corners on dst, mapped by the forward transform.
+  (coeff maps dst => src, so forward is its inverse.
+   homographyCoeffByMarkers(srcMarkersNorm, true) gives the same up to scale)
+*/
+function drawDstMarkers(dstCanvas, params) {
+    const forwardCoeff = invertMatrix(params.coeff, 3);
+    params.forwardCoeff = forwardCoeff;
+    params.dstMarkerArray = drawMarker(dstCanvas, forwardCoeff);
 }
 
 /*
@@ -216,38 +259,53 @@ function drawMarker(canvas, coeff, xy00) {
         xyArr[i] = [x * width, y * height];
     }
     let markerArray = xyArr;
-    ctx.lineWidth = 2;
-    let colors = ["red", "yellow", "blue", "green"];
+    // bright colors (red, yellow, blue, green) for dark images too.
+    let colors = ["rgb(255,80,80)", "rgb(255,255,0)",
+                  "rgb(80,160,255)", "rgb(80,220,80)"];
+    // dark outline under the colored stroke, visible on any background.
+    const outlineColor = "rgba(0,0,0,0.6)";
+    const outlineWidth = 4, strokeWidth = 2;
+    // lines (all outlines first, then colors, so outlines don't cover colors)
+    for (const [lineWidth, isOutline] of [[outlineWidth, true],
+                                          [strokeWidth, false]]) {
+        ctx.lineWidth = lineWidth;
+        for (let i = 0, n = xyArr.length; i < n; i++) {
+            let [x, y] = xyArr[i];
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.strokeStyle = isOutline? outlineColor: colors[i];
+            /*
+             *  0 ---->1
+             *  ^      |
+             *  |      V
+             *  2 <--- 3
+             * i: 0=>1,1=>3,2=>0,3=>2
+             * floor((i+3)/2): 0=>1,1=>2,2=>2, 3=>3
+             * floor((3*i+3)/2)%4: 0=>1,1=>3,2=>0, 3=>2
+             */
+            var xyArrNext = xyArr[Math.floor((3*i+3)/2)%4];
+            ctx.lineTo(xyArrNext[0], xyArrNext[1]);
+            ctx.stroke();
+        }
+    }
+    // rings on top of the lines
     for (let i = 0, n = xyArr.length; i < n; i++) {
         let [x, y] = xyArr[i];
-        //
         ctx.beginPath();
-        ctx.strokeStyle = colors[i];
         ctx.fillStyle = "rgba(255,255,255,0.5)";
         ctx.arc(x, y, 8, 0, 2*Math.PI, false);
         ctx.fill();
+        ctx.lineWidth = outlineWidth;
+        ctx.strokeStyle = outlineColor;
+        ctx.stroke();
+        ctx.lineWidth = strokeWidth;
+        ctx.strokeStyle = colors[i];
         ctx.stroke();
         //
         ctx.beginPath();
         ctx.fillStyle = "black";
         ctx.arc(x, y, 2, 0, 2*Math.PI, false);
         ctx.fill();
-        //
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.strokeStyle = colors[i];
-        /*
-         *  0 ---->1
-         *  ^      |
-         *  |      V
-         *  2 <--- 3
-         * i: 0=>1,1=>3,2=>0,3=>2
-         * floor((i+3)/2): 0=>1,1=>2,2=>2, 3=>3
-         * floor((3*i+3)/2)%4: 0=>1,1=>3,2=>0, 3=>2
-         */
-        var xyArrNext = xyArr[Math.floor((3*i+3)/2)%4];
-        ctx.lineTo(xyArrNext[0], xyArrNext[1]);
-        ctx.stroke();
     }
     return markerArray
 }
