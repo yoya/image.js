@@ -263,7 +263,8 @@ function drawMarker(canvas, coeff, xy00) {
     let colors = ["rgb(255,80,80)", "rgb(255,255,0)",
                   "rgb(80,160,255)", "rgb(80,220,80)"];
     // dark outline under the colored stroke, visible on any background.
-    const outlineColor = "rgba(0,0,0,0.6)";
+    // (light enough not to dull the stroke color)
+    const outlineColor = "rgba(0,0,0,0.35)";
     const outlineWidth = 4, strokeWidth = 2;
     // lines (all outlines first, then colors, so outlines don't cover colors)
     for (const [lineWidth, isOutline] of [[outlineWidth, true],
