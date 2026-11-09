@@ -238,12 +238,8 @@ downloadButton.addEventListener('click', e => {
     });
 });
 
-document.body.addEventListener('drop', e => {
-    console.log("drop");
-    e.preventDefault();
-    const hr = document.createElement('hr');
-    const first = document.body.firstElementChild;;
-    Array.from(e.dataTransfer.files).forEach(file => {
+function loadMagFiles(files) {
+    Array.from(files).forEach(file => {
         const div = document.createElement('div');
         div.style = "float:left;  position: relative;";
         magList.appendChild(div);
@@ -265,6 +261,17 @@ document.body.addEventListener('drop', e => {
             }
         };
         reader.readAsArrayBuffer(file);
-        return false;
     });
+}
+
+document.body.addEventListener('drop', e => {
+    e.preventDefault();
+    loadMagFiles(e.dataTransfer.files);
 }, true);
+
+// file picker (for touch devices etc.)
+fileButton.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', () => {
+    loadMagFiles(fileInput.files);
+    fileInput.value = "";  // allow choosing the same files again
+});
