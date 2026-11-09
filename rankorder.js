@@ -14,13 +14,6 @@ function main() {
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     var params = {};
     //
-    // var filterSelect      = document.getElementById("filterSelect");
-    // var filterWindowRange = document.getElementById("filterWindowRange");
-    var rankOrderRange = document.getElementById("rankOrderRange");
-    var rankOrderText  = document.getElementById("rankOrderText");
-    // var maxWidthHeight = parseFloat(maxWidthHeightRange.value);
-    // var filterWindow   = parseFloat(filterWindowRange.value);
-    // var rankOrder      = parseFloat(rankOrderRange.value)
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
@@ -53,20 +46,20 @@ function main() {
                              }
                              break;
                          }
-                         rankOrderRange.value = rankOrder;
-                         rankOrderText.value  = rankOrder;
                          params.rankOrder = rankOrder;
+                         syncParamsToElements(params, {keys: ["rankOrder"]});
                      }
                      console.log(rankOrder, filterWindow, ((filterWindow*filterWindow/2) | 0));
                      if (rankOrder == 1) {
-                         filterSelect.value = "min";
+                         params.filter = "min";
                      } else if (rankOrder == filterWindow*filterWindow) {
-                         filterSelect.value = "max";
+                         params.filter = "max";
                      } else if (rankOrder == ((filterWindow*filterWindow/2+1) | 0)) {
-                         filterSelect.value = "median";
+                         params.filter = "median";
                      } else {
-                         filterSelect.value = "etc";
+                         params.filter = "etc";
                      }
+                     syncParamsToElements(params, {keys: ["filter"]});
 		     drawRankOrderFilter(srcCanvas, dstCanvas, params, rel);
 		 }, {keys: ["filter", "filterWindow", "rankOrder"]});
     bindParams(params, function(key, target, rel) {

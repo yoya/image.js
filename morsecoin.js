@@ -28,8 +28,7 @@ function main() {
         const key = event.key;
         if (key === "Enter") {
             let delay = 0, delayAlphabet = 0;
-            let textText = document.getElementById("textText").value;
-            for (const c of textText.split('')) {
+            for (const c of params.text.split('')) {
                 const uc = c.toUpperCase();
                 animationAlphabetAndPoint(uc, delay);
                 delay += 2000;

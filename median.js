@@ -12,36 +12,31 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var filter = document.getElementById("filterSelect").value;
-    var filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+	    drawSrcImage(srcImage, srcCanvas, params.maxWidthHeight);
 	    dstCanvas.width = srcCanvas.width;
 	    dstCanvas.height = srcCanvas.height;
-	    drawMedianFilter(srcCanvas, dstCanvas, filter, filterWindow, true);
+	    drawMedianFilter(srcCanvas, dstCanvas, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindParams({}, function(key, target, rel) {
-		     filter = document.getElementById("filterSelect").value;
-		     filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
-		     drawMedianFilter(srcCanvas, dstCanvas, filter, filterWindow, rel);
+    bindParams(params, function(key, target, rel) {
+		     drawMedianFilter(srcCanvas, dstCanvas, params, rel);
 		 }, {keys: ["filter", "filterWindow"]});
-    bindParams({}, function(key, target, rel) {
-		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+    bindParams(params, function(key, target, rel) {
+		     drawSrcImage(srcImage, srcCanvas, params.maxWidthHeight);
 		     dstCanvas.width = srcCanvas.width;
 		     dstCanvas.height = srcCanvas.height;
-		     drawMedianFilter(srcCanvas, dstCanvas, filter, filterWindow, rel);
+		     drawMedianFilter(srcCanvas, dstCanvas, params, rel);
 		 }, {keys: ["maxWidthHeight"]});
 }
 
 var worker = new workerProcess("worker/median.js");
 
-function drawMedianFilter(srcCanvas, dstCanvas, filter, filterWindow, sync) {
-    var params = {filter:filter, filterWindow:filterWindow};
+function drawMedianFilter(srcCanvas, dstCanvas, params, sync) {
+    var params_w = {filter:params.filter, filterWindow:params.filterWindow};
     worker.process(srcCanvas, dstCanvas, params, sync);
 }

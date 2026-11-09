@@ -13,10 +13,7 @@ function main() {
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     var params = {};
-    var structureType = document.getElementById("structureTypeSelect").value;
-    var filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
-    //
-    var structureTable = makeStructureTable(structureType, filterWindow);
+    var structureType, filterWindow, structureTable;  // set after bindParams
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
@@ -50,6 +47,9 @@ function main() {
 		     drawMorphologyFilter(srcCanvas, dstCanvas, structureTable, params, rel);
 
 		 }, {keys: ["maxWidthHeight"]});
+    structureType = params.structureType;
+    filterWindow  = params.filterWindow;
+    structureTable = makeStructureTable(structureType, filterWindow);
     bindTableFunction("structureTable", function(table, values, width) {
 	// console.debug(values, width);
 	structureTable = values;

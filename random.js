@@ -13,67 +13,60 @@ function main() {
     var image = new Image(canvas.width, canvas.height);
     var offCanvas = null;
     var histCanvas = document.getElementById("histCanvas");
-    var widthRange = document.getElementById("widthRange");
-    var heightRange = document.getElementById("heightRange");
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    var params = {};
         dropFunction(document, function(dataURL) {
 	    image = new Image();
 	    image.onload = function() {
 		offCanvas = document.createElement("canvas");
 		offCanvas.id = "offCanvas";
-		drawSrcImage(image, offCanvas, maxWidthHeight);
-		var width = parseFloat(offCanvas.width);
-		var height = parseFloat(offCanvas.height);
-		widthRange.value = widthText.value = width;
-		heightRange.value = heightText.value = height;
-		drawRandomAndHistogram(canvas, offCanvas, histCanvas);
+		drawSrcImage(image, offCanvas, params.maxWidthHeight);
+		params.width  = offCanvas.width;
+		params.height = offCanvas.height;
+		syncParamsToElements(params, {keys: ["width", "height"]});
+		drawRandomAndHistogram(canvas, offCanvas, histCanvas, params);
 	    }
 	    image.src = dataURL;
 	}, "DataURL");
-    bindParams({}, function(key, target, rel) {
-		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-		     drawSrcImage(image, offCanvas, maxWidthHeight);
-		     var width = parseFloat(offCanvas.width);
-		     var height = parseFloat(offCanvas.height);
-		     widthRange.value = widthText.value = width;
-		     heightRange.value = heightText.value = height;
-		     drawRandomAndHistogram(canvas, offCanvas, histCanvas);
+    bindParams(params, function(key, target, rel) {
+		     drawSrcImage(image, offCanvas, params.maxWidthHeight);
+		     params.width  = offCanvas.width;
+		     params.height = offCanvas.height;
+		     syncParamsToElements(params, {keys: ["width", "height"]});
+		     drawRandomAndHistogram(canvas, offCanvas, histCanvas, params);
 		 }, {keys: ["maxWidthHeight"]});
-    bindParams({}, function(key, target, rel) {
-                     var ampRange = document.getElementById("ampRange");
-                     var ampText = document.getElementById("ampText");
-                     var offsetRange = document.getElementById("offsetRange");
-                     var offsetText = document.getElementById("offsetText");
-                     var amp = parseFloat(ampRange.value);
-                     var offset = parseFloat(document.getElementById("offsetRange").value);
+    bindParams(params, function(key, target, rel) {
+                     var { amp, offset } = params;
 	             if (key === "amp") {
                          if (1 < (offset + amp)) {
-                             offsetRange.value = offsetText.value = 1 - amp;
+                             params.offset = 1 - amp;
+                             syncParamsToElements(params, {keys: ["offset"]});
                          }
                      }
                      if (key === "offset") {
                          if (1 < (offset + amp)) {
-                             ampRange.value = ampText.value = 1 - offset;
+                             params.amp = 1 - offset;
+                             syncParamsToElements(params, {keys: ["amp"]});
                          }
                      }
 		     if (key === "ejectButton") {
 			 offCanvas = null;
 		     }
 		     if (key === "animationButton") {
-			 animationRandomAndHistogram(canvas, offCanvas, histCanvas);
+			 animationRandomAndHistogram(canvas, offCanvas, histCanvas, params);
 		     }
-		     drawRandomAndHistogram(canvas, offCanvas, histCanvas);
+		     drawRandomAndHistogram(canvas, offCanvas, histCanvas, params);
 		     
 		 }, {keys: ["refreshButton", "animationButton", "ejectButton", "width", "height", "redRatio", "greenRatio", "blueRatio", "amp", "offset", "density"]});
-    drawRandomAndHistogram(canvas, offCanvas, histCanvas);
+    drawRandomAndHistogram(canvas, offCanvas, histCanvas, params);
 }
 
 var anim_id = null;
-function animationRandomAndHistogram(canvas, offCanvas, histCanvas) {
+function animationRandomAndHistogram(canvas, offCanvas, histCanvas, params) {
     var Context = function() {
 	this.canvas = canvas;
 	this.offCanvas = offCanvas;
 	this.histCanvas =  histCanvas;
+	this.params = params;
     }
     var ctx = new Context();
     if (anim_id === null) {
@@ -88,22 +81,15 @@ function animationRandomAndHistogram_() {
     var canvas = this.canvas;
     var offCanvas = this.offCanvas;
     var histCanvas = this.histCanvas
-    drawRandomAndHistogram(canvas, offCanvas, histCanvas);
+    drawRandomAndHistogram(canvas, offCanvas, histCanvas, this.params);
 }
 
-function drawRandomAndHistogram(canvas, offCanvas, histCanvas) {
+function drawRandomAndHistogram(canvas, offCanvas, histCanvas, params) {
     if (anim_id !== null) {
-	animationRandomAndHistogram(canvas, offCanvas, histCanvas);
-	animationRandomAndHistogram(canvas, offCanvas, histCanvas);
+	animationRandomAndHistogram(canvas, offCanvas, histCanvas, params);
+	animationRandomAndHistogram(canvas, offCanvas, histCanvas, params);
     }
-    var width = parseInt(document.getElementById("widthRange").value, 10);
-    var height = parseInt(document.getElementById("heightRange").value, 10);
-    var redRatio = parseFloat(document.getElementById("redRatioRange").value);
-    var greenRatio = parseFloat(document.getElementById("greenRatioRange").value);
-    var blueRatio = parseFloat(document.getElementById("blueRatioRange").value);
-    var amp = parseFloat(document.getElementById("ampRange").value);
-    var offset = parseFloat(document.getElementById("offsetRange").value);
-    var density = parseFloat(document.getElementById("densityRange").value);
+    var { width, height, redRatio, greenRatio, blueRatio, amp, offset, density } = params;
     drawRandom(canvas, offCanvas, width, height, redRatio, greenRatio, blueRatio, amp, offset, density);
     var redHist   = getColorHistogramList(canvas, "red");
     var greenHist = getColorHistogramList(canvas, "green");

@@ -28,18 +28,14 @@ function main() {
                          if (params.maxLuminance <= params.minLuminance) {
                              const lumi = params.minLuminance + 1;
                              params.maxLuminance = lumi;
-                             params.maxLuminance = lumi;
-                             maxLuminance.value =  lumi;
-                             maxLuminanceText.value =  lumi;
+                             syncParamsToElements(params, {keys: ["maxLuminance"]});
                          }
                          break;
                      case "minLuminance":
                          if (params.minLuminance >= params.maxLuminance) {
                              const lumi = params.maxLuminance - 1;
                              params.minLuminance = lumi;
-                             params.minLuminance = lumi;
-                             minLuminance.value = lumi;
-                             minLuminanceText.value = lumi;
+                             syncParamsToElements(params, {keys: ["minLuminance"]});
                          }
                      }
 		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params, rel);
