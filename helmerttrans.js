@@ -58,9 +58,6 @@ function main() {
         setTableValues("helmertMatrixTable", helmertMatrix);
 	drawHelmertTransform(srcCanvas, dstCanvas, helmertMatrix, params, true);
     }, helmertMatrix, helmertWindow);
-    //
-    helmert = params.helmert;
-    helmertMatrix = helmert2Matrix(helmert, srcCanvas);
 }
 
 function helmert2Matrix(helmert, canvas) {

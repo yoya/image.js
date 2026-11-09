@@ -45,9 +45,6 @@ function main() {
 	affinMatrix = values;
 	drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, true);
     }, affinMatrix, affinWindow);
-    //
-    affin = params.affin;
-    affinMatrix = affin2Matrix(affin, srcCanvas);
 }
 
 function affin2Matrix(affin, canvas) {
