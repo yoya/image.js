@@ -259,38 +259,53 @@ function drawMarker(canvas, coeff, xy00) {
         xyArr[i] = [x * width, y * height];
     }
     let markerArray = xyArr;
-    ctx.lineWidth = 2;
-    let colors = ["red", "yellow", "blue", "green"];
+    // bright colors (red, yellow, blue, green) for dark images too.
+    let colors = ["rgb(255,80,80)", "rgb(255,255,0)",
+                  "rgb(80,160,255)", "rgb(80,220,80)"];
+    // dark outline under the colored stroke, visible on any background.
+    const outlineColor = "rgba(0,0,0,0.6)";
+    const outlineWidth = 4, strokeWidth = 2;
+    // lines (all outlines first, then colors, so outlines don't cover colors)
+    for (const [lineWidth, isOutline] of [[outlineWidth, true],
+                                          [strokeWidth, false]]) {
+        ctx.lineWidth = lineWidth;
+        for (let i = 0, n = xyArr.length; i < n; i++) {
+            let [x, y] = xyArr[i];
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.strokeStyle = isOutline? outlineColor: colors[i];
+            /*
+             *  0 ---->1
+             *  ^      |
+             *  |      V
+             *  2 <--- 3
+             * i: 0=>1,1=>3,2=>0,3=>2
+             * floor((i+3)/2): 0=>1,1=>2,2=>2, 3=>3
+             * floor((3*i+3)/2)%4: 0=>1,1=>3,2=>0, 3=>2
+             */
+            var xyArrNext = xyArr[Math.floor((3*i+3)/2)%4];
+            ctx.lineTo(xyArrNext[0], xyArrNext[1]);
+            ctx.stroke();
+        }
+    }
+    // rings on top of the lines
     for (let i = 0, n = xyArr.length; i < n; i++) {
         let [x, y] = xyArr[i];
-        //
         ctx.beginPath();
-        ctx.strokeStyle = colors[i];
         ctx.fillStyle = "rgba(255,255,255,0.5)";
         ctx.arc(x, y, 8, 0, 2*Math.PI, false);
         ctx.fill();
+        ctx.lineWidth = outlineWidth;
+        ctx.strokeStyle = outlineColor;
+        ctx.stroke();
+        ctx.lineWidth = strokeWidth;
+        ctx.strokeStyle = colors[i];
         ctx.stroke();
         //
         ctx.beginPath();
         ctx.fillStyle = "black";
         ctx.arc(x, y, 2, 0, 2*Math.PI, false);
         ctx.fill();
-        //
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.strokeStyle = colors[i];
-        /*
-         *  0 ---->1
-         *  ^      |
-         *  |      V
-         *  2 <--- 3
-         * i: 0=>1,1=>3,2=>0,3=>2
-         * floor((i+3)/2): 0=>1,1=>2,2=>2, 3=>3
-         * floor((3*i+3)/2)%4: 0=>1,1=>3,2=>0, 3=>2
-         */
-        var xyArrNext = xyArr[Math.floor((3*i+3)/2)%4];
-        ctx.lineTo(xyArrNext[0], xyArrNext[1]);
-        ctx.stroke();
     }
     return markerArray
 }
