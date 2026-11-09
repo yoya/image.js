@@ -38,6 +38,9 @@
     --on-accent:   light-dark(#ffffff, var(--p-ink-15));
     --fun:         light-dark(var(--p-butter-90), #5a4d1c);
     --on-fun:      light-dark(var(--p-ink-15), var(--p-butter-90));
+    /* slider track: clearly darker (light) / lighter (dark) than the card */
+    --track:       light-dark(#d4c6a6, #6b6052);
+    --track-edge:  light-dark(#968257, #8f8270);
 
     /* radius tiers */
     --radius-inner: 6px;
@@ -149,12 +152,17 @@ input[type="range"] {
     height: 22px; background: transparent;
 }
 input[type="range"]::-webkit-slider-runnable-track {
-    height: 8px; border-radius: 999px; background: var(--muted);
-    box-shadow: inset 0 1px 2px #0000001a;
+    height: 8px; border-radius: 999px; background: var(--track);
+    box-shadow: inset 0 0 0 1px var(--track-edge);
 }
 input[type="range"]::-moz-range-track {
-    height: 8px; border-radius: 999px; background: var(--muted);
+    height: 8px; border-radius: 999px; background: var(--track);
+    box-shadow: inset 0 0 0 1px var(--track-edge);
 }
+input[type="range"]::-moz-range-progress {  /* filled part (Firefox only) */
+    height: 8px; border-radius: 999px; background: var(--accent);
+}
+input[type="range"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 999px; }
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 18px; height: 18px; margin-top: -5px;

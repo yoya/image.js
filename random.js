@@ -28,10 +28,12 @@ function main() {
 	    image.src = dataURL;
 	}, "DataURL");
     bindParams(params, function(key, target, rel) {
-		     drawSrcImage(image, offCanvas, params.maxWidthHeight);
-		     params.width  = offCanvas.width;
-		     params.height = offCanvas.height;
-		     syncParamsToElements(params, {keys: ["width", "height"]});
+		     if (offCanvas) {  // no image before a drop or after Eject
+			 drawSrcImage(image, offCanvas, params.maxWidthHeight);
+			 params.width  = offCanvas.width;
+			 params.height = offCanvas.height;
+			 syncParamsToElements(params, {keys: ["width", "height"]});
+		     }
 		     drawRandomAndHistogram(canvas, offCanvas, histCanvas, params);
 		 }, {keys: ["maxWidthHeight"]});
     bindParams(params, function(key, target, rel) {

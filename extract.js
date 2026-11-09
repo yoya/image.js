@@ -127,10 +127,10 @@ function searchTailGIF(arr, offset) {
 	    var extLabel = arr[offset++];
 	    var extSize = arr[offset++];
 	    offset += extSize;
-	    if (extLabel === 0xFF) {
-		while (size = arr[offset++]) {
-		    offset += size;
-		}
+	    // every extension is followed by data sub-blocks and a 0 terminator
+	    // (not only Application Extension 0xFF; e.g. Graphic Control 0xF9)
+	    while ((size = arr[offset++])) {
+		offset += size;
 	    }
 	    break;
 	case 0x2C: // Image
@@ -141,9 +141,10 @@ function searchTailGIF(arr, offset) {
 		offset += 3 * nColor;
 	    }
 	    offset++; // lzwMinimumCodeSize
-	    while (size = arr[offset++]) {
+	    while ((size = arr[offset++])) {
 		offset += size;
 	    }
+	    break;  // next block (Extension, Image or Trailer)
 	default:
 	    console.warn("GIF: wrong separator:"+ sep);
 	    return -1;
