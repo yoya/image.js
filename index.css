@@ -59,6 +59,7 @@ div { margin: 4px; }
 
 .controlPanel, #controlPanel {
     flex-wrap: wrap;  /* for panels laid out with display:flex (narrow screens) */
+    display: flow-root;  /* contain floated children (inline display:flex still wins) */
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -271,7 +272,10 @@ figcaption { margin-top: 4px; color: var(--text-sub); font-size: 12px; text-alig
     /* rows laid out with inline display:flex wrap instead of overflowing */
     [style*="display:flex"], [style*="display: flex"] { flex-wrap: wrap; }
     table input[type="text"] { width: 3.8em; }
-    .param > .name { min-width: 0; }
+    /* keep parameter names in one piece; wrap the row instead of the word */
+    .param { flex-wrap: wrap; }
+    .param > input[type="range"] { flex-basis: 60px; }
+    .param > .name { min-width: 0; white-space: nowrap; overflow-wrap: normal; }
     .param > input[type="range"] { min-width: 60px; }
     .param > input[type="text"] { width: 4em; }
     body { overflow-wrap: anywhere; }
