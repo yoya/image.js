@@ -20,17 +20,14 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "boostSelect":"",
-                  "rgRange":"rgText", "ybRange":"ybText"},
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
                                          params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "boost", "rg", "yb"]});
 }
 
 function drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawRGYB(srcCanvas, dstCanvas, params);
 }
@@ -83,9 +80,9 @@ function boostRGYB(imageData, boost, rgyb, ratio) {
 
 function drawRGYB(srcCanvas, dstCanvas, params) {
     // console.debug("drawRGYB");
-    const boost = params.boostSelect;
-    const rg = params.rgRange;
-    const yb = params.ybRange;
+    const boost = params.boost;
+    const rg = params.rg;
+    const yb = params.yb;
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const width = srcCanvas.width, height = srcCanvas.height;

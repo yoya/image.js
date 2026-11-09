@@ -20,14 +20,9 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "srcBitDepthRange":"srcBitDepthText",
-		  "dstBitDepthRange":"dstBitDepthText",
-		  "quantizeSelect":null,
-		  "ditherSelect":null},
-		 function(target, rel) {
+    bindParams({}, function(key, target, rel) {
 		     drawSrcImageAndBitDepth(srcImage, srcCanvas, dstCanvas, rel);
-		 } );
+		 }, {keys: ["maxWidthHeight", "srcBitDepth", "dstBitDepth", "quantize", "dither"]});
     drawBitDepthGraph(srcCanvas, dstCanvas, graphCanvas);
 }
 

@@ -29,33 +29,25 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "grayscaleCheckbox":null},
-		 function(target, rel) {
+    bindParams({}, function(key, target, rel) {
 		     drawSrcImageAndGetHistogram(srcImage, srcCanvas);
                      drawHistogramAndBinarize(srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, rel);
-		 } );
-    bindFunction({"thresholdRange":"thresholdText",
-                  "pTileRange":"pTileText",
-		  "ditherSelect":null,
-                  "totalLineCheckbox":null, "histogramCheckbox":null},
-		 function(target, rel) {
-                     if ((target.id == "thresholdRange") ||
-                         (target.id == "thresholdText")) {
+		 }, {keys: ["maxWidthHeight", "grayscale"]});
+    bindParams({}, function(key, target, rel) {
+                     if ((key == "threshold")) {
                          const threshold = parseFloat(thresholdRange.value);
                          const ptile = getThresholdToPtile(threshold, hist);
                          pTileRange.value = ptile;
                          pTileText.value = ptile;
                      }
-                     if ((target.id == "pTileRange") ||
-                         (target.id == "pTileText")) {
+                     if ((key == "pTile")) {
                          const ptile = parseFloat(pTileRange.value);
                          const th = getThresholdFromTile(ptile, hist);
                          thresholdRange.value = th;
                          thresholdText.value = th;
                      }
                      drawHistogramAndBinarize(srcCanvas, dstCanvas, histCanvas, diffhistCanvas, laphistCanvas, rel);
-		 } );
+		 }, {keys: ["threshold", "pTile", "dither", "totalLine", "histogram"]});
 }
 
 const hist     = [null, null, null];

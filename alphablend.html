@@ -10,7 +10,7 @@
     <div id="controlPanel"  style="float:left">
       <div style="float:left">
 	<div style="float:left ;">
-          <select id="methodSelect" size="4">
+          <select id="methodSelect" data-bind="method" size="4">
             <option value="plus" selected> 加算 </option>
             <option value="minus"        > 減算 </option>
             <option value="multi"        > 乗算 </option>
@@ -20,46 +20,46 @@
       </div >
       <div style="float:left">
         <div>
-          maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+          maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
         </div>
         <div>
-	  linearGamma:<input id="linearGammaCheckbox" type="checkbox" />
+	  linearGamma:<input id="linearGammaCheckbox" data-bind="linearGamma" type="checkbox" />
         </div>
         <div>
-	  inverse :<input id="inverse" type="checkbox" />
-        </div>
-      </div>
-      <div style="float:left">
-        <div>
-	  ratio1:<input id="ratio1Range" type="range" min="0.0" max="1.0" step="0.1" value="0.5">:<input type="text" id="ratio1Text" size="4">
-        </div>
-        <div>
-	  ratio2:<input id="ratio2Range" type="range" min="0.0" max="1.0" step="0.1" value="0.5">:<input type="text" id="ratio2Text" size="4"> <br />
-        </div>
-        <div>
-          ratio:<input id="ratioRange" type="range" min="0.0" max="1.0" step="0.1" value="0.5">:<input type="text" id="ratioText" size="4">
+	  inverse :<input id="inverse" data-bind="inverse" type="checkbox" />
         </div>
       </div>
       <div style="float:left">
         <div>
-	  shift X:<input id="shiftXRange" type="range" min="-100" max="100" step="1" value="0">:<input type="text" id="shiftXText" size="4">
+	  ratio1:<input id="ratio1Range" data-bind="ratio1" type="range" min="0.0" max="1.0" step="0.1" value="0.5">:<input type="text" id="ratio1Text" data-bind="ratio1" size="4">
         </div>
         <div>
-          shift Y:<input id="shiftYRange" type="range" min="-100" max="100" step="1" value="0">:<input type="text" id="shiftYText" size="4">
+	  ratio2:<input id="ratio2Range" data-bind="ratio2" type="range" min="0.0" max="1.0" step="0.1" value="0.5">:<input type="text" id="ratio2Text" data-bind="ratio2" size="4"> <br />
+        </div>
+        <div>
+          ratio:<input id="ratioRange" data-bind="ratio" type="range" min="0.0" max="1.0" step="0.1" value="0.5">:<input type="text" id="ratioText" data-bind="ratio" size="4">
         </div>
       </div>
       <div style="float:left">
         <div>
-	  grad slant X:<input id="gradSlantXRange" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="gradSlantXText" size="4">
+	  shift X:<input id="shiftXRange" data-bind="shiftX" type="range" min="-100" max="100" step="1" value="0">:<input type="text" id="shiftXText" data-bind="shiftX" size="4">
         </div>
         <div>
-          grad slant Y:<input id="gradSlantYRange" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="gradSlantYText" size="4">
+          shift Y:<input id="shiftYRange" data-bind="shiftY" type="range" min="-100" max="100" step="1" value="0">:<input type="text" id="shiftYText" data-bind="shiftY" size="4">
+        </div>
+      </div>
+      <div style="float:left">
+        <div>
+	  grad slant X:<input id="gradSlantXRange" data-bind="gradSlantX" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="gradSlantXText" data-bind="gradSlantX" size="4">
         </div>
         <div>
-	  grad intercept X:<input id="gradInterceptXRange" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="gradInterceptXText" size="4">
+          grad slant Y:<input id="gradSlantYRange" data-bind="gradSlantY" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="gradSlantYText" data-bind="gradSlantY" size="4">
         </div>
         <div>
-          grad intercept Y:<input id="gradInterceptYRange" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="gradInterceptYText" size="4">
+	  grad intercept X:<input id="gradInterceptXRange" data-bind="gradInterceptX" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="gradInterceptXText" data-bind="gradInterceptX" size="4">
+        </div>
+        <div>
+          grad intercept Y:<input id="gradInterceptYRange" data-bind="gradInterceptY" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="gradInterceptYText" data-bind="gradInterceptY" size="4">
         </div>
       </div>
     </div> <!-- controlPanel -->

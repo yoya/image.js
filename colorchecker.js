@@ -22,17 +22,13 @@ function main() {
         nColumns: 6,  // horitontal
         nRows: 4,     // vertical
     };
-    bindFunction({"widthRange":"widthText",
-                  "heightRange":"heightText",
-                  "border1Range":"border1Text",
-                  "border2Range":"border2Text"},
-		 function(target, rel) {
+    bindParams({}, function(key, target, rel) {
                      params['width']  = parseFloat(widthRange.value);
                      params['height'] = parseFloat(heightRange.value);
                      params['border1'] = parseFloat(border1Range.value);
                      params['border2'] = parseFloat(border2Range.value);
                      drawColorChecker(canvas, params);
-		 } );
+		 }, {keys: ["widthRange", "heightRange", "border1Range", "border2Range"]});
     drawColorChecker(canvas, params);
 }
 

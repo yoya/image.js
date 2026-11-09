@@ -8,14 +8,14 @@
   <body>
     <div class="container">
       <div class="controlPanel">
-	width:<input id="widthRange" type="range" min="16" max="1920" step="1" value="800">
-        :<input type="text" id="widthText" size="5">
-        height:<input id="heightRange" type="range" min="16" max="1080" step="1" value="540">
-        :<input type="text" id="heightText" size="5">
-	border1:<input id="border1Range" type="range" min="0" max="100" step="1" value="30">
-        :<input type="text" id="border1Text" size="5">
-	border2:<input id="border2Range" type="range" min="0" max="100" step="1" value="20">
-        :<input type="text" id="border2Text" size="5">
+	width:<input id="widthRange" data-bind="widthRange" type="range" min="16" max="1920" step="1" value="800">
+        :<input type="text" id="widthText" data-bind="widthRange" size="5">
+        height:<input id="heightRange" data-bind="heightRange" type="range" min="16" max="1080" step="1" value="540">
+        :<input type="text" id="heightText" data-bind="heightRange" size="5">
+	border1:<input id="border1Range" data-bind="border1Range" type="range" min="0" max="100" step="1" value="30">
+        :<input type="text" id="border1Text" data-bind="border1Range" size="5">
+	border2:<input id="border2Range" data-bind="border2Range" type="range" min="0" max="100" step="1" value="20">
+        :<input type="text" id="border2Text" data-bind="border2Range" size="5">
       </div> <!-- controlPanel -->
       <canvas id="canvas" width=200 height=200> srcCanvas </canvas>
     </div>  <!-- container -->

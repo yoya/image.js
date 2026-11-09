@@ -20,16 +20,9 @@ function main() {
         });
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeight":"maxWidthHeightText",
-                  "backgroundColor":"backgroundColorText",
-                  "checkboard":null,
-                  "multi1":"multi1Text", "plus1":"plus1Text",
-                  "multi2":"multi2Text", "plus2":"plus2Text",
-                  "multi3":"multi3Text", "plus3":"plus3Text",
-                  "multi4":"multi4Text", "plus4":"plus4Text"},
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageDataAndAlphacomponent(params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "backgroundColor", "checkboard", "multi1", "plus1", "multi2", "plus2", "multi3", "plus3", "multi4", "plus4"]});
     const dataURL = "img/CMYK.png";
     loadImageData(dataURL, function(imageData) {
         params.srcImageData = imageData;

@@ -26,12 +26,10 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "mosaicCheckbox":null},
-		 function() {
+    bindParams({}, function(key, target, rel) {
 		     mosaic = mosaicCheckbox.checked;
 		     drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, mosaic);
-		 } );
+		 }, {keys: ["maxWidthHeight", "mosaic"]});
 }
 
 function drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, mosaic) {

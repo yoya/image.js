@@ -22,33 +22,31 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    let maxWidthHeight = params["maxWidthHeightRange"];
+	    let maxWidthHeight = params.maxWidthHeight;
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function(target, rel) {
-                     let maxWidthHeight = params["maxWidthHeightRange"];
+    bindParams(params, function(key, target, rel) {
+                     let maxWidthHeight = params.maxWidthHeight;
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, rel);
-		 }, params);
-    bindFunction({"affinSelect":null, "outfillSelect":null},
-		 function(target, rel) {
-		     let affin = params["affinSelect"];
+		 }, {keys: ["maxWidthHeight"]});
+    bindParams(params, function(key, target, rel) {
+		     let affin = params.affin;
 		     affinMatrix = affin2Matrix(affin, srcCanvas);
 		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, rel);
 		     setTableValues("affinMatrixTable", affinMatrix);
-		 }, params);
+		 }, {keys: ["affin", "outfill"]});
     //
     bindTableFunction("affinMatrixTable", function(table, values, width) {
 	affinMatrix = values;
 	drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, true);
     }, affinMatrix, affinWindow);
     //
-    affin = params["affinSelect"];
+    affin = params.affin;
     affinMatrix = affin2Matrix(affin, srcCanvas);
 }
 
@@ -128,7 +126,7 @@ var worker = new workerProcess("worker/affintrans.js");
 function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, sync) {
     var params_w = {
         affinMatrix: affinMatrix,
-        outfill    : outfillStyleNumber(params["outfillSelect"]),
+        outfill    : outfillStyleNumber(params.outfill),
     };
     worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

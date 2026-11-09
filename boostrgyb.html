@@ -11,7 +11,7 @@
         <div style="float:left;">
           Filter:  <br />
           <div style="float:left; ">
-            <select id="boostSelect" size="3">
+            <select id="boostSelect" data-bind="boost" size="3">
               <option value="mul" selected> 乗算 </option>
               <option value="add"         > 加算 </option>
               <option value="mid"         > 中点 </option>
@@ -20,11 +20,11 @@
         </div>
         <div>
           <div>
-	    maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+	    maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
           </div>
           <div>
-	    R-G:<input id="rgRange" type="range" min="-50" max="50" step="1" value="0">:<input type="text" id="rgText" size="5"> <br />
-            Y-B:<input id="ybRange" type="range" min="-50" max="50" step="1" value="0">:<input type="text" id="ybText" size="5">
+	    R-G:<input id="rgRange" data-bind="rg" type="range" min="-50" max="50" step="1" value="0">:<input type="text" id="rgText" data-bind="rg" size="5"> <br />
+            Y-B:<input id="ybRange" data-bind="yb" type="range" min="-50" max="50" step="1" value="0">:<input type="text" id="ybText" data-bind="yb" size="5">
           </div>
         </div>
       </div> <!-- controlPanel -->

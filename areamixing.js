@@ -20,14 +20,10 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({ "maxWidthHeightRange":"maxWidthHeightText",
-                   "dxRange":"dxText", "dyRange":"dyText",
-                   "dxdySyncCheckbox": null,
-                   "methodSelect": null },
-                 function(target, rel) {
+    bindParams(params, function(key, target, rel) {
                      let dxdyParams = ["dxRange", "dxText",
                                        "dyRange", "dyText"];
-                     if (params.dxdySyncCheckbox &&
+                     if (params.dxdySync &&
                          dxdyParams.includes(target.id)) {
                          let value = document.getElementById(target.id).value;
                          params.rxRange = dxRange.value = dxText.value = value;
@@ -35,11 +31,11 @@ function main() {
                      }
 	             drawSrcImageAndAreaMixing(srcImage, srcCanvas, dstCanvas,
                                                params);
-    }, params);
+    }, {keys: ["maxWidthHeight", "dx", "dy", "dxdySync", "method"]});
 }
 
 function drawSrcImageAndAreaMixing(srcImage, srcCanvas, dstCanvas, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawAreaMixing(srcCanvas, dstCanvas, params);
 }
@@ -85,7 +81,7 @@ function minRGBA(rgbaArr) {
 
 function drawAreaMixing(srcCanvas, dstCanvas, params) {
     // console.debug("drawAreaMixing");
-    const { dxRange, dyRange, methodSelect } = params;
+    const { dx: dxRange, dy: dyRange, method : methodSelect} = params;
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const srcWidth = srcCanvas.width, srcHeight = srcCanvas.height;

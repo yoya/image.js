@@ -13,26 +13,26 @@
     <div id="controlPanel">
       <div style="display:flex">
         <div>
-	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
           <br />
-          grayscale:<input id="grayscaleCheckbox" type="checkbox" checked/>
+          grayscale:<input id="grayscaleCheckbox" data-bind="grayscale" type="checkbox" checked/>
         </div>
         <div>
-	  threshold:<input id="thresholdRange" type="range" min="0" max="255" step="1" value="110">:<input type="text" id="thresholdText" size="4">
+	  threshold:<input id="thresholdRange" data-bind="threshold" type="range" min="0" max="255" step="1" value="110">:<input type="text" id="thresholdText" data-bind="threshold" size="4">
           <br />
-          p-tile:<input id="pTileRange" type="range" min="0" max="100" step="1" value="43">:<input type="text" id="pTileText" size="4">
+          p-tile:<input id="pTileRange" data-bind="pTile" type="range" min="0" max="100" step="1" value="43">:<input type="text" id="pTileText" data-bind="pTile" size="4">
         </div>
 	<div>
           Dither:  <br />
-	  <select id="ditherSelect" size="3">
+	  <select id="ditherSelect" data-bind="dither" size="3">
 	    <option value="none" selected> 無し </option>
 	    <option value="random"       > ランダム </option>
           </select>
 	</div>
         <div>
-          totalLine:<input id="totalLineCheckbox" type="checkbox" />
+          totalLine:<input id="totalLineCheckbox" data-bind="totalLine" type="checkbox" />
           <br />
-          histogram:<input id="histogramCheckbox" type="checkbox" checked/>
+          histogram:<input id="histogramCheckbox" data-bind="histogram" type="checkbox" checked/>
         </div>
       </div>
     </div> <!-- controlPanel -->
