@@ -11,7 +11,7 @@
 	<div>
           Filter: <br />
 	  <div style="float:left; ">
-            <select id="thresholdMethod" size="3">
+            <select id="thresholdMethod" data-bind="thresholdMethod" size="3">
               <option value="max-min"      > Max-Min </option>
 	      <option value="mean" selected> Mean </option>
 	      <option value="median"    > Median </option -->
@@ -19,12 +19,12 @@
           </div>
 	</div>
 	<div style="float:left; ">
-	  maxWidthHeight:<input id="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+	  maxWidthHeight:<input id="maxWidthHeight" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
 	</div>
 	<div style="float:left; ">
-	  maxLuminance:<input id="maxLuminance" type="range" min="1" max="255" step="1" value="255">:<input type="text" id="maxLuminanceText" size="4">
+	  maxLuminance:<input id="maxLuminance" data-bind="maxLuminance" type="range" min="1" max="255" step="1" value="255">:<input type="text" id="maxLuminanceText" data-bind="maxLuminance" size="4">
           <br />
-	  minLuminance:<input id="minLuminance" type="range" min="0" max="254" step="1" value="0">:<input type="text" id="minLuminanceText" size="4">
+	  minLuminance:<input id="minLuminance" data-bind="minLuminance" type="range" min="0" max="254" step="1" value="0">:<input type="text" id="minLuminanceText" data-bind="minLuminance" size="4">
 	</div>
       </div> <!-- controlPanel -->
       <div style="clear:both">

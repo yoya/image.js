@@ -541,40 +541,22 @@ function main() {
 	    updateSelectIndex(dstSelect, text);
 	}
     }, "ArrayBuffer");
-    bindFunction({"srcVRange":"srcVText",
-                  "srcRRange":"srcRText",
-		  "srcGRange":"srcGText",
-		  "srcBRange":"srcBText",
-		  "srcCRange":"srcCText",
-		  "srcMRange":"srcMText",
-		  "srcYRange":"srcYText",
-		  "srcKRange":"srcKText"},
-		 function(target,rel) {
+    bindParams({}, function(key, target, rel) {
 		     elems.transformForward.style.display = "block";
 		     elems.transformInverse.style.display = "none";
 		     inverse = false; // src => dst conversion
 		     updateDiagramSrcDstPoints();
-		 });
-    bindFunction({"dstVRange":"dstVText",
-                  "dstRRange":"dstRText",
-		  "dstGRange":"dstGText",
-		  "dstBRange":"dstBText",
-		  "dstCRange":"dstCText",
-		  "dstMRange":"dstMText",
-		  "dstYRange":"dstYText",
-		  "dstKRange":"dstKText"},
-		 function(target,rel) {
+		 }, {keys: ["srcV", "srcR", "srcG", "srcB", "srcC", "srcM", "srcY", "srcK"]});
+    bindParams({}, function(key, target, rel) {
 		     elems.transformForward.style.display = "none";
 		     elems.transformInverse.style.display = "block";
 		     inverse = true; // dst => src conversion
 		     updateDiagramSrcDstPoints();
-		 });
-    bindFunction({"intentSelect":null,
-		  "BPCCheckbox":null},
-		 function(target, rel) {
+		 }, {keys: ["dstV", "dstR", "dstG", "dstB", "dstC", "dstM", "dstY", "dstK"]});
+    bindParams({}, function(key, target, rel) {
 		     makeTransform();
 		     updateDiagramSrcDstPoints();
-		 });
+		 }, {keys: ["intent", "BPC"]});
     var onCIEXYZdata = function(name, arr, isDefault) {
 	diagramParams[name] = arr;
 	if (isDefault) {
@@ -618,18 +600,16 @@ function main() {
 	    });
 	}
     }
-    bindFunction({"srcSelect":null},
-		 function(target,rel) {
+    bindParams({}, function(key, target, rel) {
 		     var buf = srcProfiles[target.value];
 		     updateInputProfile(buf);
 		     updateDiagramSrcDstPoints();
-		 });
-    bindFunction({"dstSelect":null},
-		 function(target,rel) {
+		 }, {keys: ["src"]});
+    bindParams({}, function(key, target, rel) {
 		     var buf = dstProfiles[target.value];
 		     updateOutputProfile(buf);
 		     updateDiagramSrcDstPoints();
-		 });
+		 }, {keys: ["dst"]});
 }
 
 function loadICCProfile(ctx, callback) {

@@ -25,20 +25,18 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"filterSelect":null, "filterWindowRange":"filterWindowText"},
-		 function(target, rel) {
+    bindParams({}, function(key, target, rel) {
 		     filter = document.getElementById("filterSelect").value;
 		     filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
 		     drawMedianFilter(srcCanvas, dstCanvas, filter, filterWindow, rel);
-		 } );
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function(target, rel) {
+		 }, {keys: ["filter", "filterWindow"]});
+    bindParams({}, function(key, target, rel) {
 		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     dstCanvas.width = srcCanvas.width;
 		     dstCanvas.height = srcCanvas.height;
 		     drawMedianFilter(srcCanvas, dstCanvas, filter, filterWindow, rel);
-		 } );
+		 }, {keys: ["maxWidthHeight"]});
 }
 
 var worker = new workerProcess("worker/median.js");

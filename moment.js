@@ -19,11 +19,9 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "reverseCheckbox":null},
-		 function() {
+    bindParams({}, function(key, target, rel) {
 		     drawSrcImageAndMoment(srcImage, srcCanvas, dstCanvas);
-		 } );
+		 }, {keys: ["maxWidthHeight", "reverse"]});
 }
 function drawSrcImageAndMoment(srcImage, srcCanvas, dstCanvas) {
     var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);

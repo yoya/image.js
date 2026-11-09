@@ -60,10 +60,7 @@ function main() {
 	updateDstMatrix(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
     }, srcMatrix2, srcMatrix2Window);
     updateDstMatrix(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
-    bindFunction({ "srcMatrixWindow0DownButton":null,
-		   "srcMatrixWindow0UpButton":null,
-		   "srcMatrixWindow0Text":null },
-		 function(target, rel) {
+    bindParams({}, function(key, target, rel) {
 		     var id = target.id;
 		     var currentWindow0 = srcMatrix1.length / srcMatrix1Window;
 		     var newWindow0 = currentWindow0;
@@ -87,11 +84,8 @@ function main() {
 			 updateDstMatrix(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
 		     }
 
-		 });
-    bindFunction({ "srcMatrixWindow1DownButton":null,
-		   "srcMatrixWindow1UpButton":null,
-		   "srcMatrixWindow1Text":null },
-		 function(target, rel) {
+		 }, {keys: ["srcMatrixWindow0DownButton", "srcMatrixWindow0UpButton", "srcMatrixWindow0"]});
+    bindParams({}, function(key, target, rel) {
 		     var id = target.id;
 		     var currentWindow1 = srcMatrix1Window;
 		     var newWindow1 = currentWindow1;
@@ -121,11 +115,8 @@ function main() {
 			 updateDstMatrix(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
 		     }
 
-		 });
-    bindFunction({ "srcMatrixWindow2DownButton":null,
-		   "srcMatrixWindow2UpButton":null,
-		   "srcMatrixWindow2Text":null },
-		 function(target, rel) {
+		 }, {keys: ["srcMatrixWindow1DownButton", "srcMatrixWindow1UpButton", "srcMatrixWindow1"]});
+    bindParams({}, function(key, target, rel) {
 		     var id = target.id;
 		     var currentWindow2 = srcMatrix2Window;
 		     var newWindow2 = currentWindow2;
@@ -150,7 +141,7 @@ function main() {
 			 updateDstMatrix(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window);
 		     }
 
-		 });
+		 }, {keys: ["srcMatrixWindow2DownButton", "srcMatrixWindow2UpButton", "srcMatrixWindow2"]});
 }
 
 function matrixMultiply(srcMatrix1, srcMatrix1Window, srcMatrix2, srcMatrix2Window) {

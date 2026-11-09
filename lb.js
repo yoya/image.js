@@ -22,17 +22,13 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeight":"maxWidthHeightText",
-		  "thresholdMethod": null,
-                  "maxLuminance":"maxLuminanceText",
-                  "minLuminance":"minLuminanceText"},
-		 function(target, rel) {
-                     switch (target.id) {
+    bindParams(params, function(key, target, rel) {
+                     switch (key) {
                      case "maxLuminance":
                          if (params.maxLuminance <= params.minLuminance) {
                              const lumi = params.minLuminance + 1;
                              params.maxLuminance = lumi;
-                             params.maxLuminanceText = lumi;
+                             params.maxLuminance = lumi;
                              maxLuminance.value =  lumi;
                              maxLuminanceText.value =  lumi;
                          }
@@ -41,13 +37,13 @@ function main() {
                          if (params.minLuminance >= params.maxLuminance) {
                              const lumi = params.maxLuminance - 1;
                              params.minLuminance = lumi;
-                             params.minLuminanceText = lumi;
+                             params.minLuminance = lumi;
                              minLuminance.value = lumi;
                              minLuminanceText.value = lumi;
                          }
                      }
 		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params, rel);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "thresholdMethod", "maxLuminance", "minLuminance"]});
  }
 function drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params, sync) {
     drawSrcImage(srcImage, srcCanvas, params.maxWidthHeight);

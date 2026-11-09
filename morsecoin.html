@@ -9,10 +9,10 @@
     <div class="container">
       <div class="controlPanel" style="display:flex">
         <div>
-	  widthHeight:<input id="widthHeightRange" type="range" min="16" max="2048" step="1" value="400">:<input type="text" id="widthHeightText" size="5">
+	  widthHeight:<input id="widthHeightRange" data-bind="widthHeight" type="range" min="16" max="2048" step="1" value="400">:<input type="text" id="widthHeightText" data-bind="widthHeight" size="5">
           </div>
         <div>
-          text:<input id="textText" type="text" value="SOS">
+          text:<input id="textText" data-bind="text" type="text" value="SOS">
         </div>
       </div> <!-- controlPanel -->
       <canvas id="sendCanvas" class="borderBlue" width="400" height="400"> dstCanvas </canvas>

@@ -20,24 +20,20 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-            let maxWidthHeight = params["maxWidthHeightRange"];
+            let maxWidthHeight = params.maxWidthHeight;
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    drawKuwaharaFilter(srcCanvas, dstCanvases, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"variWindowRange":"variWindowText",
-                  "vslideWindowRange":"vslideWindowText",
-                  "filterWindowRange":"filterWindowText"},
-		 function(target, rel) {
+    bindParams(params, function(key, target, rel) {
 		     drawKuwaharaFilter(srcCanvas, dstCanvases, params, rel);
-		 }, params);
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function(target, rel) {
-		     let maxWidthHeight = params["maxWidthHeightRange"];
+		 }, {keys: ["variWindow", "vslideWindow", "filterWindow"]});
+    bindParams(params, function(key, target, rel) {
+		     let maxWidthHeight = params.maxWidthHeight;
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     drawKuwaharaFilter(srcCanvas, dstCanvases, params, rel);
-		 }, params);
+		 }, {keys: ["maxWidthHeight"]});
 }
 
 var worker = new workerProcess("worker/kuwahara.js");
@@ -45,9 +41,9 @@ var worker = new workerProcess("worker/kuwahara.js");
 function drawKuwaharaFilter(srcCanvas, dstCanvases, params, sync) {
     var params_w = {
         rankOrder   : 1,
-        variWindow  : params["variWindowRange"],
-        vslideWindow: params["vslideWindowRange"],
-        filterWindow: params["filterWindowRange"],
+        variWindow  : params.variWindow,
+        vslideWindow: params.vslideWindow,
+        filterWindow: params.filterWindow,
     };
     // console.debug("worker.process", srcCanvas, dstCanvases, params_w, sync);
     worker.process(srcCanvas, dstCanvases, params_w, sync);
