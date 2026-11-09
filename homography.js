@@ -123,24 +123,8 @@ function main() {
         let markerArray = params.markerArray;
         switch (eventType) {
         case "mousedown":
-            let grabbedDist2 = 0;
-            let grabbedMarker = null;
-            for (let i = 0, n = markerArray.length; i < n; i++) {
-                let [xx, yy] = markerArray[i];
-                let dist2 = (x-xx)**2 + (y-yy)**2;
-                if (dist2 < hittestRadius2) {
-                    if (grabbedMarker === null) {
-                        grabbedMarker = i;
-                        grabbedDist2 = dist2;
-                    } else {
-                        if (grabbedDist < dist2) {
-                            grabbedMarker = i;
-                            grabbedDist2 = dist2;
-                        }
-                    }
-                }
-            }
-            params.grabbedMarker = grabbedMarker;
+            params.grabbedMarker = grabMarkerIndex(markerArray, x, y,
+                                                   hittestRadius2);
             // console.debug(eventType, params.grabbedMarker, x, y);
             break;
         case "mousemove":
@@ -170,6 +154,65 @@ function main() {
             break;
         }
     });
+    // dst markers: the src image corners mapped on dst.
+    bindCursolFunction("dstCanvas", params, function(target, eventType) {
+        if ((!params.dstMarkers) || (!params.dstMarkerArray)) {
+            return ;  // skip
+        }
+        const {x, y} = params[target.id];
+        const hittestRadius2 = 16 ** 2;
+        const dstMarkerArray = params.dstMarkerArray;
+        switch (eventType) {
+        case "mousedown":
+            params.dstGrabbedMarker = grabMarkerIndex(dstMarkerArray, x, y,
+                                                      hittestRadius2);
+            break;
+        case "mousemove":
+        case "mouseup":
+            if ((params.dstGrabbedMarker === null) ||
+                (params.dstGrabbedMarker === undefined)) {
+                break;
+            }
+            const rel = (eventType === "mouseup");
+            dstMarkerArray[params.dstGrabbedMarker] = [x, y];
+            const { width, height } = dstCanvas;
+            const dstMarkersNorm = dstMarkerArray.map(([xx, yy]) =>
+                                                      [xx / width, yy / height]);
+            // dst markers => unit square (src) : that is dst => src coeff.
+            let coeff = homographyCoeffByMarkers(dstMarkersNorm, true);
+            coeff = coeff.map(v => v / coeff[8]);  // normalize i to 1
+            params.coeff = coeff;
+            // src markers follow: dst corners mapped on src.
+            const corners = [[0, 0], [1, 0], [0, 1], [1, 1]];
+            for (let i = 0; i < 4; i++) {
+                const [sx, sy] = homography(corners[i][0], corners[i][1], coeff);
+                params[markerNameList[i*2]]   = sx * srcCanvas.width;
+                params[markerNameList[i*2+1]] = sy * srcCanvas.height;
+            }
+            bind2elements(params);
+            coeffValueSet(params.coeff);  // after bind2elements (it overwrites)
+            drawHomograpy(srcImage, srcCanvas, dstCanvas, params, rel);
+            if (eventType === "mouseup") {
+                params.dstGrabbedMarker = null;
+            }
+            break;
+        }
+    });
+}
+
+// index of the nearest marker within the radius, or null.
+function grabMarkerIndex(markerArray, x, y, radius2) {
+    let grabbedMarker = null;
+    let grabbedDist2 = radius2;
+    for (let i = 0, n = markerArray.length; i < n; i++) {
+        const [xx, yy] = markerArray[i];
+        const dist2 = (x-xx)**2 + (y-yy)**2;
+        if (dist2 < grabbedDist2) {
+            grabbedMarker = i;
+            grabbedDist2 = dist2;
+        }
+    }
+    return grabbedMarker;
 }
 
 var worker = new workerProcess("worker/homography.js");
