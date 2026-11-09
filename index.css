@@ -274,30 +274,40 @@ figcaption { margin-top: 4px; color: var(--text-sub); font-size: 12px; text-alig
  * curved trailing edge) so the direction of rotation is obvious.
  * it spins in gusts: speeding up and slowing down, never fully stopping.
  */
-.loadingOverlay .loadingVanes {
-    isolation: isolate;
+.loadingOverlay .loadingSpin {
     transform-box: view-box;
     transform-origin: 50% 50%;
     animation: loadingPinwheel 2.4s cubic-bezier(.4, .1, .6, .9) infinite;
 }
+.loadingOverlay .loadingVanes { isolation: isolate; }
 .loadingOverlay .loadingVane {
     mix-blend-mode: darken;  /* overlapping vanes mix, as in the old icon */
-    stroke: rgba(0, 0, 0, 0.18);
-    stroke-width: 0.8;
+    /* outline: same width on screen whatever the icon size or vane scaling */
+    vector-effect: non-scaling-stroke;
+    stroke: rgba(40, 30, 20, 0.75);
+    stroke-width: 1.2px;
     stroke-linejoin: round;
 }
-.loadingOverlay svg { filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35)); }
+.loadingOverlay .loadingHalo {  /* white rim around the whole pinwheel */
+    vector-effect: non-scaling-stroke;
+    fill: #fff;
+    stroke: #fff;
+    stroke-width: 5px;
+    stroke-linejoin: round;
+}
+.loadingOverlay svg { filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4)); }
 .loadingOverlay .loadingPin {
-    fill: var(--surface);
-    stroke: rgba(0, 0, 0, 0.3);
-    stroke-width: 1.2;
+    vector-effect: non-scaling-stroke;
+    fill: #fff;
+    stroke: rgba(40, 30, 20, 0.75);
+    stroke-width: 1.2px;
 }
 @keyframes loadingPinwheel {
     from { transform: rotate(0deg); }
     to   { transform: rotate(720deg); }
 }
 @media (prefers-reduced-motion: reduce) {
-    .loadingOverlay .loadingVanes { animation-duration: 8s; }
+    .loadingOverlay .loadingSpin { animation-duration: 8s; }
 }
 .loadingOverlay.loadingCenter {
     position: fixed;
