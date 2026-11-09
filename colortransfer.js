@@ -13,10 +13,9 @@ function main() {
     // console.debug("main");
     const srcCanvas = document.getElementById("srcCanvas");
     const dstCanvas = document.getElementById("dstCanvas");
+    // for the jscolor picker API
     const srcColorText = document.getElementById("srcColorText");
     const dstColorText = document.getElementById("dstColorText");
-    const colorSrcDstRadio1 = document.getElementById("colorSrcDstRadio1");
-    const colorSrcDstRadio2 = document.getElementById("colorSrcDstRadio2");
     const srcImage = new Image();
     const params = {};
     srcImage.onload = function() {
@@ -30,17 +29,16 @@ function main() {
                      switch (key) {
                      case "srcColor":
                      case "colorSrcDstRadio1":
-                         colorSrcDstRadio1.checked = true;
-                         colorSrcDstRadio2.checked = false;
+                         params.colorSrcDstRadio1 = true;
+                         params.colorSrcDstRadio2 = false;
                          break;
                      case "dstColor":
                      case "colorSrcDstRadio2":
-                         colorSrcDstRadio1.checked = false;
-                         colorSrcDstRadio2.checked = true;
+                         params.colorSrcDstRadio1 = false;
+                         params.colorSrcDstRadio2 = true;
                          break;
                      }
-                     params.colorSrcDstRadio1 = colorSrcDstRadio1.checked;
-                     params.colorSrcDstRadio2 = colorSrcDstRadio2.checked;
+                     syncParamsToElements(params, {keys: ["colorSrcDstRadio1", "colorSrcDstRadio2"]});
                      drawSrcImageAndColorTransfer(srcImage, srcCanvas, dstCanvas, params);
 		 }, {keys: ["maxWidthHeight", "fuzz", "srcColor", "dstColor", "colorSrcDstRadio1", "colorSrcDstRadio2", "diffSync", "diffRelative"]});
     let touch = false;

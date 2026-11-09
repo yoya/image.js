@@ -13,33 +13,30 @@ function main() {
     const dstCanvas = document.getElementById("dstCanvas");
     const graphCanvas = document.getElementById("graphCanvas");
     let srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    const params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndBitDepth(srcImage, srcCanvas, dstCanvas, true);
+	    drawSrcImageAndBitDepth(srcImage, srcCanvas, dstCanvas, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindParams({}, function(key, target, rel) {
-		     drawSrcImageAndBitDepth(srcImage, srcCanvas, dstCanvas, rel);
+    bindParams(params, function(key, target, rel) {
+		     drawSrcImageAndBitDepth(srcImage, srcCanvas, dstCanvas, params, rel);
 		 }, {keys: ["maxWidthHeight", "srcBitDepth", "dstBitDepth", "quantize", "dither"]});
     drawBitDepthGraph(srcCanvas, dstCanvas, graphCanvas);
 }
 
-function drawSrcImageAndBitDepth(srcImage, srcCanvas, dstCanvas, sync) {
-    const maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    const srcBitDepth = parseFloat(document.getElementById("srcBitDepthRange").value);
-    const dstBitDepth = parseFloat(document.getElementById("dstBitDepthRange").value);
-    const dither = document.getElementById("ditherSelect").value;
-    const quantize = document.getElementById("quantizeSelect").value;
+function drawSrcImageAndBitDepth(srcImage, srcCanvas, dstCanvas, params, sync) {
+    const { maxWidthHeight, srcBitDepth, dstBitDepth, dither, quantize } = params;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    const params = {
+    const params_w = {
 	"srcBitDepth":srcBitDepth,
 	"dstBitDepth":dstBitDepth,
 	"dither":dither,
 	"quantize":quantize
     };
-    drawBitDepth(srcCanvas, dstCanvas, params, sync);
+    drawBitDepth(srcCanvas, dstCanvas, params_w, sync);
 }
 
 

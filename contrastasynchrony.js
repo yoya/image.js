@@ -15,16 +15,11 @@ const stopButton = document.getElementById("stopButton");
 
 function main() {
     // console.debug("main");
-    const widthRange = document.getElementById("widthRange");
-    const heightRange = document.getElementById("heightRange");
-    const periodRange = document.getElementById("periodRange");
+    // width, height, period, debug1..3 are set by bindParams
     const params = {
         canvas:canvas,
-        width: parseFloat(widthRange.value),
-        height:parseFloat(heightRange.value),
         elapse:1000 / 24, // 24fps
         //elapse: 1000 / 4, // debug
-        period: parseFloat(periodRange.value),
         timerId: -1,
     };
     bindParams(params, function(key, target, rel) {

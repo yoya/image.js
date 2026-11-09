@@ -10,25 +10,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     var canvas = document.getElementById("canvas");
-    var widthRange = document.getElementById("widthRange");
-    var heightRange = document.getElementById("heightRange");
-    var barder1Range = document.getElementById("border1Range");
-    var barder2Range = document.getElementById("border2Range");
     var params = {
-        width:parseFloat(widthRange.value),
-        height: parseFloat(heightRange.value),
-        border1:parseFloat(border1Range.value),
-        border2:parseFloat(border2Range.value),
         nColumns: 6,  // horitontal
         nRows: 4,     // vertical
     };
-    bindParams({}, function(key, target, rel) {
-                     params['width']  = parseFloat(widthRange.value);
-                     params['height'] = parseFloat(heightRange.value);
-                     params['border1'] = parseFloat(border1Range.value);
-                     params['border2'] = parseFloat(border2Range.value);
+    // width, height, border1, border2
+    bindParams(params, function(key, target, rel) {
                      drawColorChecker(canvas, params);
-		 }, {keys: ["widthRange", "heightRange", "border1Range", "border2Range"]});
+		 }, {keys: ["width", "height", "border1", "border2"]});
     drawColorChecker(canvas, params);
 }
 

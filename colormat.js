@@ -14,11 +14,9 @@ function main() {
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     //
     var colorMatrixTable = document.getElementById("colorMatrixTable");
-    var categorySelect = document.getElementById("categorySelect");
-    var colorSelect    = document.getElementById("colorSelect");
-    var category = categorySelect.value;
-    var color    = colorSelect.value;
-    var colorMatrix = color2Matrix[color];
+    var colorSelect    = document.getElementById("colorSelect");  // options are rebuilt
+    var params = {};
+    var colorMatrix = null;  // set after bindParams
     var colorWindow = 4;
     var colorSelectOptions = [];
     // saving all color select option elems
@@ -29,20 +27,18 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix);
+	    drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindParams({}, function(key, target, rel) {
+    bindParams(params, function(key, target, rel) {
                      var identMatrix = color2Matrix["ident"];
-                     var amount = parseFloat(document.getElementById("amountRange").value);
-                     var matrix = interpMatrix(identMatrix, colorMatrix, amount);
-                     
-		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, matrix, rel);
+                     var matrix = interpMatrix(identMatrix, colorMatrix, params.amount);
+		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, matrix, params, rel);
 		 }, {keys: ["maxWidthHeight", "amount", "linear"]});
-    bindParams({}, function(key, target, rel) {
-                     category = categorySelect.value;
+    bindParams(params, function(key, target, rel) {
+                     const category = params.category;
                      while (colorSelect.options.length > 0) {
                          colorSelect.remove(0);
                      }
@@ -63,17 +59,16 @@ function main() {
                          }
                      }
 		 }, {keys: ["category"]});
-    bindParams({}, function(key, target, rel) {
-		     color = colorSelect.value;
-		     colorMatrix = color2Matrix[color];
-		     // console.log(color, colorMatrix);
-		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, rel);
+    bindParams(params, function(key, target, rel) {
+		     colorMatrix = color2Matrix[params.color];
+		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, params, rel);
 		     setTableValues("colorMatrixTable", colorMatrix);
 		 }, {keys: ["color"]});
+    colorMatrix = color2Matrix[params.color];
     //
     bindTableFunction("colorMatrixTable", function(table, values, width) {
 	colorMatrix = values;
-	drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, true);
+	drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, params, true);
     }, colorMatrix, colorWindow);
     // x2console.log(colorMatrixTable);
 }
@@ -215,9 +210,8 @@ var color2Matrix = {
 	0.299*(43/107) , 0.587*(43/107) , 0.114*(43/107) , 0],
 };
 
-function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, rel) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var linear = document.getElementById("linearCheckbox").checked;
+function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatrix, params, rel) {
+    var { maxWidthHeight, linear } = params;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawColorTransform(srcCanvas, dstCanvas, colorMatrix, linear, rel);
 }

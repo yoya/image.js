@@ -14,8 +14,7 @@ function main() {
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     //
     var affinMatrixTable = document.getElementById("affinMatrixTable");
-    var affin = document.getElementById("affinSelect").value;
-    var affinMatrix = affin2Matrix(affin, srcCanvas);
+    var affinMatrix = null;  // set after bindParams
     var affinWindow = 3;
     var params = {};
     //
@@ -40,6 +39,7 @@ function main() {
 		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, rel);
 		     setTableValues("affinMatrixTable", affinMatrix);
 		 }, {keys: ["affin", "outfill"]});
+    affinMatrix = affin2Matrix(params.affin, srcCanvas);
     //
     bindTableFunction("affinMatrixTable", function(table, values, width) {
 	affinMatrix = values;

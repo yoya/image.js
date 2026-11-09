@@ -13,29 +13,27 @@ function main() {
     var dstCanvasArr = ["dstCanvas1", "dstCanvas2", "dstCanvas3", "dstCanvas4", "dstCanvas"].map(function(id) { return document.getElementById(id); });
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     //
-    var component = document.getElementById("componentSelect").value;
+    var params = {};
     //
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, component);
+	    drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindParams({}, function(key, target, rel) {
-		     drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, component);
+    bindParams(params, function(key, target, rel) {
+		     drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, params);
 		 }, {keys: ["maxWidthHeight"]});
-    bindParams({}, function(key, target, rel) {
-		     component = document.getElementById("componentSelect").value;
-		     drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, component);
+    bindParams(params, function(key, target, rel) {
+		     drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, params);
 		 }, {keys: ["component", "amp1", "amp2", "amp3", "amp4"]});
 }
 
-function drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, component) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var ampIdArr = ["amp1Range", "amp2Range", "amp3Range", "amp4Range"];
-    var ampArr = ampIdArr.map(function(id) { return parseFloat(document.getElementById(id).value); });
+function drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, params) {
+    var { maxWidthHeight, component } = params;
+    var ampArr = [params.amp1, params.amp2, params.amp3, params.amp4];
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawColorComponent(srcCanvas, dstCanvasArr, component, ampArr);
 }

@@ -12,25 +12,25 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndColorReduction(srcImage, srcCanvas);
+	    drawSrcImageAndColorReduction(srcImage, srcCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindParams({}, function(key, target, rel) {
-		     drawSrcImageAndColorReduction(srcImage, srcCanvas);
+    bindParams(params, function(key, target, rel) {
+		     drawSrcImageAndColorReduction(srcImage, srcCanvas, params);
 		 }, {keys: ["maxWidthHeight", "quantizeMethod"]});
 }
 
 var worker = null;
 
-function drawSrcImageAndColorReduction(srcImage, srcCanvas) {
+function drawSrcImageAndColorReduction(srcImage, srcCanvas, params) {
     var srcCtx = srcCanvas.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");
-    var quantizeMethod = document.getElementById("quantizeMethod").value;
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    var { quantizeMethod, maxWidthHeight } = params;
     document.getElementById("nColorSrc").value = "";
     document.getElementById("nColorDst").value = "";
     var srcImageData = srcCanvas.getContext("2d").getImageData(0, 0, srcCanvas.width, srcCanvas.height);

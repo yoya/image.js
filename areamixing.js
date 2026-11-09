@@ -21,13 +21,9 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     bindParams(params, function(key, target, rel) {
-                     let dxdyParams = ["dxRange", "dxText",
-                                       "dyRange", "dyText"];
-                     if (params.dxdySync &&
-                         dxdyParams.includes(target.id)) {
-                         let value = document.getElementById(target.id).value;
-                         params.rxRange = dxRange.value = dxText.value = value;
-                         params.ryRange = dyRange.value = dyText.value = value;
+                     if (params.dxdySync && ((key === "dx") || (key === "dy"))) {
+                         params.dx = params.dy = params[key];
+                         syncParamsToElements(params, {keys: ["dx", "dy"]});
                      }
 	             drawSrcImageAndAreaMixing(srcImage, srcCanvas, dstCanvas,
                                                params);
