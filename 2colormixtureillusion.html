@@ -1,16 +1,19 @@
+<!doctype html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="copyright" content="Copyright &copy; 2017/11/26- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> 2 color mixtures illusion </title>
 <link rel="stylesheet" href="index.css">
+<script src="lib/page.js"></script>
 </head>
 <body>
   <div class="container">
     <div id="controlPanel">
       <div>
-	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight">
-	mosaic:<input id="mosaicCheckbox" data-bind="mosaic" type="checkbox" />
+	<label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight"></label>
+	<label class="check"><input id="mosaicCheckbox" data-bind="mosaic" type="checkbox" /> mosaic</label>
       </div>
     </div>
   </div>

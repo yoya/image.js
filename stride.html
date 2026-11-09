@@ -1,15 +1,18 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2018/08/28- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> Stride Shift </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
   </head>
   <body>
     <div class="container">
       <div class="controlPanel">
-	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="4096">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-	stride:<input id="strideRange" data-bind="stride" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="strideText" data-bind="stride" size="5">
+	<label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="4096"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+	<label class="param"><span class="name">stride</span><input id="strideRange" data-bind="stride" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="strideText" data-bind="stride" size="5"></label>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>

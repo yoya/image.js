@@ -1,9 +1,12 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2017/06/12- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> Pseudo Color </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
   </head>
   <body>
     <div class="container">
@@ -33,15 +36,14 @@
           <div>
 	    <canvas id="clutCanvas" class="borderGray" width=256 height=32> clutCanvas </canvas>
           </div> <div>
-	    clutScale: <br/> <input id="clutScaleRange" data-bind="clutScale" type="range" min="-8" max="8" step="0.1" value="1" style="width:80%">:<input type="text" id="clutScaleText" data-bind="clutScale" size="4">
+	    <label class="param"><span class="name">clutScale</span><input id="clutScaleRange" data-bind="clutScale" type="range" min="-8" max="8" step="0.1" value="1" style="width:80%"><input type="text" id="clutScaleText" data-bind="clutScale" size="4"></label>
           </div> <div>
-            clutOffset: <br/> <input id="clutOffsetRange" data-bind="clutOffset" type="range" min="0" max="100" step="1" value="0" style="width:80%">:<input type="text" id="clutOffsetText" data-bind="clutOffset" size="4">
+            <label class="param"><span class="name">clutOffset</span><input id="clutOffsetRange" data-bind="clutOffset" type="range" min="0" max="100" step="1" value="0" style="width:80%"><input type="text" id="clutOffsetText" data-bind="clutOffset" size="4"></label>
           </div>
 	</div>
 	<div>
-	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-          <br />
-          linear RGB:<input id="linearCheckbox" data-bind="linear" type="checkbox" />
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+          <label class="check"><input id="linearCheckbox" data-bind="linear" type="checkbox" /> linear RGB</label>
 	</div>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>

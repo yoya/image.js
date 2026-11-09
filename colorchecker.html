@@ -1,20 +1,23 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2019/02/23- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> Color Checker </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
   </head>
   <body>
     <div class="container">
       <div class="controlPanel">
-	width:<input id="widthRange" data-bind="width" type="range" min="16" max="1920" step="1" value="800">
+	<label class="param"><span class="name">width</span><input id="widthRange" data-bind="width" type="range" min="16" max="1920" step="1" value="800"></label>
         :<input type="text" id="widthText" data-bind="width" size="5">
-        height:<input id="heightRange" data-bind="height" type="range" min="16" max="1080" step="1" value="540">
+        <label class="param"><span class="name">height</span><input id="heightRange" data-bind="height" type="range" min="16" max="1080" step="1" value="540"></label>
         :<input type="text" id="heightText" data-bind="height" size="5">
-	border1:<input id="border1Range" data-bind="border1" type="range" min="0" max="100" step="1" value="30">
+	<label class="param"><span class="name">border1</span><input id="border1Range" data-bind="border1" type="range" min="0" max="100" step="1" value="30"></label>
         :<input type="text" id="border1Text" data-bind="border1" size="5">
-	border2:<input id="border2Range" data-bind="border2" type="range" min="0" max="100" step="1" value="20">
+	<label class="param"><span class="name">border2</span><input id="border2Range" data-bind="border2" type="range" min="0" max="100" step="1" value="20"></label>
         :<input type="text" id="border2Text" data-bind="border2" size="5">
       </div> <!-- controlPanel -->
       <canvas id="canvas" width=200 height=200> srcCanvas </canvas>

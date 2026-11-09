@@ -1,9 +1,12 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2022/01/22- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> Color Time Mix </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
     <style>
       .preview {
           max-width: 320px;  max-height: 240px;
@@ -14,10 +17,10 @@
     <div class="container">
       <div class="controlPanel" style="display:flex">
         <div>
-	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"  style="width:200px;">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"> <br />
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"  style="width:200px;"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
           <input type="button" id="buttonStart" data-bind="buttonStart" value="Start"> </input>
           <input type="button" id="buttonStop" data-bind="buttonStop" value="Stop"> </input>
-          delay:<input id="delayRange" data-bind="delay" type="range" min="0" max="500" step="1" value="0" style="width:200px;">:<input type="text" id="delayText" data-bind="delay" size="4">
+          <label class="param"><span class="name">delay</span><input id="delayRange" data-bind="delay" type="range" min="0" max="500" step="1" value="0" style="width:200px;"><input type="text" id="delayText" data-bind="delay" size="4"></label>
         </div>
         <div>
           <span style="vertical-align: top;"> type: </span>

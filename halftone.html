@@ -1,23 +1,26 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2022/08/28- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> Halftone </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
   </head>
   <body>
     <div class="container">
       <div class="controlPanel" style="display:flex">
         <div>
-	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"> <br />
-          scale:<input id="scaleRange" data-bind="scale" type="range" min="1" max="8" step="0.1" value="1.0">:<input type="text" id="scaleText" data-bind="scale" size="4"> <br />
-          size:<input id="sizeRange" data-bind="size" type="range" min="1" max="32" step="1" value="8">:<input type="text" id="sizeText" data-bind="size" size="3">
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+          <label class="param"><span class="name">scale</span><input id="scaleRange" data-bind="scale" type="range" min="1" max="8" step="0.1" value="1.0"><input type="text" id="scaleText" data-bind="scale" size="4"></label>
+          <label class="param"><span class="name">size</span><input id="sizeRange" data-bind="size" type="range" min="1" max="32" step="1" value="8"><input type="text" id="sizeText" data-bind="size" size="3"></label>
         </div>
         <div>
-          cRotate:<input id="cRotateRange" data-bind="cRotate" type="range" min="0" max="180" step="1" value="15">:<input type="text" id="cRotateText" data-bind="cRotate" size="4"> <br />
-          mRotate:<input id="mRotateRange" data-bind="mRotate" type="range" min="0" max="180" step="1" value="30">:<input type="text" id="mRotateText" data-bind="mRotate" size="4"> <br />
-          yRotate:<input id="yRotateRange" data-bind="yRotate" type="range" min="0" max="180" step="1" value="45">:<input type="text" id="yRotateText" data-bind="yRotate" size="4"> <br />
-          kRotate:<input id="kRotateRange" data-bind="kRotate" type="range" min="0" max="180" step="1" value="75">:<input type="text" id="kRotateText" data-bind="kRotate" size="4">
+          <label class="param"><span class="name">cRotate</span><input id="cRotateRange" data-bind="cRotate" type="range" min="0" max="180" step="1" value="15"><input type="text" id="cRotateText" data-bind="cRotate" size="4"></label>
+          <label class="param"><span class="name">mRotate</span><input id="mRotateRange" data-bind="mRotate" type="range" min="0" max="180" step="1" value="30"><input type="text" id="mRotateText" data-bind="mRotate" size="4"></label>
+          <label class="param"><span class="name">yRotate</span><input id="yRotateRange" data-bind="yRotate" type="range" min="0" max="180" step="1" value="45"><input type="text" id="yRotateText" data-bind="yRotate" size="4"></label>
+          <label class="param"><span class="name">kRotate</span><input id="kRotateRange" data-bind="kRotate" type="range" min="0" max="180" step="1" value="75"><input type="text" id="kRotateText" data-bind="kRotate" size="4"></label>
         </div>
         <div>
           <button type="button" id="rc1Button" data-bind="rc1Button"> 15, 30, 45, 75 </button> <br />
@@ -27,10 +30,10 @@
           <button type="button" id="rc5Button" data-bind="rc5Button"> 20, 80, 65, 50 </button>
         </div>
         <div>
-          cAmount:<input id="cAmountRange" data-bind="cAmount" type="range" min="0" max="100" step="1" value="100">:<input type="text" id="cAmountText" data-bind="cAmount" size="4"> <br />
-          mAmount:<input id="mAmountRange" data-bind="mAmount" type="range" min="0" max="100" step="1" value="100">:<input type="text" id="mAmountText" data-bind="mAmount" size="4"> <br />
-          yAmount:<input id="yAmountRange" data-bind="yAmount" type="range" min="0" max="100" step="1" value="100">:<input type="text" id="yAmountText" data-bind="yAmount" size="4"> <br />
-          kAmount:<input id="kAmountRange" data-bind="kAmount" type="range" min="0" max="100" step="1" value="100">:<input type="text" id="kAmountText" data-bind="kAmount" size="4">
+          <label class="param"><span class="name">cAmount</span><input id="cAmountRange" data-bind="cAmount" type="range" min="0" max="100" step="1" value="100"><input type="text" id="cAmountText" data-bind="cAmount" size="4"></label>
+          <label class="param"><span class="name">mAmount</span><input id="mAmountRange" data-bind="mAmount" type="range" min="0" max="100" step="1" value="100"><input type="text" id="mAmountText" data-bind="mAmount" size="4"></label>
+          <label class="param"><span class="name">yAmount</span><input id="yAmountRange" data-bind="yAmount" type="range" min="0" max="100" step="1" value="100"><input type="text" id="yAmountText" data-bind="yAmount" size="4"></label>
+          <label class="param"><span class="name">kAmount</span><input id="kAmountRange" data-bind="kAmount" type="range" min="0" max="100" step="1" value="100"><input type="text" id="kAmountText" data-bind="kAmount" size="4"></label>
         </div>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>

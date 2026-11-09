@@ -1,21 +1,23 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2018/10/08- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> CZP (Circular Zone Plate) </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
   </head>
   <body>
     <div class="container">
       <div class="controlPanel">
-	width:<input id="widthRange" data-bind="width" type="range" min="16" max="4096" step="1" value="640">:<input type="text" id="widthText" data-bind="width" size="5">
-	height:<input id="heightRange" data-bind="height" type="range" min="16" max="4096" step="1" value="640">:<input type="text" id="heightText" data-bind="height" size="5">
-	theta:<input id="thetaRange" data-bind="theta" type="range" min="0" max="359" step="1" value="0">:<input type="text" id="thetaText" data-bind="theta" size="5">
-	<br>
-	revRed:<input id="revRedCheckbox" data-bind="revRed" type="checkbox"/>
-	revGreen:<input id="revGreenCheckbox" data-bind="revGreen" type="checkbox"/>
-	revBlue:<input id="revBlueCheckbox" data-bind="revBlue" type="checkbox"/>
-	scale:<input id="scaleRange" data-bind="scale" type="range" min="0.1" max="5.0" step="0.01" value="1.0">:<input type="text" id="scaleText" data-bind="scale" size="4">
+	<label class="param"><span class="name">width</span><input id="widthRange" data-bind="width" type="range" min="16" max="4096" step="1" value="640"><input type="text" id="widthText" data-bind="width" size="5"></label>
+	<label class="param"><span class="name">height</span><input id="heightRange" data-bind="height" type="range" min="16" max="4096" step="1" value="640"><input type="text" id="heightText" data-bind="height" size="5"></label>
+	<label class="param"><span class="name">theta</span><input id="thetaRange" data-bind="theta" type="range" min="0" max="359" step="1" value="0"><input type="text" id="thetaText" data-bind="theta" size="5"></label>
+	<label class="check"><input id="revRedCheckbox" data-bind="revRed" type="checkbox"/> revRed</label>
+	<label class="check"><input id="revGreenCheckbox" data-bind="revGreen" type="checkbox"/> revGreen</label>
+	<label class="check"><input id="revBlueCheckbox" data-bind="revBlue" type="checkbox"/> revBlue</label>
+	<label class="param"><span class="name">scale</span><input id="scaleRange" data-bind="scale" type="range" min="0.1" max="5.0" step="0.01" value="1.0"><input type="text" id="scaleText" data-bind="scale" size="4"></label>
       </div> <!-- controlPanel -->
       <canvas id="canvas" class="borderBlue" width=200 height=200> canvas </canvas>
     </div>  <!-- container -->

@@ -1,21 +1,23 @@
+<!doctype html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="copyright" content="Copyright &copy; 2018/06/05- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> k-means demo </title>
   <link rel="stylesheet" href="index.css">
+  <script src="lib/page.js"></script>
 </head>
 <body>
   <div id="controllerContainer">
     <input type="button" id="restartButton" data-bind="restartButton" value="Restart" />
-    delay:<input id="delayRange" data-bind="delay" type="range" min="0.0" max="2.0" step="0.1" value="1.0">:<input type="text" id="delayText" data-bind="delay" size="5">
+    <label class="param"><span class="name">delay</span><input id="delayRange" data-bind="delay" type="range" min="0.0" max="2.0" step="0.1" value="1.0"><input type="text" id="delayText" data-bind="delay" size="5"></label>
     <input type="button" id="resetButton" data-bind="resetButton" value="Reset" />
     <br />
-    nPoints:<input id="nPointsRange" data-bind="nPoints" type="range" min="10" max="100" step="1" value="25">:<input type="text" id="nPointsText" data-bind="nPoints" size="5">
-    nCenterPoints:<input id="nCenterPointsRange" data-bind="nCenterPoints" type="range" min="2" max="10" step="1" value="5">:<input type="text" id="nCenterPointsText" data-bind="nCenterPoints" size="5">
-    <br />
-    width:<input id="widthRange" data-bind="width" type="range" min="16" max="4096" step="1" value="512">:<input type="text" id="widthText" data-bind="width" size="5">
-    height:<input id="heightRange" data-bind="height" type="range" min="16" max="4096" step="1" value="512">:<input type="text" id="heightText" data-bind="height" size="5">
+    <label class="param"><span class="name">nPoints</span><input id="nPointsRange" data-bind="nPoints" type="range" min="10" max="100" step="1" value="25"><input type="text" id="nPointsText" data-bind="nPoints" size="5"></label>
+    <label class="param"><span class="name">nCenterPoints</span><input id="nCenterPointsRange" data-bind="nCenterPoints" type="range" min="2" max="10" step="1" value="5"><input type="text" id="nCenterPointsText" data-bind="nCenterPoints" size="5"></label>
+    <label class="param"><span class="name">width</span><input id="widthRange" data-bind="width" type="range" min="16" max="4096" step="1" value="512"><input type="text" id="widthText" data-bind="width" size="5"></label>
+    <label class="param"><span class="name">height</span><input id="heightRange" data-bind="height" type="range" min="16" max="4096" step="1" value="512"><input type="text" id="heightText" data-bind="height" size="5"></label>
   </div>
   <div id="canvasContainer">
     <canvas id="canvas" class="borderRed" width="512" height="512"> </canvas>

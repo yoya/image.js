@@ -1,9 +1,12 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2018/12/12- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> LB (Local Binary) </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
   </head>
   <body>
     <div class="container">
@@ -19,12 +22,11 @@
           </div>
 	</div>
 	<div style="float:left; ">
-	  maxWidthHeight:<input id="maxWidthHeight" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeight" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
 	</div>
 	<div style="float:left; ">
-	  maxLuminance:<input id="maxLuminance" data-bind="maxLuminance" type="range" min="1" max="255" step="1" value="255">:<input type="text" id="maxLuminanceText" data-bind="maxLuminance" size="4">
-          <br />
-	  minLuminance:<input id="minLuminance" data-bind="minLuminance" type="range" min="0" max="254" step="1" value="0">:<input type="text" id="minLuminanceText" data-bind="minLuminance" size="4">
+	  <label class="param"><span class="name">maxLuminance</span><input id="maxLuminance" data-bind="maxLuminance" type="range" min="1" max="255" step="1" value="255"><input type="text" id="maxLuminanceText" data-bind="maxLuminance" size="4"></label>
+	  <label class="param"><span class="name">minLuminance</span><input id="minLuminance" data-bind="minLuminance" type="range" min="0" max="254" step="1" value="0"><input type="text" id="minLuminanceText" data-bind="minLuminance" size="4"></label>
 	</div>
       </div> <!-- controlPanel -->
       <div style="clear:both">

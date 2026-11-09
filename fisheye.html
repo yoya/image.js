@@ -1,17 +1,19 @@
+<!doctype html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="copyright" content="Copyright &copy; 2017/05/30- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> Fish Eye </title>
 <link rel="stylesheet" href="index.css">
+<script src="lib/page.js"></script>
 </head>
 <body>
   <div class="container">
     <div id="controlPanel">
       <div>
-	maxWidthHeight: <br />
-	<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-	guide:<input id="guideCheckbox" data-bind="guide" type="checkbox" />
+	<label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+	<label class="check"><input id="guideCheckbox" data-bind="guide" type="checkbox" /> guide</label>
       </div>
       <div class="noCR">
 	Src Proj:  <br />
@@ -20,14 +22,9 @@
 	  <option value="equirectangular"> 正距円筒図 (パノラマ) </option>
         </select>
 	<br />
-	srcProjX:
-	<input id="srcProjXRange" data-bind="srcProjX" type="range" min="0.0" max="1.0" step="0.01" value="0.5">:<input type="text" id="srcProjXText" data-bind="srcProjX" size="4">
-	<br />
-	srcProjY:
-	<input id="srcProjYRange" data-bind="srcProjY" type="range" min="0.0" max="1.0" step="0.01" value="0.5">:<input type="text" id="srcProjYText" data-bind="srcProjY" size="4">
-	<br />
-	srcProjR:
-	<input id="srcProjRRange" data-bind="srcProjR" type="range" min="0.0" max="2.0" step="0.01" value="1.0">:<input type="text" id="srcProjRText" data-bind="srcProjR" size="4">
+	<label class="param"><span class="name">srcProjX</span><input id="srcProjXRange" data-bind="srcProjX" type="range" min="0.0" max="1.0" step="0.01" value="0.5"><input type="text" id="srcProjXText" data-bind="srcProjX" size="4"></label>
+	<label class="param"><span class="name">srcProjY</span><input id="srcProjYRange" data-bind="srcProjY" type="range" min="0.0" max="1.0" step="0.01" value="0.5"><input type="text" id="srcProjYText" data-bind="srcProjY" size="4"></label>
+	<label class="param"><span class="name">srcProjR</span><input id="srcProjRRange" data-bind="srcProjR" type="range" min="0.0" max="2.0" step="0.01" value="1.0"><input type="text" id="srcProjRText" data-bind="srcProjR" size="4"></label>
       </div>
       <div class="noCR">
 	Dist Proj:  <br />
@@ -36,14 +33,9 @@
 	  <option value="fisheye" > ??? (魚眼) </option>
         </select>
 	<br />
-	dstProjX:
-	<input id="dstProjXRange" data-bind="dstProjX" type="range" min="0.0" max="1.0" step="0.01" value="0.5">:<input type="text" id="dstProjXText" data-bind="dstProjX" size="4">
-	<br />
-	dstProjY:
-	<input id="dstProjYRange" data-bind="dstProjY" type="range" min="0.0" max="1.0" step="0.01" value="0.5">:<input type="text" id="dstProjYText" data-bind="dstProjY" size="4">
-	<br />
-	dstProjR:
-	<input id="dstProjRRange" data-bind="dstProjR" type="range" min="0.0" max="2.0" step="0.01" value="1.0">:<input type="text" id="dstProjRText" data-bind="dstProjR" size="4">
+	<label class="param"><span class="name">dstProjX</span><input id="dstProjXRange" data-bind="dstProjX" type="range" min="0.0" max="1.0" step="0.01" value="0.5"><input type="text" id="dstProjXText" data-bind="dstProjX" size="4"></label>
+	<label class="param"><span class="name">dstProjY</span><input id="dstProjYRange" data-bind="dstProjY" type="range" min="0.0" max="1.0" step="0.01" value="0.5"><input type="text" id="dstProjYText" data-bind="dstProjY" size="4"></label>
+	<label class="param"><span class="name">dstProjR</span><input id="dstProjRRange" data-bind="dstProjR" type="range" min="0.0" max="2.0" step="0.01" value="1.0"><input type="text" id="dstProjRText" data-bind="dstProjR" size="4"></label>
       </div>
     </div>
     <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>

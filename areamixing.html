@@ -1,20 +1,22 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2023/02/21- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> area mixing </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
   </head>
   <body>
     <div class="container">
       <div class="controlPanel" style="display:flex">
         <div>
-	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+	  <label class="param"><span class="name">dx</span><input id="dxRange" data-bind="dx" type="range" min="1" max="64" step="1" value="8"><input type="text" id="dxText" data-bind="dx" size="3"></label>
+          <label class="check"><input id="dxdySyncCheckbox" data-bind="dxdySync" type="checkbox" checked/> dxdy sync</label>
           <br />
-	  dx:<input id="dxRange" data-bind="dx" type="range" min="1" max="64" step="1" value="8">:<input type="text" id="dxText" data-bind="dx" size="3">
-          dxdy sync:<input id="dxdySyncCheckbox" data-bind="dxdySync" type="checkbox" checked/>
-          <br />
-          dy:<input id="dyRange" data-bind="dy" type="range" min="1" max="64" step="1" value="8">:<input type="text" id="dyText" data-bind="dy" size="3">
+          <label class="param"><span class="name">dy</span><input id="dyRange" data-bind="dy" type="range" min="1" max="64" step="1" value="8"><input type="text" id="dyText" data-bind="dy" size="3"></label>
           </div>
         <div>
           <select id="methodSelect" data-bind="method" size="4">

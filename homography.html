@@ -1,19 +1,20 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2020/09/10- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> homography </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
   </head>
   <body>
     <div class="container">
       <div class="controlPanel" style="display:flex;">
         <div>
-	  maxWidthHeight:
-          <input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-          <br />
-          srcMarkers:<input id="srcMarkers" data-bind="srcMarkers" type="checkbox" checked="checked" />
-          dstMarkers:<input id="dstMarkers" data-bind="dstMarkers" type="checkbox" />  <br />
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+          <label class="check"><input id="srcMarkers" data-bind="srcMarkers" type="checkbox" checked="checked" /> srcMarkers</label>
+          <label class="check"><input id="dstMarkers" data-bind="dstMarkers" type="checkbox" /> dstMarkers</label> <br />
           <span style="position:relative; top:-1ex;"> Interpolation: </span>
           <select id="interpolationSelect" data-bind="interpolationMode" size="3">
             <option value="NN"           > Nearest neighbor </option>
@@ -34,16 +35,14 @@
         </div>
         <div>
           Reverse Projection parameter: <br />
-          a:<input id="aRange" data-bind="a" type="range" min="-2.0" max="2.0" step="0.001" value="1.0">:<input type="text" id="aText" data-bind="a" size="6">
-          b:<input id="bRange" data-bind="b" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="bText" data-bind="b" size="6">
-          c:<input id="cRange" data-bind="c" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="cText" data-bind="c" size="6">
-          <br />
-          d:<input id="dRange" data-bind="d" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="dText" data-bind="d" size="6">
-          e:<input id="eRange" data-bind="e" type="range" min="-2.0" max="2.0" step="0.001" value="1.0">:<input type="text" id="eText" data-bind="e" size="6">
-          f:<input id="fRange" data-bind="f" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="fText" data-bind="f" size="6">
-          <br />
-          g:<input id="gRange" data-bind="g" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="gText" data-bind="g" size="6">
-          h:<input id="hRange" data-bind="h" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="hText" data-bind="h" size="6">
+          <label class="param"><span class="name">a</span><input id="aRange" data-bind="a" type="range" min="-2.0" max="2.0" step="0.001" value="1.0"><input type="text" id="aText" data-bind="a" size="6"></label>
+          <label class="param"><span class="name">b</span><input id="bRange" data-bind="b" type="range" min="-2.0" max="2.0" step="0.001" value="0.0"><input type="text" id="bText" data-bind="b" size="6"></label>
+          <label class="param"><span class="name">c</span><input id="cRange" data-bind="c" type="range" min="-2.0" max="2.0" step="0.001" value="0.0"><input type="text" id="cText" data-bind="c" size="6"></label>
+          <label class="param"><span class="name">d</span><input id="dRange" data-bind="d" type="range" min="-2.0" max="2.0" step="0.001" value="0.0"><input type="text" id="dText" data-bind="d" size="6"></label>
+          <label class="param"><span class="name">e</span><input id="eRange" data-bind="e" type="range" min="-2.0" max="2.0" step="0.001" value="1.0"><input type="text" id="eText" data-bind="e" size="6"></label>
+          <label class="param"><span class="name">f</span><input id="fRange" data-bind="f" type="range" min="-2.0" max="2.0" step="0.001" value="0.0"><input type="text" id="fText" data-bind="f" size="6"></label>
+          <label class="param"><span class="name">g</span><input id="gRange" data-bind="g" type="range" min="-2.0" max="2.0" step="0.001" value="0.0"><input type="text" id="gText" data-bind="g" size="6"></label>
+          <label class="param"><span class="name">h</span><input id="hRange" data-bind="h" type="range" min="-2.0" max="2.0" step="0.001" value="0.0"><input type="text" id="hText" data-bind="h" size="6"></label>
 
 
 

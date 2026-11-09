@@ -1,9 +1,12 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2018/01/21- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> Count Down </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
   </head>
   <body>
     <div class="container">
@@ -17,9 +20,9 @@
         <input id="playButton" data-bind="playButton" type="button" value="Play"/>
         <input id="stopButton" data-bind="stopButton" type="button" value="Stop"/>
         <input id="downloadButton" data-bind="downloadButton" type="button" value="Download"/>
-	width:<input id="widthRange" data-bind="width" type="range" min="16" max="1920" step="1" value="960">
+	<label class="param"><span class="name">width</span><input id="widthRange" data-bind="width" type="range" min="16" max="1920" step="1" value="960"></label>
         :<input type="text" id="widthText" data-bind="width" size="5">
-        height:<input id="heightRange" data-bind="height" type="range" min="16" max="1080" step="1" value="540">
+        <label class="param"><span class="name">height</span><input id="heightRange" data-bind="height" type="range" min="16" max="1080" step="1" value="540"></label>
         :<input type="text" id="heightText" data-bind="height" size="5">
       </div> <!-- controlPanel -->
       <div style="clear:both">

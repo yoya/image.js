@@ -1,9 +1,12 @@
+<!doctype html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="copyright" content="Copyright &copy; 2018/04/14- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> Binarize </title>
   <link rel="stylesheet" href="index.css">
+  <script src="lib/page.js"></script>
   <style>
     div.box { float:left ; }
   </style>
@@ -13,14 +16,12 @@
     <div id="controlPanel">
       <div style="display:flex">
         <div>
-	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-          <br />
-          grayscale:<input id="grayscaleCheckbox" data-bind="grayscale" type="checkbox" checked/>
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+          <label class="check"><input id="grayscaleCheckbox" data-bind="grayscale" type="checkbox" checked/> grayscale</label>
         </div>
         <div>
-	  threshold:<input id="thresholdRange" data-bind="threshold" type="range" min="0" max="255" step="1" value="110">:<input type="text" id="thresholdText" data-bind="threshold" size="4">
-          <br />
-          p-tile:<input id="pTileRange" data-bind="pTile" type="range" min="0" max="100" step="1" value="43">:<input type="text" id="pTileText" data-bind="pTile" size="4">
+	  <label class="param"><span class="name">threshold</span><input id="thresholdRange" data-bind="threshold" type="range" min="0" max="255" step="1" value="110"><input type="text" id="thresholdText" data-bind="threshold" size="4"></label>
+          <label class="param"><span class="name">p-tile</span><input id="pTileRange" data-bind="pTile" type="range" min="0" max="100" step="1" value="43"><input type="text" id="pTileText" data-bind="pTile" size="4"></label>
         </div>
 	<div>
           Dither:  <br />
@@ -30,9 +31,9 @@
           </select>
 	</div>
         <div>
-          totalLine:<input id="totalLineCheckbox" data-bind="totalLine" type="checkbox" />
+          <label class="check"><input id="totalLineCheckbox" data-bind="totalLine" type="checkbox" /> totalLine</label>
           <br />
-          histogram:<input id="histogramCheckbox" data-bind="histogram" type="checkbox" checked/>
+          <label class="check"><input id="histogramCheckbox" data-bind="histogram" type="checkbox" checked/> histogram</label>
         </div>
       </div>
     </div> <!-- controlPanel -->

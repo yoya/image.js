@@ -1,9 +1,12 @@
+<!doctype html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="copyright" content="Copyright &copy; 2017/06/10- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> CIE Color Diagram & Matching Function </title>
   <link rel="stylesheet" href="index.css">
+  <script src="lib/page.js"></script>
   <style>
     #dstCanvas { background-color:black; }
   </style>
@@ -29,8 +32,7 @@
         </select>
       </div>
       <div>
-        maxWidthHeight: <br />
-	<input id="maxWidthHeight" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+        <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeight" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
       </div>
     </div> <!-- controlPanel -->
 
@@ -51,14 +53,12 @@
         </select>
       </div>
       <div style="float:left">
-	guide:<input id="guide" data-bind="guide" type="checkbox" checked="checked" />
+	<label class="check"><input id="guide" data-bind="guide" type="checkbox" checked="checked" /> guide</label>
       </div>
       <div style="float:left">
-        graphAlpha:<input id="graphAlpha" data-bind="graphAlpha" type="range" min="0.0" max="1.0" step="0.05" value="0.65">:<input type="text" id="graphAlphaText" data-bind="graphAlpha" size="5">
-        <br />
-        pointSize:<input id="pointSize" data-bind="pointSize" type="range" min="1" max="16" step="1" value="1">:<input type="text" id="pointSizeText" data-bind="pointSize" size="5">
-        <br />
-        pointDensity:<input id="pointDensity" data-bind="pointDensity" type="range" min="0.05" max="1" step="0.05" value="1">:<input type="text" id="pointDensityText" data-bind="pointDensity" size="5">
+        <label class="param"><span class="name">graphAlpha</span><input id="graphAlpha" data-bind="graphAlpha" type="range" min="0.0" max="1.0" step="0.05" value="0.65"><input type="text" id="graphAlphaText" data-bind="graphAlpha" size="5"></label>
+        <label class="param"><span class="name">pointSize</span><input id="pointSize" data-bind="pointSize" type="range" min="1" max="16" step="1" value="1"><input type="text" id="pointSizeText" data-bind="pointSize" size="5"></label>
+        <label class="param"><span class="name">pointDensity</span><input id="pointDensity" data-bind="pointDensity" type="range" min="0.05" max="1" step="0.05" value="1"><input type="text" id="pointDensityText" data-bind="pointDensity" size="5"></label>
       </div>
     </div> <!-- controlPanel 2 -->
 

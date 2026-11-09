@@ -1,16 +1,18 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2018/10/16- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> Color Bit Depth </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
   </head>
   <body>
     <div class="container">
       <div class="controlPanel" style="float:left">
 	<div style="float:left">
-	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-	  <br />
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
 	  <div style="float:left">
             量子化:  <br />
 	    <select id="quantizeSelect" data-bind="quantize" size="3">
@@ -28,9 +30,8 @@
 	  </div>
 	  <div id="canvasContainer" style="clear:both"> </div>
 	  <div style="float:left">
-	    srcBitDepth:<input id="srcBitDepthRange" data-bind="srcBitDepth" type="range" min="1" max="8" step="1" value="8">:<input type="text" id="srcBitDepthText" data-bind="srcBitDepth" size="2">
-	    <br />
-	    dstBitDepth:<input id="dstBitDepthRange" data-bind="dstBitDepth" type="range" min="1" max="8" step="1" value="4">:<input type="text" id="dstBitDepthText" data-bind="dstBitDepth" size="2">
+	    <label class="param"><span class="name">srcBitDepth</span><input id="srcBitDepthRange" data-bind="srcBitDepth" type="range" min="1" max="8" step="1" value="8"><input type="text" id="srcBitDepthText" data-bind="srcBitDepth" size="2"></label>
+	    <label class="param"><span class="name">dstBitDepth</span><input id="dstBitDepthRange" data-bind="dstBitDepth" type="range" min="1" max="8" step="1" value="4"><input type="text" id="dstBitDepthText" data-bind="dstBitDepth" size="2"></label>
 	  </div>
 	</div>
 	<div style="float:left">

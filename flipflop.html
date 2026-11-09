@@ -1,16 +1,19 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2021/10/16- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> Flipflop Mirror </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
   </head>
   <body>
     <div class="container">
       <div class="controlPanel">
-	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-        vertical (flip):<input id="verticalCheckbox" data-bind="vertical" type="checkbox" />
-        horizontal (flop):<input id="horizontalCheckbox" data-bind="horizontal" type="checkbox" />
+	<label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+        <label class="check"><input id="verticalCheckbox" data-bind="vertical" type="checkbox" /> vertical (flip)</label>
+        <label class="check"><input id="horizontalCheckbox" data-bind="horizontal" type="checkbox" /> horizontal (flop)</label>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>

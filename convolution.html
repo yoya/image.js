@@ -1,9 +1,12 @@
+<!doctype html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="copyright" content="Copyright &copy; 2017/04/02- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> Convolution </title>
 <link rel="stylesheet" href="index.css">
+<script src="lib/page.js"></script>
 </head>
 <body>
   <div class="container">
@@ -44,13 +47,13 @@
       </div> filterMatrix:<table id="filterMatrixTable"> </table>
     </div>
     <div>
-      filterWindow:<input id="filterWindowRange" data-bind="filterWindow" type="range" min="1" max="9" step="2" value="3">:<input type="text" id="filterWindowText" data-bind="filterWindow" size="3">
-      matrix-normalize:<input id="matrixNormalizeCheckbox" data-bind="matrixNormalize" type="checkbox" />
-      matrix-zero-centering:<input id="matrixZerocenteringCheckbox" data-bind="matrixZerocentering" type="checkbox" />
+      <label class="param"><span class="name">filterWindow</span><input id="filterWindowRange" data-bind="filterWindow" type="range" min="1" max="9" step="2" value="3"><input type="text" id="filterWindowText" data-bind="filterWindow" size="3"></label>
+      <label class="check"><input id="matrixNormalizeCheckbox" data-bind="matrixNormalize" type="checkbox" /> matrix-normalize</label>
+      <label class="check"><input id="matrixZerocenteringCheckbox" data-bind="matrixZerocentering" type="checkbox" /> matrix-zero-centering</label>
       <br />
-      maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-      linearRGB:<input id="linearRGBCheckbox" data-bind="linearRGB" type="checkbox" />
-      image-normalize:<input id="imageNormalizeCheckbox" data-bind="imageNormalize" type="checkbox" />
+      <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+      <label class="check"><input id="linearRGBCheckbox" data-bind="linearRGB" type="checkbox" /> linearRGB</label>
+      <label class="check"><input id="imageNormalizeCheckbox" data-bind="imageNormalize" type="checkbox" /> image-normalize</label>
     </div>
   </div>
   <div style="clear:both">

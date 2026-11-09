@@ -1,27 +1,30 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2023/05/05- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> Glitch RGB </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
   </head>
   <body>
     <div id="container" class="vertical">
       <div id="control" class="horizontal">
         <div>
-	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
         </div>
         <div>
-	  R dx:<input id="dxR" data-bind="dxR" type="range" min="-64" max="64" step="1" value="1">:<input type="text" id="dxRText" data-bind="dxR" size="3"> </br>
-	  G dx:<input id="dxG" data-bind="dxG" type="range" min="-64" max="64" step="1" value="0">:<input type="text" id="dxGText" data-bind="dxG" size="3"> </br>
-          B dx:<input id="dxB" data-bind="dxB" type="range" min="-64" max="64" step="1" value="-2">:<input type="text" id="dxBText" data-bind="dxB" size="3"> </br>
-	  A dx:<input id="dxA" data-bind="dxA" type="range" min="-64" max="64" step="1" value="0">:<input type="text" id="dxAText" data-bind="dxA" size="3">
+	  <label class="param"><span class="name">R dx</span><input id="dxR" data-bind="dxR" type="range" min="-64" max="64" step="1" value="1"><input type="text" id="dxRText" data-bind="dxR" size="3"></label>
+	  <label class="param"><span class="name">G dx</span><input id="dxG" data-bind="dxG" type="range" min="-64" max="64" step="1" value="0"><input type="text" id="dxGText" data-bind="dxG" size="3"></label>
+          <label class="param"><span class="name">B dx</span><input id="dxB" data-bind="dxB" type="range" min="-64" max="64" step="1" value="-2"><input type="text" id="dxBText" data-bind="dxB" size="3"></label>
+	  <label class="param"><span class="name">A dx</span><input id="dxA" data-bind="dxA" type="range" min="-64" max="64" step="1" value="0"><input type="text" id="dxAText" data-bind="dxA" size="3"></label>
         </div>
         <div>
-          R dy:<input id="dyR" data-bind="dyR" type="range" min="-64" max="64" step="1" value="0">:<input type="text" id="dyRText" data-bind="dyR" size="3"> </br>
-          G dy:<input id="dyG" data-bind="dyG" type="range" min="-64" max="64" step="1" value="0">:<input type="text" id="dyGText" data-bind="dyG" size="3"> </br>
-          B dy:<input id="dyB" data-bind="dyB" type="range" min="-64" max="64" step="1" value="0">:<input type="text" id="dyBText" data-bind="dyB" size="3"> </br>
-          A dy:<input id="dyA" data-bind="dyA" type="range" min="-64" max="64" step="1" value="0">:<input type="text" id="dyAText" data-bind="dyA" size="3">
+          <label class="param"><span class="name">R dy</span><input id="dyR" data-bind="dyR" type="range" min="-64" max="64" step="1" value="0"><input type="text" id="dyRText" data-bind="dyR" size="3"></label>
+          <label class="param"><span class="name">G dy</span><input id="dyG" data-bind="dyG" type="range" min="-64" max="64" step="1" value="0"><input type="text" id="dyGText" data-bind="dyG" size="3"></label>
+          <label class="param"><span class="name">B dy</span><input id="dyB" data-bind="dyB" type="range" min="-64" max="64" step="1" value="0"><input type="text" id="dyBText" data-bind="dyB" size="3"></label>
+          <label class="param"><span class="name">A dy</span><input id="dyA" data-bind="dyA" type="range" min="-64" max="64" step="1" value="0"><input type="text" id="dyAText" data-bind="dyA" size="3"></label>
         </div>
       </div> <!-- control -->
       <div id="display" class="horizontal">

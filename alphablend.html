@@ -1,9 +1,12 @@
+<!doctype html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="copyright" content="Copyright &copy; 2017/04/27- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> Alpha Blending </title>
 <link rel="stylesheet" href="index.css">
+<script src="lib/page.js"></script>
 </head>
 <body>
   <div class="container">
@@ -20,46 +23,46 @@
       </div >
       <div style="float:left">
         <div>
-          maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+          <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="480"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
         </div>
         <div>
-	  linearGamma:<input id="linearGammaCheckbox" data-bind="linearGamma" type="checkbox" />
+	  <label class="check"><input id="linearGammaCheckbox" data-bind="linearGamma" type="checkbox" /> linearGamma</label>
         </div>
         <div>
-	  inverse :<input id="inverse" data-bind="inverse" type="checkbox" />
-        </div>
-      </div>
-      <div style="float:left">
-        <div>
-	  ratio1:<input id="ratio1Range" data-bind="ratio1" type="range" min="0.0" max="1.0" step="0.1" value="0.5">:<input type="text" id="ratio1Text" data-bind="ratio1" size="4">
-        </div>
-        <div>
-	  ratio2:<input id="ratio2Range" data-bind="ratio2" type="range" min="0.0" max="1.0" step="0.1" value="0.5">:<input type="text" id="ratio2Text" data-bind="ratio2" size="4"> <br />
-        </div>
-        <div>
-          ratio:<input id="ratioRange" data-bind="ratio" type="range" min="0.0" max="1.0" step="0.1" value="0.5">:<input type="text" id="ratioText" data-bind="ratio" size="4">
+	  <label class="check"><input id="inverse" data-bind="inverse" type="checkbox" /> inverse</label>
         </div>
       </div>
       <div style="float:left">
         <div>
-	  shift X:<input id="shiftXRange" data-bind="shiftX" type="range" min="-100" max="100" step="1" value="0">:<input type="text" id="shiftXText" data-bind="shiftX" size="4">
+	  <label class="param"><span class="name">ratio1</span><input id="ratio1Range" data-bind="ratio1" type="range" min="0.0" max="1.0" step="0.1" value="0.5"><input type="text" id="ratio1Text" data-bind="ratio1" size="4"></label>
         </div>
         <div>
-          shift Y:<input id="shiftYRange" data-bind="shiftY" type="range" min="-100" max="100" step="1" value="0">:<input type="text" id="shiftYText" data-bind="shiftY" size="4">
+	  <label class="param"><span class="name">ratio2</span><input id="ratio2Range" data-bind="ratio2" type="range" min="0.0" max="1.0" step="0.1" value="0.5"><input type="text" id="ratio2Text" data-bind="ratio2" size="4"></label>
+        </div>
+        <div>
+          <label class="param"><span class="name">ratio</span><input id="ratioRange" data-bind="ratio" type="range" min="0.0" max="1.0" step="0.1" value="0.5"><input type="text" id="ratioText" data-bind="ratio" size="4"></label>
         </div>
       </div>
       <div style="float:left">
         <div>
-	  grad slant X:<input id="gradSlantXRange" data-bind="gradSlantX" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="gradSlantXText" data-bind="gradSlantX" size="4">
+	  <label class="param"><span class="name">shift X</span><input id="shiftXRange" data-bind="shiftX" type="range" min="-100" max="100" step="1" value="0"><input type="text" id="shiftXText" data-bind="shiftX" size="4"></label>
         </div>
         <div>
-          grad slant Y:<input id="gradSlantYRange" data-bind="gradSlantY" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="gradSlantYText" data-bind="gradSlantY" size="4">
+          <label class="param"><span class="name">shift Y</span><input id="shiftYRange" data-bind="shiftY" type="range" min="-100" max="100" step="1" value="0"><input type="text" id="shiftYText" data-bind="shiftY" size="4"></label>
+        </div>
+      </div>
+      <div style="float:left">
+        <div>
+	  <label class="param"><span class="name">grad slant X</span><input id="gradSlantXRange" data-bind="gradSlantX" type="range" min="-1.0" max="1.0" step="0.01" value="0"><input type="text" id="gradSlantXText" data-bind="gradSlantX" size="4"></label>
         </div>
         <div>
-	  grad intercept X:<input id="gradInterceptXRange" data-bind="gradInterceptX" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="gradInterceptXText" data-bind="gradInterceptX" size="4">
+          <label class="param"><span class="name">grad slant Y</span><input id="gradSlantYRange" data-bind="gradSlantY" type="range" min="-1.0" max="1.0" step="0.01" value="0"><input type="text" id="gradSlantYText" data-bind="gradSlantY" size="4"></label>
         </div>
         <div>
-          grad intercept Y:<input id="gradInterceptYRange" data-bind="gradInterceptY" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="gradInterceptYText" data-bind="gradInterceptY" size="4">
+	  <label class="param"><span class="name">grad intercept X</span><input id="gradInterceptXRange" data-bind="gradInterceptX" type="range" min="-1.0" max="1.0" step="0.01" value="0"><input type="text" id="gradInterceptXText" data-bind="gradInterceptX" size="4"></label>
+        </div>
+        <div>
+          <label class="param"><span class="name">grad intercept Y</span><input id="gradInterceptYRange" data-bind="gradInterceptY" type="range" min="-1.0" max="1.0" step="0.01" value="0"><input type="text" id="gradInterceptYText" data-bind="gradInterceptY" size="4"></label>
         </div>
       </div>
     </div> <!-- controlPanel -->

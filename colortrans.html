@@ -1,30 +1,33 @@
+<!doctype html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="copyright" content="Copyright &copy; 2017/04/02- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> Color Transform (add & multi) </title>
 <link rel="stylesheet" href="index.css">
+<script src="lib/page.js"></script>
 </head>
 <body>
   <div class="container">
     <div>
     <div>
-      maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+      <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
     </div>
     <div>
-      multiRed:<input id="multiRedRange" data-bind="multiRed" type="range" min="0" max="3" step="0.1" value="1">:<input type="text" id="multiRedText" data-bind="multiRed" size="4">
-      multiGreen:<input id="multiGreenRange" data-bind="multiGreen" type="range" min="0" max="3" step="0.1" value="1">:<input type="text" id="multiGreenText" data-bind="multiGreen" size="4">
-      multiBlue:<input id="multiBlueRange" data-bind="multiBlue" type="range" min="0" max="3" step="0.1" value="1">:<input type="text" id="multiBlueText" data-bind="multiBlue" size="4">
+      <label class="param"><span class="name">multiRed</span><input id="multiRedRange" data-bind="multiRed" type="range" min="0" max="3" step="0.1" value="1"><input type="text" id="multiRedText" data-bind="multiRed" size="4"></label>
+      <label class="param"><span class="name">multiGreen</span><input id="multiGreenRange" data-bind="multiGreen" type="range" min="0" max="3" step="0.1" value="1"><input type="text" id="multiGreenText" data-bind="multiGreen" size="4"></label>
+      <label class="param"><span class="name">multiBlue</span><input id="multiBlueRange" data-bind="multiBlue" type="range" min="0" max="3" step="0.1" value="1"><input type="text" id="multiBlueText" data-bind="multiBlue" size="4"></label>
     </div>
     <div>
-      addRed:<input id="addRedRange" data-bind="addRed" type="range" min="-100" max="100" step="1" value="0">:<input type="text" id="addRedText" data-bind="addRed" size="4">
-      addGreen:<input id="addGreenRange" data-bind="addGreen" type="range" min="-100" max="100" step="1" value="0">:<input type="text" id="addGreenText" data-bind="addGreen" size="4">
-      addBlue:<input id="addBlueRange" data-bind="addBlue" type="range" min="-100" max="100" step="1" value="0">:<input type="text" id="addBlueText" data-bind="addBlue" size="4">
+      <label class="param"><span class="name">addRed</span><input id="addRedRange" data-bind="addRed" type="range" min="-100" max="100" step="1" value="0"><input type="text" id="addRedText" data-bind="addRed" size="4"></label>
+      <label class="param"><span class="name">addGreen</span><input id="addGreenRange" data-bind="addGreen" type="range" min="-100" max="100" step="1" value="0"><input type="text" id="addGreenText" data-bind="addGreen" size="4"></label>
+      <label class="param"><span class="name">addBlue</span><input id="addBlueRange" data-bind="addBlue" type="range" min="-100" max="100" step="1" value="0"><input type="text" id="addBlueText" data-bind="addBlue" size="4"></label>
     </div>
     <div>
-      sigmoidRed:<input id="sigmoidRedRange" data-bind="sigmoidRed" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="sigmoidRedText" data-bind="sigmoidRed" size="4">
-      sigmoidGreen:<input id="sigmoidGreenRange" data-bind="sigmoidGreen" type="range" min="-1.0" max="1.0" step="0.01" value="0">:<input type="text" id="sigmoidGreenText" data-bind="sigmoidGreen" size="4">
-      sigmoidBlue:<input id="sigmoidBlueRange" data-bind="sigmoidBlue" type="range" min="-1.0" max="1" step="0.01" value="0">:<input type="text" id="sigmoidBlueText" data-bind="sigmoidBlue" size="4">
+      <label class="param"><span class="name">sigmoidRed</span><input id="sigmoidRedRange" data-bind="sigmoidRed" type="range" min="-1.0" max="1.0" step="0.01" value="0"><input type="text" id="sigmoidRedText" data-bind="sigmoidRed" size="4"></label>
+      <label class="param"><span class="name">sigmoidGreen</span><input id="sigmoidGreenRange" data-bind="sigmoidGreen" type="range" min="-1.0" max="1.0" step="0.01" value="0"><input type="text" id="sigmoidGreenText" data-bind="sigmoidGreen" size="4"></label>
+      <label class="param"><span class="name">sigmoidBlue</span><input id="sigmoidBlueRange" data-bind="sigmoidBlue" type="range" min="-1.0" max="1" step="0.01" value="0"><input type="text" id="sigmoidBlueText" data-bind="sigmoidBlue" size="4"></label>
     </div>
     <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
     <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>

@@ -1,16 +1,19 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2021/03/23- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> Saturation </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
   </head>
   <body>
     <div class="container">
       <div class="controlPanel">
         <div style="float: left">
-	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"> <br />
-          saturation:<input id="saturationRange" data-bind="saturation" type="range" min="0.0" max="3.0" step="0.1" value="1.0">:<input type="text" id="saturationText" data-bind="saturation" size="4">
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+          <label class="param"><span class="name">saturation</span><input id="saturationRange" data-bind="saturation" type="range" min="0.0" max="3.0" step="0.1" value="1.0"><input type="text" id="saturationText" data-bind="saturation" size="4"></label>
         </div>
         <select id="filterSelect" data-bind="filter" size="5" >
           <option value="saturation"        > Saturation (CSS) </option>

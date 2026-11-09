@@ -1,9 +1,12 @@
+<!doctype html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="copyright" content="Copyright &copy; 2017/04/02- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> diff </title>
 <link rel="stylesheet" href="index.css">
+<script src="lib/page.js"></script>
 </head>
 <body>
   <div class="container">
@@ -19,9 +22,8 @@
 	</div>
       </div >
       <div style="float:left">
-        maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-        <br />
-	normalize:<input id="normalizeCheckbox" data-bind="normalize" type="checkbox" checked="checked" />
+        <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+	<label class="check"><input id="normalizeCheckbox" data-bind="normalize" type="checkbox" checked="checked" /> normalize</label>
       </div>
     </div> <!-- controlPanel -->
     <br />

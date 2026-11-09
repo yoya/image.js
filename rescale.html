@@ -1,15 +1,18 @@
+<!doctype html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="copyright" content="Copyright &copy; 2016/11/13- yoya@awm.jp . All Rights Reserved.">
 <title> Image Rescale </title>
 <link rel="stylesheet" href="index.css">
+<script src="lib/page.js"></script>
 </head>
 <body>
 
 <div class="container">
   <div class="noCR"  style="vertical-align:top;">
     <div>
-      maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+      <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
     </div>
      <div class="noCR">
       Filter
@@ -19,18 +22,18 @@
                <option value="BiCubic"> BiCubic </option>
                <option value="Lanczos"> Lanczos </option>
              </select> </br>
-      B: <input id="cubicBRange" data-bind="cubicBRange" type="range" min="0" max="1" step="0.01" />
+      <label class="param"><span class="name">B</span><input id="cubicBRange" data-bind="cubicBRange" type="range" min="0" max="1" step="0.01" /></label>
          <input id="cubicBText" data-bind="cubicBRange" type="text" size="4" value="0.33"/> <br>
-      C: <input id="cubicCRange" data-bind="cubicCRange" type="range" min="0" max="1" step="0.01" />
+      <label class="param"><span class="name">C</span><input id="cubicCRange" data-bind="cubicCRange" type="range" min="0" max="1" step="0.01" /></label>
          <input id="cubicCText" data-bind="cubicCRange" type="text" size="4" value="0.33"/> <br>
-      L: <input id="lobeRange" data-bind="lobeRange" type="range" min="1" max="4" step="1" />
+      <label class="param"><span class="name">L</span><input id="lobeRange" data-bind="lobeRange" type="range" min="1" max="4" step="1" /></label>
          <input id="lobeText" data-bind="lobeRange" type="text" size="4" value="2"/> <br>
      </div>
      <div class="noCR">
        <canvas id="graphCanvas" class="borderGreen bgWhite" width="800" height="220"> graph </canvas>
      </div>
      <div>
-       Scale:<input id="scaleRange" data-bind="scale" type="range" min="0.1" max="10" step="0.01" value="1" style="width: 400px"/>
+       <label class="param"><span class="name">Scale</span><input id="scaleRange" data-bind="scale" type="range" min="0.1" max="10" step="0.01" value="1" style="width: 400px"/></label>
        <input id="scaleText" data-bind="scale" type="text" size="4"/> <br>
      </div>
   </div>

@@ -1,23 +1,23 @@
+<!doctype html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="copyright" content="Copyright &copy; 2020/06/12- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> Kuwahara Filter </title>
 <link rel="stylesheet" href="index.css">
+<script src="lib/page.js"></script>
 </head>
 <body>
   <div class="container">
     <div id="controlPanel" style="display:flex">
       <div>
-        variWindow:<input id="variWindowRange" data-bind="variWindow" type="range" min="1" max="10" step="2" value="3">:<input type="text" id="variWindowText" data-bind="variWindow" size="3">
-        <br />
-        vslideWindow:<input id="vslideWindowRange" data-bind="vslideWindow" type="range" min="1" max="10" step="1" value="2">:<input type="text" id="vslideWindowText" data-bind="vslideWindow" size="3">
-        <br />
-        filterWindow:<input id="filterWindowRange" data-bind="filterWindow" type="range" min="1" max="11" step="2" value="5">:<input type="text" id="filterWindowText" data-bind="filterWindow" size="3">
-        <br />
+        <label class="param"><span class="name">variWindow</span><input id="variWindowRange" data-bind="variWindow" type="range" min="1" max="10" step="2" value="3"><input type="text" id="variWindowText" data-bind="variWindow" size="3"></label>
+        <label class="param"><span class="name">vslideWindow</span><input id="vslideWindowRange" data-bind="vslideWindow" type="range" min="1" max="10" step="1" value="2"><input type="text" id="vslideWindowText" data-bind="vslideWindow" size="3"></label>
+        <label class="param"><span class="name">filterWindow</span><input id="filterWindowRange" data-bind="filterWindow" type="range" min="1" max="11" step="2" value="5"><input type="text" id="filterWindowText" data-bind="filterWindow" size="3"></label>
       </div>
       <div>
-        maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="1024">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+        <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="1024"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
       </div>
     </div> <!-- controlPanel -->
     <div id="canvasContainer">

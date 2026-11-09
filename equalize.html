@@ -1,28 +1,29 @@
+<!doctype html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="copyright" content="Copyright &copy; 2017/04/23- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> Histogram Equalization </title>
 <link rel="stylesheet" href="index.css">
+<script src="lib/page.js"></script>
 </head>
 <body>
   <div class="container">
     <div id="controlPanel" style="display:flex">
       <div>
-	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="4096" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
-	<br />
-	equalize:<input id="equalizeCheckbox" data-bind="equalize" type="checkbox" checked/>
-	equalizeRatio:<input id="equalizeRatioRange" data-bind="equalizeRatio" type="range" min="0" max="255" step="1" value="255">:<input type="text" id="equalizeRatioText" data-bind="equalizeRatio" size="4">
+	<label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="4096" step="1" value="480"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+	<label class="check"><input id="equalizeCheckbox" data-bind="equalize" type="checkbox" checked/> equalize</label>
+	<label class="param"><span class="name">equalizeRatio</span><input id="equalizeRatioRange" data-bind="equalizeRatio" type="range" min="0" max="255" step="1" value="255"><input type="text" id="equalizeRatioText" data-bind="equalizeRatio" size="4"></label>
       </div>
       <div>
-	maxValue:<input id="maxValueRange" data-bind="maxValue" type="range" min="0" max="255" step="1" value="255">:<input type="text" id="maxValueText" data-bind="maxValue" size="4">
-	<br />
-	minValue:<input id="minValueRange" data-bind="minValue" type="range" min="0" max="255" step="1" value="0">:<input type="text" id="minValueText" data-bind="minValue" size="4">
+	<label class="param"><span class="name">maxValue</span><input id="maxValueRange" data-bind="maxValue" type="range" min="0" max="255" step="1" value="255"><input type="text" id="maxValueText" data-bind="maxValue" size="4"></label>
+	<label class="param"><span class="name">minValue</span><input id="minValueRange" data-bind="minValue" type="range" min="0" max="255" step="1" value="0"><input type="text" id="minValueText" data-bind="minValue" size="4"></label>
       </div>
       <div>
-	totalLine:<input id="totalLineCheckbox" data-bind="totalLine" type="checkbox" />
+	<label class="check"><input id="totalLineCheckbox" data-bind="totalLine" type="checkbox" /> totalLine</label>
         <br />
-        histogram:<input id="histogramCheckbox" data-bind="histogram" type="checkbox" checked/>
+        <label class="check"><input id="histogramCheckbox" data-bind="histogram" type="checkbox" checked/> histogram</label>
       </div>
     </div> <!-- controlPanel -->
   <div>

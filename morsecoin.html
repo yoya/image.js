@@ -1,15 +1,18 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2022/03/25- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> Morse code Coin </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
   </head>
   <body>
     <div class="container">
       <div class="controlPanel" style="display:flex">
         <div>
-	  widthHeight:<input id="widthHeightRange" data-bind="widthHeight" type="range" min="16" max="2048" step="1" value="400">:<input type="text" id="widthHeightText" data-bind="widthHeight" size="5">
+	  <label class="param"><span class="name">widthHeight</span><input id="widthHeightRange" data-bind="widthHeight" type="range" min="16" max="2048" step="1" value="400"><input type="text" id="widthHeightText" data-bind="widthHeight" size="5"></label>
           </div>
         <div>
           text:<input id="textText" data-bind="text" type="text" value="SOS">

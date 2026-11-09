@@ -1,22 +1,25 @@
+<!doctype html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="copyright" content="Copyright &copy; 2017/04/23- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> Sigmoid Correction </title>
 <link rel="stylesheet" href="index.css">
+<script src="lib/page.js"></script>
 </head>
 <body>
   <div class="container">
     <div>
       <div>
         <div>
-          maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+          <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
         </div>
         <div style="float:left">
-          a:<input id="aRange" data-bind="a" type="range" min="0" max="100" step="0.1" value="10"> : <input type="text" id="aText" data-bind="a" size="5"> </br>
-	  b:<input id="bRange" data-bind="b" type="range" min="-0.5" max="1.5" step="0.01" value="0.5"> : <input type="text" id="bText" data-bind="b" size="5"> </br>
-          z:<input id="zRange" data-bind="z" type="range" min="-1" max="1" step="0.1" value="0"> : <input type="text" id="zText" data-bind="z" size="5"> </br>
-	  linear:<input id="linearCheckbox" data-bind="linear" type="checkbox" />
+          <label class="param"><span class="name">a</span><input id="aRange" data-bind="a" type="range" min="0" max="100" step="0.1" value="10"><input type="text" id="aText" data-bind="a" size="5"></label>
+	  <label class="param"><span class="name">b</span><input id="bRange" data-bind="b" type="range" min="-0.5" max="1.5" step="0.01" value="0.5"><input type="text" id="bText" data-bind="b" size="5"></label>
+          <label class="param"><span class="name">z</span><input id="zRange" data-bind="z" type="range" min="-1" max="1" step="0.1" value="0"><input type="text" id="zText" data-bind="z" size="5"></label>
+	  <label class="check"><input id="linearCheckbox" data-bind="linear" type="checkbox" /> linear</label>
         </div>
       </div>
       <div>

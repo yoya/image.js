@@ -1,12 +1,15 @@
+<!doctype html>
 <html>
   <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="copyright" content="Copyright &copy; 2024/11/08- yoya@awm.jp . All Rights Reserved.">
     <meta charset="utf-8">
     <title> prime 6 </title>
     <link rel="stylesheet" href="index.css">
+    <script src="lib/page.js"></script>
     <style>
-      span {
-          margin: 0px 10px;;
+      #control > span {
+          margin: 0px 10px;
       }
     </style>
   </head>
@@ -14,13 +17,13 @@
     <div id="container" class="vertical">
       <div id="control" class="horizontal">
         <span>
-	  WidthHeight:<input id="widthHeight" data-bind="widthHeight" type="range" min="16" max="2048" step="1" value="512">:<input type="text" id="widthHeightText" data-bind="widthHeight" size="5">
+	  <label class="param"><span class="name">WidthHeight</span><input id="widthHeight" data-bind="widthHeight" type="range" min="16" max="2048" step="1" value="512"><input type="text" id="widthHeightText" data-bind="widthHeight" size="5"></label>
         </span>
         <span>
-          Perioa:<input id="period" data-bind="period" type="range" min="2" max="19" step="1" value="6">:<input type="text" id="periodText" data-bind="period" size="2">
+          <label class="param"><span class="name">Perioa</span><input id="period" data-bind="period" type="range" min="2" max="19" step="1" value="6"><input type="text" id="periodText" data-bind="period" size="2"></label>
         </span>
         <span>
-          Circle:<input id="circle" data-bind="circle" type="checkbox" checked>
+          <label class="check"><input id="circle" data-bind="circle" type="checkbox" checked> Circle</label>
         </span>
       </div> <!-- control -->
       <div id="display" class="horizontal">

@@ -1,9 +1,12 @@
+<!doctype html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="copyright" content="Copyright &copy; 2017/04/17- yoya@awm.jp . All Rights Reserved.">
   <meta charset="utf-8">
   <title> Color Component </title>
 <link rel="stylesheet" href="index.css">
+<script src="lib/page.js"></script>
 </head>
 <body>
   <div class="container">
@@ -26,7 +29,7 @@
         </select>
       </div>
       <div>
-	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="320">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+	<label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="320"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
       </div>
     </div>
   </div>
@@ -36,19 +39,19 @@
       <canvas id="srcCanvas" class="borderGray" width=200 height=200> srcCanvas </canvas>
     </div>
     <div style="float:left">
-      amp1:<input id="amp1Range" data-bind="amp1" type="range" min="0" max="2" step="0.1" value="1.0">:<input type="text" id="amp1Text" data-bind="amp1" size="4"> <br />
+      <label class="param"><span class="name">amp1</span><input id="amp1Range" data-bind="amp1" type="range" min="0" max="2" step="0.1" value="1.0"><input type="text" id="amp1Text" data-bind="amp1" size="4"></label>
       <canvas id="dstCanvas1" class="borderRed" width=200 height=200> dstCanvas1 </canvas>
     </div>
     <div style="float:left">
-      amp2:<input id="amp2Range" data-bind="amp2" type="range" min="0" max="2" step="0.1" value="1.0">:<input type="text" id="amp2Text" data-bind="amp2" size="4"> <br />
+      <label class="param"><span class="name">amp2</span><input id="amp2Range" data-bind="amp2" type="range" min="0" max="2" step="0.1" value="1.0"><input type="text" id="amp2Text" data-bind="amp2" size="4"></label>
       <canvas id="dstCanvas2" class="borderGreen" width=200 height=200> dstCanvas2 </canvas>
     </div>
     <div style="float:left">
-      amp3:<input id="amp3Range" data-bind="amp3" type="range" min="0" max="2" step="0.1" value="1.0">:<input type="text" id="amp3Text" data-bind="amp3" size="4"> <br />
+      <label class="param"><span class="name">amp3</span><input id="amp3Range" data-bind="amp3" type="range" min="0" max="2" step="0.1" value="1.0"><input type="text" id="amp3Text" data-bind="amp3" size="4"></label>
       <canvas id="dstCanvas3" class="borderBlue" width=200 height=200> dstCanvas3 </canvas>
     </div>
     <div style="float:left">
-      amp4:<input id="amp4Range" data-bind="amp4" type="range" min="0" max="2" step="0.1" value="1.0">:<input type="text" id="amp4Text" data-bind="amp4" size="4"> <br />
+      <label class="param"><span class="name">amp4</span><input id="amp4Range" data-bind="amp4" type="range" min="0" max="2" step="0.1" value="1.0"><input type="text" id="amp4Text" data-bind="amp4" size="4"></label>
       <canvas id="dstCanvas4" class="borderBlack" width=200 height=200> dstCanvas4 </canvas>
     </div>
     <div style="float:left">

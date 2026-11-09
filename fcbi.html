@@ -1,20 +1,23 @@
+<!doctype html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="utf-8">
   <meta name="copyright" content="Copyright &copy; 2017/03/03- yoya@awm.jp . All Rights Reserved.">
   <title> FCBI (Fast Curvature Based Interpolation) </title>
 <link rel="stylesheet" href="index.css">
+<script src="lib/page.js"></script>
 </head>
 <body>
   <div class="container">
     <div id="controlPanel">
       <div>
-	TM:<input id="TMRange" data-bind="TM" type="range" min="4" max="150" step="1" value="20" />:<input type="text" id="TMText" data-bind="TM" size="3" />
-	edgeMode:<input id="edgeModeCheckbox" data-bind="edgeMode" type="checkbox" />
-	phaseLimit:<input id="phaseLimitRange" data-bind="phaseLimit" type="range" min="1" max="3" step="1" value="3" />:<input type="text" id="phaseLimitText" data-bind="phaseLimit"  size="1" />
+	<label class="param"><span class="name">TM</span><input id="TMRange" data-bind="TM" type="range" min="4" max="150" step="1" value="20" /><input type="text" id="TMText" data-bind="TM" size="3" /></label>
+	<label class="check"><input id="edgeModeCheckbox" data-bind="edgeMode" type="checkbox" /> edgeMode</label>
+	<label class="param"><span class="name">phaseLimit</span><input id="phaseLimitRange" data-bind="phaseLimit" type="range" min="1" max="3" step="1" value="3" /><input type="text" id="phaseLimitText" data-bind="phaseLimit"  size="1" /></label>
       </div>
       <div>
-	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="320" />:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="3" />
+	<label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="320" /><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="3" /></label>
       </div>
     </div>
     <div>
