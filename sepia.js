@@ -41,50 +41,39 @@ function main() {
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     //
-    var matrixSelect = document.getElementById("matrixSelect");
-    var matrix = matrixSelect.value;
     var colorMatrixTable = document.getElementById("colorMatrixTable");
-    var amountRange = document.getElementById("amountRange");
-    var amount = parseFloat(amountRange.value);
-    var colorMatrix = sepiaToneMatrix(amount, matrix);
+    var params = {};
+    var colorMatrix = null;  // set after bindParams
     var colorWindow = 4;
     //
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix);
+	    drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "linearCheckbox":null,
-                  "radiusRange":"radiusText"},
-		 function() {
-		     drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix);
-		 } );
-    bindFunction({"amountRange":"amountText",
-                  "matrixSelect":null},
-		 function() {
-		     amount = parseFloat(amountRange.value);
-		     matrix = matrixSelect.value;
-		     colorMatrix = sepiaToneMatrix(amount, matrix);
+    bindParams(params, function(key, target, rel) {
+		     drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix, params);
+		 }, {keys: ["maxWidthHeight", "linear", "radius"]});
+    bindParams(params, function(key, target, rel) {
+		     colorMatrix = sepiaToneMatrix(params.amount, params.matrix);
 		     setTableValues("colorMatrixTable", colorMatrix);
-		     drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix);
-		 } );
+		     drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix, params);
+		 }, {keys: ["amount", "matrix"]});
+    colorMatrix = sepiaToneMatrix(params.amount, params.matrix);
     //
     bindTableFunction("colorMatrixTable", function(table, values, width) {
 	colorMatrix = values;
-	drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix);
+	drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix, params);
     }, colorMatrix, colorWindow);
     console.log(colorMatrixTable);
 }
 
 
-function drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var linear = document.getElementById("linearCheckbox").checked;
-    var radius = parseFloat(document.getElementById("radiusRange").value);
+function drawSrcImageAndSepiaTone(srcImage, srcCanvas, dstCanvas, colorMatrix, params) {
+    var { maxWidthHeight, linear, radius } = params;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawSepiaTone(srcCanvas, dstCanvas, colorMatrix, linear, radius);
 }

@@ -20,17 +20,12 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "colorRange":"colorText",
-                  "vignetteRange":"vignetteText",
-                  "mosaicRange":"mosaicText",
-                  "smoothingRange":"smoothingText"},
-		 function(target, rel) {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndShowa(srcImage, srcCanvas, dstCanvas, params, rel);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "color", "vignette", "mosaic", "smoothing"]});
 }
 function drawSrcImageAndShowa(srcImage, srcCanvas, dstCanvas, params, sync) {
-    const maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawShowa(srcCanvas, dstCanvas, params, sync);
 }
@@ -40,10 +35,10 @@ var worker = new workerProcess("worker/showa.js");
 function drawShowa(srcCanvas, dstCanvas, params, sync) {
     //console.debug("drawShowa:", params);
     var params_w = {
-        color    : params["colorRange"],
-        vignette : params["vignetteRange"],
-        mosaic   : params["mosaicRange"],
-        smoothing: params["smoothingRange"]
+        color    : params.color,
+        vignette : params.vignette,
+        mosaic   : params.mosaic,
+        smoothing: params.smoothing
     };
     worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

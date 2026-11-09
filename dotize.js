@@ -16,30 +16,25 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    let maxWidthHeight = params["maxWidthHeightRange"];
+	    let maxWidthHeight = params.maxWidthHeight;
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    drawDotize(srcCanvas, dstCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"scaleRange":"scaleText",
-		  "borderRange":"borderText",
-		  "borderColorText":null},
-		 function() { drawDotize(srcCanvas, dstCanvas, params) },
-                 params);
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
-                     let maxWidthHeight = params["maxWidthHeightRange"];
+    bindParams(params, function(key, target, rel) { drawDotize(srcCanvas, dstCanvas, params) }, {keys: ["scale", "border", "borderColor"]});
+    bindParams(params, function(key, target, rel) {
+                     let maxWidthHeight = params.maxWidthHeight;
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     drawDotize(srcCanvas, dstCanvas, params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight"]});
 }
 
 function drawDotize(srcCanvas, dstCanvas, params) {
     // console.debug("drawDotize", params);
-    var scale       = params["scaleRange"];
-    var border      = params["borderRange"];
-    var borderColor = params["borderColorText"];
+    var scale       = params.scale;
+    var border      = params.border;
+    var borderColor = params.borderColor;
     var borderRGBA = getRGBAfromHexColor(borderColor);
     //
     var srcCtx = srcCanvas.getContext("2d");

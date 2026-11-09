@@ -20,13 +20,10 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({ "maxWidthHeight":"maxWidthHeightText",
-                   "amount":"amountText",
-                   "scale":"scaleText"},
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndGravityLens(srcImage, srcCanvas, dstCanvas,
                                          params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "amount", "scale"]});
     function cursolFunction(target, eventType) {
         const p = params[target.id];
         const { x, y, buttons } = p;

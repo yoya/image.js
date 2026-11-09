@@ -10,12 +10,12 @@
       <div class="controlPanel" style="display:flex;">
         <div>
 	  maxWidthHeight:
-          <input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+          <input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
           <br />
-          srcMarkers:<input id="srcMarkers" type="checkbox" checked="checked" />
-          dstMarkers:<input id="dstMarkers" type="checkbox" />  <br />
+          srcMarkers:<input id="srcMarkers" data-bind="srcMarkers" type="checkbox" checked="checked" />
+          dstMarkers:<input id="dstMarkers" data-bind="dstMarkers" type="checkbox" />  <br />
           <span style="position:relative; top:-1ex;"> Interpolation: </span>
-          <select id="interpolationSelect" size="3">
+          <select id="interpolationSelect" data-bind="interpolationMode" size="3">
             <option value="NN"           > Nearest neighbor </option>
             <option value="NNBL" selected> NN & BL </option>
             <option value="BL"           > Bi-linear </option>
@@ -23,27 +23,27 @@
         </div>
         <div>
           src markers: <br />
-          X0:<input type="text" id="markerX0" size="6">
-          Y0:<input type="text" id="markerY0" size="6">
-          X1:<input type="text" id="markerX1" size="6">
-          Y1:<input type="text" id="markerY1" size="6"> <br />
-          X2:<input type="text" id="markerX2" size="6">
-          Y2:<input type="text" id="markerY2" size="6">
-          X3:<input type="text" id="markerX3" size="6">
-          Y3:<input type="text" id="markerY3" size="6">
+          X0:<input type="text" id="markerX0" data-bind="markerX0" size="6">
+          Y0:<input type="text" id="markerY0" data-bind="markerY0" size="6">
+          X1:<input type="text" id="markerX1" data-bind="markerX1" size="6">
+          Y1:<input type="text" id="markerY1" data-bind="markerY1" size="6"> <br />
+          X2:<input type="text" id="markerX2" data-bind="markerX2" size="6">
+          Y2:<input type="text" id="markerY2" data-bind="markerY2" size="6">
+          X3:<input type="text" id="markerX3" data-bind="markerX3" size="6">
+          Y3:<input type="text" id="markerY3" data-bind="markerY3" size="6">
         </div>
         <div>
           Reverse Projection parameter: <br />
-          a:<input id="aRange" type="range" min="-2.0" max="2.0" step="0.001" value="1.0">:<input type="text" id="aText" size="6">
-          b:<input id="bRange" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="bText" size="6">
-          c:<input id="cRange" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="cText" size="6">
+          a:<input id="aRange" data-bind="a" type="range" min="-2.0" max="2.0" step="0.001" value="1.0">:<input type="text" id="aText" data-bind="a" size="6">
+          b:<input id="bRange" data-bind="b" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="bText" data-bind="b" size="6">
+          c:<input id="cRange" data-bind="c" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="cText" data-bind="c" size="6">
           <br />
-          d:<input id="dRange" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="dText" size="6">
-          e:<input id="eRange" type="range" min="-2.0" max="2.0" step="0.001" value="1.0">:<input type="text" id="eText" size="6">
-          f:<input id="fRange" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="fText" size="6">
+          d:<input id="dRange" data-bind="d" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="dText" data-bind="d" size="6">
+          e:<input id="eRange" data-bind="e" type="range" min="-2.0" max="2.0" step="0.001" value="1.0">:<input type="text" id="eText" data-bind="e" size="6">
+          f:<input id="fRange" data-bind="f" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="fText" data-bind="f" size="6">
           <br />
-          g:<input id="gRange" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="gText" size="6">
-          h:<input id="hRange" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="hText" size="6">
+          g:<input id="gRange" data-bind="g" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="gText" data-bind="g" size="6">
+          h:<input id="hRange" data-bind="h" type="range" min="-2.0" max="2.0" step="0.001" value="0.0">:<input type="text" id="hText" data-bind="h" size="6">
 
 
 

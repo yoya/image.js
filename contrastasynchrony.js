@@ -15,27 +15,16 @@ const stopButton = document.getElementById("stopButton");
 
 function main() {
     // console.debug("main");
-    const widthRange = document.getElementById("widthRange");
-    const heightRange = document.getElementById("heightRange");
-    const periodRange = document.getElementById("periodRange");
+    // width, height, period, debug1..3 are set by bindParams
     const params = {
         canvas:canvas,
-        width: parseFloat(widthRange.value),
-        height:parseFloat(heightRange.value),
         elapse:1000 / 24, // 24fps
         //elapse: 1000 / 4, // debug
-        period: parseFloat(periodRange.value),
         timerId: -1,
     };
-    bindFunction( {"widthRange":"widthText",
-                   "heightRange":"heightText",
-                   "periodRange":"periodText",
-                   "debug1Checkbox":null,
-                   "debug2Checkbox":null,
-                   "debug3Checkbox":null
-                  }, function(target, rel) {
+    bindParams(params, function(key, target, rel) {
                       // start(params);
-		  }, params);
+		  }, {keys: ["width", "height", "period", "debug1", "debug2", "debug3"]});
     start(params);
 }
 
@@ -60,12 +49,12 @@ function drawContrastAsynchrony() {
     const ticks = this.ticks ; this.ticks++;
     const params = this.params;
     const { elapse } = params;
-    const width  = params.widthRange;
-    const height = params.heightRange;
-    const period = params.periodRange;
-    const debug1 = params.debug1Checkbox;
-    const debug2 = params.debug2Checkbox;
-    const debug3 = params.debug3Checkbox;
+    const width  = params.width;
+    const height = params.height;
+    const period = params.period;
+    const debug1 = params.debug1;
+    const debug2 = params.debug2;
+    const debug3 = params.debug3;
     //
     const progress = (ticks%(period*1000/elapse)) / (period*1000/elapse);
     const radius = width / 5;

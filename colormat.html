@@ -10,7 +10,7 @@
     <div id="controlPanel"  style="float:left">
       <div style="float:left">
         Filter Category:  <br />
-        <select id="categorySelect" size="5">
+        <select id="categorySelect" data-bind="category" size="5">
           <option value="all" selected> 全て表示 </option>
 	  <option value="emp"  > 色強調 </option>
           <option value="cont" > コントラスト </option>
@@ -22,7 +22,7 @@
       </div>
       <div style="float:left">
         Color Filter:  <br />
-        <select id="colorSelect" size="7">
+        <select id="colorSelect" data-bind="color" size="7">
           <option value="ident" selected> 元のまま </option>
 	  <option value="red-add"   data-category="emp"> 赤+0.5 </option>
           <option value="green-add" data-category="emp"> 緑+0.5 </option>
@@ -61,11 +61,11 @@
           colorMatrix:<table id="colorMatrixTable" style="border:1 "> </table>
         </div>
         <div>
-          linearRGB :<input id="linearCheckbox" type="checkbox" checked/>
-	  amount:<input id="amountRange" type="range" min="0.0" max="1.0" step="0.01" value="1.0">:<input type="text" id="amountText" size="5">
+          linearRGB :<input id="linearCheckbox" data-bind="linear" type="checkbox" checked/>
+	  amount:<input id="amountRange" data-bind="amount" type="range" min="0.0" max="1.0" step="0.01" value="1.0">:<input type="text" id="amountText" data-bind="amount" size="5">
         </div>
         <div>
-          maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+          maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
         </div>
       </div>
     </div> <!-- controlPanel -->

@@ -10,23 +10,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     var dstCanvas = document.getElementById("dstCanvas");
-    bindFunction({"widthRange":"widthText",
-		  "heightRange":"heightText",
-                  "nPascalRange":"nPascalText",
-                  "nColorRange":"nColorText",
-                  "bottomBarCheckbox":null},
-		 function() {
-		     drawPascalTriangle(dstCanvas);
-		 } );
-    drawPascalTriangle(dstCanvas);
+    var params = {};
+    bindParams(params, function(key, target, rel) {
+		     drawPascalTriangle(dstCanvas, params);
+		 }, {keys: ["width", "height", "nPascal", "nColor", "bottomBar"]});
+    drawPascalTriangle(dstCanvas, params);
 }
 
-function drawPascalTriangle(canvas) {
-    var width = parseFloat(document.getElementById("widthRange").value);
-    var height = parseFloat(document.getElementById("heightRange").value);
-    var nPascal = parseFloat(document.getElementById("nPascalRange").value);
-    var nColor = parseFloat(document.getElementById("nColorRange").value);
-    var bottomBar = document.getElementById("bottomBarCheckbox").checked;
+function drawPascalTriangle(canvas, params) {
+    var { width, height, nPascal, nColor, bottomBar } = params;
     canvas.width = width;
     canvas.height = height;
     var ctx = dstCanvas.getContext("2d");

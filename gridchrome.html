@@ -9,14 +9,14 @@
     <div class="container">
       <div class="controlPanel" style="display:flex">
         <div>
-	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
           <br />
-          cheat:<input id="cheatRange" type="range" min="0" max="20" step="1" value="4">:<input type="text" id="cheatText" size="3">
+          cheat:<input id="cheatRange" data-bind="cheat" type="range" min="0" max="20" step="1" value="4">:<input type="text" id="cheatText" data-bind="cheat" size="3">
         </div>
         <div>
-          period:<input id="periodRange" type="range" min="1" max="48" step="1" value="32">:<input type="text" id="periodText" size="3">
+          period:<input id="periodRange" data-bind="period" type="range" min="1" max="48" step="1" value="32">:<input type="text" id="periodText" data-bind="period" size="3">
           <br />
-          width:<input id="widthRange" type="range" min="1" max="32" step="1" value="2">:<input type="text" id="widthText" size="3">
+          width:<input id="widthRange" data-bind="width" type="range" min="1" max="32" step="1" value="2">:<input type="text" id="widthText" data-bind="width" size="3">
         </div>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>

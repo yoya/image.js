@@ -14,17 +14,10 @@ function main() {
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     var params = {};
     //
-    // var filterSelect      = document.getElementById("filterSelect");
-    // var filterWindowRange = document.getElementById("filterWindowRange");
-    var rankOrderRange = document.getElementById("rankOrderRange");
-    var rankOrderText  = document.getElementById("rankOrderText");
-    // var maxWidthHeight = parseFloat(maxWidthHeightRange.value);
-    // var filterWindow   = parseFloat(filterWindowRange.value);
-    // var rankOrder      = parseFloat(rankOrderRange.value)
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-            let maxWidthHeight = params["maxWidthHeightRange"];
+            let maxWidthHeight = params.maxWidthHeight;
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    dstCanvas.width = srcCanvas.width;
 	    dstCanvas.height = srcCanvas.height;
@@ -32,15 +25,11 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"filterSelect":null,
-                  "filterWindowRange":"filterWindowText",
-                  "rankOrderRange":"rankOrderText"},
-		 function(target, rel) {
-                     let filterWindow = params["filterWindowRange"];
-                     let rankOrder    = params["rankOrderRange"];
-                     if ((target.id == "filterSelect") || (target.id == "filterWindowRange") ||
-                         (target.id == "filterWindowText")) {
-                         var filter = params["filterSelect"];
+    bindParams(params, function(key, target, rel) {
+                     let filterWindow = params.filterWindow;
+                     let rankOrder    = params.rankOrder;
+                     if ((key == "filter") || (key == "filterWindow")) {
+                         var filter = params.filter;
                          switch (filter) {
                          case "min":
                              rankOrder = 1;
@@ -57,38 +46,37 @@ function main() {
                              }
                              break;
                          }
-                         rankOrderRange.value = rankOrder;
-                         rankOrderText.value  = rankOrder;
-                         params["rankOrderRange"] = rankOrder;
+                         params.rankOrder = rankOrder;
+                         syncParamsToElements(params, {keys: ["rankOrder"]});
                      }
                      console.log(rankOrder, filterWindow, ((filterWindow*filterWindow/2) | 0));
                      if (rankOrder == 1) {
-                         filterSelect.value = "min";
+                         params.filter = "min";
                      } else if (rankOrder == filterWindow*filterWindow) {
-                         filterSelect.value = "max";
+                         params.filter = "max";
                      } else if (rankOrder == ((filterWindow*filterWindow/2+1) | 0)) {
-                         filterSelect.value = "median";
+                         params.filter = "median";
                      } else {
-                         filterSelect.value = "etc";
+                         params.filter = "etc";
                      }
+                     syncParamsToElements(params, {keys: ["filter"]});
 		     drawRankOrderFilter(srcCanvas, dstCanvas, params, rel);
-		 }, params);
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function(target, rel) {
-		     let maxWidthHeight = params["maxWidthHeightRange"];
+		 }, {keys: ["filter", "filterWindow", "rankOrder"]});
+    bindParams(params, function(key, target, rel) {
+		     let maxWidthHeight = params.maxWidthHeight;
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     dstCanvas.width = srcCanvas.width;
 		     dstCanvas.height = srcCanvas.height;
 		     drawRankOrderFilter(srcCanvas, dstCanvas, params, rel);
-		 }, params);
+		 }, {keys: ["maxWidthHeight"]});
 }
 
 var worker = new workerProcess("worker/rankorder.js");
 
 function drawRankOrderFilter(srcCanvas, dstCanvas, params, sync) {
     var params_w = {
-        rankOrder   : params["rankOrderRange"],
-        filterWindow: params["filterWindowRange"],
+        rankOrder   : params.rankOrder,
+        filterWindow: params.filterWindow,
     };
     worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

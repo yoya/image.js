@@ -13,14 +13,11 @@ function main() {
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     var params = {};
-    var structureType = document.getElementById("structureTypeSelect").value;
-    var filterWindow = parseFloat(document.getElementById("filterWindowRange").value);
-    //
-    var structureTable = makeStructureTable(structureType, filterWindow);
+    var structureType, filterWindow, structureTable;  // set after bindParams
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-            let maxWidthHeight = params["maxWidthHeightRange"];
+            let maxWidthHeight = params.maxWidthHeight;
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    dstCanvas.width  = srcCanvas.width;
 	    dstCanvas.height = srcCanvas.height;
@@ -28,15 +25,12 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"filterSelect":null},
-		 function(target, rel) {
+    bindParams(params, function(key, target, rel) {
 		     drawMorphologyFilter(srcCanvas, dstCanvas, structureTable, params, rel);
-		 }, params);
-    bindFunction({"structureTypeSelect":null,
-		  "filterWindowRange":"filterWindowText"},
-		 function(target, rel) {
-		     structureType = params["structureTypeSelect"];
-		     filterWindow  = params["filterWindowRange"];
+		 }, {keys: ["filter"]});
+    bindParams(params, function(key, target, rel) {
+		     structureType = params.structureType;
+		     filterWindow  = params.filterWindow;
 		     structureTable = makeStructureTable(structureType, filterWindow);
 		     drawMorphologyFilter(srcCanvas, dstCanvas, structureTable, params, rel);
 		     bindTableFunction("structureTable", function(table, values, width) {
@@ -44,16 +38,18 @@ function main() {
 			 structureTable = values;
 			 drawMorphologyFilter(srcCanvas, dstCanvas, structureTable, params, true);
 		     }, structureTable, filterWindow, "checkbox");
-		 }, params);
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function(target, rel) {
-		     let maxWidthHeight = params["maxWidthHeightRange"];
+		 }, {keys: ["structureType", "filterWindow"]});
+    bindParams(params, function(key, target, rel) {
+		     let maxWidthHeight = params.maxWidthHeight;
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     dstCanvas.width  = srcCanvas.width;
 		     dstCanvas.height = srcCanvas.height;
 		     drawMorphologyFilter(srcCanvas, dstCanvas, structureTable, params, rel);
 
-		 }, params);
+		 }, {keys: ["maxWidthHeight"]});
+    structureType = params.structureType;
+    filterWindow  = params.filterWindow;
+    structureTable = makeStructureTable(structureType, filterWindow);
     bindTableFunction("structureTable", function(table, values, width) {
 	// console.debug(values, width);
 	structureTable = values;
@@ -141,8 +137,8 @@ var worker = new workerProcess("worker/morphology.js");
 function drawMorphologyFilter(srcCanvas, dstCanvas, structureTable, params, sync) {
     var params_w = {
         structureTable:structureTable,
-        filter      : params["filterSelect"],
-        filterWindow: params["filterWindowRange"],
+        filter      : params.filter,
+        filterWindow: params.filterWindow,
     };
     worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

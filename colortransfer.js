@@ -13,10 +13,9 @@ function main() {
     // console.debug("main");
     const srcCanvas = document.getElementById("srcCanvas");
     const dstCanvas = document.getElementById("dstCanvas");
+    // for the jscolor picker API
     const srcColorText = document.getElementById("srcColorText");
     const dstColorText = document.getElementById("dstColorText");
-    const colorSrcDstRadio1 = document.getElementById("colorSrcDstRadio1");
-    const colorSrcDstRadio2 = document.getElementById("colorSrcDstRadio2");
     const srcImage = new Image();
     const params = {};
     srcImage.onload = function() {
@@ -26,29 +25,22 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "fuzzRange":"fuzzText",
-                  "srcColorText":null, "dstColorText":null,
-                  "colorSrcDstRadio1":null, "colorSrcDstRadio2":null,
-                  "diffSyncRange":"diffSyncText",
-                  "diffRelativeRange":"diffRelativeText"},
-		 function(target) {
-                     switch (target.id) {
-                     case "srcColorText":
+    bindParams(params, function(key, target, rel) {
+                     switch (key) {
+                     case "srcColor":
                      case "colorSrcDstRadio1":
-                         colorSrcDstRadio1.checked = true;
-                         colorSrcDstRadio2.checked = false;
+                         params.colorSrcDstRadio1 = true;
+                         params.colorSrcDstRadio2 = false;
                          break;
-                     case "dstColorText":
+                     case "dstColor":
                      case "colorSrcDstRadio2":
-                         colorSrcDstRadio1.checked = false;
-                         colorSrcDstRadio2.checked = true;
+                         params.colorSrcDstRadio1 = false;
+                         params.colorSrcDstRadio2 = true;
                          break;
                      }
-                     params.colorSrcDstRadio1 = colorSrcDstRadio1.checked;
-                     params.colorSrcDstRadio2 = colorSrcDstRadio2.checked;
+                     syncParamsToElements(params, {keys: ["colorSrcDstRadio1", "colorSrcDstRadio2"]});
                      drawSrcImageAndColorTransfer(srcImage, srcCanvas, dstCanvas, params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "fuzz", "srcColor", "dstColor", "colorSrcDstRadio1", "colorSrcDstRadio2", "diffSync", "diffRelative"]});
     let touch = false;
     bindCursolFunction("srcCanvas", params, function(target, eventType) {
         switch (eventType) {
@@ -67,11 +59,11 @@ function main() {
             const rgb = rgba.subarray(0, 3);
             if (params.colorSrcDstRadio1) {
                 const colorText = Utils.ToHexArray(rgb).join("");
-                params.srcColorText = colorText;
+                params.srcColor = colorText;
                 srcColorText.jscolor.fromString(colorText);
             } else {
                 const colorText = Utils.ToHexArray(rgb).join("");
-                params.dstColorText = colorText;
+                params.dstColor = colorText;
                 dstColorText.jscolor.fromString(colorText);
             }
             drawSrcImageAndColorTransfer(srcImage, srcCanvas, dstCanvas, params);
@@ -86,7 +78,7 @@ function getCanvasRGBA(canvas, x, y, outfill) {
 }
 
 function drawSrcImageAndColorTransfer(srcImage, srcCanvas, dstCanvas, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawColorTransfer(srcCanvas, dstCanvas, params);
 }
@@ -99,11 +91,11 @@ function drawColorTransfer(srcCanvas, dstCanvas, params) {
     dstCanvas.width  = width;
     dstCanvas.height = height;
     //
-    const srcColor = getRGBAfromHexColor(params.srcColorText);
-    const dstColor = getRGBAfromHexColor(params.dstColorText);
-    const fuzz = params.fuzzRange;
-    const diffSync = params.diffSyncRange;
-    const diffRelative = params.diffRelativeRange;
+    const srcColor = getRGBAfromHexColor(params.srcColor);
+    const dstColor = getRGBAfromHexColor(params.dstColor);
+    const fuzz = params.fuzz;
+    const diffSync = params.diffSync;
+    const diffRelative = params.diffRelative;
     const srcImageData = srcCtx.getImageData(0, 0, width, height);
     const dstImageData = dstCtx.createImageData(width, height);
     for (let y = 0 ; y < height; y++) {

@@ -23,20 +23,15 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "borderRange":"borderText",
-                  "blurRange":"blurText",
-                  "ampRange":"ampText",
-                  "linearRGBCheckbox":null},
-		 function(target, rel) {
-                     const blur = params.blurRange;
+    bindParams(params, function(key, target, rel) {
+                     const blur = params.blur;
                      params.blurKernelSize = blur,
                      params.blurKernel = makeKernel_PascalTriangle_2D(blur);
 		     drawSrcImageAndMirror(srcImage, srcCanvas, dstCanvas, params, rel);
-		 }, params );
+		 }, {keys: ["maxWidthHeight", "borderRange", "blur", "ampRange", "linearRGBCheckbox"]});
 }
 function drawSrcImageAndMirror(srcImage, srcCanvas, dstCanvas, params, sync) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawMirror(srcCanvas, dstCanvas, params, sync);
 }

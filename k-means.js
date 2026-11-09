@@ -34,38 +34,27 @@ var kmc = null;
 function main() {
     console.debug("main");
     canvas.style.background = "black";
-    bindFunction({ "restartButton":null,
-		   "resetButton":null,
-		   "widthRange":"widthText",
-		   "heightRange":"heightText",
-		   "nPointsRange":"nPointsText",
-		   "nCenterPointsRange":"nCenterPointsText",
-                   "delayRange":"delayText"},
-		 function(target) {
-                     switch (target.id) {
+    const params = {};
+    bindParams(params, function(key, target, rel) {
+                     switch (key) {
 		     case "restartButton":
-                     case "delayRange":
-                     case "delayText":
-			 revert();
+                     case "delay":
+			 revert(params);
                          break;
                      default:
-			 reset();
+			 reset(params);
                          break;
 		     }
 		     restart();
-		 });
-    reset();
+		 }, {keys: ["restartButton", "resetButton", "width", "height", "nPoints", "nCenterPoints", "delay"]});
+    reset(params);
     restart();
 }
 
-function reset() {
-    var width  = parseFloat(document.getElementById("widthRange").value);
-    var height = parseFloat(document.getElementById("heightRange").value);
+function reset(params) {
+    var { width, height, nPoints, nCenterPoints, delay } = params;
     canvas.width  = width;
     canvas.height = height;
-    var nPoints = parseFloat(document.getElementById("nPointsRange").value);
-    var nCenterPoints = parseFloat(document.getElementById("nCenterPointsRange").value);
-    var delay = parseFloat(document.getElementById("delayRange").value);
     if (kmc) {
 	kmc.status = -1; // stop
 	kmc = null;
@@ -74,8 +63,8 @@ function reset() {
     kMeansSetup(kmc);
 }
 
-function revert(){
-    kmc.delay = parseFloat(document.getElementById("delayRange").value);
+function revert(params) {
+    kmc.delay = params.delay;
     for (var i = 0, n = kmc.nPoints ; i < n ; i++) {
 	kmc.points[i].centerIndex = null;
     }

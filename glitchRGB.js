@@ -20,19 +20,14 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "dxR":"dxRText", "dyR":"dyRText",
-                  "dxG":"dxGText", "dyG":"dyGText",
-                  "dxB":"dxBText", "dyB":"dyBText",
-                  "dxA":"dxAText", "dyA":"dyAText"},
-                 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndGlitchRGB(srcImage, srcCanvas, dstCanvas,
                                          params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "dxR", "dyR", "dxG", "dyG", "dxB", "dyB", "dxA", "dyA"]});
 }
 
 function drawSrcImageAndGlitchRGB(srcImage, srcCanvas, dstCanvas, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawGlitchRGB(srcCanvas, dstCanvas, params);
 }

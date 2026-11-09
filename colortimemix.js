@@ -40,16 +40,11 @@ function main() {
     dropFunction(document, function(dataURL) {
         srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "typeSelect":null},
-		 function() {
+    bindParams(params, function(key, target, rel) {
                      drawSrcImageAndCTM(srcImage, params);
-		 }, params);
-    bindFunction({"buttonStart":null, "buttonStop":null,
-                  "delayRange":"delayText",
-                 },
-		 function(target) {
-                     switch (target.id) {
+		 }, {keys: ["maxWidthHeight", "type"]});
+    bindParams(params, function(key, target, rel) {
+                     switch (key) {
                      case "buttonStart":
                          stop(params);
                          start(params);
@@ -57,17 +52,16 @@ function main() {
                      case "buttonStop":
                          stop(params);
                          break;
-                     case "delayRange":
-                     case "delayText":
+                     case "delay":
                      default:
                          break;
                      }
-		 }, params);
+		 }, {keys: ["buttonStart", "buttonStop", "delay"]});
 }
 
 function drawSrcImageAndCTM(srcImage,  params) {
     const srcCanvas = params.canvasTable.src;
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     stop(params);
     drawCTM(params);
@@ -102,7 +96,7 @@ function drawCTM(params) {
     const rData = redImageData.data;
     const gData = greenImageData.data;
     const bData = blueImageData.data;
-    switch (params.typeSelect) {
+    switch (params.type) {
     case "RGB":
         for (let i = 0, n = srcData.length; i < n; i+= 4) {
             const [r, g, b, a] = srcData.subarray(i, i + 4);
@@ -157,7 +151,7 @@ function frame() {
     if (tick === null) {
         return ;
     }
-    const delay = params.delayRange;
+    const delay = params.delay;
     const dstCtx = params.ctxTable.dst;
     const imageDataTable = params.imageDataTable;
     const imageData = [imageDataTable.red, imageDataTable.green, imageDataTable.blue][tick % 3];
@@ -167,7 +161,7 @@ function frame() {
 }
 
 function start(params) {
-    const delay = params.delayRange;
+    const delay = params.delay;
     params.tick = 0;
     params.timeoutID = setTimeout(frame.bind(params), delay);
 }

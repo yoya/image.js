@@ -11,7 +11,7 @@
       <div style="float:left">
         Compare Diff Method:  <br />
 	<div  style="float:left">
-          <select id="methodSelect" size="6">
+          <select id="methodSelect" data-bind="method" size="6">
             <option value="ae" selected> AE   </option>
             <option value="mse"        > MSE  </option>
             <option value="psnr"       > PSNR </option>
@@ -19,9 +19,9 @@
 	</div>
       </div >
       <div style="float:left">
-        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+        maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
         <br />
-	normalize:<input id="normalizeCheckbox" type="checkbox" checked="checked" />
+	normalize:<input id="normalizeCheckbox" data-bind="normalize" type="checkbox" checked="checked" />
       </div>
     </div> <!-- controlPanel -->
     <br />

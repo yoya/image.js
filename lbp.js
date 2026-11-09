@@ -20,14 +20,12 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "thresholdSelect": null},
-		 function(target, rel) {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params, rel);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "threshold"]});
  }
 function drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params, sync) {
-    var maxWidthHeight = params["maxWidthHeightRange"];
+    var maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawLBP(srcCanvas, dstCanvas, params, sync);
 }
@@ -37,7 +35,7 @@ var worker = new workerProcess("worker/lbp.js");
 
 function drawLBP(srcCanvas, dstCanvas, params, sync) {
     var params_w = {
-        threshold: params["thresholdSelect"],
+        threshold: params.threshold,
     };
     worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

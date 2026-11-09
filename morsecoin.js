@@ -18,20 +18,17 @@ function main() {
     const receiveCanvas = document.getElementById("receiveCanvas");
     const srcImage = new Image();
     const params = {};
-    bindFunction({"widthHeightRange":"widthHeightText",
-                  "textText":null},
-                 function() {
-                     const widthHeight = params['widthHeightRange'];
+    bindParams(params, function(key, target, rel) {
+                     const widthHeight = params.widthHeight;
                      sendCanvas.width = sendCanvas.height = widthHeight;
                      receiveCanvas.width = receiveCanvas.height = widthHeight;
 		     drawSrcImageAndMorse(sendCanvas, receiveCanvas, params);
-		 }, params);
+		 }, {keys: ["widthHeight", "text"]});
     bindkeyFunction(params, function(event, eventType) {
         const key = event.key;
         if (key === "Enter") {
             let delay = 0, delayAlphabet = 0;
-            let textText = document.getElementById("textText").value;
-            for (const c of textText.split('')) {
+            for (const c of params.text.split('')) {
                 const uc = c.toUpperCase();
                 animationAlphabetAndPoint(uc, delay);
                 delay += 2000;

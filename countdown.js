@@ -14,7 +14,6 @@ var video = document.getElementById("video");
 var playButton = document.getElementById("playButton");
 var stopButton = document.getElementById("stopButton");
 var downloadButton = document.getElementById("downloadButton");
-var typeSelect = document.getElementById("typeSelect");
 
 var stream = canvas.captureStream(24);
 video.srcObject = stream;
@@ -29,39 +28,26 @@ var sourceBuffer;
 function main() {
     // console.debug("main");
     var options = {mimeType: 'video/webm;codecs=vp9'};
-    var widthRange = document.getElementById("widthRange");
-    var heightRange = document.getElementById("heightRange");
+    // width, height, type are set by bindParams
     var params = {
         canvas:canvas,
         video:video,
-        width: parseFloat(widthRange.value),
-        height:parseFloat(heightRange.value),
-        type: typeSelect.value,
         elapse: 1000 / 24, // 24fps
         // elapse: 1000 / 4, // debug
         count: 10,
     };
-    bindFunction({"widthRange":"widthText",
-                  "heightRange":"heightText",
-                  "typeSelect":null},
-		 function(target, rel) {
-                     params['width']  = parseFloat(widthRange.value);
-                     params['height'] = parseFloat(heightRange.value);
-                     params['type'] = typeSelect.value;
+    bindParams(params, function(key, target, rel) {
                      drawBackgroundImage(params);
-		 } );
-    bindFunction({"playButton":null},
-		 function(target, rel) {
+		 }, {keys: ["width", "height", "type"]});
+    bindParams({}, function(key, target, rel) {
 		     start(params);
-		 } );
-    bindFunction({"stopButton":null},
-		 function(target, rel) {
+		 }, {keys: ["playButton"]});
+    bindParams({}, function(key, target, rel) {
 		     stop();
-		 } );
-    bindFunction({"downloadButton":null},
-		 function(target, rel) {
+		 }, {keys: ["stopButton"]});
+    bindParams({}, function(key, target, rel) {
 		     download();
-		 } );
+		 }, {keys: ["downloadButton"]});
     // start(params);
     drawBackgroundImage(params);
 }

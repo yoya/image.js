@@ -13,14 +13,14 @@
     <div id="controlPanel" style="float:left">
       <div style="float:left">
         <div style="float:left">
-          maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="1024">:<input type="text" id="maxWidthHeightText" size="5">
+          maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="1024">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
           <br />
-          dstNormalize:<input id="dstNormalizeCheckbox" type="checkbox" />
+          dstNormalize:<input id="dstNormalizeCheckbox" data-bind="dstNormalize" type="checkbox" />
         </div>
         <div style="float:left">
-          windowSize:<input id="windowSizeRange" type="range" min="8" max="11" step="1" value="8">:<input type="text" id="windowSizeText" size="2">
+          windowSize:<input id="windowSizeRange" data-bind="windowSize" type="range" min="8" max="11" step="1" value="8">:<input type="text" id="windowSizeText" data-bind="windowSize" size="2">
           <br />
-          slideSize:<input id="slideSizeRange" type="range" min="1" max="11" step="1" value="1">:<input type="text" id="slideSizeText" size="2">
+          slideSize:<input id="slideSizeRange" data-bind="slideSize" type="range" min="1" max="11" step="1" value="1">:<input type="text" id="slideSizeText" data-bind="slideSize" size="2">
       </div>
       </div>
     </div> <!-- controlPanel -->

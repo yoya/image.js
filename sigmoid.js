@@ -13,54 +13,37 @@ function main() {
     var dstCanvas = document.getElementById("dstCanvas");
     var gammaCanvas = document.getElementById("gammaCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    var aRange = document.getElementById("aRange");
-    var bRange = document.getElementById("bRange");
-    var zRange =document.getElementById("zRange");
-    var aText = document.getElementById("aText");
-    var bText = document.getElementById("bText");
-    var zText = document.getElementById("zText");
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndSigmoid(srcImage, srcCanvas, dstCanvas, gammaCanvas, true);
+	    drawSrcImageAndSigmoid(srcImage, srcCanvas, dstCanvas, gammaCanvas, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "aRange":"aText", "bRange":"bText", "zRange":"zText",
-		  "linearCheckbox":null},
-		 function(target, rel) {
+    bindParams(params, function(key, target, rel) {
 		     // console.debug(target.id);
-		     switch (target.id) {
-		     case "aRange":
-		     case "aText":
-		     case "bRange":
-		     case "bText":
-			 zRange.value = 0;
-			 zText.value = 0;
+		     switch (key) {
+		     case "a":
+		     case "b":
+			 params.z = 0;
+			 syncParamsToElements(params, {keys: ["z"]});
 			 break;
-		     case "zRange":
-		     case "zText":
+		     case "z":
 			 // -1.0
-			 var z = parseFloat(zRange.value);
-			 var a = Math.abs(z) * 50;
-			 var b = z + 0.5;
-			 aRange.value = a;
-			 aText.value  = a;
-			 bRange.value = b;
-			 bText.value  = b;
+			 var z = params.z;
+			 params.a = Math.abs(z) * 50;
+			 params.b = z + 0.5;
+			 syncParamsToElements(params, {keys: ["a", "b"]});
 			 break;
 		     }
-		     drawSrcImageAndSigmoid(srcImage, srcCanvas, dstCanvas, gammaCanvas, rel);
-		 } );
-    drawSrcImageAndSigmoid(srcImage, srcCanvas, dstCanvas, gammaCanvas, true);
+		     drawSrcImageAndSigmoid(srcImage, srcCanvas, dstCanvas, gammaCanvas, params, rel);
+		 }, {keys: ["maxWidthHeight", "a", "b", "z", "linear"]});
+    drawSrcImageAndSigmoid(srcImage, srcCanvas, dstCanvas, gammaCanvas, params, true);
 }
 
-function drawSrcImageAndSigmoid(srcImage, srcCanvas, dstCanvas, gammaCanvas, sync) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var a = parseFloat(document.getElementById("aRange").value);
-    var b = parseFloat(document.getElementById("bRange").value);
-    var linear = document.getElementById("linearCheckbox").checked;
+function drawSrcImageAndSigmoid(srcImage, srcCanvas, dstCanvas, gammaCanvas, params, sync) {
+    var { maxWidthHeight, a, b, linear } = params;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawSigmoidGraph(gammaCanvas, a, b);
     drawSigmoidImage(srcCanvas, dstCanvas, a, b, linear, sync);

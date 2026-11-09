@@ -19,11 +19,11 @@ function main() {
     const srcImage1 = new Image();
     const srcImage2 = new Image();
     srcImage1.onload = function() {
-	drawSrcImage(srcImage1, srcCanvas1, params.maxWidthHeightRange);
+	drawSrcImage(srcImage1, srcCanvas1, params.maxWidthHeight);
 	drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, params, true);
     }
     srcImage2.onload = function() {
-	drawSrcImage(srcImage2, srcCanvas2, params.maxWidthHeightRange);
+	drawSrcImage(srcImage2, srcCanvas2, params.maxWidthHeight);
 	drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, params, true)
     }
     srcImage1.src = "img/4x4primary-400x400.png";
@@ -35,44 +35,34 @@ function main() {
 	srcImage2.src = dataURL;
     }, "DataURL");
     
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "linearGammaCheckbox":null, "inverse":null,
-		  "ratioRange":"ratioText",
-		  "ratio1Range":"ratio1Text", "ratio2Range":"ratio2Text",
-                  "shiftXRange":"shiftXText", "shiftYRange":"shiftYText",
-                  "gradSlantXRange":"gradSlantXText",
-                  "gradSlantYRange":"gradSlantYText",
-                  "gradInterceptXRange":"gradInterceptXText",
-                  "gradInterceptYRange":"gradInterceptYText"},
-		 function(target, rel) {
-		     const maxWidthHeight = params.maxWidthHeightRange;
-		     if ((target.id === "ratioRange") || (target.id === "ratioText")) {
-			 const ratio = params.ratioRange;
-                         params.ratio1Range = params.ratio1Text = 1 - ratio;
-			 params.ratio2Range = params.ratio2Text = ratio;
-                         bind2elements(params);
+    bindParams(params, function(key, target, rel) {
+		     const maxWidthHeight = params.maxWidthHeight;
+		     if ((key === "ratio")) {
+			 const ratio = params.ratio;
+                         params.ratio1 = params.ratio1 = 1 - ratio;
+			 params.ratio2 = params.ratio2 = ratio;
+                         syncParamsToElements(params);
 		     }
 		     drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
 		     drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
 		     drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, params,
 				    rel);
-		 }, params );
-    bindFunction({"methodSelect":null},
-		 function(target, rel) {
+		 }, {keys: ["maxWidthHeight", "linearGamma", "inverse", "ratio", "ratio1", "ratio2", "shiftX", "shiftY", "gradSlantX", "gradSlantY", "gradInterceptX", "gradInterceptY"]});
+    bindParams(params, function(key, target, rel) {
 		     drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, params,
 				    true);
-		 }, params );
+		 }, {keys: ["method"]});
 }
 
 const worker = new workerProcess("worker/alphablend.js");
 
 function drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, params, sync) {
     console.debug("drawAlphaBrend", params);
-    const { methodSelect, linearGammaCheckbox, inverse,
-            ratio1Range, ratio2Range,
-            shiftXRange, shiftYRange,
-            gradSlantXRange, gradSlantYRange,
-            gradInterceptXRange, gradInterceptYRange} = params;
+    const { method: methodSelect, linearGamma: linearGammaCheckbox, inverse,
+            ratio1: ratio1Range, ratio2: ratio2Range,
+            shiftX: shiftXRange, shiftY: shiftYRange,
+            gradSlantX: gradSlantXRange, gradSlantY: gradSlantYRange,
+            gradInterceptX: gradInterceptXRange, gradInterceptY: gradInterceptYRange} = params;
     const [shiftX, shiftY] = [shiftXRange, shiftYRange];
     const srcCtx1 = srcCanvas1.getContext("2d");
     const srcCtx2 = srcCanvas2.getContext("2d");

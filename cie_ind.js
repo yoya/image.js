@@ -36,18 +36,15 @@ function main() {
             drawSpectrumGraphCMF(graphCanvas, params);
         }
     }
-    bindFunction({"MCheckbox":null, "FCheckbox":null,
-                  "ageMinRange":"ageMinText", "ageMaxRange":"ageMaxText",
-                  "ICheckbox":null, "IICheckbox":null},
-		 function(target, rel) {
+    bindParams({}, function(key, target, rel) {
                      var id = target.id;
                      elems[id] = document.getElementById(id);
-                     if (target.id == "MCheckbox") {
+                     if (key == "M") {
                          if (! elems["MCheckbox"].checked) {
                              elems["FCheckbox"].checked = true;
                          }
                      }
-                     if (target.id == "FCheckbox") {
+                     if (key == "F") {
                          if (! elems["FCheckbox"].checked) {
                              elems["MCheckbox"].checked = true;
                          }
@@ -55,7 +52,7 @@ function main() {
                      var ageMax = elems["ageMaxRange"].value;
                      var ageMin = elems["ageMinRange"].value
                      if (ageMin > ageMax) {
-                         if (target.id == "ageMaxRange") {
+                         if (key == "ageMax") {
                              ageMin = ageMax;
                              elems["ageMinRange"].value = ageMin;
                              elems["ageMinText"].value = ageMin;
@@ -65,12 +62,12 @@ function main() {
                              elems["ageMaxText"].value = ageMax;
                          }
                      }
-                     if (target.id == "ICheckbox") {
+                     if (key == "I") {
                          if (! elems["ICheckbox"].checked) {
                              elems["IICheckbox"].checked = true;
                          }
                      }
-                     if (target.id == "IICheckbox") {
+                     if (key == "II") {
                          if (! elems["IICheckbox"].checked) {
                              elems["ICheckbox"].checked = true;
                          }
@@ -98,7 +95,7 @@ function main() {
 	                 params['cieArr'] = personalArr["WRGB"];
                          drawSpectrumGraphCMF(graphCanvas, params);
                      }
-                 } );
+                 }, {keys: ["M", "F", "ageMin", "ageMax", "I", "II"]});
     //
     loadCIE10ind_data(onCIEXYZdata);
 }

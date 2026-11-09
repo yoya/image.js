@@ -10,20 +10,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     var graphCanvas = document.getElementById("graphCanvas");
-    bindFunction({"w1Range":"w1Text",
-                  "w2Range":"w2Text",
-                  "thetaRange":"thetaText"},
-		 function() {
-                     drawPerceptron(graphCanvas);
-		 } );
-    drawPerceptron(graphCanvas);
+    var params = {};
+    bindParams(params, function(key, target, rel) {
+                     drawPerceptron(graphCanvas, params);
+		 }, {keys: ["w1", "w2", "theta"]});
+    drawPerceptron(graphCanvas, params);
 }
 
-function drawPerceptron(graphCanvas) {
+function drawPerceptron(graphCanvas, params) {
     // console.debug("drawCopy");
-    var w1 = parseFloat(document.getElementById("w1Range").value);
-    var w2 = parseFloat(document.getElementById("w2Range").value);
-    var theta = parseFloat(document.getElementById("thetaRange").value);
+    var { w1, w2, theta } = params;
     var [x_min, x_max] = [-2, 3];
     var [y_min, y_max] = [-2, 3];
     var graph ={

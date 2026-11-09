@@ -24,8 +24,7 @@ function main() {
 	    drawDiagram(diagramBaseCanvas, dstCanvas, params, true);
 	}
     }
-    bindFunction({"cie":null},
-		 function(target, rel) {
+    bindParams(params, function(key, target, rel) {
                      const { cie } = params;
 		     if (cie === "ciexyz31") {
 			 params['cieArr'] = params['cie31Arr'];
@@ -36,25 +35,16 @@ function main() {
 		     }
 		     drawSpectrumGraph(graphCanvas, params, params.graphAlpha);
 		     drawDiagram(diagramBaseCanvas, dstCanvas, params, rel);
-		 }, params);
-    bindFunction({"maxWidthHeight":"maxWidthHeightText"},
-		 function(target, rel) {
+		 }, {keys: ["cie"]});
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImage(srcImage, srcCanvas, params.maxWidthHeight);
 		     params['hist'] = getColorHistogram(srcCanvas);
 		     drawDiagram(diagramBaseCanvas, dstCanvas, params, rel);
-		 }, params);
-    bindFunction({"chromaticity":null,
-		  "pointSize":"pointSizeText",
-                  "pointDensity":"pointDensityText",
-		  "colorspace":null,
-		  "tristimulus":null,
-		  "guide":null,
-                  "graphAlpha":"graphAlphaText",
-		  },
-		 function(target, rel) {
+		 }, {keys: ["maxWidthHeight"]});
+    bindParams(params, function(key, target, rel) {
 		     drawSpectrumGraph(graphCanvas, params, params.graphAlpha);
 		     drawDiagram(diagramBaseCanvas, dstCanvas, params, rel);
-		 }, params);
+		 }, {keys: ["chromaticity", "pointSize", "pointDensity", "colorspace", "tristimulus", "guide", "graphAlpha"]});
     //
     dropFunction(document, function(dataURL) {
 	// console.debug("file drop");

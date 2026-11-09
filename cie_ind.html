@@ -16,22 +16,22 @@
           Sex:
         </div>
         <div style="float:left">
-          Male <input id="MCheckbox" type="checkbox" checked> <br />
-          Female <input id="FCheckbox" type="checkbox" checked> <br />
+          Male <input id="MCheckbox" data-bind="M" type="checkbox" checked> <br />
+          Female <input id="FCheckbox" data-bind="F" type="checkbox" checked> <br />
         </div>
       </div>
       <div style="float:left">
-        Age min:<input id="ageMinRange" type="range" min="17" max="55" step="1" value="17"> : <input type="text" id="ageMinText" size="5">
+        Age min:<input id="ageMinRange" data-bind="ageMin" type="range" min="17" max="55" step="1" value="17"> : <input type="text" id="ageMinText" data-bind="ageMin" size="5">
         <br />
-        Age max:<input id="ageMaxRange" type="range" min="17" max="55" step="1" value="55"> : <input type="text" id="ageMaxText" size="5">
+        Age max:<input id="ageMaxRange" data-bind="ageMax" type="range" min="17" max="55" step="1" value="55"> : <input type="text" id="ageMaxText" data-bind="ageMax" size="5">
       </div>
       <div style="float:left">
         <div style="float:left">
           Condition:
         </div>
         <div style="float:left">
-          I <input id="ICheckbox" type="checkbox" checked> <br />
-          II <input id="IICheckbox" type="checkbox" checked> <br />
+          I <input id="ICheckbox" data-bind="I" type="checkbox" checked> <br />
+          II <input id="IICheckbox" data-bind="II" type="checkbox" checked> <br />
         </div>
       </div>
     </div> <!-- controlPanel -->

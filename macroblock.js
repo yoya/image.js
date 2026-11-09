@@ -22,11 +22,6 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({ },
-		 function() {
-		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
-                                         params);
-		 }, params);
 }
 
 function drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params) {

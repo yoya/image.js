@@ -9,15 +9,15 @@
     <div class="container">
       <div class="controlPanel" style="display:flex">
         <div>
-	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
           <br />
-	  dx:<input id="dxRange" type="range" min="1" max="64" step="1" value="8">:<input type="text" id="dxText" size="3">
-          dxdy sync:<input id="dxdySyncCheckbox" type="checkbox" checked/>
+	  dx:<input id="dxRange" data-bind="dx" type="range" min="1" max="64" step="1" value="8">:<input type="text" id="dxText" data-bind="dx" size="3">
+          dxdy sync:<input id="dxdySyncCheckbox" data-bind="dxdySync" type="checkbox" checked/>
           <br />
-          dy:<input id="dyRange" type="range" min="1" max="64" step="1" value="8">:<input type="text" id="dyText" size="3">
+          dy:<input id="dyRange" data-bind="dy" type="range" min="1" max="64" step="1" value="8">:<input type="text" id="dyText" data-bind="dy" size="3">
           </div>
         <div>
-          <select id="methodSelect" size="4">
+          <select id="methodSelect" data-bind="method" size="4">
             <option value="mean" selected> Mean </option>
             <option value="median"       > Median </option>
             <option value="max"       > Max </option>

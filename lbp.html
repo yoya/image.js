@@ -11,7 +11,7 @@
 	<div>
           Filter: <br />
 	  <div style="float:left; ">
-            <select id="thresholdSelect" size="3">
+            <select id="thresholdSelect" data-bind="threshold" size="3">
               <option value="center" selected> 中心 </option>
 	      <option value="mean"           > 平均 </option>
               <option value="median"         > 中央値(median) </option>
@@ -19,7 +19,7 @@
           </div>
 	</div>
 	<div style="float:left; ">
-	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
+	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
 	</div>
       </div> <!-- controlPanel -->
       <div style="clear:both">

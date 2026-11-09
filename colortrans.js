@@ -12,33 +12,24 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas);
+	    drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "addRedRange":"addRedText", "addGreenRange":"addGreenText", "addBlueRange":"addBlueText",
-		  "multiRedRange":"multiRedText", "multiGreenRange":"multiGreenText", "multiBlueRange":"multiBlueText",
-		  "sigmoidRedRange":"sigmoidRedText", "sigmoidGreenRange":"sigmoidGreenText", "sigmoidBlueRange":"sigmoidBlueText"},
-		 function() {
-		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas);
-		 } );
+    bindParams(params, function(key, target, rel) {
+		     drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, params);
+		 }, {keys: ["maxWidthHeight", "addRed", "addGreen", "addBlue", "multiRed", "multiGreen", "multiBlue", "sigmoidRed", "sigmoidGreen", "sigmoidBlue"]});
 }
-function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, params) {
+    var { maxWidthHeight,
+          addRed, addGreen, addBlue,
+          multiRed, multiGreen, multiBlue,
+          sigmoidRed, sigmoidGreen, sigmoidBlue } = params;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    var addRed    = parseFloat(document.getElementById("addRedRange").value);
-    var addGreen  = parseFloat(document.getElementById("addGreenRange").value);
-    var addBlue   = parseFloat(document.getElementById("addBlueRange").value);
-    var multiRed    = parseFloat(document.getElementById("multiRedRange").value);
-    var multiGreen  = parseFloat(document.getElementById("multiGreenRange").value);
-    var multiBlue   = parseFloat(document.getElementById("multiBlueRange").value);
-    var sigmoidRed    = parseFloat(document.getElementById("sigmoidRedRange").value);
-    var sigmoidGreen  = parseFloat(document.getElementById("sigmoidGreenRange").value);
-    var sigmoidBlue   = parseFloat(document.getElementById("sigmoidBlueRange").value);
     drawColorTransform(srcCanvas, dstCanvas,
 		       addRed, addGreen, addBlue,
 		       multiRed, multiGreen, multiBlue,

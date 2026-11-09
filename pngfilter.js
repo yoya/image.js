@@ -9,12 +9,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 function main() {
-    const filterSelect = document.getElementById("filterSelect");
-    const filterViewCheckbox = document.getElementById("filterViewCheckbox");
-    const alphaOnCheckbox = document.getElementById("alphaOnCheckbox");
-    var filter     = parseInt(filterSelect.value);
-    var filterView = filterViewCheckbox.checked;
-    var alphaOn    = alphaOnCheckbox.checked;
+    const params = {};  // filter ("" or "0".."4"), filterView, alphaOn
     //
     var png, origArr, workArr;
     dropFunction(document, function(buf) {
@@ -37,26 +32,20 @@ function main() {
         origArr = inflate.decompress();
         workArr = new Uint8Array(origArr);
         pngFilterSummarize(png, origArr);
-        if (filterView) {
+        if (params.filterView) {
             pngFilterView(png, origArr);
         } else {
-            pngFilterOverwrite(png, workArr, filter, alphaOn);
+            pngFilterOverwrite(png, workArr, params.filter, params.alphaOn);
         }
     }, "ArrayBuffer");
-    bindFunction({"filterSelect":null,
-                  "filterViewCheckbox":null,
-                  "alphaOnCheckbox":null},
-                 function() {
-                     filterView = filterViewCheckbox.checked;
-                     alphaOn       = alphaOnCheckbox.checked;
-                     filter = filterSelect.value;
+    bindParams(params, function(key, target, rel) {
                      pngFilterSummarize(png, origArr);
-                     if (filterView) {
+                     if (params.filterView) {
                          pngFilterView(png, origArr);
                      } else {
-                         pngFilterOverwrite(png, workArr, filter, alphaOn);
+                         pngFilterOverwrite(png, workArr, params.filter, params.alphaOn);
                      }
-                 });
+                 }, {keys: ["filter", "filterView", "alphaOn"]});
 }
 
 function pngFilterSummarize(png, origArr) {

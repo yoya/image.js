@@ -9,22 +9,22 @@
     <div class="container">
       <div class="controlPanel" style="display:flex">
         <div>
-	  maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5"> <br/>
-          fuzz:<input id="fuzzRange" type="range" min="0.0" max="1.0" step="0.01" value="0.2">:<input type="text" id="fuzzText" size="5">
+	  maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"> <br/>
+          fuzz:<input id="fuzzRange" data-bind="fuzz" type="range" min="0.0" max="1.0" step="0.01" value="0.2">:<input type="text" id="fuzzText" data-bind="fuzz" size="5">
         </div>
         <div>
           srcColor <br />
-          <input type="checkbox" id="colorSrcDstRadio1" checked>
+          <input type="checkbox" id="colorSrcDstRadio1" data-bind="colorSrcDstRadio1" checked>
         </div>:
-        <input id="srcColorText" class="jscolor" value="000000" size="9"> <br/>
+        <input id="srcColorText" data-bind="srcColor" class="jscolor" value="000000" size="9"> <br/>
         <div>
           dstColor <br />
-          <input type="checkbox" id="colorSrcDstRadio2">
+          <input type="checkbox" id="colorSrcDstRadio2" data-bind="colorSrcDstRadio2">
         </div>:
-        <input id="dstColorText" class="jscolor" value="000000" size="9"> <br/>
+        <input id="dstColorText" data-bind="dstColor" class="jscolor" value="000000" size="9"> <br/>
         <div>
-          diffSync:<input id="diffSyncRange" type="range" min="0.0" max="1.0" step="0.01" value="1.0">:<input type="text" id="diffSyncText" size="5"> <br />
-          diffRelative:<input id="diffRelativeRange" type="range" min="-1.0" max="1.0" step="0.1" value="0.0">:<input type="text" id="diffRelativeText" size="4"> <br />
+          diffSync:<input id="diffSyncRange" data-bind="diffSync" type="range" min="0.0" max="1.0" step="0.01" value="1.0">:<input type="text" id="diffSyncText" data-bind="diffSync" size="5"> <br />
+          diffRelative:<input id="diffRelativeRange" data-bind="diffRelative" type="range" min="-1.0" max="1.0" step="0.1" value="0.0">:<input type="text" id="diffRelativeText" data-bind="diffRelative" size="4"> <br />
         </div>
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>

@@ -8,9 +8,9 @@
   <body>
     <div class="container">
       <div class="controlPanel">
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
-        vertical (flip):<input id="verticalCheckbox" type="checkbox" />
-        horizontal (flop):<input id="horizontalCheckbox" type="checkbox" />
+	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+        vertical (flip):<input id="verticalCheckbox" data-bind="vertical" type="checkbox" />
+        horizontal (flop):<input id="horizontalCheckbox" data-bind="horizontal" type="checkbox" />
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>

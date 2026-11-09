@@ -12,25 +12,13 @@ const markerNameList = [ "markerX0", "markerY0",
                          "markerX1", "markerY1",
                          "markerX2", "markerY2",
                          "markerX3", "markerY3" ];
-var coeffNameList = ["a", "b", "c", "d", "e", "f", "g", "h"];
+const coeffNameList = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
-function coeffNameIndex(name) {
-    for (let i = 0, n = coeffNameList.length; i < n ; i++) {
-        let cName = coeffNameList[i];
-        if ((name === cName+"Range") || (name === cName+"Text")) {
-            return i;
-       }
-    }
-    return -1;
-}
-
-function coeffValueSet(coeff) {
-    for (let i = 0, n = coeffNameList.length; i < n ; i++) {
-        let cName = coeffNameList[i];
-        var range = document.getElementById(cName+"Range");
-        range.value = coeff[i];
-        document.getElementById(cName+"Text").value = range.value;
-    }
+// params.coeff => params.a..h and the a..h elements
+function setCoeffParams(params, coeff) {
+    params.coeff = coeff;
+    coeffNameList.forEach((name, i) => { params[name] = coeff[i]; });
+    syncParamsToElements(params, {keys: coeffNameList});
 }
 
 function main() {
@@ -70,42 +58,32 @@ function main() {
             params.coeff = [1, 0, 0,
                             0, 1, 0,
                             0, 0, 1];
-            bind2elements(params);
-            coeffValueSet(params.coeff);  // after bind2elements (it overwrites)
+            syncParamsToElements(params, {keys: markerNameList});
+            setCoeffParams(params, params.coeff);
             drawHomograpy(srcImage, srcCanvas, dstCanvas, params, true);
 	}
 	srcImage.src = url;
     }
     dropFunction(document, imageOnLoad, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "srcMarkers":null, "dstMarkers":null,
-                  "interpolationSelect":null,
-                  "markerX0":null, "markerY0":null,
-                  "markerX1":null, "markerY1":null,
-                  "markerX2":null, "markerY2":null,
-                  "markerX3":null, "markerY3":null,
-                  "aRange":"aText", "bRange":"bText", "cRange":"cText",
-                  "dRange":"dText", "eRange":"eText", "fRange":"fText",
-                  "gRange":"gText", "hRange":"hText"},
-		 function(target, rel) {
-                     // params["maxWidthHeight"] = parseFloat(maxWidthHeightRange.value);
-                     let num = coeffNameIndex(target.id);
-                     if (markerNameList.includes(target.id)) {
-                         // marker fields are in the source image pixels
-                         // (independent of maxWidthHeight scaling).
-                         const { width, height } = srcImage;
-                         const markersNorm = [0, 1, 2, 3].map(i => [
-                             parseFloat(params[markerNameList[i*2]]) / width,
-                             parseFloat(params[markerNameList[i*2+1]]) / height
-                         ]);
-                         params.coeff = homographyCoeffByMarkers(markersNorm);
-                         coeffValueSet(params.coeff);
-                     }
-                     if (num >= 0) {
-                         params.coeff[num] = parseFloat(target.value);
-                     }
-                     drawHomograpy(srcImage, srcCanvas, dstCanvas, params, rel);
-		 }, params);
+    bindParams(params, function(key, elem, rel) {
+        if (markerNameList.includes(key)) {
+            // marker fields are in the source image pixels
+            // (independent of maxWidthHeight scaling).
+            const { width, height } = srcImage;
+            const markersNorm = [0, 1, 2, 3].map(i => [
+                parseFloat(params[markerNameList[i*2]]) / width,
+                parseFloat(params[markerNameList[i*2+1]]) / height
+            ]);
+            setCoeffParams(params, homographyCoeffByMarkers(markersNorm));
+        }
+        const num = coeffNameList.indexOf(key);
+        if (num >= 0) {
+            params.coeff[num] = params[key];
+        }
+        drawHomograpy(srcImage, srcCanvas, dstCanvas, params, rel);
+    });
+    // a..h may be given by the URL query
+    params.coeff = [...coeffNameList.map(name => params[name]), 1];
     bindCursolFunction("srcCanvas", params, function(target, eventType) {
         if ((!params.srcMarkers) || (!params.markerArray)) {
             return ;  // skip
@@ -135,15 +113,14 @@ function main() {
                 x * srcImage.width / width;
             params[markerNameList[params.grabbedMarker*2+1]] =
                 y * srcImage.height / height;
-            bind2elements(params);
+            syncParamsToElements(params, {keys: markerNameList});
             var markersNorm = [
                 [markerArray[0][0] / width, markerArray[0][1] / height],
                 [markerArray[1][0] / width, markerArray[1][1] / height],
                 [markerArray[2][0] / width, markerArray[2][1] / height],
                 [markerArray[3][0] / width, markerArray[3][1] / height]
             ];
-            params.coeff = homographyCoeffByMarkers(markersNorm);
-            coeffValueSet(params.coeff);
+            setCoeffParams(params, homographyCoeffByMarkers(markersNorm));
             drawHomograpy(srcImage, srcCanvas, dstCanvas, params, rel);
             if (eventType === "mouseup") {
                 params.grabbedMarker = null;
@@ -178,7 +155,6 @@ function main() {
             // dst markers => unit square (src) : that is dst => src coeff.
             let coeff = homographyCoeffByMarkers(dstMarkersNorm, true);
             coeff = coeff.map(v => v / coeff[8]);  // normalize i to 1
-            params.coeff = coeff;
             // src markers follow: dst corners mapped on src (image pixels).
             const corners = [[0, 0], [1, 0], [0, 1], [1, 1]];
             for (let i = 0; i < 4; i++) {
@@ -186,8 +162,8 @@ function main() {
                 params[markerNameList[i*2]]   = sx * srcImage.width;
                 params[markerNameList[i*2+1]] = sy * srcImage.height;
             }
-            bind2elements(params);
-            coeffValueSet(params.coeff);  // after bind2elements (it overwrites)
+            syncParamsToElements(params, {keys: markerNameList});
+            setCoeffParams(params, coeff);
             drawHomograpy(srcImage, srcCanvas, dstCanvas, params, rel);
             if (eventType === "mouseup") {
                 params.dstGrabbedMarker = null;
@@ -215,12 +191,12 @@ function grabMarkerIndex(markerArray, x, y, radius2) {
 var worker = new workerProcess("worker/homography.js");
 
 function drawHomograpy(srcImage, srcCanvas, dstCanvas, params, sync) {
-    drawSrcImage(srcImage, srcCanvas, params["maxWidthHeightRange"]);
+    drawSrcImage(srcImage, srcCanvas, params.maxWidthHeight);
     //
-    if (params.interpolationSelect === "NNBL") {
+    if (params.interpolationMode === "NNBL") {
         params.interpolation = sync? "BL": "NN";
     } else {
-        params.interpolation = params.interpolationSelect;
+        params.interpolation = params.interpolationMode;
     }
     worker.process(srcCanvas, dstCanvas, params, sync);
     if (params.srcMarkers) {

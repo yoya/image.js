@@ -14,68 +14,39 @@ function main() {
     var srcHistCanvas = document.getElementById("srcHistCanvas");
     var dstHistCanvas = document.getElementById("dstHistCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    var equalizeCheckbox = document.getElementById("equalizeCheckbox");
-    var equalizeRatioRange = document.getElementById("equalizeRatioRange");
-    var equalizeRatioText  = document.getElementById ("equalizeRatioText");
-    var maxValueRange = document.getElementById("maxValueRange");
-    var minValueRange = document.getElementById("minValueRange");
-    var maxValueText = document.getElementById("maxValueText");
-    var minValueText = document.getElementById("minValueText");
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndHistogram(srcImage, srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas);
+	    drawSrcImageAndHistogram(srcImage, srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "equalizeCheckbox":null,
-		  "totalLineCheckbox":null,
-                  "histogramCheckbox":null,
-		  "equalizeRatioRange":"equalizeRatioText",
-		  "maxValueRange":"maxValueText",
-		  "minValueRange":"minValueText"},
-		 function(target) {
-		     console.debug(target.id);
-		     var maxValue = parseFloat(document.getElementById("maxValueRange").value);
-		     var minValue = parseFloat(document.getElementById("minValueRange").value);
-		     if (target.id === "equalizeCheckbox")  {
-			 if (equalizeCheckbox.checked) {
-			     equalizeRatioRange.value = 255;
-			     equalizeRatioText.value = 255;
-			 } else {
-			     equalizeRatioRange.value = 0
-			     equalizeRatioText.value = 0;
-			 }
-		     } else if ((target.id === "equalizeRatioRange") ||
-				(target.id === "equalizeRatioText")) {
-			 if (equalizeRatioRange.value == 0) {
-			     equalizeCheckbox.checked = false;
-			 } else {
-			     equalizeCheckbox.checked = true;
-			 }
+    bindParams(params, function(key, target, rel) {
+		     const { maxValue, minValue } = params;
+		     if (key === "equalize")  {
+			 params.equalizeRatio = params.equalize? 255: 0;
+			 syncParamsToElements(params, {keys: ["equalizeRatio"]});
+		     } else if (key === "equalizeRatio") {
+			 params.equalize = (params.equalizeRatio != 0);
+			 syncParamsToElements(params, {keys: ["equalize"]});
 		     } else {
 			 if (minValue > maxValue) {
-			     if ((target.id === "maxValueRange") || (target.id === "maxValueText")) {
-				 minValueRange.value = maxValue;
-				 minValueText.value  = maxValue;
-			     } else if ((target.id === "minValueRange") || (target.id === "minValueText")) {
-				 maxValueRange.value = minValue;
-				 maxValueText.value  = minValue;
+			     if (key === "maxValue") {
+				 params.minValue = maxValue;
+				 syncParamsToElements(params, {keys: ["minValue"]});
+			     } else if (key === "minValue") {
+				 params.maxValue = minValue;
+				 syncParamsToElements(params, {keys: ["maxValue"]});
 			     }
 			 }
 		     }
-		     drawSrcImageAndHistogram(srcImage, srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas);
-		 } );
+		     drawSrcImageAndHistogram(srcImage, srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, params);
+		 }, {keys: ["maxWidthHeight", "equalize", "totalLine", "histogram", "equalizeRatio", "maxValue", "minValue"]});
 }
 
-function drawSrcImageAndHistogram(srcImage, srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var equalizeRatio = parseFloat(document.getElementById("equalizeRatioRange").value);
-    var maxValue = parseFloat(document.getElementById("maxValueRange").value);
-    var minValue = parseFloat(document.getElementById("minValueRange").value);
-    var totalLine = document.getElementById("totalLineCheckbox").checked;
-    var histogram = document.getElementById("histogramCheckbox").checked;
+function drawSrcImageAndHistogram(srcImage, srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, params) {
+    var { maxWidthHeight, equalizeRatio, maxValue, minValue, totalLine, histogram } = params;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawHistogram(srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas, equalizeRatio, minValue, maxValue, totalLine, histogram);
 }

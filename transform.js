@@ -23,7 +23,7 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-            let maxWidthHeight = params["maxWidthHeightRange"];
+            let maxWidthHeight = params.maxWidthHeight;
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    affinMatrix = makeAffinMatrix(srcCanvas, params);
 	    setTableValues("affinMatrixTable", affinMatrix);
@@ -32,21 +32,14 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "rotateRoundCenterCheckbox":null,
-                  "axisGuideCheckbox":null,
-		  "rotateRange":"rotateText",
-		  "transXRange":"transXText",
-		  "transYRange":"transYText",
-		  "outfillSelect":null},
-		 function(target, rel) {
+    bindParams(params, function(key, target, rel) {
 		     // console.debug("bindFunction:", target.id, rel);
-                     let maxWidthHeight = params["maxWidthHeightRange"];
+                     let maxWidthHeight = params.maxWidthHeight;
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     affinMatrix = makeAffinMatrix(srcCanvas, params);
 		     setTableValues("affinMatrixTable", affinMatrix);
 		     drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, rel);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "rotateRoundCenter", "axisGuide", "rotate", "transX", "transY", "outfill"]});
     bindTableFunction("affinMatrixTable", function(table, values, width) {
 	affinMatrix = values;
 	drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params);
@@ -56,10 +49,10 @@ function main() {
 function makeAffinMatrix(canvas, params) {
     // console.debug("makeAffinMatrix",params);
     var width = canvas.width, height = canvas.height;
-    var rotateRoundCenter = params["rotateRoundCenterCheckbox"];
-    var rotate = params["rotateRange"];
-    var transX = params["transXRange"];
-    var transY = params["transYRange"];
+    var rotateRoundCenter = params.rotateRoundCenter;
+    var rotate = params.rotate;
+    var transX = params.transX;
+    var transY = params.transY;
     var theta = 2 * Math.PI * rotate / 360;
     var mat = [Math.cos(theta), -Math.sin(theta), 0,
 	       Math.sin(theta),  Math.cos(theta), 0,
@@ -81,9 +74,9 @@ function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, sync) {
     // console.debug("drawAffinTransform", affinMatrix, params);
     var params_w = {
         affinMatrix      : affinMatrix,
-	rotateRoundCenter: params["rotateRoundCenterCheckbox"],
-        axisGuide        : params["axisGuideCheckbox"],
-        outfill          : outfillStyleNumber(params["outfillSelect"]),
+	rotateRoundCenter: params.rotateRoundCenter,
+        axisGuide        : params.axisGuide,
+        outfill          : outfillStyleNumber(params.outfill),
     }
     worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

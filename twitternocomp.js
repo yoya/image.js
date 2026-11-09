@@ -11,20 +11,20 @@ function main() {
     // console.debug("main");
     var srcCanvas = document.getElementById("srcCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndTransSet(srcImage, srcCanvas);
+	    drawSrcImageAndTransSet(srcImage, srcCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
-		     drawSrcImageAndTransSet(srcImage, srcCanvas);
-		 } );
+    bindParams(params, function(key, target, rel) {
+		     drawSrcImageAndTransSet(srcImage, srcCanvas, params);
+		 }, {keys: ["maxWidthHeight"]});
 }
-function drawSrcImageAndTransSet(srcImage, srcCanvas) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+function drawSrcImageAndTransSet(srcImage, srcCanvas, params) {
+    var maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawTransSet(srcCanvas);
 }

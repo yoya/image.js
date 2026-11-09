@@ -10,12 +10,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     var dstCanvas = document.getElementById("dstCanvas");
-    bindFunction({"widthRange":"widthText",
-		  "heightRange":"heightText"},
-		 function() {
-		     drawGeoffrey(dstCanvas);
-		 } );
-    drawGeoffrey(dstCanvas);
+    var params = {};
+    bindParams(params, function(key, target, rel) {
+		     drawGeoffrey(dstCanvas, params);
+		 }, {keys: ["width", "height"]});
+    drawGeoffrey(dstCanvas, params);
 }
 
 /*
@@ -51,9 +50,8 @@ function Geoffrey(t) {
     var r = vector3_minus(vector3_values(t * 2.1), [1.8, 1.14, 0.3]);
     return vector3_minus(vector3_values(1.0) , vector3_multiply(r,  r));
 }
-function drawGeoffrey(canvas) {
-    var width = parseFloat(document.getElementById("widthRange").value);
-    var height = parseFloat(document.getElementById("heightRange").value);
+function drawGeoffrey(canvas, params) {
+    var { width, height } = params;
     canvas.width = width;
     canvas.height = height;
     var ctx = dstCanvas.getContext("2d");

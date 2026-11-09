@@ -8,11 +8,11 @@
   <body>
     <div class="container">
       <div class="controlPanel">
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" size="5">
-	radius:<input id="radiusRange" type="range" min="0.5" max="2.0" step="0.1" value="1.0">:<input type="text" id="radiusText" size="4">
-        bias:<input id="biasRange" type="range" min="-1.0" max="1.0" step="0.05" value="0.0">:<input type="text" id="biasText" size="4">
-	linearGamma:<input id="linearGammaCheckbox" type="checkbox" checked/>
-	inverse:<input id="inverseCheckbox" type="checkbox" />
+	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
+	radius:<input id="radiusRange" data-bind="radius" type="range" min="0.5" max="2.0" step="0.1" value="1.0">:<input type="text" id="radiusText" data-bind="radius" size="4">
+        bias:<input id="biasRange" data-bind="bias" type="range" min="-1.0" max="1.0" step="0.05" value="0.0">:<input type="text" id="biasText" data-bind="bias" size="4">
+	linearGamma:<input id="linearGammaCheckbox" data-bind="linearGamma" type="checkbox" checked/>
+	inverse:<input id="inverseCheckbox" data-bind="inverse" type="checkbox" />
       </div> <!-- controlPanel -->
       <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
       <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>

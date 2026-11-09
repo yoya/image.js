@@ -9,16 +9,16 @@
   <div class="container">
     <div id="controlPanel"  style="float:left">
       <div style="float:left">
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
 	<br />
-	linear:<input id="linearCheckbox" type="checkbox" />
+	linear:<input id="linearCheckbox" data-bind="linear" type="checkbox" />
 	<br />
-	amount:<input id="amountRange" type="range" min="0.0" max="1.0" step="0.01" value="1.0">:<input type="text" id="amountText" size="5">
+	amount:<input id="amountRange" data-bind="amount" type="range" min="0.0" max="1.0" step="0.01" value="1.0">:<input type="text" id="amountText" data-bind="amount" size="5">
         <br />
-        vignette radius:<input id="radiusRange" type="range" min="0.5" max="2.0" step="0.1" value="1.25">:<input type="text" id="radiusText" size="5">
+        vignette radius:<input id="radiusRange" data-bind="radius" type="range" min="0.5" max="2.0" step="0.1" value="1.25">:<input type="text" id="radiusText" data-bind="radius" size="5">
       </div>
       <div style="float:left">
-        <select id="matrixSelect" size="3">
+        <select id="matrixSelect" data-bind="matrix" size="3">
           <option value="GOOD" selected> GOOD </option>
           <option value="SOSO"         > SOSO </option>
           <option value="BAD"          > BAD </option>

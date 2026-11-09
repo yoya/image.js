@@ -12,23 +12,21 @@ function main() {
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var params = {};
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndMoment(srcImage, srcCanvas, dstCanvas);
+	    drawSrcImageAndMoment(srcImage, srcCanvas, dstCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "reverseCheckbox":null},
-		 function() {
-		     drawSrcImageAndMoment(srcImage, srcCanvas, dstCanvas);
-		 } );
+    bindParams(params, function(key, target, rel) {
+		     drawSrcImageAndMoment(srcImage, srcCanvas, dstCanvas, params);
+		 }, {keys: ["maxWidthHeight", "reverse"]});
 }
-function drawSrcImageAndMoment(srcImage, srcCanvas, dstCanvas) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+function drawSrcImageAndMoment(srcImage, srcCanvas, dstCanvas, params) {
+    var { maxWidthHeight, reverse } = params;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    var reverse = document.getElementById("reverseCheckbox").checked;
     drawGrayImage(srcCanvas, dstCanvas);
     drawMoment(dstCanvas, reverse);
 }

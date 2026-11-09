@@ -23,20 +23,16 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "typeSelect": null,
-                  "fontSelect": null,
-                  "inputText": null},
-		 function() {
+    bindParams(params, function(key, target, rel) {
                      const inputText = document.getElementById("inputText");
-                     if (params.typeSelect === "B") {
+                     if (params.type === "B") {
                          inputText.style.display = "block";
                      } else {
                          inputText.style.display = "none";
                      }
 		     drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas,
                                          params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "type", "font", "input"]});
     bindCursolFunction("dstCanvas", params, function(target, eventType) {
         const p = params[target.id];
         switch (eventType) {
@@ -48,11 +44,11 @@ function main() {
             mousePointer = null;
             break;
         case "mousedown":
-            if (params.typeSelect === "AB") {
-                annotate.push( { x:p.x, y:p.y, key:params.inputText } );
+            if (params.type === "AB") {
+                annotate.push( { x:p.x, y:p.y, key:params.input } );
                 drawText(srcCanvas, dstCanvas, params);
             }
-            if (params.typeSelect === "C") {
+            if (params.type === "C") {
                 // let input = document.createElement("input");
             }
             break;
@@ -66,7 +62,7 @@ function main() {
                             return ;
                         }
                         // console.log(event, mousePointer);
-                        if (params.typeSelect === "B") {
+                        if (params.type === "B") {
                             annotate.push( { x:p.x, y:p.y, key:event.key } );
                             drawText(srcCanvas, dstCanvas, params);
                         }
@@ -74,7 +70,7 @@ function main() {
 }
 
 function drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawText(srcCanvas, dstCanvas, params);
 }

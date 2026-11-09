@@ -33,16 +33,7 @@ function main() {
     var filterMatrixTable = document.getElementById("filterMatrixTable");
     var params = {};
     //
-    var filterSelect = document.getElementById("filterSelect");
-    var filterWindowRange = document.getElementById("filterWindowRange");
-    var filterWindowText  = document.getElementById("filterWindowText");
-    //
-    var filter = filterSelect.value;
-    var [filterMatrix, filterWindow] = filter2Matrix[filter];
-    params["filterMatrix"] = filterMatrix;
-    params["filterWindow"] = filterWindow;
-    filterWindowRange.value = filterWindow;
-    filterWindowText.value = filterWindow;
+    var filterMatrix, filterWindow;  // set after bindParams
     //
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
@@ -52,27 +43,17 @@ function main() {
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params);
-		 }, params);
-    bindFunction({"filterSelect":null,
-                  "filterWindowRange":"filterWindowText",
-                  "matrixNormalizeCheckbox":null,
-                  "matrixZerocenteringCheckbox":null,
-                  "linearRGBCheckbox":null,
-                  "imageNormalizeCheckbox":null},
-		 function(target) {
-                     if (target.id === "filterSelect") {
-		         filter = params["filterSelect"];
-		         [filterMatrix, filterWindow] = filter2Matrix[filter];
-                         filterWindowRange.value = filterWindow;
-                         filterWindowText.value  = filterWindow;
-                         params["filterWindowRange"] = filterWindow;
-                         params["filterWindowText"]  = filterWindow;
+		 }, {keys: ["maxWidthHeight"]});
+    bindParams(params, function(key, target, rel) {
+                     if (key === "filter") {
+		         [filterMatrix, filterWindow] = filter2Matrix[params.filter];
+                         params.filterWindow = filterWindow;
+                         syncParamsToElements(params, {keys: ["filterWindow"]});
                      } else {
                          var oldFilterWindow = filterWindow;
-                         filterWindow = params["filterWindowRange"];
+                         filterWindow = params.filterWindow;
                          filterMatrix = matResize(filterMatrix, oldFilterWindow, filterWindow);
                      }
                      params["filterMatrix"] = filterMatrix;
@@ -83,7 +64,11 @@ function main() {
 		     }, filterMatrix, filterWindow);
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params);
 		     setTableValues("filterMatrixTable", filterMatrix);
-		 }, params);
+		 }, {keys: ["filter", "filterWindow", "matrixNormalize", "matrixZerocentering", "linearRGB", "imageNormalize"]});
+    [filterMatrix, filterWindow] = filter2Matrix[params.filter];
+    params.filterMatrix = filterMatrix;
+    params.filterWindow = filterWindow;
+    syncParamsToElements(params, {keys: ["filterWindow"]});
     //
     bindTableFunction("filterMatrixTable", function(table, values, width) {
 	params["filterMatrix"] = filterMatrix = values;
@@ -255,15 +240,15 @@ var filter2Matrix = {
 var worker = new workerProcess("worker/convolution.js");
 
 function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params) {
-    var maxWidthHeight = params["maxWidthHeightRange"];
+    var maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     //
     var filterMatrix = params["filterMatrix"];
     var filterWindow = params["filterWindow"];
-    var matrixNormalize = params["matrixNormalizeCheckbox"];
-    var zerocentering   = params["matrixZerocenteringCheckbox"];
-    var linearRGB       = params["linearRGBCheckbox"];
-    var imageNormalize  = params["imageNormalizeCheckbox"];
+    var matrixNormalize = params.matrixNormalize;
+    var zerocentering   = params.matrixZerocentering;
+    var linearRGB       = params.linearRGB;
+    var imageNormalize  = params.imageNormalize;
     //
     if (matrixNormalize) {
         var total = filterMatrix.reduce(function(a, b) { return a + b; });

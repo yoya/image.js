@@ -16,32 +16,29 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-            let maxWidthHeight = params["maxWidthHeightRange"];
+            let maxWidthHeight = params.maxWidthHeight;
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    drawTrim(srcCanvas, dstCanvas, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function(target, rel) {
-                     let maxWidthHeight = params["maxWidthHeightRange"];
+    bindParams(params, function(key, target, rel) {
+                     let maxWidthHeight = params.maxWidthHeight;
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     drawTrim(srcCanvas, dstCanvas, params, rel);
-		 }, params);
-    bindFunction({"fuzzRange":"fuzzText",
-		  "marginRange":"marginText"},
-		 function(target, rel) {
+		 }, {keys: ["maxWidthHeight"]});
+    bindParams(params, function(key, target, rel) {
 		     drawTrim(srcCanvas, dstCanvas, params, rel);
-		 }, params);
+		 }, {keys: ["fuzz", "margin"]});
 }
 
 var worker = new workerProcess("worker/trim.js");
 
 function drawTrim(srcCanvas, dstCanvas, params, sync) {
     var params_w = {
-        fuzz  : params["fuzzRange"],
-        margin: params["marginRange"],
+        fuzz  : params.fuzz,
+        margin: params.margin,
     };
     worker.process(srcCanvas, dstCanvas, params_w, sync);
 }

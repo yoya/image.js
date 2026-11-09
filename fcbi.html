@@ -9,12 +9,12 @@
   <div class="container">
     <div id="controlPanel">
       <div>
-	TM:<input id="TMRange" type="range" min="4" max="150" step="1" value="20" />:<input type="text" id="TMText" size="3" />
-	edgeMode:<input id="edgeModeCheckbox" type="checkbox" />
-	phaseLimit:<input id="phaseLimitRange" type="range" min="1" max="3" step="1" value="3" />:<input type="text" id="phaseLimitText"  size="1" />
+	TM:<input id="TMRange" data-bind="TM" type="range" min="4" max="150" step="1" value="20" />:<input type="text" id="TMText" data-bind="TM" size="3" />
+	edgeMode:<input id="edgeModeCheckbox" data-bind="edgeMode" type="checkbox" />
+	phaseLimit:<input id="phaseLimitRange" data-bind="phaseLimit" type="range" min="1" max="3" step="1" value="3" />:<input type="text" id="phaseLimitText" data-bind="phaseLimit"  size="1" />
       </div>
       <div>
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="320" />:<input type="text" id="maxWidthHeightText" size="3" />
+	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="320" />:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="3" />
       </div>
     </div>
     <div>

@@ -11,7 +11,7 @@
       <div style="float:left">
         Filter:  <br />	
 	<div style="float:left">
-          <select id="filterSelect" size="4">
+          <select id="filterSelect" data-bind="filter" size="4">
             <option value="min"    selected> 最小値(min) </option>
 	    <option value="median"         > 中央値(median) </option>
             <option value="max"            > 最大値(max) </option>
@@ -21,7 +21,7 @@
       <div style="float:left">
         structure Type:  <br />	
 	<div style="float:left">
-          <select id="structureTypeSelect" size="7">
+          <select id="structureTypeSelect" data-bind="structureType" size="7">
             <option value="square" selected> 正方形(square) </option>
             <option value="circle"         > 円 (circle) </option>
 	    <option value="diamond"        > ダイヤ (diamond) </option>
@@ -32,9 +32,9 @@
         </div>
       </div>
       <div style="float:left">
-        maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="2000" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+        maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
 	<br />
-        filterWindow:<input id="filterWindowRange" type="range" min="1" max="11" step="2" value="5">:<input type="text" id="filterWindowText" size="3">
+        filterWindow:<input id="filterWindowRange" data-bind="filterWindow" type="range" min="1" max="11" step="2" value="5">:<input type="text" id="filterWindowText" data-bind="filterWindow" size="3">
 	<br />
 	structureTable :<table id="structureTable"> </table>
       </div>

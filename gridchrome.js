@@ -20,18 +20,14 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "periodRange":"periodText",
-                  "widthRange":"widthText",
-                  "cheatRange":"cheatText"},
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndGridChrome(srcImage, srcCanvas, dstCanvas,
                                          params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "period", "width", "cheat"]});
 }
 
 function drawSrcImageAndGridChrome(srcImage, srcCanvas, dstCanvas, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawGridChrome(srcCanvas, dstCanvas, params);
 }
@@ -60,9 +56,9 @@ function isGrid(x, y, period, width) {
 
 function gridChrome(x, y, rgba, params) {
     const [r, g, b, a] = rgba;
-    const period = params.periodRange;
-    const width = params.widthRange;
-    const cheat = params.cheatRange;
+    const period = params.period;
+    const width = params.width;
+    const cheat = params.cheat;
     if (isGrid(x, y, period, width/2)) {
         return rgba;
     }

@@ -16,7 +16,7 @@
 	
       </div> <!-- controlPanel -->
       <div style="float:left;">
-        <select id="srcSelect" class="colorSpaceSelector">
+        <select id="srcSelect" data-bind="src" class="colorSpaceSelector">
 	  <option value="rgb/sRGB_LittleCMS1.icc" selected> sRGB (LittleCMS v1)) </option>
 	  <option value="rgb/DisplayP3.icc" disabled="disabled"> Display P3 (Apple) </option>
 	  <option value="rgb/AdobeRGB1998.icc" disabled="disabled"> Adobe RGB 1998 (Adobe)</option>
@@ -33,26 +33,26 @@
 	<canvas id="srcDiagramBaseCanvas" width=320 height=320 style="display: none"> srcDiagramBaseCanvas </canvas>
 	<br />
 	<div id="srcGray">
-	  V:<input type="range" id="srcVRange" class="colorSlider" min="0" max="255" step="0.01" value="0" />
-	    <input type="text" id="srcVText" size="6" value="0" />  <br />
+	  V:<input type="range" id="srcVRange" data-bind="srcV" class="colorSlider" min="0" max="255" step="0.01" value="0" />
+	    <input type="text" id="srcVText" data-bind="srcV" size="6" value="0" />  <br />
 	</div>
 	<div id="srcRGB">
-	  R:<input type="range" id="srcRRange" class="colorSlider" min="0" max="255" step="0.01" value="0" />
-	    <input type="text" id="srcRText" size="6" value="0" />  <br />
-	  G:<input type="range" id="srcGRange" class="colorSlider" mim="0" max="255" step="0.01" value="0" />
-	    <input type="text" id="srcGText" size="6" value="0"  />  <br />
-	  B:<input type="range" id="srcBRange" class="colorSlider" mim="0" max="255" step="0.01" value="0" />
-	    <input type="text" id="srcBText" size="6" value="0" />
+	  R:<input type="range" id="srcRRange" data-bind="srcR" class="colorSlider" min="0" max="255" step="0.01" value="0" />
+	    <input type="text" id="srcRText" data-bind="srcR" size="6" value="0" />  <br />
+	  G:<input type="range" id="srcGRange" data-bind="srcG" class="colorSlider" mim="0" max="255" step="0.01" value="0" />
+	    <input type="text" id="srcGText" data-bind="srcG" size="6" value="0"  />  <br />
+	  B:<input type="range" id="srcBRange" data-bind="srcB" class="colorSlider" mim="0" max="255" step="0.01" value="0" />
+	    <input type="text" id="srcBText" data-bind="srcB" size="6" value="0" />
 	</div>
 	<div id="srcCMYK">
-	  C:<input type="range" id="srcCRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
-	    <input type="text" id="srcCText" size="6" value="0" /> <br />
-	  M:<input type="range" id="srcMRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
-	    <input type="text" id="srcMText" size="6" value="0" /> <br />
-	  Y:<input type="range" id="srcYRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
-	    <input type="text" id="srcYText" size="6" value="0" /> <br />
-	  K:<input type="range" id="srcKRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
-	    <input type="text" id="srcKText" size="6" value="0" />
+	  C:<input type="range" id="srcCRange" data-bind="srcC" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
+	    <input type="text" id="srcCText" data-bind="srcC" size="6" value="0" /> <br />
+	  M:<input type="range" id="srcMRange" data-bind="srcM" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
+	    <input type="text" id="srcMText" data-bind="srcM" size="6" value="0" /> <br />
+	  Y:<input type="range" id="srcYRange" data-bind="srcY" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
+	    <input type="text" id="srcYText" data-bind="srcY" size="6" value="0" /> <br />
+	  K:<input type="range" id="srcKRange" data-bind="srcK" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
+	    <input type="text" id="srcKText" data-bind="srcK" size="6" value="0" />
 	</div>
 	<div id="srcXYZ">
 	  XYZ: <input type="text" id="srcXYZ_XText" size="6" value="" />
@@ -63,14 +63,14 @@
 	</div>
       </div>
       <div style="float:left; ">
-        <select id="intentSelect" size="4">
+        <select id="intentSelect" data-bind="intent" size="4">
 	  <option value="0" selected> Perceptual </option>
 	  <option value="1"         > Relative Colorimetric </option>
 	  <option value="2"         > Saturation </option>
 	  <option value="3"         > Absolute Colorimetric </option>
 	</select>
 	<div>
-	  BPC:<input id="BPCCheckbox" type="checkbox" checked="checked"/>
+	  BPC:<input id="BPCCheckbox" data-bind="BPC" type="checkbox" checked="checked"/>
 	</div>
 	<div>
 	  <div id="transformForward" align="left">
@@ -82,33 +82,33 @@
 	</div>
       </div>
       <div style="float:left;">
-	<select id="dstSelect" class="colorSpaceSelector">
+	<select id="dstSelect" data-bind="dst" class="colorSpaceSelector">
 	</select> <br />
 	<textarea id="dstDesc" cols="50">  profile loading ... </textarea> <br />
 	<canvas id="dstCanvas" class="borderBlue" width=320 height=320> dstCanvas </canvas>
 	<canvas id="dstDiagramBaseCanvas" width=320 height=320 style="display: none"> dstDiagramBaseCanvas </canvas>
 	<br />
 	<div id="dstGray">
-	  V:<input type="range" id="dstVRange" class="colorSlider" mim="0" max="255" step="0.01" value="0" />
-	    <input type="text" id="dstVText" size="6" value="0" /> <br />
+	  V:<input type="range" id="dstVRange" data-bind="dstV" class="colorSlider" mim="0" max="255" step="0.01" value="0" />
+	    <input type="text" id="dstVText" data-bind="dstV" size="6" value="0" /> <br />
 	</div>
 	<div id="dstRGB">
-	  R:<input type="range" id="dstRRange" class="colorSlider" mim="0" max="255" step="0.01" value="0" class="colorSlider" />
-	    <input type="text" id="dstRText" size="6" value="0" /> <br />
-	  G:<input type="range" id="dstGRange" class="colorSlider" mim="0" max="255" step="0.01" value="0" />
-	    <input type="text" id="dstGText" size="6" value="0" />  <br />
-	  B:<input type="range" id="dstBRange" class="colorSlider" mim="0" max="255" step="0.01" value="0" />
-	    <input type="text" id="dstBText" size="6" value="0" />  <br />
+	  R:<input type="range" id="dstRRange" data-bind="dstR" class="colorSlider" mim="0" max="255" step="0.01" value="0" class="colorSlider" />
+	    <input type="text" id="dstRText" data-bind="dstR" size="6" value="0" /> <br />
+	  G:<input type="range" id="dstGRange" data-bind="dstG" class="colorSlider" mim="0" max="255" step="0.01" value="0" />
+	    <input type="text" id="dstGText" data-bind="dstG" size="6" value="0" />  <br />
+	  B:<input type="range" id="dstBRange" data-bind="dstB" class="colorSlider" mim="0" max="255" step="0.01" value="0" />
+	    <input type="text" id="dstBText" data-bind="dstB" size="6" value="0" />  <br />
 	</div>
 	<div id="dstCMYK">
-	  C:<input type="range" id="dstCRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
-	    <input type="text" id="dstCText" size="6" value="0" /> <br />
-	  M:<input type="range" id="dstMRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
-	    <input type="text" id="dstMText" size="6" value="0" /> <br />
-	  Y:<input type="range" id="dstYRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
-	    <input type="text" id="dstYText" size="6" value="0" /> <br />
-	  K:<input type="range" id="dstKRange" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
-	    <input type="text" id="dstKText" size="6" value="0" /> <br />
+	  C:<input type="range" id="dstCRange" data-bind="dstC" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
+	    <input type="text" id="dstCText" data-bind="dstC" size="6" value="0" /> <br />
+	  M:<input type="range" id="dstMRange" data-bind="dstM" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
+	    <input type="text" id="dstMText" data-bind="dstM" size="6" value="0" /> <br />
+	  Y:<input type="range" id="dstYRange" data-bind="dstY" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
+	    <input type="text" id="dstYText" data-bind="dstY" size="6" value="0" /> <br />
+	  K:<input type="range" id="dstKRange" data-bind="dstK" class="colorSlider" mim="0" max="100" step="0.01" value="0" />
+	    <input type="text" id="dstKText" data-bind="dstK" size="6" value="0" /> <br />
 	</div>
 	<div id="dstXYZ">
 	  XYZ: <input type="text" id="dstXYZ_XText" size="6" value="" />

@@ -15,27 +15,23 @@ function main() {
     const dstCanvas3 = document.getElementById("dstCanvas3");
     const dstCanvasArr = [dstCanvas1, dstCanvas2, dstCanvas3];
     let srcImage = new Image(srcCanvas.width, srcCanvas.height);
-    const mosaicCheckbox = document.getElementById("mosaicCheckbox");
-    let mosaic = mosaicCheckbox.checkded
+    const params = {};
     //
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, mosaic);
+	    drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "mosaicCheckbox":null},
-		 function() {
-		     mosaic = mosaicCheckbox.checked;
-		     drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, mosaic);
-		 } );
+    bindParams(params, function(key, target, rel) {
+		     drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, params);
+		 }, {keys: ["maxWidthHeight", "mosaic"]});
 }
 
-function drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, mosaic) {
-    const maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+function drawSrcImageAndColorComponent(srcImage, srcCanvas, dstCanvasArr, params) {
+    const { maxWidthHeight, mosaic } = params;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawColorComponent(srcCanvas, dstCanvasArr, mosaic);
 }

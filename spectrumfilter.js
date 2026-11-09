@@ -24,15 +24,13 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeight":"maxWidthHeightText"},
-		 function() {
+    bindParams(params, function(key, target, rel) {
                      drawSpectrumCanvas(canvases, params);
                      drawSpectrumFilter(canvases, params);
-		 }, params );
-    bindFunction({"contrast":"contrastText"},
-		 function() {
+		 }, {keys: ["maxWidthHeight"]});
+    bindParams(params, function(key, target, rel) {
                      drawSpectrumFilter(canvases, params);
-		 }, params );
+		 }, {keys: ["contrast"]});
 }
 
 const gray = [0.6, 0.6, 0.6];

@@ -11,12 +11,9 @@ function main() {
     // console.debug("main");
     const canvas = document.getElementById("canvas");
     const params = {};
-    bindFunction({ "widthHeight":"widthHeightText",
-                   "period":"periodText",
-                   "circle": null },
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawPrime6(canvas, params);
-		 }, params);
+		 }, {keys: ["widthHeight", "period", "circle"]});
     drawPrime6(canvas, params);
 }
 
