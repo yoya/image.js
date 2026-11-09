@@ -269,30 +269,35 @@ figcaption { margin-top: 4px; color: var(--text-sub); font-size: 12px; text-alig
 }
 .loadingOverlay.show { opacity: 0.9; }
 .loadingOverlay svg { display: block; width: 100%; height: 100%; }
-.loadingOverlay .loadingDisc {
-    fill: var(--surface);
-    opacity: 0.85;
-    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.25));
-}
-.loadingOverlay .loadingRing {
-    fill: none;
-    stroke: var(--border);
-    stroke-width: 9;
-}
-.loadingOverlay .loadingArc {
-    fill: none;
-    stroke-width: 9;
-    stroke-linecap: round;
-    stroke-dasharray: 34 167;  /* arc 34 + gap 167 = circumference 201 */
-}
-.loadingOverlay .loadingSpin {
+/*
+ * pinwheel: the old RGB flower with asymmetric vanes (straight leading edge,
+ * curved trailing edge) so the direction of rotation is obvious.
+ * it spins in gusts: speeding up and slowing down, never fully stopping.
+ */
+.loadingOverlay .loadingVanes {
+    isolation: isolate;
     transform-box: view-box;
     transform-origin: 50% 50%;
-    animation: loadingSpin 1s linear infinite;
+    animation: loadingPinwheel 2.4s cubic-bezier(.4, .1, .6, .9) infinite;
 }
-@keyframes loadingSpin { to { transform: rotate(360deg); } }
+.loadingOverlay .loadingVane {
+    mix-blend-mode: darken;  /* overlapping vanes mix, as in the old icon */
+    stroke: rgba(0, 0, 0, 0.18);
+    stroke-width: 0.8;
+    stroke-linejoin: round;
+}
+.loadingOverlay svg { filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35)); }
+.loadingOverlay .loadingPin {
+    fill: var(--surface);
+    stroke: rgba(0, 0, 0, 0.3);
+    stroke-width: 1.2;
+}
+@keyframes loadingPinwheel {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(720deg); }
+}
 @media (prefers-reduced-motion: reduce) {
-    .loadingOverlay .loadingSpin { animation-duration: 3s; }
+    .loadingOverlay .loadingVanes { animation-duration: 8s; }
 }
 .loadingOverlay.loadingCenter {
     position: fixed;
