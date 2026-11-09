@@ -10,18 +10,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     var graphCanvas = document.getElementById("graphCanvas");
-    bindParams({}, function(key, target, rel) {
-                     drawExponential(graphCanvas);
+    var params = {};
+    bindParams(params, function(key, target, rel) {
+                     drawExponential(graphCanvas, params);
 		 }, {keys: ["a", "exp", "expdiff", "explog"]});
-    drawExponential(graphCanvas);
+    drawExponential(graphCanvas, params);
 }
 
-function drawExponential(graphCanvas) {
+function drawExponential(graphCanvas, params) {
     // console.debug("drawCopy");
-    var a = parseFloat(document.getElementById("aRange").value);
-    var expCheckbox = document.getElementById("expCheckbox");
-    var expdiffCheckbox = document.getElementById("expdiffCheckbox");
-    var explogCheckbox = document.getElementById("explogCheckbox");
+    var { a, exp, expdiff, explog } = params;
     var [x_min, x_max] = [-2, 3];
     var [y_min, y_max] = [-2, 3];
     var graph ={
@@ -36,7 +34,7 @@ function drawExponential(graphCanvas) {
     drawGraphBase(graph, points);
     var points;
     
-    if (expCheckbox.checked) {
+    if (exp) {
         points = [];
         for (var x = x_min ; x <= x_max; x += 0.02) {
             var y = Math.pow(a, x);
@@ -45,7 +43,7 @@ function drawExponential(graphCanvas) {
         graph.lineColor = "red";
         drawGraphLines(graph, points);
     }
-    if (expdiffCheckbox.checked) {
+    if (expdiff) {
         points = [];
         var h = 0.00001;
         for (var x = x_min ; x <= x_max; x += 0.02) {
@@ -55,7 +53,7 @@ function drawExponential(graphCanvas) {
         graph.lineColor = "green";
         drawGraphLines(graph, points)
     }
-    if (explogCheckbox.checked) {
+    if (explog) {
         points = [];
         for (var x = x_min ; x <= x_max; x += 0.02) {
             var y = Math.pow(a, x) * Math.log(a);

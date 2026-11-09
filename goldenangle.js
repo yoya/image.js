@@ -11,23 +11,10 @@ function main() {
     // console.debug("main");
     var hueCanvas = document.getElementById("hueCanvas");
     var colorCanvas = document.getElementById("colorCanvas");
-    var maxWidthHeighRange = document.getElementById("maxWidthHeightRange");
-    var unitWidthRange  = document.getElementById("unitWidthRange");
-    var unitHeightRange = document.getElementById("unitHeightRange");
-
-    var params = {
-	maxWidthHeight: parseFloat(maxWidthHeighRange.value),
-	unitWidth: parseFloat(unitWidthRange.value),
-	unitHeight: parseFloat(unitHeightRange.value)
-    };
-    bindParams({}, function(key, target, rel) {
-		     var params = {
-			 maxWidthHeight: parseFloat(maxWidthHeighRange.value),
-			 unitWidth:  parseFloat(unitWidthRange.value),
-			 unitHeight: parseFloat(unitHeightRange.value),
-		     };
+    var params = {};
+    bindParams(params, function(key, target, rel) {
 		     drawColor(hueCanvas, colorCanvas, params);
-		 }, {keys: ["maxWidthHeightRange", "unitWidthRange", "unitHeightRange"]});
+		 }, {keys: ["maxWidthHeight", "unitWidth", "unitHeight"]});
     drawColor(hueCanvas, colorCanvas, params);
 }
 

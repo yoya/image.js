@@ -14,8 +14,7 @@ function main() {
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
     //
     var helmertMatrixTable = document.getElementById("helmertMatrixTable");
-    var helmert = document.getElementById("helmertSelect").value;
-    var helmertMatrix = helmert2Matrix(helmert, srcCanvas);
+    var helmertMatrix = null;  // set after bindParams
     var helmertWindow = 3;
     var params = {};
     //
@@ -40,6 +39,7 @@ function main() {
 		     drawHelmertTransform(srcCanvas, dstCanvas, helmertMatrix, params, rel);
 		     setTableValues("helmertMatrixTable", helmertMatrix);
 		 }, {keys: ["helmert", "outfill"]});
+    helmertMatrix = helmert2Matrix(params.helmert, srcCanvas);
     //
     bindTableFunction("helmertMatrixTable", function(table, values, width) {
         for (const idx in helmertMatrix) {

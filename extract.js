@@ -10,12 +10,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     var target = document.getElementById("imageContainer");
+    var params = {};
     dropFunction(document, function(buf) {
 	// console.debug("dropFunction");
 	target.innerHTML = "";
-	addImageFiles.call({buf:buf, bOffset:0, target:target});
+	addImageFiles.call({buf:buf, bOffset:0, target:target, params:params});
     }, "ArrayBuffer");
-    bindParams({}, function(key, target, rel) {
+    bindParams(params, function(key, target, rel) {
 		     ;
 		 }, {keys: ["maxWidthHeight"]});
 }
@@ -37,16 +38,16 @@ function addImageFiles() {
     }
     var blob = new Blob([arr.slice(bOffset, nOffset)]);
     var dataURL = URL.createObjectURL(blob);
-    addImageFile(target, dataURL);
+    addImageFile(target, dataURL, this.params.maxWidthHeight);
     this.bOffset = nOffset;
     g_timeoutId = setTimeout(addImageFiles.bind(this), 0); // 1枚ずつ描画
 }
 
-function addImageFile(target, dataURL) {
+function addImageFile(target, dataURL, maxWidthHeight) {
     // console.debug("addImageFile");
     var srcImage = new Image();
     srcImage.onload = function(e) {
-	constraintImageSize(srcImage);
+	constraintImageSize(srcImage, maxWidthHeight);
     }
     target.append(srcImage);
     srcImage.src =  dataURL;
@@ -178,8 +179,7 @@ function getImageBinaryArray(arr, offset)  {
     return [bOffset, nOffset];
 }
 
-function constraintImageSize(image) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+function constraintImageSize(image, maxWidthHeight) {
     var width = image.width;
     var height = image.height;
     if ((maxWidthHeight < width) || (maxWidthHeight < height)) {

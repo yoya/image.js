@@ -14,43 +14,41 @@ function main() {
     var srcCanvas1Container = document.getElementById("srcCanvas1Container");
     var srcCanvas2Container = document.getElementById("srcCanvas2Container");
     var dstCanvas = document.getElementById("dstCanvas");
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
+    var params = {};
     var srcImage1 = new Image(srcCanvas1.width, srcCanvas1.height);
     var srcImage2 = new Image(srcCanvas2.width, srcCanvas2.height);
     
     dropFunction(srcCanvas1Container, function(dataURL) {
 	srcImage1 = new Image();
 	srcImage1.onload = function() {
-	    drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
-	    drawDiff(srcCanvas1, srcCanvas2, dstCanvas);
+	    drawSrcImage(srcImage1, srcCanvas1, params.maxWidthHeight);
+	    drawDiff(srcCanvas1, srcCanvas2, dstCanvas, params);
 	}
 	srcImage1.src = dataURL;
     }, "DataURL");
     dropFunction(srcCanvas2Container, function(dataURL) {
 	srcImage2 = new Image();
 	srcImage2.onload = function() {
-	    drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
-	    drawDiff(srcCanvas1, srcCanvas2, dstCanvas);
+	    drawSrcImage(srcImage2, srcCanvas2, params.maxWidthHeight);
+	    drawDiff(srcCanvas1, srcCanvas2, dstCanvas, params);
 	}
 	srcImage2.src = dataURL;
     }, "DataURL");
     
-    bindParams({}, function(key, target, rel) {
-		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-		     drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
-		     drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
-		     drawDiff(srcCanvas1, srcCanvas2, dstCanvas);
+    bindParams(params, function(key, target, rel) {
+		     drawSrcImage(srcImage1, srcCanvas1, params.maxWidthHeight);
+		     drawSrcImage(srcImage2, srcCanvas2, params.maxWidthHeight);
+		     drawDiff(srcCanvas1, srcCanvas2, dstCanvas, params);
 		 }, {keys: ["maxWidthHeight", "normalize"]});
-    bindParams({}, function(key, target, rel) {
-		     drawDiff(srcCanvas1, srcCanvas2, dstCanvas);
+    bindParams(params, function(key, target, rel) {
+		     drawDiff(srcCanvas1, srcCanvas2, dstCanvas, params);
 		 }, {keys: ["method"]});
     
 }
 
-function drawDiff(srcCanvas1, srcCanvas2, dstCanvas) {
+function drawDiff(srcCanvas1, srcCanvas2, dstCanvas, params) {
     // console.debug("drawDiff")
-    var normalize = document.getElementById("normalizeCheckbox").checked;
-    var method = document.getElementById("methodSelect").value;
+    var { normalize, method } = params;
     var srcCtx1 = srcCanvas1.getContext("2d");
     var srcCtx2 = srcCanvas2.getContext("2d");
     var dstCtx = dstCanvas.getContext("2d");

@@ -13,27 +13,26 @@ function main() {
     var dstCanvasArr = document.querySelectorAll(".dstCanvas");
     console.log(dstCanvasArr);
     var srcImage = new Image(srcCanvas.width, srcCanvas.height);
+    var params = {};
     //
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
 	    console.log(srcImage);
-	    drawSrcImageAndGrayscale(srcImage, srcCanvas, dstCanvasArr, true);
+	    drawSrcImageAndGrayscale(srcImage, srcCanvas, dstCanvasArr, params, true);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     //
-    bindParams({}, function(key, target, rel) {
-		     drawSrcImageAndGrayscale(srcImage, srcCanvas, dstCanvasArr, rel);
+    bindParams(params, function(key, target, rel) {
+		     drawSrcImageAndGrayscale(srcImage, srcCanvas, dstCanvasArr, params, rel);
 		 }, {keys: ["maxWidthHeight", "colorFactor", "linearGamma"]});
 }
 
 var workers = [];
 
-function drawSrcImageAndGrayscale(srcImage, srcCanvas, dstCanvasArr, sync) {
-    var maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
-    var colorFactor = parseFloat(document.getElementById("colorFactorRange").value);
-    var linearGamma = document.getElementById("linearGammaCheckbox").checked;
+function drawSrcImageAndGrayscale(srcImage, srcCanvas, dstCanvasArr, params, sync) {
+    var { maxWidthHeight, colorFactor, linearGamma } = params;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     for (var i = 0, n = dstCanvasArr.length ; i < n ; i++) {
 	var dstCanvas = dstCanvasArr[i];

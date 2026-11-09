@@ -9,7 +9,7 @@
     <div class="container">
       <div class="controlPanel">
 	<div>
-          <select id="typeSelect" data-bind="typeSelect" size="3"  style="float:left">
+          <select id="typeSelect" data-bind="type" size="3"  style="float:left">
             <option value="testcard" selected> テストカード </option>
             <option value="oldmovie" selected> 古いムービー風 </option>
           </select>
@@ -17,10 +17,10 @@
         <input id="playButton" data-bind="playButton" type="button" value="Play"/>
         <input id="stopButton" data-bind="stopButton" type="button" value="Stop"/>
         <input id="downloadButton" data-bind="downloadButton" type="button" value="Download"/>
-	width:<input id="widthRange" data-bind="widthRange" type="range" min="16" max="1920" step="1" value="960">
-        :<input type="text" id="widthText" data-bind="widthRange" size="5">
-        height:<input id="heightRange" data-bind="heightRange" type="range" min="16" max="1080" step="1" value="540">
-        :<input type="text" id="heightText" data-bind="heightRange" size="5">
+	width:<input id="widthRange" data-bind="width" type="range" min="16" max="1920" step="1" value="960">
+        :<input type="text" id="widthText" data-bind="width" size="5">
+        height:<input id="heightRange" data-bind="height" type="range" min="16" max="1080" step="1" value="540">
+        :<input type="text" id="heightText" data-bind="height" size="5">
       </div> <!-- controlPanel -->
       <div style="clear:both">
       <canvas id="canvas" width=200 height=200> srcCanvas </canvas>

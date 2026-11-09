@@ -10,32 +10,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     var canvas = document.getElementById("canvas")
-    var widthRange  = document.getElementById("widthRange");
-    var heightRange = document.getElementById("heightRange");
-    var thetaRange = document.getElementById("thetaRange");
-    var revRedCheckbox = document.getElementById("revRedCheckbox");
-    var revGreenCheckbox = document.getElementById("revGreenCheckbox");
-    var revBlueCheckbox = document.getElementById("revBlueCheckbox");
-    var scaleRange = document.getElementById("scaleRange");
-    var params = {
-	"width":  parseFloat(widthRange.value),
-	"height": parseFloat(heightRange.value),
-	"theta": parseFloat(thetaRange.value),
-	"revRed":  revRedCheckbox.checked,
-	"revGreen":revGreenCheckbox.checked,
-	"revBlue": revBlueCheckbox.checked,
-	"scale": parseFloat(scaleRange.value)
-    };
-    bindParams({}, function(key, target, rel) {
-		     params["width"]  = parseFloat(widthRange.value);
-		     params["height"] = parseFloat(heightRange.value);
-		     params["theta"] = parseFloat(thetaRange.value);
-		     params["revRed"]   = revRedCheckbox.checked;
-		     params["revGreen"] = revGreenCheckbox.checked;
-		     params["revBlue"]  = revBlueCheckbox.checked;
-		     params["scale"] = parseFloat(scaleRange.value);
+    var params = {};
+    bindParams(params, function(key, target, rel) {
 		     drawCZP(canvas, params);
-		 }, {keys: ["widthRange", "heightRange", "thetaRange", "revRedCheckbox", "revGreenCheckbox", "revBlueCheckbox", "scaleRange"]});
+		 }, {keys: ["width", "height", "theta", "revRed", "revGreen", "revBlue", "scale"]});
     drawCZP(canvas, params);
 }
 

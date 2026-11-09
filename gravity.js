@@ -22,12 +22,9 @@ function main() {
 	let dstWidth  = srcCanvas.width;
 	let dstHeight = srcCanvas.height;
         // console.debug("dstWidth, dstHeight", dstWidth, dstHeight);
-	document.getElementById("dstWidthRange").value = dstWidth;
-	document.getElementById("dstWidthText").value  = dstWidth;
-	document.getElementById("dstHeightRange").value = dstHeight;
-	document.getElementById("dstHeightText").value  = dstHeight;
-        params.dstWidth  = params.dstWidth  = dstWidth;
-        params.dstHeight = params.dstHeight = dstHeight;
+        params.dstWidth  = dstWidth;
+        params.dstHeight = dstHeight;
+        syncParamsToElements(params, {keys: ["dstWidth", "dstHeight"]});
 	drawGravity(srcCanvas, dstCanvas, params, rel);
     }
     dropFunction(document, function(dataURL) {

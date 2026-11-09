@@ -33,16 +33,7 @@ function main() {
     var filterMatrixTable = document.getElementById("filterMatrixTable");
     var params = {};
     //
-    var filterSelect = document.getElementById("filterSelect");
-    var filterWindowRange = document.getElementById("filterWindowRange");
-    var filterWindowText  = document.getElementById("filterWindowText");
-    //
-    var filter = filterSelect.value;
-    var [filterMatrix, filterWindow] = filter2Matrix[filter];
-    params["filterMatrix"] = filterMatrix;
-    params["filterWindow"] = filterWindow;
-    filterWindowRange.value = filterWindow;
-    filterWindowText.value = filterWindow;
+    var filterMatrix, filterWindow;  // set after bindParams
     //
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
@@ -57,15 +48,12 @@ function main() {
 		 }, {keys: ["maxWidthHeight"]});
     bindParams(params, function(key, target, rel) {
                      if (key === "filter") {
-		         filter = params.filter;
-		         [filterMatrix, filterWindow] = filter2Matrix[filter];
-                         filterWindowRange.value = filterWindow;
-                         filterWindowText.value  = filterWindow;
-                         params["filterWindowRange"] = filterWindow;
-                         params.filterWindowRange  = filterWindow;
+		         [filterMatrix, filterWindow] = filter2Matrix[params.filter];
+                         params.filterWindow = filterWindow;
+                         syncParamsToElements(params, {keys: ["filterWindow"]});
                      } else {
                          var oldFilterWindow = filterWindow;
-                         filterWindow = params["filterWindowRange"];
+                         filterWindow = params.filterWindow;
                          filterMatrix = matResize(filterMatrix, oldFilterWindow, filterWindow);
                      }
                      params["filterMatrix"] = filterMatrix;
@@ -76,7 +64,11 @@ function main() {
 		     }, filterMatrix, filterWindow);
 		     drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params);
 		     setTableValues("filterMatrixTable", filterMatrix);
-		 }, {keys: ["filter", "filterWindowRange", "matrixNormalize", "matrixZerocentering", "linearRGB", "imageNormalize"]});
+		 }, {keys: ["filter", "filterWindow", "matrixNormalize", "matrixZerocentering", "linearRGB", "imageNormalize"]});
+    [filterMatrix, filterWindow] = filter2Matrix[params.filter];
+    params.filterMatrix = filterMatrix;
+    params.filterWindow = filterWindow;
+    syncParamsToElements(params, {keys: ["filterWindow"]});
     //
     bindTableFunction("filterMatrixTable", function(table, values, width) {
 	params["filterMatrix"] = filterMatrix = values;
