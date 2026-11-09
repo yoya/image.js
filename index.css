@@ -51,6 +51,28 @@ a:hover { text-decoration: underline; }
 .pageHeader .home::before { content: "\2190  "; color: var(--text-sub); }
 .pageHeader h1 { margin: 0; font-size: 18px; font-weight: 600; }
 .pageHeader .hint { margin-left: auto; color: var(--text-sub); font-size: 12px; }
+/* file picker buttons (lib/drop.js) */
+.pageHeader .filePickers { display: flex; gap: 6px; margin-left: auto; align-self: center; }
+.pageHeader .filePickers ~ .hint { margin-left: 0; }
+.pageHeader .filePick { font-size: 13px; }
+
+/* while dragging a file over a drop target (lib/drop.js) */
+.dropActive { outline: 3px dashed var(--accent); outline-offset: -6px; }
+html.dropActive { outline-offset: -4px; }
+
+/* notification toast (lib/page.js) */
+.pageToast {
+    position: fixed; left: 50%; bottom: 24px; z-index: 1100;
+    width: max-content; max-width: calc(100vw - 32px);
+    padding: 10px 18px;
+    border-radius: var(--radius, 8px);
+    background: var(--text); color: var(--bg);
+    box-shadow: var(--shadow);
+    opacity: 0; pointer-events: none;
+    transform: translate(-50%, 8px);
+    transition: opacity 200ms, transform 200ms;
+}
+.pageToast.show { opacity: 1; transform: translate(-50%, 0); }
 
 /* ---------- layout ---------- */
 
@@ -322,6 +344,7 @@ canvas.loadingTarget { opacity: 0.5; }
 @media (max-width: 640px) {
     .pageHeader { flex-wrap: wrap; gap: 4px 12px; padding: 8px 12px; }
     .pageHeader .hint { margin-left: 0; width: 100%; }
+    .pageHeader .filePickers { margin-left: 0; }
     .container { padding: 10px 12px; }
     .controlPanel, #controlPanel { width: 100%; margin-right: 0; float: none !important; }
     .param > input[type="range"] { max-width: none; }

@@ -58,6 +58,15 @@ function drawSrcImageAndColorReduction(srcImage, srcCanvas, params) {
 	loadingEnd(div);
 	worker = null;
     }
+    worker.onerror = function(e) {
+	console.error("worker error:", e.message);
+	worker.terminate();
+	worker = null;
+	loadingEnd();
+	if (typeof pageNotify === "function") {
+	    pageNotify("処理中にエラーが発生しました");
+	}
+    }
     worker.postMessage({image:srcImageData, method:quantizeMethod},
 		       [srcImageData.data.buffer]);
 }
