@@ -207,7 +207,7 @@ function download_hook(canvas) {
 
 function hover_hook(canvas) {
     const parent = canvas.parentNode;
-    const textDiv = document.createElement('hr');
+    const textDiv = document.createElement('div');
     parent.appendChild(textDiv)
     textDiv.innerText = canvas.dataset.filename;
     textDiv.className = "hoverText";
@@ -228,7 +228,7 @@ function hover_hook(canvas) {
 scaleSelect.addEventListener('change', e => {
     const scale = Number(scaleSelect.value) / 100;
     CanvasList.forEach(canvas => {
-        canvas.style.width = (canvas.width * scale) | 0;
+        canvas.style.width = ((canvas.width * scale) | 0) + "px";
     });
 });
 
@@ -246,7 +246,7 @@ document.body.addEventListener('drop', e => {
     Array.from(e.dataTransfer.files).forEach(file => {
         const div = document.createElement('div');
         div.style = "float:left;  position: relative;";
-        container.appendChild(div);
+        magList.appendChild(div);
         const reader = new FileReader();
         reader.onload = function(ev) {
             const canvas = document.createElement('canvas');
@@ -257,7 +257,7 @@ document.body.addEventListener('drop', e => {
                 download_hook(canvas);
                 hover_hook(canvas, file);
                 const scale = Number(scaleSelect.value) / 100;
-                canvas.style.width = (canvas.width * scale) | 0;
+                canvas.style.width = ((canvas.width * scale) | 0) + "px";
                 CanvasList.push(canvas);
             } else {
                 const errtext = document.createTextNode(ret+"("+file.name+")");
