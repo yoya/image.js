@@ -98,7 +98,7 @@ function load_mag(ab, canvas) {
 		    data[dst + 15] = 0xFF;
 		    dst += 16;
 		} else {
-		    const c = pixel[src++] * 3;
+		    let c = pixel[src++] * 3;
 		    data[dst] = palette[c + 1];
 		    data[dst + 1] = palette[c];
 		    data[dst + 2] = palette[c + 2];
