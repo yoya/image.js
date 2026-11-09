@@ -1,36 +1,51 @@
 <!doctype html>
 <html>
   <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
     <title> Mag Loarder </title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="soft.css">
+    <script src="lib/page.js"></script>
     <style>
+      body { min-height: 100vh; }  /* drop anywhere on the page */
       canvas {
           cursor: pointer;
       }
+      .hint, .copyright { float: none; margin: 0 0 8px; color: var(--text-sub); }
+      #magList > div { margin: 0 8px 8px 0; }
       .hoverText {
           position: absolute;
-          border-radius: 5px;
-          font-size: xx-large;
-          background-color: white;
-          opacity: 75%;
+          pointer-events: none;
+          padding: 2px 10px;
+          border-radius: var(--radius-element, 6px);
+          font-size: x-large;
+          white-space: nowrap;
+          background-color: var(--surface);
+          color: var(--text);
+          box-shadow: var(--shadow);
+          opacity: 0.85;
       }
     </style>
   </head>
   <body>
-    <div>
-      <h2> MAG Files Drop Here! </h2>
-      scale: <select id="scaleSelect" size="3">
-         <option value="25" selected> 25% </option>
-         <option value="50" selected> 50% </option>
-         <option value="100"> 100% </option>
-      </select>
-      download: <button id="downloadButton"> All </button>
+    <div class="container">
+      <div class="controlPanel">
+        <p class="hint"> MAG ファイルをページにドロップすると表示します（画像をクリックすると PNG で保存） </p>
+        <label class="param"><span class="name">scale</span>
+          <select id="scaleSelect" size="3">
+            <option value="25"> 25% </option>
+            <option value="50" selected> 50% </option>
+            <option value="100"> 100% </option>
+          </select>
+        </label>
+        <label class="param"><span class="name">download</span>
+          <button id="downloadButton"> All </button>
+        </label>
+      </div>
+      <div id="magList" class="horizontal"> </div>
+      <p class="copyright"> (c) <a href="http://emk.name/2015/03/magjs.html"> http://emk.name/2015/03/magjs.html </a> </p>
     </div>
-    <hr>
-    <div id="container"> </div>
-    <div style="clear:both; display:none"> </div>
-    <copyright> (c) <a href="http://emk.name/2015/03/magjs.html"> http://emk.name/2015/03/magjs.html </a> </copyright>
     <script src="mag.js"> </script>
   </body>
 </html>
