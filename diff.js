@@ -35,18 +35,15 @@ function main() {
 	srcImage2.src = dataURL;
     }, "DataURL");
     
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		 "normalizeCheckbox":null},
-		 function() {
+    bindParams({}, function(key, target, rel) {
 		     maxWidthHeight = parseFloat(document.getElementById("maxWidthHeightRange").value);
 		     drawSrcImage(srcImage1, srcCanvas1, maxWidthHeight);
 		     drawSrcImage(srcImage2, srcCanvas2, maxWidthHeight);
 		     drawDiff(srcCanvas1, srcCanvas2, dstCanvas);
-		 } );
-    bindFunction({"methodSelect":null},
-		 function() {
+		 }, {keys: ["maxWidthHeight", "normalize"]});
+    bindParams({}, function(key, target, rel) {
 		     drawDiff(srcCanvas1, srcCanvas2, dstCanvas);
-		 } );
+		 }, {keys: ["method"]});
     
 }
 

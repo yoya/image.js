@@ -26,14 +26,7 @@ function main() {
 	"revBlue": revBlueCheckbox.checked,
 	"scale": parseFloat(scaleRange.value)
     };
-    bindFunction({"widthRange":"widthText",
-		  "heightRange":"heightText",
-		  "thetaRange":"thetaText",
-		  "revRedCheckbox":null,
-		  "revGreenCheckbox":null,
-		  "revBlueCheckbox":null,
-		  "scaleRange":"scaleText"},
-		 function() {
+    bindParams({}, function(key, target, rel) {
 		     params["width"]  = parseFloat(widthRange.value);
 		     params["height"] = parseFloat(heightRange.value);
 		     params["theta"] = parseFloat(thetaRange.value);
@@ -42,7 +35,7 @@ function main() {
 		     params["revBlue"]  = revBlueCheckbox.checked;
 		     params["scale"] = parseFloat(scaleRange.value);
 		     drawCZP(canvas, params);
-		 } );
+		 }, {keys: ["widthRange", "heightRange", "thetaRange", "revRedCheckbox", "revGreenCheckbox", "revBlueCheckbox", "scaleRange"]});
     drawCZP(canvas, params);
 }
 

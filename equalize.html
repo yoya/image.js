@@ -9,20 +9,20 @@
   <div class="container">
     <div id="controlPanel" style="display:flex">
       <div>
-	maxWidthHeight:<input id="maxWidthHeightRange" type="range" min="16" max="4096" step="1" value="480">:<input type="text" id="maxWidthHeightText" size="5">
+	maxWidthHeight:<input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="4096" step="1" value="480">:<input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5">
 	<br />
-	equalize:<input id="equalizeCheckbox" type="checkbox" checked/>
-	equalizeRatio:<input id="equalizeRatioRange" type="range" min="0" max="255" step="1" value="255">:<input type="text" id="equalizeRatioText" size="4">
+	equalize:<input id="equalizeCheckbox" data-bind="equalize" type="checkbox" checked/>
+	equalizeRatio:<input id="equalizeRatioRange" data-bind="equalizeRatio" type="range" min="0" max="255" step="1" value="255">:<input type="text" id="equalizeRatioText" data-bind="equalizeRatio" size="4">
       </div>
       <div>
-	maxValue:<input id="maxValueRange" type="range" min="0" max="255" step="1" value="255">:<input type="text" id="maxValueText" size="4">
+	maxValue:<input id="maxValueRange" data-bind="maxValue" type="range" min="0" max="255" step="1" value="255">:<input type="text" id="maxValueText" data-bind="maxValue" size="4">
 	<br />
-	minValue:<input id="minValueRange" type="range" min="0" max="255" step="1" value="0">:<input type="text" id="minValueText" size="4">
+	minValue:<input id="minValueRange" data-bind="minValue" type="range" min="0" max="255" step="1" value="0">:<input type="text" id="minValueText" data-bind="minValue" size="4">
       </div>
       <div>
-	totalLine:<input id="totalLineCheckbox" type="checkbox" />
+	totalLine:<input id="totalLineCheckbox" data-bind="totalLine" type="checkbox" />
         <br />
-        histogram:<input id="histogramCheckbox" type="checkbox" checked/>
+        histogram:<input id="histogramCheckbox" data-bind="histogram" type="checkbox" checked/>
       </div>
     </div> <!-- controlPanel -->
   <div>

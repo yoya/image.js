@@ -20,24 +20,22 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-                  "verticalCheckbox":null, "horizontalCheckbox":null},
-		 function() {
+    bindParams(params, function(key, target, rel) {
 		     drawSrcImageAndFlipflop(srcImage, srcCanvas, dstCanvas,
                                          params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "vertical", "horizontal"]});
 }
 
 function drawSrcImageAndFlipflop(srcImage, srcCanvas, dstCanvas, params) {
-    const maxWidthHeight = params.maxWidthHeightRange;
+    const maxWidthHeight = params.maxWidthHeight;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawFlipflop(srcCanvas, dstCanvas, params);
 }
 
 function drawFlipflop(srcCanvas, dstCanvas, params) {
     // console.debug("drawFlipflop");
-    const vertical = params.verticalCheckbox;
-    const horizontal = params.horizontalCheckbox;
+    const vertical = params.vertical;
+    const horizontal = params.horizontal;
     const srcCtx = srcCanvas.getContext("2d");
     const dstCtx = dstCanvas.getContext("2d");
     const width = srcCanvas.width, height = srcCanvas.height;

@@ -11,18 +11,14 @@ function main() {
     // console.debug("main");
     const params = {};
     const canvas = document.getElementById("canvas");
-    bindFunction({ "width":"widthText",
-                   "height":"heightText",
-                   "count":"countText",
-                   "animation":null },
-		 function() {
+    bindParams(params, function(key, target, rel) {
                      if (params.animation) {
                          const args = { canvas, params };
                          requestAnimationFrame(tick.bind(args))
                      } else {
                          drawFern(canvas, params);
                      }
-		 }, params );
+		 }, {keys: ["width", "height", "count", "animation"]});
     drawFern(canvas, params);
 }
 

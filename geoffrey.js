@@ -10,11 +10,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     var dstCanvas = document.getElementById("dstCanvas");
-    bindFunction({"widthRange":"widthText",
-		  "heightRange":"heightText"},
-		 function() {
+    bindParams({}, function(key, target, rel) {
 		     drawGeoffrey(dstCanvas);
-		 } );
+		 }, {keys: ["width", "height"]});
     drawGeoffrey(dstCanvas);
 }
 

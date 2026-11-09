@@ -28,18 +28,11 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "equalizeCheckbox":null,
-		  "totalLineCheckbox":null,
-                  "histogramCheckbox":null,
-		  "equalizeRatioRange":"equalizeRatioText",
-		  "maxValueRange":"maxValueText",
-		  "minValueRange":"minValueText"},
-		 function(target) {
+    bindParams({}, function(key, target, rel) {
 		     console.debug(target.id);
 		     var maxValue = parseFloat(document.getElementById("maxValueRange").value);
 		     var minValue = parseFloat(document.getElementById("minValueRange").value);
-		     if (target.id === "equalizeCheckbox")  {
+		     if (key === "equalize")  {
 			 if (equalizeCheckbox.checked) {
 			     equalizeRatioRange.value = 255;
 			     equalizeRatioText.value = 255;
@@ -47,8 +40,7 @@ function main() {
 			     equalizeRatioRange.value = 0
 			     equalizeRatioText.value = 0;
 			 }
-		     } else if ((target.id === "equalizeRatioRange") ||
-				(target.id === "equalizeRatioText")) {
+		     } else if ((key === "equalizeRatio")) {
 			 if (equalizeRatioRange.value == 0) {
 			     equalizeCheckbox.checked = false;
 			 } else {
@@ -56,17 +48,17 @@ function main() {
 			 }
 		     } else {
 			 if (minValue > maxValue) {
-			     if ((target.id === "maxValueRange") || (target.id === "maxValueText")) {
+			     if ((key === "maxValue")) {
 				 minValueRange.value = maxValue;
 				 minValueText.value  = maxValue;
-			     } else if ((target.id === "minValueRange") || (target.id === "minValueText")) {
+			     } else if ((key === "minValue")) {
 				 maxValueRange.value = minValue;
 				 maxValueText.value  = minValue;
 			     }
 			 }
 		     }
 		     drawSrcImageAndHistogram(srcImage, srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas);
-		 } );
+		 }, {keys: ["maxWidthHeight", "equalize", "totalLine", "histogram", "equalizeRatio", "maxValue", "minValue"]});
 }
 
 function drawSrcImageAndHistogram(srcImage, srcCanvas, dstCanvas, srcHistCanvas, dstHistCanvas) {

@@ -20,34 +20,23 @@ function main() {
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText",
-		  "guideCheckbox":null,
-		  "srcProjSelect":null,
-		  "srcProjXRange":"srcProjXText",
-		  "srcProjYRange":"srcProjYText",
-		  "srcProjRRange":"srcProjRText",
-		  "dstProjSelect":null,
-		  "dstProjXRange":"dstProjXText",
-		  "dstProjYRange":"dstProjYText",
-		  "dstProjRRange":"dstProjRText"
-		 },
-		 function(target) {
+    bindParams(params, function(key, target, rel) {
 		     console.debug("target id:" + target.id);
 		     drawSrcImageAndFisheye(srcImage, srcCanvas, dstCanvas, params);
-		 }, params);
+		 }, {keys: ["maxWidthHeight", "guide", "srcProj", "srcProjX", "srcProjY", "srcProjR", "dstProj", "dstProjX", "dstProjY", "dstProjR"]});
 }
 
 function drawSrcImageAndFisheye(srcImage, srcCanvas, dstCanvas, params) {
-    var maxWidthHeight = params["maxWidthHeightRange"];
-    var guide = params["guideCheckbox"];
-    var srcProj  = params["srcProjSelect"];
-    var srcProjX = params["srcProjXRange"];
-    var srcProjY = params["srcProjYRange"];
-    var srcProjR = params["srcProjRRange"];
-    var dstProj  = params["dstProjSelect"];
-    var dstProjX = params["dstProjXRange"];
-    var dstProjY = params["dstProjYRange"];
-    var dstProjR = params["dstProjRRange"];
+    var maxWidthHeight = params.maxWidthHeight;
+    var guide = params.guide;
+    var srcProj  = params.srcProj;
+    var srcProjX = params.srcProjX;
+    var srcProjY = params.srcProjY;
+    var srcProjR = params.srcProjR;
+    var dstProj  = params.dstProj;
+    var dstProjX = params.dstProjX;
+    var dstProjY = params.dstProjY;
+    var dstProjR = params.dstProjR;
     // console.debug("drawSrcImageAndFisheye  guide:" + guide);
     // console.debug("srcProj:" + srcProj+","+srcProjX+","+srcProjY+","+ srcProjR);
     // console.debug("dstProj:" + dstProj+","+dstProjX+","+dstProjY+","+ dstProjR);

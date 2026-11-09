@@ -15,10 +15,9 @@ function main() {
 	target.innerHTML = "";
 	addImageFiles.call({buf:buf, bOffset:0, target:target});
     }, "ArrayBuffer");
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
+    bindParams({}, function(key, target, rel) {
 		     ;
-		 } );
+		 }, {keys: ["maxWidthHeight"]});
 }
 
 var g_timeoutId = null;

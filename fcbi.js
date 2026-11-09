@@ -16,24 +16,20 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    let maxWidthHeight = params["maxWidthHeightRange"];
+	    let maxWidthHeight = params.maxWidthHeight;
 	    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 	    drawFCBI(srcCanvas, dstCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
-    bindFunction({"TMRange":"TMText",
-		  "phaseLimitRange":"phaseLimitText",
-		  "edgeModeCheckbox":null},
-		 function () {
+    bindParams(params, function(key, target, rel) {
                      drawFCBI(srcCanvas, dstCanvas, params);
-                 }, params);
-    bindFunction({"maxWidthHeightRange":"maxWidthHeightText"},
-		 function() {
-                     let maxWidthHeight = params["maxWidthHeightRange"];
+                 }, {keys: ["TM", "phaseLimit", "edgeMode"]});
+    bindParams(params, function(key, target, rel) {
+                     let maxWidthHeight = params.maxWidthHeight;
 		     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
 		     drawFCBI(srcCanvas, dstCanvas, params);
-                 }, params);
+                 }, {keys: ["maxWidthHeight"]});
 }
 
 function meanRGBA(rgba1, rgba2) {
@@ -69,9 +65,9 @@ function drawFCBI(srcCanvas, dstCanvas, params) {
 	this.srcImageData = srcImageData;
 	this.dstImageData = dstImageData;;
 	// input params
-	this.TM         = params["TMRange"];
-	this.edgeMode   = params["edgeModeCheckbox"];
-	this.phaseLimit = params["phaseLimitRange"];
+	this.TM         = params.TM;
+	this.edgeMode   = params.edgeMode;
+	this.phaseLimit = params.phaseLimit;
     };
     var ctx = new Context();
     var id = setTimeout(drawFCBI_.bind(ctx), 10); //フェイズ毎に描画させたい

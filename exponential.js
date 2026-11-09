@@ -10,13 +10,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function main() {
     // console.debug("main");
     var graphCanvas = document.getElementById("graphCanvas");
-    bindFunction({"aRange":"aText",
-                  "expCheckbox":null,
-                  "expdiffCheckbox":null,
-                  "explogCheckbox":null},
-		 function() {
+    bindParams({}, function(key, target, rel) {
                      drawExponential(graphCanvas);
-		 } );
+		 }, {keys: ["a", "exp", "expdiff", "explog"]});
     drawExponential(graphCanvas);
 }
 
