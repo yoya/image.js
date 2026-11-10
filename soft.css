@@ -237,3 +237,20 @@ canvas {
     transition: background var(--motion-fast), padding var(--motion-fast) var(--ease);
 }
 .category li a:hover { background: color-mix(in srgb, var(--cat) 16%, transparent); padding-left: 18px; }
+
+/* Japanese sub labels: a little larger, darker, roomier.
+   the rounded face has a single weight (W4) and gets thin at small sizes,
+   so use a gothic face that has W5 here. */
+.category li .ja, .category h2 small {
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "BIZ UDPGothic",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: .04em;
+}
+.category li .ja {
+    margin-top: 1px;
+    line-height: 1.45;
+    color: color-mix(in srgb, var(--text) 78%, var(--surface));
+}
+.category h2 small { color: color-mix(in srgb, var(--text) 78%, transparent); }
