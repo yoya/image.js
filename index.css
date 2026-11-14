@@ -225,7 +225,11 @@ p { float: left; margin: 0; }
 /* items filtered out by the search box (display:block above wins over [hidden]) */
 .category li[hidden] { display: none; }
 /* matched characters of the search box (index.html) */
-::highlight(search) { background-color: var(--fun, #fdee8c); color: var(--on-fun, inherit); }
+::highlight(search) {
+    background-color: var(--fun, #fdee8c); color: var(--on-fun, inherit);
+    text-decoration: underline 2px var(--accent, currentColor);
+    text-underline-offset: 3px;
+}
 .category li .ja { display: block; color: var(--text-sub); font-size: 12px; line-height: 1.3; }
 .category li span.todo { color: #a0a6ad; }
 .category li span.todo::after { content: " (TODO)"; font-size: 11px; }
