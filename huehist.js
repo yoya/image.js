@@ -101,7 +101,7 @@ function drawHistGraph(canvas, hist, params) {
     for (let i = 0 ; i < 360 ; i++) {
         const x = i + 0.5;
         const y = height * (1 - (hist[i] / max));
-        const [r, g, b] = HSL2RGB([i, 1.0, 1.0]);
+        const [r, g, b] = HSV2RGB([i, 1.0, 1.0]);
         ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
         ctx.beginPath();
         ctx.moveTo(x, height);
@@ -128,7 +128,7 @@ function drawHistRing(canvas, hist, params) {
         const t = i * delta;
         const x = centerX + radius * Math.sin(t);
         const y = centerY - radius * Math.cos(t);
-        const [r, g, b] = HSL2RGB([i, 1.0, 1.0]);
+        const [r, g, b] = HSV2RGB([i, 1.0, 1.0]);
         ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
@@ -155,7 +155,7 @@ function drawHueSaturationMap(canvas, map, params) {
             const h = x;
             const s = (100 - y) / 100;
             const l = map[i] / max;
-            const [r, g, b] = HSL2RGB([h, s, (l<1.0)?l:1.0]);
+            const [r, g, b] = HSV2RGB([h, s, (l<1.0)?l:1.0]);
             // console.log(x, y, [h, s, v], [r, g, b]);
             ctx.fillStyle = "rgb("+r+","+g+","+b+")";
             ctx.beginPath();
