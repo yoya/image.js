@@ -528,7 +528,7 @@ function main() {
 	    }
 	    updateSelectIndex(srcSelect, text);
 	}
-    }, "ArrayBuffer");
+    }, "ArrayBuffer", "入力側の ICC / 画像");
     dropFunction(document, function(buf) {
 	buf = extractICCData(buf);
 	var text = updateOutputProfile(buf);
@@ -540,7 +540,7 @@ function main() {
 	    }
 	    updateSelectIndex(dstSelect, text);
 	}
-    }, "ArrayBuffer");
+    }, "ArrayBuffer", "出力側の ICC / 画像");
     bindParams({}, function(key, target, rel) {
 		     elems.transformForward.style.display = "block";
 		     elems.transformInverse.style.display = "none";
