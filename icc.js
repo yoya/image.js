@@ -99,7 +99,7 @@ function main() {
 	}
     }
     loadCIEXYZdata(onCIEXYZdata);
-    dropFunction(document, function(buf) {
+    dropFunction(document, async function(buf) {
 	var  iccTableContainer= document.getElementById("iccTableContainer");
 	resetHTMLTable(iccTableContainer);
 	var arr = new Uint8Array(buf);
@@ -120,7 +120,7 @@ function main() {
 	    return ;
 	}
 	io.parse(arr);
-        var iccdata = io.getICC();
+        var iccdata = await io.getICC();
 	io = null;
 	if (iccdata === null) {
 	    console.warn("ICC profile not found");

@@ -478,7 +478,7 @@ var transformAndUpdate = function() {
     }
 }
 
-function extractICCData(buf) {
+async function extractICCData(buf) {
     var imageClassList = [IO_JPEG, IO_PNG];
     var iccdata = null;
     var arr = new Uint8Array(buf);
@@ -488,7 +488,7 @@ function extractICCData(buf) {
 	    console.log(i);
 	    var io = new imgClass();
 	    io.parse(arr);
-	    iccdata = io.getICC();
+	    iccdata = await io.getICC();
 	    if (iccdata) {
 		return iccdata.buffer;
 	    }
@@ -517,8 +517,8 @@ function addSelectItem(select, value, text) {
 
 function main() {
     // console.debug("main");
-    dropFunction(srcCanvas, function(buf) {
-	buf = extractICCData(buf);
+    dropFunction(srcCanvas, async function(buf) {
+	buf = await extractICCData(buf);
 	var text = updateInputProfile(buf);
 	updateDiagramSrcDstPoints();
 	if (text) {
@@ -529,8 +529,8 @@ function main() {
 	    updateSelectIndex(srcSelect, text);
 	}
     }, "ArrayBuffer", "入力 ICC/画像");
-    dropFunction(document, function(buf) {
-	buf = extractICCData(buf);
+    dropFunction(document, async function(buf) {
+	buf = await extractICCData(buf);
 	var text = updateOutputProfile(buf);
 	updateDiagramSrcDstPoints();
 	if (text) {
