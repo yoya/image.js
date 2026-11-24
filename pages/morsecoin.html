@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="copyright" content="Copyright &copy; 2022/03/25- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Morse code Coin </title>
+    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="../soft.css">
+    <script src="../lib/page.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel" style="display:flex">
+        <div>
+	  <label class="param"><span class="name">widthHeight</span><input id="widthHeightRange" data-bind="widthHeight" type="range" min="16" max="2048" step="1" value="400"><input type="text" id="widthHeightText" data-bind="widthHeight" size="5"></label>
+          </div>
+        <div>
+          text:<input id="textText" data-bind="text" type="text" value="SOS">
+        </div>
+      </div> <!-- controlPanel -->
+      <canvas id="sendCanvas" class="borderBlue" width="400" height="400"> dstCanvas </canvas>
+      <canvas id="receiveCanvas" class="borderRed" width="400" height="400"> srcCanvas </canvas>
+      <br/>
+      <copyright> (c) <a href="https://twitter.com/hirax/status/1507271331192004608"> https://twitter.com/hirax/status/1507271331192004608 </a> </copyright>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="../lib/drop.js"> </script>
+    <script type="text/javascript" src="../lib/bind.js"> </script>
+    <script type="text/javascript" src="../lib/canvas.js"> </script>
+    <script type="text/javascript" src="morsecoin_send.js"> </script>
+    <script type="text/javascript" src="morsecoin_receive.js"> </script>
+    <script type="text/javascript" src="morsecoin.js"> </script>
+  </body>
+</html>

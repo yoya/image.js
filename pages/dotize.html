@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="copyright" content="Copyright &copy; 2017/02/26- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> dotize </title>
+<link rel="stylesheet" href="../index.css">
+<link rel="stylesheet" href="../soft.css">
+<script src="../lib/page.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div id="controlPanel" style="display:flex">
+      <div>
+        <label class="param"><span class="name">scale</span><input id="scaleRange" data-bind="scale" type="range" min="1" max="64" step="1" value="8"><input type="text" id="scaleText" data-bind="scale" size="3"></label>
+        <label class="param"><span class="name">border</span><input id="borderRange" data-bind="border" type="range" min="0" max="4" step="1" value="1"><input type="text" id="borderText" data-bind="border" size="2"></label>
+      </div>
+      <div>
+        <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="800" step="1" value="256"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="4"></label>
+        borderColor:<input id="borderColorText" data-bind="borderColor" class="jscolor" value="000000" size="9">
+      </div>
+    </div>
+    <div style="display:flex">
+      <div>
+        <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+      </div>
+      <div>
+        <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="../dist/jscolor/jscolor.js"> </script>
+  <script type="text/javascript" src="../lib/drop.js"> </script>
+  <script type="text/javascript" src="../lib/bind.js"> </script>
+  <script type="text/javascript" src="../lib/canvas.js"> </script>
+  <script type="text/javascript" src="dotize.js"> </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+  <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="copyright" content="Copyright &copy; 2023/03/05- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Ordered Dither </title>
+    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="../soft.css">
+    <script src="../lib/page.js"></script>
+  </head>
+  <body>
+    <div id="container" class="vertical">
+      <div id="control" class="horizontal" >
+        <div>
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+          <label class="param"><span class="name">scale</span><input id="scaleRange" data-bind="scale" type="range" min="1" max="8" step="1" value="1"><input type="text" id="scaleText" data-bind="scale" size="2"></label>
+        </div>
+        <div class="horizontal">
+          threshold:
+          <select id="thresholdSelect" data-bind="threshold" size="4" >
+            <option value="threshold"    > Threshold 1x1 (non-dither) </option>
+            <option value="checks"       > Checkboard 2x1 (dither) </option>
+            <option value="o2x2"         > Ordered 2x2 (dispersed) </option>
+            <option value="o3x3"         > Ordered 3x3 (dispersed) </option>
+            <option value="o4x4" selected> Ordered 4x4 (dispersed) </option>
+            <option value="o8x8"         > Ordered 8x8 (dispersed) </option>
+            <option value="h4x4a"        > Halftone 4x4 (angled) </option>
+            <option value="h6x6a"        > Halftone 6x6 (angled) </option>
+            <option value="h8x8a"        > Halftone 8x8 (angled) </option>
+            <option value="h4x4o"        > Halftone 4x4 (orthogonal) </option>
+            <option value="h6x6o"        > Halftone 6x6 (orthogonal) </option>
+            <option value="h8x8o"        > Halftone 8x8 (orthogonal) </option>
+            <option value="h16x16o"      > Halftone 16x16 (orthogonal) </option>
+            <option value="c5x5b"        > Circles 5x5 (black) </option>
+            <option value="c5x5w"        > Circles 5x5 (white) </option>
+            <option value="c6x6b"        > Circles 6x6 (black) </option>
+            <option value="c6x6w"        > Circles 6x6 (white) </option>
+            <option value="c7x7b"        > Circles 7x7 (black) </option>
+            <option value="c7x7w"        > Circles 7x7 (white) </option>
+          </select>
+        </div>
+        <div class="horizontal">
+          <div class="vertical">
+            <div style="color: #F44"> Red </div>
+            <div class="horizontal">
+              <select id="level0Select" data-bind="level0">
+                <option value="1"         > 1 </option>
+                <option value="2"         > 2 </option>
+                <option value="4"         > 4 </option>
+                <option value="8" selected> 8 </option>
+                <option value="16"        >16 </option>
+              </select>
+            </div>
+          </div>
+          <div class="vertical">
+            <div style="color: #2A2"> Green </div>
+            <div class="horizontal">
+              <select id="level1Select" data-bind="level1">
+                <option value="1"         > 1 </option>
+                <option value="2"         > 2 </option>
+                <option value="4"         > 4 </option>
+                <option value="8" selected> 8 </option>
+                <option value="16"        >16 </option>
+              </select>
+            </div>
+          </div>
+          <div class="vertical">
+            <div style="color: #48F"> Blue </div>
+            <div class="horizontal">
+              <select id="level2Select" data-bind="level2">
+                <option value="1"         > 1 </option>
+                <option value="2"         > 2 </option>
+                <option value="4" selected> 4 </option>
+                <option value="8"         > 8 </option>
+                <option value="16"        >16 </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div>
+          <canvas id="matrixCanvas" class="borderMagenta" width=100 height=100> srcCanvas </canvas>
+        </div>
+      </div> <!-- control -->
+      <div id="display" class="horizontal">
+        <div class="canvasContainer">
+          <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+        </div>
+        <div class="canvasContainer">
+          <canvas id="halftoneCanvas" class="borderGreen" width=200 height=200> halftoneCanvas </canvas>
+        </div>
+        <div class="canvasContainer">
+          <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+        </div>
+      </div> <!-- display -->
+    </div>  <!-- container -->
+    <script type="text/javascript" src="../lib/drop.js"> </script>
+    <script type="text/javascript" src="../lib/bind.js"> </script>
+    <script type="text/javascript" src="../lib/canvas.js"> </script>
+    <script type="text/javascript" src="ordered-dither.js"> </script>
+  </body>
+</html>

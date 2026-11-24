@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="copyright" content="Copyright &copy; 2017/06/28- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> Smoothing </title>
+<link rel="stylesheet" href="../index.css">
+<link rel="stylesheet" href="../soft.css">
+<script src="../lib/page.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div>
+      <div id="controlPanel" style="float:left">
+        Smoothing Filter:  <br />
+	<div style="float:left; ">
+          <select id="filterSelect" data-bind="filter" size="3">
+            <option value="average"        > 移動平均 </option>
+	    <option value="pascal" selected> パスカル三角形 </option>
+	    <option value="gaussian"       > ガウス分布 </option>
+          </select>
+	  <br />
+          <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="4096" step="1" value="640"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="4"></label>
+          <label class="param"><span class="name">filterWindow</span><input id="filterWindowRange" data-bind="filterWindow" type="range" min="1" max="9" step="2" value="5"><input type="text" id="filterWindowText" data-bind="filterWindow" size="3"></label>
+	  <label class="param"><span class="name">sigma</span><input id="sigmaRange" data-bind="sigma" type="range" min="0.5" max="1.5" step="0.01" value="1.0"/></label>
+	  <input id="sigmaText" data-bind="sigma" type="text" size="4"/>
+	  <br />
+	  <label class="check"><input id="bilateralCheckbox" data-bind="bilateral" type="checkbox" /> bilateral</label>
+	  <label class="param"><span class="name">colorScale</span><input id="colorScaleRange" data-bind="colorScale" type="range" min="1" max="100" step="1" value="20"/></label>
+	  <input id="colorScaleText" data-bind="colorScale" type="text" size="4"/>
+	</div>
+	<div style="float:left; ">
+	    filterMatrix:<table id="filterMatrixTable"> </table>
+	  </div>
+	</div>
+      </div>  
+    <div style="clear:both">
+    <canvas id="srcCanvas" class="borderRed" width=200 height=200> srcCanvas </canvas>
+    <canvas id="dstCanvas" class="borderBlue" width=200 height=200> dstCanvas </canvas>
+  </div>
+  <script type="text/javascript" src="../lib/drop.js"> </script>
+  <script type="text/javascript" src="../lib/bind.js"> </script>
+  <script type="text/javascript" src="../lib/math.js"> </script>
+  <script type="text/javascript" src="../lib/kernel.js"> </script>
+  <script type="text/javascript" src="../lib/canvas.js"> </script>
+  <script type="text/javascript" src="../lib/loading.js"> </script>
+  <script type="text/javascript" src="../lib/worker.js"> </script>
+  <script type="text/javascript" src="smoothing.js"> </script>
+</body>
+</html>

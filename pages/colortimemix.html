@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="copyright" content="Copyright &copy; 2022/01/22- yoya@awm.jp . All Rights Reserved.">
+    <meta charset="utf-8">
+    <title> Color Time Mix </title>
+    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="../soft.css">
+    <script src="../lib/page.js"></script>
+    <style>
+      .preview {
+          max-width: 320px;  max-height: 240px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="controlPanel" style="display:flex">
+        <div>
+	  <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="640"  style="width:200px;"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+          <input type="button" id="buttonStart" data-bind="buttonStart" value="Start"> </input>
+          <input type="button" id="buttonStop" data-bind="buttonStop" value="Stop"> </input>
+          <label class="param"><span class="name">delay</span><input id="delayRange" data-bind="delay" type="range" min="0" max="500" step="1" value="0" style="width:200px;"><input type="text" id="delayText" data-bind="delay" size="4"></label>
+        </div>
+        <div>
+          <span style="vertical-align: top;"> type: </span>
+          <select id="typeSelect" data-bind="type" size="4">
+            <option value="RGB" selected> RGB </option>
+            <option value="RGB2"        > RGB2 </option>
+            <option value="CMY"         > CMY </option>
+            <option value="CMY2"        > CMY2 </option>
+          </select>
+        </div>
+      </div> <!-- controlPanel -->
+      <div>
+        <canvas id="srcCanvas" class="borderBlack preview" width=200 height=200> srcCanvas </canvas>
+        <canvas id="redCanvas" class="borderRed preview" width=200 height=200> redCanvas </canvas>
+        <canvas id="greenCanvas" class="borderGreen preview" width=200 height=200> greenCanvas </canvas>
+        <canvas id="blueCanvas" class="borderBlue preview" width=200 height=200> blueCanvas </canvas>
+      </div>
+      <div>
+        <canvas id="dstCanvas" class="borderBlack" width=200 height=200> dstCanvas </canvas>
+      </div>
+    </div>  <!-- container -->
+    <script type="text/javascript" src="../lib/drop.js"> </script>
+    <script type="text/javascript" src="../lib/bind.js"> </script>
+    <script type="text/javascript" src="../lib/canvas.js"> </script>
+    <script type="text/javascript" src="colortimemix.js"> </script>
+  </body>
+</html>

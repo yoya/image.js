@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="copyright" content="Copyright &copy; 2017/04/27- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> Alpha Blending </title>
+<link rel="stylesheet" href="../index.css">
+<link rel="stylesheet" href="../soft.css">
+<script src="../lib/page.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div id="controlPanel"  style="float:left">
+      <div style="float:left">
+	<div style="float:left ;">
+          <select id="methodSelect" data-bind="method" size="4">
+            <option value="plus" selected> 加算 </option>
+            <option value="minus"        > 減算 </option>
+            <option value="multi"        > 乗算 </option>
+	    <option value="div"          > 除算 </option>
+          </select>
+	</div>
+      </div >
+      <div style="float:left">
+        <div>
+          <label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2000" step="1" value="480"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+        </div>
+        <div>
+	  <label class="check"><input id="linearGammaCheckbox" data-bind="linearGamma" type="checkbox" /> linearGamma</label>
+        </div>
+        <div>
+	  <label class="check"><input id="inverse" data-bind="inverse" type="checkbox" /> inverse</label>
+        </div>
+      </div>
+      <div style="float:left">
+        <div>
+	  <label class="param"><span class="name">ratio1</span><input id="ratio1Range" data-bind="ratio1" type="range" min="0.0" max="1.0" step="0.1" value="0.5"><input type="text" id="ratio1Text" data-bind="ratio1" size="4"></label>
+        </div>
+        <div>
+	  <label class="param"><span class="name">ratio2</span><input id="ratio2Range" data-bind="ratio2" type="range" min="0.0" max="1.0" step="0.1" value="0.5"><input type="text" id="ratio2Text" data-bind="ratio2" size="4"></label>
+        </div>
+        <div>
+          <label class="param"><span class="name">ratio</span><input id="ratioRange" data-bind="ratio" type="range" min="0.0" max="1.0" step="0.1" value="0.5"><input type="text" id="ratioText" data-bind="ratio" size="4"></label>
+        </div>
+      </div>
+      <div style="float:left">
+        <div>
+	  <label class="param"><span class="name">shift X</span><input id="shiftXRange" data-bind="shiftX" type="range" min="-100" max="100" step="1" value="0"><input type="text" id="shiftXText" data-bind="shiftX" size="4"></label>
+        </div>
+        <div>
+          <label class="param"><span class="name">shift Y</span><input id="shiftYRange" data-bind="shiftY" type="range" min="-100" max="100" step="1" value="0"><input type="text" id="shiftYText" data-bind="shiftY" size="4"></label>
+        </div>
+      </div>
+      <div style="float:left">
+        <div>
+	  <label class="param"><span class="name">grad slant X</span><input id="gradSlantXRange" data-bind="gradSlantX" type="range" min="-1.0" max="1.0" step="0.01" value="0"><input type="text" id="gradSlantXText" data-bind="gradSlantX" size="4"></label>
+        </div>
+        <div>
+          <label class="param"><span class="name">grad slant Y</span><input id="gradSlantYRange" data-bind="gradSlantY" type="range" min="-1.0" max="1.0" step="0.01" value="0"><input type="text" id="gradSlantYText" data-bind="gradSlantY" size="4"></label>
+        </div>
+        <div>
+	  <label class="param"><span class="name">grad intercept X</span><input id="gradInterceptXRange" data-bind="gradInterceptX" type="range" min="-1.0" max="1.0" step="0.01" value="0"><input type="text" id="gradInterceptXText" data-bind="gradInterceptX" size="4"></label>
+        </div>
+        <div>
+          <label class="param"><span class="name">grad intercept Y</span><input id="gradInterceptYRange" data-bind="gradInterceptY" type="range" min="-1.0" max="1.0" step="0.01" value="0"><input type="text" id="gradInterceptYText" data-bind="gradInterceptY" size="4"></label>
+        </div>
+      </div>
+    </div> <!-- controlPanel -->
+    <br />
+    <div style="clear:both">
+      <span id="srcCanvas1Container" >
+	<canvas id="srcCanvas1" class="borderRed" width="200" height="200"> src1Canvas </canvas>
+      </span>
+      <span id="srcCanvas2Container" >
+        <canvas id="srcCanvas2" class="borderGreen" width="200" height="200"> src2Canvas </canvas>
+      </span>
+      <canvas id="dstCanvas" class="borderBlue" width="200" height="200"> dstCanvas </canvas>
+    </div>
+    <p> Drop image files(png,jpg,gif) into red & green box </p>
+  </div>  <!-- container -->
+  <script type="text/javascript" src="../lib/drop.js"> </script>
+  <script type="text/javascript" src="../lib/bind.js"> </script>
+  <script type="text/javascript" src="../lib/canvas.js"> </script>
+  <script type="text/javascript" src="../lib/color.js"> </script>
+  <script type="text/javascript" src="../lib/loading.js"> </script>
+  <script type="text/javascript" src="../lib/worker.js"> </script>
+  <script type="text/javascript" src="alphablend.js"> </script>
+</body>
+</html>

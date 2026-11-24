@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="copyright" content="Copyright &copy; 2017/05/12- yoya@awm.jp . All Rights Reserved.">
+  <meta charset="utf-8">
+  <title> Random </title>
+<link rel="stylesheet" href="../index.css">
+<link rel="stylesheet" href="../soft.css">
+<script src="../lib/page.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div id="controlPanel" style="float:left; margin: 10px;">
+      <div>
+	<label class="param"><span class="name">maxWidthHeight</span><input id="maxWidthHeightRange" data-bind="maxWidthHeight" type="range" min="16" max="2048" step="1" value="480"><input type="text" id="maxWidthHeightText" data-bind="maxWidthHeight" size="5"></label>
+      </div>
+      <div align="center">
+	<label class="param"><span class="name">width</span><input id="widthRange" data-bind="width" type="range" min="16" max="2048" step="1" value="320"><input type="text" id="widthText" data-bind="width" size="5"></label>
+	<label class="param"><span class="name">height</span><input id="heightRange" data-bind="height" type="range" min="16" max="2048" step="1" value="320"><input type="text" id="heightText" data-bind="height" size="5"></label>
+      </div>
+      <div style="margin: 20px;"> </div>
+      <div align="center">
+	<input id="refreshButton" data-bind="refreshButton" type="button" value="Refresh"/>
+	<input id="animationButton" data-bind="animationButton" type="button" value="Animation"/>
+	<span style="margin: 20px;"> </span>
+	<input id="ejectButton" data-bind="ejectButton" type="button" value="Eject"/>
+      </div>
+      <div style="margin: 20px;"> </div>
+      <div align="center">
+	<label class="param"><span class="name">redRatio</span><input id="redRatioRange" data-bind="redRatio" type="range" min="-1.0" max="1.0" step="0.01" value="0"><input type="text" id="redRatioText" data-bind="redRatio" size="5"></label>
+	<label class="param"><span class="name">greenRatio</span><input id="greenRatioRange" data-bind="greenRatio" type="range" min="-1.0" max="1.0" step="0.01" value="0"><input type="text" id="greenRatioText" data-bind="greenRatio" size="5"></label>
+	<label class="param"><span class="name">blueRatio</span><input id="blueRatioRange" data-bind="blueRatio" type="range" min="-1.0" max="1.0" step="0.01" value="0"><input type="text" id="blueRatioText" data-bind="blueRatio" size="5"></label>
+      </div>
+      <div>
+	<label class="param"><span class="name">amp</span><input id="ampRange" data-bind="amp" type="range" min="-1.0" max="1.0" step="0.01" value="1"><input type="text" id="ampText" data-bind="amp" size="5"></label>
+	<label class="param"><span class="name">offset</span><input id="offsetRange" data-bind="offset" type="range" min="0.0" max="1.0" step="0.01" value="0"><input type="text" id="offsetText" data-bind="offset" size="5"></label>
+	<label class="param"><span class="name">density</span><input id="densityRange" data-bind="density" type="range" min="1" max="100" step="1" value="1"><input type="text" id="densityText" data-bind="density" size="4"></label>
+      </div>
+    </div> <!-- ControlPanel-->
+    <div>
+      <canvas id="histCanvas" class="borderGray" width=256 height=256> histCanvas </canvas>
+    </div>
+    <br />
+    <div>
+      <canvas id="canvas" class="borderRed" width=200 height=200> Canvas </canvas>
+    </div>
+  </div>
+  <script type="text/javascript" src="../lib/drop.js"> </script>
+  <script type="text/javascript" src="../lib/bind.js"> </script>
+  <script type="text/javascript" src="../lib/canvas.js"> </script>
+  <script type="text/javascript" src="random.js"> </script>
+</body>
+</html>

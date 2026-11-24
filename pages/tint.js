@@ -1,0 +1,87 @@
+"use strict";
+/*
+ * 2024/01/28- (c) yoya@awm.jp
+ */
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    main();
+});
+
+function main() {
+    // console.debug("main");
+    const srcCanvas = document.getElementById("srcCanvas");
+    const dstCanvas = document.getElementById("dstCanvas");
+    const srcImage = new Image();
+    const params = {};
+    srcImage.onload = function() {
+	drawSrcImageAndTint(srcImage, srcCanvas, dstCanvas, params);
+    }
+    srcImage.src = "../img/RGBCube.png"
+    dropFunction(document, function(dataURL) {
+	srcImage.src = dataURL;
+    }, "DataURL");
+    bindParams(params, function(key, target, rel) {
+		     drawSrcImageAndTint(srcImage, srcCanvas, dstCanvas,
+                                         params);
+		 }, {keys: ["maxWidthHeight", "equation", "color", "amount", "linear"]});
+}
+
+function drawSrcImageAndTint(srcImage, srcCanvas, dstCanvas, params) {
+    const { maxWidthHeight } = params;
+    drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
+    drawTint(srcCanvas, dstCanvas, params);
+}
+function tintWeightFlat(a) {
+    return 1.0;
+}
+
+function tintWeightQuadratic(a) {
+    a -= 0.5;
+    return 1 - (4 * a * a);
+}
+
+function tintWeightQuadratic2(a) {  // XXX
+    return 1 - (4 * a * a);
+}
+
+function tintWeightLanczos(a) {
+    a -= 0.5;
+    return lanczos(a*2, 1)
+}
+
+function tint(a, b, weightFunc, amount) {
+    const w = weightFunc(a)
+    //return a * (1-amount) + w*b*amount;
+    return a + w*b*amount;
+}
+
+function drawTint(srcCanvas, dstCanvas, params) {
+    const { equation, color, amount, linear } = params;
+    const srcCtx = srcCanvas.getContext("2d");
+    const dstCtx = dstCanvas.getContext("2d");
+    const width = srcCanvas.width, height = srcCanvas.height;
+    dstCanvas.width  = width;
+    dstCanvas.height = height;
+    //
+    const srcImageData = srcCtx.getImageData(0, 0, width, height);
+    const dstImageData = dstCtx.createImageData(width, height);
+    const twFunc = { "flat"      : tintWeightFlat,
+                     "quadratic" : tintWeightQuadratic,
+                     "quadratic2": tintWeightQuadratic2,
+                     "lanczos"   : tintWeightLanczos} [equation]
+    const color_rgba = getRGBAfromHexColor(color);
+    for (let y = 0 ; y < height; y++) {
+        for (let x = 0 ; x < width; x++) {
+	    let [r,g,b,a] = getRGBA(srcImageData, x, y);
+            [r, g, b] = linear? sRGB2linearRGB([r,g,b]):
+                [r / 255, g/255, b/255];
+            r = tint(r, color_rgba[0]/255, twFunc, amount);
+            g = tint(g, color_rgba[1]/255, twFunc, amount);
+            b = tint(b, color_rgba[2]/255 ,twFunc, amount);
+            const [r2, g2, b2] = linear?linearRGB2sRGB([r,g,b,a]):
+                  [r*255,g*255,b*255,a];
+	    setRGBA(dstImageData, x, y, [r2, g2, b2, a]);
+	}
+    }
+    dstCtx.putImageData(dstImageData, 0, 0);
+}
