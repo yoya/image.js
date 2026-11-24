@@ -12,7 +12,7 @@ function main() {
     const params = {};  // filter ("" or "0".."4"), filterView, alphaOn
     //
     var png, origArr, workArr;
-    dropFunction(document, function(buf) {
+    dropFunction(document, async function(buf) {
         const arr = new Uint8Array(buf);
         // display srcImage
         const blob = new Blob([arr], {type: 'image/png'});
@@ -29,8 +29,13 @@ function main() {
         }
         png.parse(arr);
         const idatArr =  png.getIDATdata();
-        const inflate = new Zlib.Inflate(idatArr);
-        origArr = inflate.decompress();
+        try {
+            origArr = await IO_PNG.inflate(idatArr);
+        } catch (e) {
+            document.getElementById('console').innerHTML = "IDAT inflate failed: " + e.message;
+            origArr = workArr = null;
+            return ;
+        }
         workArr = new Uint8Array(origArr);
         pngFilterSummarize(png, origArr);
         if (params.filterView) {
@@ -101,9 +106,7 @@ function pngFilterOverwrite(png, workArr, filter, alphaOn) {
     }
     // reconstruct PNG file
     png.deleteChunk("IDAT");
-    const deflate = new Zlib.Deflate(workArr, { compressionType: 0 });
-    const deflatedArr = deflate.compress();
-    png.addIDATdata(deflatedArr);
+    png.addIDATdata(zlibStored(workArr));
     let PNGarr = png.build();
     // display dstImage
     const blob = new Blob([PNGarr], {type: 'image/png'});
@@ -127,3 +130,32 @@ function pngFilterOverwrite(png, workArr, filter, alphaOn) {
 }
 
 
+
+// 無圧縮 (stored ブロック) の zlib 形式 (RFC1950/1951) を作る
+function zlibStored(arr) {
+    const maxBlock = 0xFFFF;
+    const nBlocks = Math.max(1, Math.ceil(arr.length / maxBlock));
+    const out = new Uint8Array(2 + nBlocks * 5 + arr.length + 4);
+    out[0] = 0x78;  // CMF: deflate, 32K window
+    out[1] = 0x01;  // FLG: (0x78 * 256 + 0x01) % 31 === 0
+    let o = 2;
+    for (let b = 0; b < nBlocks; b++) {
+        const start = b * maxBlock;
+        const len = Math.min(maxBlock, arr.length - start);
+        out[o++] = (b === nBlocks - 1) ? 1 : 0;  // BFINAL, BTYPE=00
+        out[o++] = len & 0xFF;
+        out[o++] = len >> 8;
+        out[o++] = ~len & 0xFF;
+        out[o++] = (~len >> 8) & 0xFF;
+        out.set(arr.subarray(start, start + len), o);
+        o += len;
+    }
+    let a = 1, s = 0;  // Adler-32
+    for (let i = 0; i < arr.length; i++) {
+        a = (a + arr[i]) % 65521;
+        s = (s + a) % 65521;
+    }
+    out[o++] = s >> 8; out[o++] = s & 0xFF;
+    out[o++] = a >> 8; out[o++] = a & 0xFF;
+    return out;
+}
