@@ -30,7 +30,7 @@ function drawSrcImageAndShowa(srcImage, srcCanvas, dstCanvas, params, sync) {
     drawShowa(srcCanvas, dstCanvas, params, sync);
 }
 
-var worker = new workerProcess("worker/showa.js");
+var worker = new workerProcess("../worker/showa.js");
 
 function drawShowa(srcCanvas, dstCanvas, params, sync) {
     //console.debug("drawShowa:", params);

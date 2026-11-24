@@ -41,7 +41,7 @@ function drawSrcImageAndGrayscale(srcImage, srcCanvas, dstCanvasArr, params, syn
 	if (equation in workers) {
 	    // do nothing
 	} else {
-	    workers[equation] = new workerProcess("worker/grayscale.js");
+	    workers[equation] = new workerProcess("../worker/grayscale.js");
 	}
 	drawGrayscale(srcCanvas, dstCanvas, equation, colorFactor, linearGamma, sync);
     }

@@ -55,7 +55,7 @@ function main() {
     params['gravity'] = gravity;
 }
 
-var worker = new workerProcess("worker/gravity.js");
+var worker = new workerProcess("../worker/gravity.js");
 
 function drawGravity(srcCanvas, dstCanvas, params, sync) {
     // console.debug("drawGravity", params);

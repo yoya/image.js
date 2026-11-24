@@ -40,7 +40,7 @@ function drawSrcImageAndBitDepth(srcImage, srcCanvas, dstCanvas, params, sync) {
 }
 
 
-const worker = new workerProcess("worker/bitdepth.js");
+const worker = new workerProcess("../worker/bitdepth.js");
 
 function drawBitDepth(srcCanvas, dstCanvas, params, sync) {
     worker.process(srcCanvas, dstCanvas, params, sync);

@@ -58,47 +58,47 @@ function main() {
 	    var url = null;
 	    switch (overlap) {
 	    case "badge":
-		file = "img/badge.png";
+		file = "../img/badge.png";
 		url = "https://twitter.com/_hp23/status/875773014750543873";
 		break;
 	    case "scope":
-		file = "img/scope.png";
+		file = "../img/scope.png";
 		url = "https://twitter.com/KulasanM/status/875611714959556609";
 		break;
 	    case "clockBlue":
-		file = "img/clockBlue.png";
+		file = "../img/clockBlue.png";
 		url ="https://twitter.com/device1020/status/875663435253415936";
 		break;
 	    case "clockYellow":
-		file = "img/clockYellow.png";
+		file = "../img/clockYellow.png";
 		url ="https://twitter.com/device1020/status/875663435253415936";
 		break;
 	    case "clockRed":
-		file = "img/clockRed.png";
+		file = "../img/clockRed.png";
 		url ="https://twitter.com/device1020/status/875663435253415936";
 		break;
 	    case "bubbleSoap":
-		file = "img/bubbleSoap.png";
+		file = "../img/bubbleSoap.png";
 		url = "https://twitter.com/NnAone2cmg/status/875738100973969408";
 		break;
 	    case "bubbleCyan":
-		file = "img/bubbleCyan.png";
+		file = "../img/bubbleCyan.png";
 		url = "https://twitter.com/NnAone2cmg/status/875989771562106881";
 		break;
 	    case "bubbleMagenta":
-		file = "img/bubbleMagenta.png";
+		file = "../img/bubbleMagenta.png";
 		url = "https://twitter.com/NnAone2cmg/status/875990875578302464";
 		break;
 	    case "bubbleGreen":
-		file = "img/bubbleGreen.png";
+		file = "../img/bubbleGreen.png";
 		url = "https://twitter.com/NnAone2cmg/status/875990875578302464";
 		break;
 	    case "bubbleBlue":
-		file = "img/bubbleBlue.png";
+		file = "../img/bubbleBlue.png";
 		url = "https://twitter.com/NnAone2cmg/status/875989771562106881";
 		break;
 	    case "bubbleRainbow":
-		file = "img/bubbleRainbow.png";
+		file = "../img/bubbleRainbow.png";
 		url = "https://twitter.com/NnAone2cmg/status/876103882752917505";
 		break;
 	    default:

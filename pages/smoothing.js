@@ -103,7 +103,7 @@ function makeFilterMatrix(filter, filterWindow, sigma) {
     return filterMatrix;
 }
 
-var worker = new workerProcess("worker/smoothing.js");
+var worker = new workerProcess("../worker/smoothing.js");
 
 function drawSrcImageAndConvolution(srcImage, srcCanvas, dstCanvas, params, sync) {
     var maxWidthHeight = params.maxWidthHeight;

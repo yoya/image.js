@@ -58,7 +58,7 @@ function main() {
     const dstCanvas2 = document.getElementById("dstCanvas2");
     const params = {};
     let srcImage = new Image();
-    srcImage.src = "./img/RGBY.png";
+    srcImage.src = "../img/RGBY.png";
     srcImage.onload = function() {
 	drawSrcImageAndOrientation(srcImage, srcCanvas,
                                    dstCanvas, dstCanvas2, params);

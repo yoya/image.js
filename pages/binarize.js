@@ -132,7 +132,7 @@ function drawHistogramAndBinarize(srcCanvas, dstCanvas, histCanvas, diffhistCanv
     drawBinarize(srcCanvas, dstCanvas, params_w, sync);
 }
 
-const worker = new workerProcess("worker/binarize.js");
+const worker = new workerProcess("../worker/binarize.js");
 
 function drawBinarize(srcCanvas, dstCanvas, params, sync) {
     worker.process(srcCanvas, dstCanvas, params, sync);

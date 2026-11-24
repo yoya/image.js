@@ -216,7 +216,7 @@ function drawSrcImageAndColorTransform(srcImage, srcCanvas, dstCanvas, colorMatr
     drawColorTransform(srcCanvas, dstCanvas, colorMatrix, linear, rel);
 }
 
-var worker = new workerProcess("worker/colormat.js");
+var worker = new workerProcess("../worker/colormat.js");
 
 function drawColorTransform(srcCanvas, dstCanvas, colorMatrix, linear, sync) {
     var params = {colorMatrix:colorMatrix, linear:linear};

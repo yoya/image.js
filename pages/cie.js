@@ -70,7 +70,7 @@ function main() {
     loadCIEXYZdata(onCIEXYZdata);
 }
 
-const worker = new workerProcess("worker/cie.js");
+const worker = new workerProcess("../worker/cie.js");
 
 function drawDiagram(diagramBaseCanvas, dstCanvas, params, sync) {
     const { hist } = params;

@@ -118,7 +118,7 @@ function affin2Matrix(affin, canvas) {
 	
 };
 
-var worker = new workerProcess("worker/affintrans.js");
+var worker = new workerProcess("../worker/affintrans.js");
 
 function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, sync) {
     var params_w = {

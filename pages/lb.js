@@ -47,7 +47,7 @@ function drawSrcImageAndCopy(srcImage, srcCanvas, dstCanvas, params, sync) {
 }
 
 
-var worker = new workerProcess("worker/lb.js");
+var worker = new workerProcess("../worker/lb.js");
 
 function drawLB(srcCanvas, dstCanvas, params, sync) {
     var _params = { params: params };

@@ -19,8 +19,8 @@ function main() {
 	drawSrcImageAndDither(srcImage, matrixCanvas, srcCanvas,
                               halftoneCanvas, dstCanvas, params);
     }
-    //    srcImage.src = "./img/RGBCube.png"
-    srcImage.src = "./img/grad-white-magenta.png";
+    //    srcImage.src = "../img/RGBCube.png"
+    srcImage.src = "../img/grad-white-magenta.png";
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");

@@ -621,7 +621,7 @@ function loadICCProfile(ctx, callback) {
     }
     xhr.ctx = ctx;
     xhr.responseType = "arraybuffer";
-    xhr.open("GET", "./icc/"+ctx.file, true); // async:true
+    xhr.open("GET", "../icc/"+ctx.file, true); // async:true
     xhr.send(null);
     xhr = null;
 }

@@ -104,7 +104,7 @@ function main() {
 		 }, {keys: ["dstNormalize", "windowSize", "slideSize"]});
 }
 
-var worker = new workerProcess("worker/ssim.js");
+var worker = new workerProcess("../worker/ssim.js");
 
 function drawSSIM(srcCanvas1, srcCanvas2, dstCanvasL, dstCanvasC, dstCanvasS, dstCanvas, params, callback, sync) {
     var srcCanvas = [srcCanvas1, srcCanvas2];

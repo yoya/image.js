@@ -32,7 +32,7 @@ function drawSrcImageAndVignette(srcImage, srcCanvas, dstCanvas, params, sync) {
     drawVignette(srcCanvas, dstCanvas, params, sync);
 }
 
-var worker = new workerProcess('worker/vignette.js');
+var worker = new workerProcess('../worker/vignette.js');
 
 function drawVignette(srcCanvas, dstCanvas, params, sync) {
     const params_w = {

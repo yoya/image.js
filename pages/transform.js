@@ -68,7 +68,7 @@ function makeAffinMatrix(canvas, params) {
     return mat;
 };
 
-var worker = new workerProcess("worker/transform.js");
+var worker = new workerProcess("../worker/transform.js");
 
 function drawAffinTransform(srcCanvas, dstCanvas, affinMatrix, params, sync) {
     // console.debug("drawAffinTransform", affinMatrix, params);

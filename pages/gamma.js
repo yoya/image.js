@@ -61,7 +61,7 @@ function drawGammaGraph(canvas, gamma, RGBchecked) {
     }
 }
 
-var worker = new workerProcess("worker/gamma.js");
+var worker = new workerProcess("../worker/gamma.js");
 
 function drawGammaImage(srcCanvas, dstCanvas,params, sync) {
     // console.debug("drawGammaImage");

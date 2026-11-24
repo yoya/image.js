@@ -33,7 +33,7 @@ function main() {
 		 }, {keys: ["fuzz", "margin"]});
 }
 
-var worker = new workerProcess("worker/trim.js");
+var worker = new workerProcess("../worker/trim.js");
 
 function drawTrim(srcCanvas, dstCanvas, params, sync) {
     var params_w = {

@@ -36,7 +36,7 @@ function main() {
 		 }, {keys: ["maxWidthHeight"]});
 }
 
-var worker = new workerProcess("worker/kuwahara.js");
+var worker = new workerProcess("../worker/kuwahara.js");
 
 function drawKuwaharaFilter(srcCanvas, dstCanvases, params, sync) {
     var params_w = {

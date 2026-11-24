@@ -16,7 +16,7 @@ function main() {
     srcImage.onload = function() {
 	drawSrcImageAndGlitchRGB(srcImage, srcCanvas, dstCanvas, params);
     }
-    srcImage.src = "./img/RGBCube.png"
+    srcImage.src = "../img/RGBCube.png"
     dropFunction(document, function(dataURL) {
 	srcImage.src = dataURL;
     }, "DataURL");

@@ -132,7 +132,7 @@ function makeStructureTable(structureType, filterWindow) {
     return structureTable;
 }   
 
-var worker = new workerProcess("worker/morphology.js");
+var worker = new workerProcess("../worker/morphology.js");
 
 function drawMorphologyFilter(srcCanvas, dstCanvas, structureTable, params, sync) {
     var params_w = {

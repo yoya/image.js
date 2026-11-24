@@ -104,7 +104,7 @@ function helmert2Matrix(helmert, canvas) {
 	
 };
 
-var worker = new workerProcess("worker/helmerttrans.js");
+var worker = new workerProcess("../worker/helmerttrans.js");
 
 function drawHelmertTransform(srcCanvas, dstCanvas, helmertMatrix, params, sync) {
     var params_w = {

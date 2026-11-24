@@ -23,7 +23,7 @@ function main() {
     bindParams(params, function(key, target, rel) {
 		     drawSrcImageDataAndAlphacomponent(params);
 		 }, {keys: ["maxWidthHeight", "backgroundColor", "checkboard", "multi1", "plus1", "multi2", "plus2", "multi3", "plus3", "multi4", "plus4"]});
-    const dataURL = "img/CMYK.png";
+    const dataURL = "../img/CMYK.png";
     loadImageData(dataURL, function(imageData) {
         params.srcImageData = imageData;
         drawSrcImageDataAndAlphacomponent(params);

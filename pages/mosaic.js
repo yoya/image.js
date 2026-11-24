@@ -32,7 +32,7 @@ function main() {
 		 }, {keys: ["blockSize", "blockType"]});
 }
 
-var worker = new workerProcess("worker/mosaic.js");
+var worker = new workerProcess("../worker/mosaic.js");
 
 function drawMosaic(srcCanvas, dstCanvas, params, sync) {
     let params_w = {

@@ -26,8 +26,8 @@ function main() {
 	drawSrcImage(srcImage2, srcCanvas2, params.maxWidthHeight);
 	drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, params, true)
     }
-    srcImage1.src = "img/4x4primary-400x400.png";
-    srcImage2.src = "img/RGBCube.png";
+    srcImage1.src = "../img/4x4primary-400x400.png";
+    srcImage2.src = "../img/RGBCube.png";
     dropFunction(srcCanvas1Container, function(dataURL) {
 	srcImage1.src = dataURL;
     }, "DataURL");
@@ -54,7 +54,7 @@ function main() {
 		 }, {keys: ["method"]});
 }
 
-const worker = new workerProcess("worker/alphablend.js");
+const worker = new workerProcess("../worker/alphablend.js");
 
 function drawAlphaBrend(srcCanvas1, srcCanvas2, dstCanvas, params, sync) {
     console.debug("drawAlphaBrend", params);

@@ -70,7 +70,7 @@ function drawSigmoidGraph(gammaCanvas, a, b) {
     ctx.fill();
 }
 
-var worker = new workerProcess("worker/sigmoid.js");
+var worker = new workerProcess("../worker/sigmoid.js");
 
 function drawSigmoidImage(srcCanvas, dstCanvas, a, b, linear, sync) {
     // console.debug("drawSigmoidImage");

@@ -26,7 +26,7 @@ function main() {
     drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas, params, true);
 }
 
-var worker = new workerProcess("worker/rescale.js");
+var worker = new workerProcess("../worker/rescale.js");
 
 function drawSrcImageAndRescale(srcImage, srcCanvas, dstCanvas, params, sync) {
     // console.debug("drawSrcImageAndRescale", params);

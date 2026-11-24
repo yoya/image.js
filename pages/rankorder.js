@@ -71,7 +71,7 @@ function main() {
 		 }, {keys: ["maxWidthHeight"]});
 }
 
-var worker = new workerProcess("worker/rankorder.js");
+var worker = new workerProcess("../worker/rankorder.js");
 
 function drawRankOrderFilter(srcCanvas, dstCanvas, params, sync) {
     var params_w = {

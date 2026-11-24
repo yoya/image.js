@@ -35,7 +35,7 @@ function drawSrcImageAndMirror(srcImage, srcCanvas, dstCanvas, params, sync) {
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
     drawMirror(srcCanvas, dstCanvas, params, sync);
 }
-var worker = new workerProcess("worker/mirror.js");
+var worker = new workerProcess("../worker/mirror.js");
 
 function drawMirror(srcCanvas, dstCanvas, params, sync) {
     params.border = params.borderRange;

@@ -34,7 +34,7 @@ function main() {
 		 }, {keys: ["maxWidthHeight"]});
 }
 
-var worker = new workerProcess("worker/median.js");
+var worker = new workerProcess("../worker/median.js");
 
 function drawMedianFilter(srcCanvas, dstCanvas, params, sync) {
     var params_w = {filter:params.filter, filterWindow:params.filterWindow};

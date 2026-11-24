@@ -197,7 +197,7 @@ function grabMarkerIndex(markerArray, x, y, radius2) {
     return grabbedMarker;
 }
 
-var worker = new workerProcess("worker/homography.js");
+var worker = new workerProcess("../worker/homography.js");
 
 function drawHomograpy(srcImage, srcCanvas, dstCanvas, params, sync) {
     drawSrcImage(srcImage, srcCanvas, params.maxWidthHeight);
