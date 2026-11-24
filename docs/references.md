@@ -1,5 +1,7 @@
 # 参考文献
 
+画像処理全般の基礎資料は [foundations.md](foundations.md) にあります。
+
 ## FFT（lib/fft.js）
 
 - J. W. Cooley and J. W. Tukey, "An Algorithm for the Machine Calculation of Complex Fourier Series",
