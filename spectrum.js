@@ -11,8 +11,6 @@ function main() {
     // console.debug("main");
     var srcCanvas = document.getElementById("srcCanvas");
     var dstCanvas = document.getElementById("dstCanvas");
-    var src2NCanvas = document.getElementById("src2NCanvas"); // 2^n size
-    var dst2NCanvas = document.getElementById("dst2NCanvas"); // 2^n size
     var srcSpectrumRedCanvas   = document.getElementById("srcSpectrumRedCanvas");
     var srcSpectrumGreenCanvas = document.getElementById("srcSpectrumGreenCanvas");
     var srcSpectrumBlueCanvas  = document.getElementById("srcSpectrumBlueCanvas");
@@ -24,115 +22,71 @@ function main() {
     dropFunction(document, function(dataURL) {
 	srcImage = new Image();
 	srcImage.onload = function() {
-	    drawSrcImageAndDCTAndFilter(srcImage, srcCanvas, src2NCanvas,
-					srcSpectrumRedCanvas, srcSpectrumGreenCanvas, srcSpectrumBlueCanvas,
-					dstSpectrumRedCanvas, dstSpectrumGreenCanvas, dstSpectrumBlueCanvas,
-					dst2NCanvas, dstCanvas, params);
+	    drawSrcImageAndSpectrumAndFilter(srcImage, srcCanvas,
+					     srcSpectrumRedCanvas, srcSpectrumGreenCanvas, srcSpectrumBlueCanvas,
+					     dstSpectrumRedCanvas, dstSpectrumGreenCanvas, dstSpectrumBlueCanvas,
+					     dstCanvas, params);
 	}
 	srcImage.src = dataURL;
     }, "DataURL");
     bindParams(params, function(key, target, rel) {
-	    drawSrcImageAndDCTAndFilter(srcImage, srcCanvas, src2NCanvas,
-					srcSpectrumRedCanvas, srcSpectrumGreenCanvas, srcSpectrumBlueCanvas,
-					dstSpectrumRedCanvas, dstSpectrumGreenCanvas, dstSpectrumBlueCanvas,
-					dst2NCanvas, dstCanvas, params);
-
-		 }, {keys: ["maxWidthHeight", "highPass", "lowPass", "keepContrast", "floor2N"]});
+	drawSrcImageAndSpectrumAndFilter(srcImage, srcCanvas,
+					 srcSpectrumRedCanvas, srcSpectrumGreenCanvas, srcSpectrumBlueCanvas,
+					 dstSpectrumRedCanvas, dstSpectrumGreenCanvas, dstSpectrumBlueCanvas,
+					 dstCanvas, params);
+    }, {keys: ["maxWidthHeight", "highPass", "lowPass", "keepContrast"]});
 }
 
-function drawSrcImageAndDCTAndFilter(srcImage, srcCanvas, src2NCanvas,
-				     srcSpectrumRedCanvas, srcSpectrumGreenCanvas, srcSpectrumblueCanvas,
-				     dstSpectrumRedCanvas, dstSpectrumGreenCanvas, dstSpectrumBlueCanvas,
-				     dst2NCanvas, dstCanvas, params) {
-    var { maxWidthHeight, highPass, lowPass, keepContrast, floor2N } = params;
+function drawSrcImageAndSpectrumAndFilter(srcImage, srcCanvas,
+					  srcSpectrumRedCanvas, srcSpectrumGreenCanvas, srcSpectrumBlueCanvas,
+					  dstSpectrumRedCanvas, dstSpectrumGreenCanvas, dstSpectrumBlueCanvas,
+					  dstCanvas, params) {
+    var { maxWidthHeight, highPass, lowPass, keepContrast } = params;
     drawSrcImage(srcImage, srcCanvas, maxWidthHeight);
-    draw2NCanvas(srcCanvas, src2NCanvas ,floor2N);
-
-    var [redSpectrum, greenSpectrum, blueSpectrum] = calcDCT(src2NCanvas);
-    var maxRedSpectrumPower   = drawSpectrum(srcSpectrumRedCanvas,   redSpectrum,   null, 0)
-    var maxGreenSpectrumPower = drawSpectrum(srcSpectrumGreenCanvas, greenSpectrum, null, 1);
-    var maxBlueSpectrumPower  = drawSpectrum(srcSpectrumBlueCanvas,  blueSpectrum,  null, 2);
-    redSpectrum   = SpectrumFilter(redSpectrum,   highPass, lowPass);
-    greenSpectrum = SpectrumFilter(greenSpectrum, highPass, lowPass);
-    blueSpectrum  = SpectrumFilter(blueSpectrum,  highPass, lowPass);
-    // console.log(maxRedSpectrumPower);
-    drawSpectrum(dstSpectrumRedCanvas,   redSpectrum,   maxRedSpectrumPower,   0);
-    drawSpectrum(dstSpectrumGreenCanvas, greenSpectrum, maxGreenSpectrumPower, 1);
-    drawSpectrum(dstSpectrumBlueCanvas,  blueSpectrum,  maxBlueSpectrumPower,  2);
-    drawFromDCT(dst2NCanvas, redSpectrum, greenSpectrum, blueSpectrum, keepContrast, src2NCanvas);
-    dstCanvas.width  = srcCanvas.width;
-    dstCanvas.height = srcCanvas.height;
-    drawFrom2NCanvas(dst2NCanvas, dstCanvas);
+    var width = srcCanvas.width, height = srcCanvas.height;
+    var fft = new FFT2D(width, height);
+    var [redSpectrum, greenSpectrum, blueSpectrum] = calcSpectrum(srcCanvas, fft);
+    var maxRedSpectrumPower   = drawSpectrum(srcSpectrumRedCanvas,   redSpectrum,   width, height, null, 0);
+    var maxGreenSpectrumPower = drawSpectrum(srcSpectrumGreenCanvas, greenSpectrum, width, height, null, 1);
+    var maxBlueSpectrumPower  = drawSpectrum(srcSpectrumBlueCanvas,  blueSpectrum,  width, height, null, 2);
+    SpectrumFilter(redSpectrum,   width, height, highPass, lowPass);
+    SpectrumFilter(greenSpectrum, width, height, highPass, lowPass);
+    SpectrumFilter(blueSpectrum,  width, height, highPass, lowPass);
+    drawSpectrum(dstSpectrumRedCanvas,   redSpectrum,   width, height, maxRedSpectrumPower,   0);
+    drawSpectrum(dstSpectrumGreenCanvas, greenSpectrum, width, height, maxGreenSpectrumPower, 1);
+    drawSpectrum(dstSpectrumBlueCanvas,  blueSpectrum,  width, height, maxBlueSpectrumPower,  2);
+    drawFromSpectrum(dstCanvas, fft, redSpectrum, greenSpectrum, blueSpectrum, keepContrast, srcCanvas);
 }
 
-function draw2NCanvas(srcCanvas, dstCanvas, floor2N) {
-    var dstCtx = dstCanvas.getContext("2d");
-    var srcWidth = srcCanvas.width;
-    var srcHeight = srcCanvas.height;
-    var w = Math.log2(srcCanvas.width);
-    var h = Math.log2(srcCanvas.height);
-    if (floor2N) {
-	w = Math.floor(w);
-	h = Math.floor(h);
-	var n = (w < h)? w : h;
-    } else {
-	w = Math.ceil(w);
-	h = Math.ceil(h);
-	var n = (w > h)? w : h;
-    }
-    var dstWidth = Math.pow(2, n);
-    var dstHeight = dstWidth;
-    dstCanvas.width  = dstWidth;
-    dstCanvas.height = dstHeight;
-    dstCtx.drawImage(srcCanvas, 0, 0, srcWidth, srcHeight,
-		     0, 0, dstWidth, dstHeight);
-}
-
-function calcDCT(srcCanvas) {
-    // console.debug("calcDCT");
+// 直流成分を中央 (floor(width/2), floor(height/2)) にしたスペクトルを返す
+function calcSpectrum(srcCanvas, fft) {
     var srcCtx = srcCanvas.getContext("2d");
     var width = srcCanvas.width, height = srcCanvas.height;
-    //
-    var srcImageData = srcCtx.getImageData(0, 0, width, height);
-    var srcData = srcImageData.data;
-    //
+    var srcData = srcCtx.getImageData(0, 0, width, height).data;
     var nSample = width * height;
-    var reRed   = new Float32Array(nSample);
-    var imRed   = new Float32Array(nSample);
-    var reGreen = new Float32Array(nSample);
-    var imGreen = new Float32Array(nSample);
-    var reBlue  = new Float32Array(nSample);
-    var imBlue  = new Float32Array(nSample);
-    var i = 0;
-    for(var y = 0; y < height; y++) {
-	for(var x = 0; x < width; x++) {
-	    var o = i << 2;
-	    reRed[i]   = srcData[o++];
-	    reGreen[i] = srcData[o++];
-	    reBlue[i]  = srcData[o++];
-	    // imRed[i] = imGreen[i] = imBlue[i] = 0;
-	    i++;
-	}
+    var red   = new Float64Array(nSample);
+    var green = new Float64Array(nSample);
+    var blue  = new Float64Array(nSample);
+    for (var i = 0, o = 0; i < nSample; i++, o += 4) {
+	red[i]   = srcData[o];
+	green[i] = srcData[o + 1];
+	blue[i]  = srcData[o + 2];
     }
-    FFT.init(width);
-    FFT.fft2d(reRed, imRed);
-    swapQuadrant(reRed, width, height);
-    swapQuadrant(imRed, width, height);
-    FFT.fft2d(reGreen, imGreen);
-    swapQuadrant(reGreen, width, height);
-    swapQuadrant(imGreen, width, height);
-    FFT.fft2d(reBlue, imBlue);
-    swapQuadrant(reBlue, width, height);
-    swapQuadrant(imBlue, width, height);
-    return [[reRed, imRed], [reGreen, imGreen], [reBlue, imBlue]];
+    // R と G は 1 回の複素 FFT にまとめる
+    var [redSpectrum, greenSpectrum] = fft.forwardReal2(red, green);
+    var blueSpectrum = [blue, new Float64Array(nSample)];
+    fft.forward(blueSpectrum[0], blueSpectrum[1]);
+    for (var spectrum of [redSpectrum, greenSpectrum, blueSpectrum]) {
+	FFT2D.shift(spectrum[0], width, height);
+	FFT2D.shift(spectrum[1], width, height);
+    }
+    return [redSpectrum, greenSpectrum, blueSpectrum];
 }
 
-function drawSpectrum(dstCanvas, spectrum, maxSpectrumPower, color) {
+function drawSpectrum(dstCanvas, spectrum, width, height, maxSpectrumPower, color) {
     var [re, im] = spectrum;
     var dstCtx = dstCanvas.getContext("2d");
-    var nSample = re.length;
-    var width = Math.sqrt(nSample);
-    var height = width;
+    var nSample = width * height;
     dstCanvas.width = width;
     dstCanvas.height = height;
     //
@@ -145,66 +99,30 @@ function drawSpectrum(dstCanvas, spectrum, maxSpectrumPower, color) {
 	spectrumPower[i] = s;
     }
     if (maxSpectrumPower === null) {
-        if (spectrumPower.length <  100) {
-	    maxSpectrumPower = Math.max.apply(null, spectrumPower);
-        } else {
-            maxSpectrumPower = 0;
-            for (var i = 0, n = spectrumPower.length ; i < n ; i++) {
-                var p = spectrumPower[i]
-                if (maxSpectrumPower < p) {
-                    maxSpectrumPower = p;
-                }
+        maxSpectrumPower = 0;
+        for (var i = 0 ; i < nSample ; i++) {
+            var p = spectrumPower[i]
+            if (maxSpectrumPower < p) {
+                maxSpectrumPower = p;
             }
         }
     }
-    var i = 0;
     var normFactor = 255 / maxSpectrumPower;
-    for (var y = 0; y < height; y++) {
-	for (var x = 0; x < width; x++) {
-	    var o = i << 2;
-	    var val = spectrumPower[i] * normFactor;
-	    dstData[o++] = (color===0)?val:(val-50);
-	    dstData[o++] = (color===1)?val:(val-50);
-	    dstData[o++] = (color===2)?val:(val-50);
-	    dstData[o++] = 255;
-	    i++;
-	}
+    for (var i = 0, o = 0; i < nSample; i++) {
+	var val = spectrumPower[i] * normFactor;
+	dstData[o++] = (color===0)?val:(val-50);
+	dstData[o++] = (color===1)?val:(val-50);
+	dstData[o++] = (color===2)?val:(val-50);
+	dstData[o++] = 255;
     }
     dstCtx.putImageData(dstImageData, 0, 0);
     return maxSpectrumPower;
 }
 
-// 象限シフト
-function swapQuadrant(data, width, height) {
-    var nSample = width * height
-    var nSample_2 = nSample / 2;
-    var nSample_3 = nSample * 3 / 4;
-    var width_2 = width / 2 , height_2 = height / 2;
-    var i, j;
-    for (var y = 0 ; y < height_2 ; y++) {
-	i = y * width;
-	j = i + nSample_2 + width_2;
-	for (var x = 0 ; x < width_2 ; x++) {
-	    [data[i], data[j]] = [data[j], data[i]];
-	    i++; j++;
-	}
-    }
-    for (var y = 0 ; y < height_2 ; y++) {
-	i = y * width + width_2;
-	j = i + nSample_2 - width_2;
-	for (var x = width_2 ; x < width; x++) {
-	    [data[i], data[j]] = [data[j], data[i]];
-	    i++; j++;
-	}
-    }
-}
-
-function SpectrumFilter(spectrum, highPass, lowPass) {
+// 直流成分からの距離でマスクする。中心を直流成分に合わせて、マスクを点対称にする。
+function SpectrumFilter(spectrum, width, height, highPass, lowPass) {
     var [re, im] = spectrum;
-    var nSample = re.length;
-    var width = Math.sqrt(nSample);
-    var height = width;
-    var centerX = (width +1)/ 2, centerY = (height+1) / 2;
+    var centerX = width >> 1, centerY = height >> 1;
     var hypotenuse = Math.sqrt(width*width + height*height);
     var i = 0;
     for (var y = 0; y < height; y++) {
@@ -220,35 +138,26 @@ function SpectrumFilter(spectrum, highPass, lowPass) {
 	    i++;
 	}
     }
-    return [re, im];
 }
 
-function drawFromDCT(dstCanvas, redSpectrum, greenSpectrum, blueSpectrum, keepContrast, srcCanvas) {
+function drawFromSpectrum(dstCanvas, fft, redSpectrum, greenSpectrum, blueSpectrum, keepContrast, srcCanvas) {
+    var width = fft.width, height = fft.height;
     var dstCtx = dstCanvas.getContext("2d");
-    var nSample = redSpectrum[0].length;
-    var width  = Math.sqrt(nSample);
-    var height = width;
     dstCanvas.width  = width;
     dstCanvas.height = height;
     //
     var dstImageData = dstCtx.createImageData(width, height);
     var dstData = dstImageData.data;
     //
-    var [reRed, imRed]     = redSpectrum;
-    var [reGreen, imGreen] = greenSpectrum;
-    var [reBlue, imBlue]   = blueSpectrum;
-    FFT.init(width);
-    swapQuadrant(reRed,   width, height);
-    swapQuadrant(imRed,   width, height);
-    FFT.ifft2d(reRed,   imRed);
-    swapQuadrant(reGreen, width, height);
-    swapQuadrant(imGreen, width, height);
-    FFT.ifft2d(reGreen, imGreen);
-    swapQuadrant(reBlue , width, height);
-    swapQuadrant(imBlue , width, height)
-    FFT.ifft2d(reBlue,  imBlue);
+    for (var spectrum of [redSpectrum, greenSpectrum, blueSpectrum]) {
+	FFT2D.unshift(spectrum[0], width, height);
+	FFT2D.unshift(spectrum[1], width, height);
+    }
+    var [reRed, reGreen] = fft.inverseReal2(redSpectrum[0], redSpectrum[1],
+					    greenSpectrum[0], greenSpectrum[1]);
+    var [reBlue, imBlue] = blueSpectrum;
+    fft.inverse(reBlue, imBlue);
     //
-
     if (keepContrast) {
 	var [srcMinRed, srcMaxRed, srcMinGreen, srcMaxGreen, srcMinBlue, srcMaxBlue] = getCanvasContrast(srcCanvas);
 	var [dstMinRed, dstMaxRed] = getArrayContrast(reRed);
@@ -285,12 +194,6 @@ function drawFromDCT(dstCanvas, redSpectrum, greenSpectrum, blueSpectrum, keepCo
 	}
     }
     dstCtx.putImageData(dstImageData, 0, 0);
-}
-
-function drawFrom2NCanvas(dst2NCanvas, dstCanvas) {
-    var dstCtx = dstCanvas.getContext("2d");
-    dstCtx.drawImage(dst2NCanvas, 0, 0, dst2NCanvas.width, dst2NCanvas.height,
-		     0, 0, dstCanvas.width, dstCanvas.height);
 }
 
 function getCanvasContrast(canvas) {
