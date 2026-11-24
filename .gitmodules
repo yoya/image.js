@@ -1,6 +1,3 @@
-[submodule "dist/imaya/zlib.js"]
-	path = dist/imaya/zlib.js
-	url = https://github.com/imaya/zlib.js.git
 [submodule "dist/yoya/lcms.js"]
 	path = dist/yoya/lcms.js
 	url = git@github.com:yoya/lcms.js.git
